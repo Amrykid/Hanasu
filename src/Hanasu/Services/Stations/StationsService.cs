@@ -31,7 +31,7 @@ namespace Hanasu.Services.Stations
 
             timer.Elapsed += timer_Elapsed;
 
-            timer.Interval = 20000; //20 seconds
+            timer.Interval = 60000 * 2; //2 minutes
 
             LoadStationsFromRepo();
 

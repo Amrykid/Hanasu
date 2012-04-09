@@ -57,8 +57,12 @@
         <Grid Grid.Row="1">
             <Border BorderBrush="Black" BorderThickness="1" CornerRadius="7 7 0 0">
                 <Grid>
+                    <StackPanel HorizontalAlignment="Left" Orientation="Vertical" Width="200" Name="BufferingSP" Visibility="Hidden">
+                        <Label FontSize="15" Margin="0 -7 0 0" HorizontalAlignment="Center">Buffering.....</Label>
+                        <metro:ProgressIndicator Width="200" Height="17" ProgressColour="LightBlue"></metro:ProgressIndicator>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn">
+                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Visibility="Hidden">
                             <Image Source="pack://application:,,,/Hanasu;component/Resources/rew.png"/>
                         </Button>
                         <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="playBtn" Click="playBtn_Click">
@@ -67,7 +71,7 @@
                         <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="pauseBtn" Click="pauseBtn_Click">
                             <Image Source="pack://application:,,,/Hanasu;component/Resources/pause.png"/>
                         </Button>
-                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn">
+                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Visibility="Hidden">
                             <Image Source="pack://application:,,,/Hanasu;component/Resources/ff.png"/>
                         </Button>
                     </StackPanel>

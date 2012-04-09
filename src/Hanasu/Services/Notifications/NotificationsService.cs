@@ -58,7 +58,7 @@ namespace Hanasu.Services.Notifications
 
                                     nw.Show();
 
-                                }), System.Windows.Threading.DispatcherPriority.Input);
+                                }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
                             while (nw.IsVisible)
                                 Thread.Sleep(50);
                         }

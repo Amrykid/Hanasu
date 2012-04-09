@@ -89,7 +89,10 @@ namespace Hanasu
 
             switch (e.newState)
             {
+                case (int)WMPLib.WMPPlayState.wmppsBuffering: BufferingSP.Visibility = System.Windows.Visibility.Visible;
+                    break;
                 case (int)WMPLib.WMPPlayState.wmppsPlaying: NowPlayingGrid.Visibility = System.Windows.Visibility.Visible;
+                    BufferingSP.Visibility = System.Windows.Visibility.Hidden;
                     break;
                 case (int)WMPLib.WMPPlayState.wmppsPaused:
                 case (int)WMPLib.WMPPlayState.wmppsStopped: NowPlayingGrid.Visibility = System.Windows.Visibility.Hidden;
