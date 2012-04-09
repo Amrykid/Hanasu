@@ -112,4 +112,11 @@
     <Format>Vocaloid</Format>
     <City>N/A</City>
   </Station>
+  <Station>
+    <Name>NHK World Radio Japan</Name>
+    <DataSource>http://www.nhk.or.jp/rj/asx/en/english.asx</DataSource>
+    <Homepage>http://www3.nhk.or.jp/nhkworld/english/radio/program/index.html</Homepage>
+    <Format>Info</Format>
+    <City>N/A</City>
+  </Station>
 </Stations>
