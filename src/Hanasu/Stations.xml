@@ -23,14 +23,7 @@
   </Station>
   <Station>
     <Name>Radio Hikari.pl</Name>
-    <DataSource>http://nowemitsuki.panelradiowy.pl/listen.php?ip=s1.slotex.pl&port=7442&format=asx</DataSource>
-    <Homepage>http://www.radiohikari.pl/news.php</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-  </Station>
-  <Station>
-    <Name>Radio Hikari.pl</Name>
-    <DataSource>http://nowemitsuki.panelradiowy.pl/listen.php?ip=s1.slotex.pl&port=7442&format=asx</DataSource>
+    <DataSource><![CDATA[http://nowemitsuki.panelradiowy.pl/listen.php?ip=s1.slotex.pl&port=7442&format=asx]]></DataSource>
     <Homepage>http://www.radiohikari.pl/news.php</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
