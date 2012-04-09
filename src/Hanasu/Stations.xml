@@ -91,4 +91,11 @@
     <Format>Mix</Format>
     <City>N/A</City>
   </Station>
+  <Station>
+    <Name>Big B Radio</Name>
+    <DataSource>http://178.33.227.116:8104</DataSource>
+    <Homepage>http://bigbradio.com/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
 </Stations>
