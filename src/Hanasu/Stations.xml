@@ -84,4 +84,11 @@
     <Format>Mix</Format>
     <City>N/A</City>
   </Station>
+  <Station>
+    <Name>JPopsuki</Name>
+    <DataSource>http://play.internet-radio-guide.net/asx.php?id=220233</DataSource>
+    <Homepage>http://jpopsuki.eu/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
 </Stations>
