@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:stations="clr-namespace:Hanasu.Services.Stations"
-        Title="Hanasu" Height="410" Width="715">
+        Title="Hanasu" MinHeight="410" MinWidth="715">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
