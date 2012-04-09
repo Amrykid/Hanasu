@@ -58,6 +58,7 @@ namespace Hanasu
             player.MediaChange += player_MediaChange;
 
             VolumeSlider.Value = player.settings.volume;
+            
         }
 
         private string lastMediaTxt = null; //prevents the below event from constantly queueing the same song title.

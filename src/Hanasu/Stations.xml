@@ -63,4 +63,11 @@
     <Format>Mix</Format>
     <City>N/A</City>
   </Station>
+  <Station>
+    <Name>AnimeAMAZE</Name>
+    <DataSource>http://apple.neostreams.info/auto/tunein.php/mcarrass/playlist.asx</DataSource>
+    <Homepage>http://www.animeamaze.net/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
 </Stations>
