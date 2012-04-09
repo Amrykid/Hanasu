@@ -1,0 +1,15 @@
+# Visual Studio Ignores
+bin/
+obj/
+*.suo
+*.user
+*.cache
+*.Cache
+*.ncb
+*.snk
+*.pfx
+*.vs10x
+*.docstates
+*.docstates.*
+# Misc Ignores
+Thumbs.db
