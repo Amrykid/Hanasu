@@ -15,6 +15,7 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
 
         public override void Process(ref Uri url)
         {
+            var newurl = "";
             using (WebClient wc = new WebClient())
             {
                 var str = wc.DownloadString(url);
@@ -23,8 +24,15 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
 
                 foreach (string line in lines)
                 {
+                    if (line.ToLower().StartsWith("file"))
+                    {
+                        newurl = line.Substring(line.IndexOf('=') + 1);
+                        break;
+                    }
                 }
             }
+
+            url = new Uri(newurl);
         }
     }
 }
