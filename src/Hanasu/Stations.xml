@@ -98,4 +98,11 @@
     <Format>Mix</Format>
     <City>N/A</City>
   </Station>
+  <Station>
+    <Name>Japan-A-Radio</Name>
+    <DataSource>http://www.japanaradio.com/free/48kaacp.pls</DataSource>
+    <Homepage>http://www.japanaradio.com/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
 </Stations>
