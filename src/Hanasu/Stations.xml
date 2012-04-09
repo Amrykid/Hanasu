@@ -60,7 +60,7 @@
     <Name>Vocaloid.FM</Name>
     <DataSource>http://labs.m2hq.net/vocaloid_fm/pls/mp3_hi.m3u</DataSource>
     <Homepage>http://labs.m2hq.net/vocaloid_fm/</Homepage>
-    <Format>Mix</Format>
+    <Format>Vocaloid</Format>
     <City>N/A</City>
   </Station>
   <Station>
@@ -103,6 +103,13 @@
     <DataSource>http://www.japanaradio.com/free/48kaacp.pls</DataSource>
     <Homepage>http://www.japanaradio.com/</Homepage>
     <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
+  <Station>
+    <Name>LeekRadio</Name>
+    <DataSource>http://miku.someone5544.net/leekradio/listen.pls</DataSource>
+    <Homepage>http://miku.someone5544.net/leekradio/</Homepage>
+    <Format>Vocaloid</Format>
     <City>N/A</City>
   </Station>
 </Stations>

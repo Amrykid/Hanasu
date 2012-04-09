@@ -11,5 +11,6 @@ namespace Hanasu.Services.Stations
         Classical = 0,
         Pop = 1,
         Mix = 2,
+        Vocaloid = 3,
     }
 }
