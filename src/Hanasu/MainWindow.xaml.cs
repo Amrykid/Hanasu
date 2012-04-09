@@ -109,6 +109,9 @@ namespace Hanasu
 
             var station = (Station)StationsListView.SelectedItem;
 
+            if (station == null)
+                return;
+
             if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource))
             {
                 var d = station.DataSource;
