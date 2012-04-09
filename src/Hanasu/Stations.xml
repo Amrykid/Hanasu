@@ -70,4 +70,11 @@
     <Format>Mix</Format>
     <City>N/A</City>
   </Station>
+  <Station>
+    <Name>JPHiP</Name>
+    <DataSource>http://radio.jphip.com:8800/</DataSource>
+    <Homepage>http://jphip.com/radio.html</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
 </Stations>
