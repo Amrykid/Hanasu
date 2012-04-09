@@ -26,36 +26,7 @@ namespace Hanasu.Services.Stations
 
             //Dummy test
             //Will move these to an external file soon
-            Stations.Add(
-                new Station()
-                {
-                    City = "Tokyo",
-                    DataSource = new Uri("http://www.animenfo.com/radio/listen.m3u"),
-                    Format = RadioFormat.Mix,
-                    Homepage = new Uri("http://www.animenfo.com/"),
-                    Name = "AnimeNfo"
-                });
-
-            Stations.Add(
-               new Station()
-               {
-                   City = "Tokyo",
-                   DataSource = new Uri("http://stream.gensokyoradio.net:8000/listen.m3u?sid=1"),
-                   Format = RadioFormat.Mix,
-                   Homepage = new Uri("http://www.gensokyoradio.net/"),
-                   Name = "Gensokyo Radio"
-               });
-
-            Stations.Add(
-               new Station()
-               {
-                   City = "Tokyo",
-                   DataSource = new Uri("http://www.makeavoice.com/shoutcast/tuneinlinks.php?file=m3u&host=67.215.229.100&port=8290"),
-                   Format = RadioFormat.Mix,
-                   Homepage = new Uri("http://nihonradio.net/2/"),
-                   Name = "Nihon Radio"
-               });
-
+            
             OnPropertyChanged("Stations");
         }
 

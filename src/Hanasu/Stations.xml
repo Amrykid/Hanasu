@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Stations>
+  <Station>
+    <Name>AnimeNfo</Name>
+    <DataSource>http://www.animenfo.com/radio/listen.m3u</DataSource>
+    <Homepage>http://www.animenfo.com/</Homepage>
+    <Format>Mix</Format>
+    <City>Tokyo</City>
+  </Station>
+  <Station>
+    <Name>Gensokyo Radio</Name>
+    <DataSource>http://stream.gensokyoradio.net:8000/listen.m3u?sid=1</DataSource>
+    <Homepage>http://www.gensokyoradio.net/</Homepage>
+    <Format>Mix</Format>
+    <City>Tokyo</City>
+  </Station
+  <Station>
+    <Name>Nihon Radio</Name>
+    <DataSource>http://www.makeavoice.com/shoutcast/tuneinlinks.php?file=m3u&host=67.215.229.100&port=8290</DataSource>
+    <Homepage>http://nihonradio.net/2/</Homepage>
+    <Format>Mix</Format>
+    <City>Tokyo</City>
+  </Station
+</Stations>
