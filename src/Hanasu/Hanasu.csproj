@@ -96,6 +96,7 @@
     <Compile Include="Services\Preprocessor\BasePreprocessor.cs" />
     <Compile Include="Services\Preprocessor\IPreprocessor.cs" />
     <Compile Include="Services\Preprocessor\PreprocessorService.cs" />
+    <Compile Include="Services\Preprocessor\Preprocessors\PLSPreprocessor.cs" />
     <Compile Include="Services\Stations\RadioFormat.cs" />
     <Compile Include="Services\Stations\Station.cs" />
     <Compile Include="Services\Stations\StationsService.cs" />
@@ -205,9 +206,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Preprocessor\Preprocessors\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
