@@ -18,7 +18,8 @@ namespace Hanasu.Services.Stations
         }
         public static void Initialize()
         {
-            Instance = new StationsService();
+            if (Instance == null)
+                Instance = new StationsService();
         }
         public static StationsService Instance { get; private set; }
 
