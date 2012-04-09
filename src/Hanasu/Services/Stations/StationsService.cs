@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using Hanasu.Core;
+using System.Xml.Linq;
 
 namespace Hanasu.Services.Stations
 {
@@ -24,9 +25,25 @@ namespace Hanasu.Services.Stations
         {
             Stations = new ObservableCollection<Station>();
 
-            //Dummy test
-            //Will move these to an external file soon
-            
+            try
+            {
+                var doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml");
+
+                var stats = from x in doc.Element("Stations").Elements("Station")
+                            select new Station()
+                            {
+                                Name = x.Element("Name").Value,
+                                DataSource = new Uri(x.Element("DataSource").Value),
+                                Homepage = new Uri(x.Element("Homepage").Value),
+                                Format = (RadioFormat)Enum.Parse(typeof(RadioFormat), x.Element("Format").Value),
+                                City = x.Element("City").Value,
+                            };
+
+                foreach (var x in stats)
+                    Stations.Add(x);
+
+            }
+            catch (Exception) { }
             OnPropertyChanged("Stations");
         }
 

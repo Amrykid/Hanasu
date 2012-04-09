@@ -13,7 +13,7 @@
     <Homepage>http://www.gensokyoradio.net/</Homepage>
     <Format>Mix</Format>
     <City>Tokyo</City>
-  </Station
+  </Station>
   <Station>
     <Name>Nihon Radio</Name>
     <DataSource>http://www.makeavoice.com/shoutcast/tuneinlinks.php?file=m3u&host=67.215.229.100&port=8290</DataSource>
