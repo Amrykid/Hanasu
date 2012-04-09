@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
+using Hanasu.Services.Preprocessor.Preprocessors;
 
 namespace Hanasu.Services.Preprocessor
 {
@@ -11,11 +12,13 @@ namespace Hanasu.Services.Preprocessor
         static PreprocessorService()
         {
             Preprocessors = new ObservableCollection<IPreprocessor>();
+
+            RegisterPreprocessor(typeof(PLSPreprocessor));
         }
 
         public static void RegisterPreprocessor(Type processor)
         {
-            if (processor is IPreprocessor)
+            if (processor.BaseType == typeof(IPreprocessor) || processor.BaseType == typeof(BasePreprocessor))
             {
                 Preprocessors.Add(
                     (IPreprocessor)Activator.CreateInstance(processor));

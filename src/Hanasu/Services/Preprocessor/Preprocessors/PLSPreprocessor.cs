@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
 
 namespace Hanasu.Services.Preprocessor.Preprocessors
 {
@@ -14,7 +15,16 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
 
         public override void Process(ref Uri url)
         {
-            throw new NotImplementedException();
+            using (WebClient wc = new WebClient())
+            {
+                var str = wc.DownloadString(url);
+
+                var lines = str.Split('\n');
+
+                foreach (string line in lines)
+                {
+                }
+            }
         }
     }
 }
