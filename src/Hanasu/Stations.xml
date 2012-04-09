@@ -77,4 +77,11 @@
     <Format>Mix</Format>
     <City>N/A</City>
   </Station>
+  <Station>
+    <Name>AnimeNexus</Name>
+    <DataSource>http://69.64.52.104:8000/</DataSource>
+    <Homepage>http://www.animenexus.net/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
 </Stations>

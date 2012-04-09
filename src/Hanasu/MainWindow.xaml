@@ -41,45 +41,47 @@
                 </TabItem>
                 <TabItem Header="Stations">
                     <Grid>
-                        <ListView Foreground="Black" Name="StationsListView" ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Station" DisplayMemberBinding="{Binding Name}"/>
-                                    <GridViewColumn Header="Format" DisplayMemberBinding="{Binding Format}"/>
-                                    <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                        <Border BorderBrush="Black" BorderThickness=".7">
+                            <Grid>
+                                <ListView Foreground="Black" Name="StationsListView" ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Station" DisplayMemberBinding="{Binding Name}"/>
+                                            <GridViewColumn Header="Format" DisplayMemberBinding="{Binding Format}"/>
+                                            <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
         <Grid Grid.Row="1">
-            <Grid>
-                <StackPanel HorizontalAlignment="Left" Orientation="Vertical" Width="200" Name="BufferingSP" Visibility="Hidden">
-                    <Label FontSize="15" Margin="0 -7 0 0" HorizontalAlignment="Center">Buffering.....</Label>
-                    <metro:ProgressIndicator Width="200" Height="17" ProgressColour="LightBlue"></metro:ProgressIndicator>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Visibility="Hidden">
-                        <Image Source="pack://application:,,,/Hanasu;component/Resources/rew.png"/>
-                    </Button>
-                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="playBtn" Click="playBtn_Click">
-                        <Image Source="pack://application:,,,/Hanasu;component/Resources/play.png"/>
-                    </Button>
-                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="pauseBtn" Click="pauseBtn_Click">
-                        <Image Source="pack://application:,,,/Hanasu;component/Resources/pause.png"/>
-                    </Button>
-                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Visibility="Hidden">
-                        <Image Source="pack://application:,,,/Hanasu;component/Resources/ff.png"/>
-                    </Button>
-                </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Orientation="Vertical" Width="200" Name="BufferingSP" Visibility="Hidden">
+                <Label FontSize="15" Margin="0 -7 0 0" HorizontalAlignment="Center">Buffering.....</Label>
+                <metro:ProgressIndicator Width="200" Height="17" ProgressColour="LightBlue"></metro:ProgressIndicator>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Visibility="Hidden">
+                    <Image Source="pack://application:,,,/Hanasu;component/Resources/rew.png"/>
+                </Button>
+                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="playBtn" Click="playBtn_Click">
+                    <Image Source="pack://application:,,,/Hanasu;component/Resources/play.png"/>
+                </Button>
+                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="pauseBtn" Click="pauseBtn_Click">
+                    <Image Source="pack://application:,,,/Hanasu;component/Resources/pause.png"/>
+                </Button>
+                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Visibility="Hidden">
+                    <Image Source="pack://application:,,,/Hanasu;component/Resources/ff.png"/>
+                </Button>
+            </StackPanel>
 
-                <StackPanel HorizontalAlignment="Right" Orientation="Vertical" Margin="0 0 10 0">
-                    <Label Margin="0 -10 0 0" FontSize="16">Volume</Label>
-                    <Slider Margin="0 -10 0 0" Name="VolumeSlider" Height="35" Width="90" ValueChanged="VolumeSlider_ValueChanged" Maximum="100" Minimum="0" TickFrequency="5" />
-                </StackPanel>
-            </Grid>
+            <StackPanel HorizontalAlignment="Right" Orientation="Vertical" Margin="0 0 10 0">
+                <Label Margin="0 -10 0 0" FontSize="16">Volume</Label>
+                <Slider Margin="0 -10 0 0" Name="VolumeSlider" Height="35" Width="90" ValueChanged="VolumeSlider_ValueChanged" Maximum="100" Minimum="0" TickFrequency="5" />
+            </StackPanel>
         </Grid>
     </Grid>
 </metro:MetroWindow>
