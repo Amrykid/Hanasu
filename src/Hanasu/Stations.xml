@@ -58,7 +58,7 @@
   </Station>
   <Station>
     <Name>Vocaloid.FM</Name>
-    <DataSource>http://labs.m2hq.net/vocaloid_fm/pls/mp3_lo_sjis.m3u</DataSource>
+    <DataSource>http://labs.m2hq.net/vocaloid_fm/pls/mp3_hi.m3u</DataSource>
     <Homepage>http://labs.m2hq.net/vocaloid_fm/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
