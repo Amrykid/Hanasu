@@ -93,6 +93,9 @@
     <Compile Include="Services\Notifications\NotificationsWindow.xaml.cs">
       <DependentUpon>NotificationsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\Preprocessor\BasePreprocessor.cs" />
+    <Compile Include="Services\Preprocessor\IPreprocessor.cs" />
+    <Compile Include="Services\Preprocessor\PreprocessorService.cs" />
     <Compile Include="Services\Stations\RadioFormat.cs" />
     <Compile Include="Services\Stations\Station.cs" />
     <Compile Include="Services\Stations\StationsService.cs" />
@@ -201,6 +204,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\Preprocessor\Preprocessors\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

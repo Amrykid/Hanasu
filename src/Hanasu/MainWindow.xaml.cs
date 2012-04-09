@@ -109,7 +109,17 @@ namespace Hanasu
 
             var station = (Station)StationsListView.SelectedItem;
 
-            player.URL = station.DataSource.ToString();
+            if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource))
+            {
+                var d = station.DataSource;
+                Hanasu.Services.Preprocessor.PreprocessorService.Process(ref d);
+
+                player.URL = d.ToString();
+            }
+            else
+            {
+                player.URL = station.DataSource.ToString();
+            }
 
             player.Ctlcontrols.play();
 
