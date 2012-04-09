@@ -47,15 +47,21 @@ namespace Hanasu.Services.Stations
 
                 Stations.Clear();
 
+                RadioFormat dummie = 0;
+
                 var stats = from x in doc.Element("Stations").Elements("Station")
                             select new Station()
                             {
                                 Name = x.Element("Name").Value,
                                 DataSource = new Uri(x.Element("DataSource").Value),
                                 Homepage = new Uri(x.Element("Homepage").Value),
-                                Format = (RadioFormat)Enum.Parse(typeof(RadioFormat), x.Element("Format").Value),
+                                Format = (Enum.TryParse<RadioFormat>(x.Element("Format").Value, out dummie) == true ? 
+                                    (RadioFormat)Enum.Parse(typeof(RadioFormat), x.Element("Format").Value) : 
+                                    RadioFormat.Mix),
                                 City = x.Element("City").Value,
                             };
+
+                
 
                 foreach (var x in stats)
                     Stations.Add(x);
