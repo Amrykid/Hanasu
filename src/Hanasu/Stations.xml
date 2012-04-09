@@ -21,4 +21,32 @@
     <Format>Mix</Format>
     <City>Tokyo</City>
   </Station>
+  <Station>
+    <Name>Radio Hikari.pl</Name>
+    <DataSource>http://nowemitsuki.panelradiowy.pl/listen.php?ip=s1.slotex.pl&port=7442&format=asx</DataSource>
+    <Homepage>http://www.radiohikari.pl/news.php</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
+  <Station>
+    <Name>Radio Hikari.pl</Name>
+    <DataSource>http://nowemitsuki.panelradiowy.pl/listen.php?ip=s1.slotex.pl&port=7442&format=asx</DataSource>
+    <Homepage>http://www.radiohikari.pl/news.php</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
+  <Station>
+    <Name>AnimeID</Name>
+    <DataSource>http://95.211.115.197/tunein.php/animeid/playlist.asx</DataSource>
+    <Homepage>http://www.animeidradio.jp/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
+  <Station>
+    <Name>Armitage's Dimension</Name>
+    <DataSource>http://www.armitunes.com/wmplaylist.php?server=http://149.255.33.76:8004</DataSource>
+    <Homepage>http://www.armitunes.com/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
 </Stations>
