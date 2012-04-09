@@ -62,7 +62,11 @@ namespace Hanasu.Services.Notifications
                             while (nw.IsVisible)
                                 Thread.Sleep(50);
                         }
-                        catch (Exception) { }
+                        catch (Exception)
+                        {
+                            if (Application.Current == null)
+                                System.Diagnostics.Process.GetCurrentProcess().Kill(); //If by some rare bug, Hanasu doesn't exit, force itself to die.
+                        }
                     }
 
                     QueueRunning = false;
