@@ -68,7 +68,11 @@ namespace Hanasu.Services.Stations
         {
             int before = Stations.Count;
 
-            LoadStationsFromRepo();
+            System.Windows.Application.Current.Dispatcher.Invoke(
+                new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                    {
+                        LoadStationsFromRepo();
+                    }));
 
             if (Stations.Count > before)
                 Hanasu.Services.Notifications.NotificationsService.AddNotification("Stations Updated",
