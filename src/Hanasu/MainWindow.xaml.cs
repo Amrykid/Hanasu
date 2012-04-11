@@ -28,12 +28,32 @@ namespace Hanasu
 
             Hanasu.Services.Stations.StationsService.Initialize();
 
+            this.KeyUp += MainWindow_KeyUp;
+
             this.Loaded += MainWindow_Loaded;
             this.Unloaded += MainWindow_Unloaded;
         }
 
+        void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.MediaPlayPause:
+                    {
+                        if (NowPlayingGrid.Visibility == System.Windows.Visibility.Visible)
+                            player.Ctlcontrols.pause();
+                        else
+                            player.Ctlcontrols.play();
+
+                        break;
+                    }
+            }
+        }
+
         void MainWindow_Unloaded(object sender, RoutedEventArgs e)
         {
+            this.KeyUp -= MainWindow_KeyUp;
+
             player.PlayStateChange -= player_PlayStateChange;
             player.MediaChange -= player_MediaChange;
 
