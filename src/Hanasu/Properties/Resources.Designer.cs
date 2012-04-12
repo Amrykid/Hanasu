@@ -67,6 +67,13 @@ namespace Hanasu.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap heart {
+            get {
+                object obj = ResourceManager.GetObject("heart", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap i {
             get {
                 object obj = ResourceManager.GetObject("i", resourceCulture);

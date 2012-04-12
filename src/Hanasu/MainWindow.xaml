@@ -56,6 +56,15 @@
                         </Border>
                     </Grid>
                 </TabItem>
+                <TabItem Header="Favorites" Name="tabItem3">
+                    <ListView Foreground="Black" Name="FavSongListView" MouseDoubleClick="StationsListView_MouseDoubleClick">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Song" DisplayMemberBinding="{Binding Name}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </TabItem>
             </TabControl>
         </Grid>
         <Grid Grid.Row="1">

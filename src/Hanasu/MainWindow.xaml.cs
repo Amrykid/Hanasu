@@ -57,6 +57,9 @@ namespace Hanasu
             player.PlayStateChange -= player_PlayStateChange;
             player.MediaChange -= player_MediaChange;
 
+            player.close();
+            player.Dispose();
+
             this.Loaded -= MainWindow_Loaded;
             this.Unloaded -= MainWindow_Unloaded;
         }
