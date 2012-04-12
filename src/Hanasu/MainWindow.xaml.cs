@@ -170,6 +170,7 @@ namespace Hanasu
                 case WMPLib.WMPPlayState.wmppsStopped: NowPlayingGrid.Visibility = System.Windows.Visibility.Hidden;
                     playBtn.IsEnabled = true;
                     pauseBtn.IsEnabled = false;
+                    HideStationsAdorner();
                     break;
             }
         }
