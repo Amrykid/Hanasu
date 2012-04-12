@@ -27,8 +27,10 @@ namespace Hanasu
             InitializeComponent();
 
             Hanasu.Services.Stations.StationsService.Initialize();
-             Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
+            Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
             Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted += Instance_StationFetchCompleted;
+
+            Hanasu.Services.Friends.FriendsService.Initialize();
 
             this.KeyUp += MainWindow_KeyUp;
 
