@@ -48,7 +48,7 @@
                                     <ac:AdornedControl.AdornerContent>
                                         <ProgressBar IsIndeterminate="True" Width="250"/>
                                     </ac:AdornedControl.AdornerContent>
-                                    <ListView Foreground="Black" Name="StationsListView" ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True}" TargetUpdated="StationsListView_TargetUpdated" SourceUpdated="StationsListView_SourceUpdated" MouseDoubleClick="StationsListView_MouseDoubleClick" IsEnabled="False">
+                                    <ListView Foreground="Black" Name="StationsListView" ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" IsEnabled="False">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="Station" DisplayMemberBinding="{Binding Name}"/>

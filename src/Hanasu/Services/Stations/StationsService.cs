@@ -44,6 +44,9 @@ namespace Hanasu.Services.Stations
         {
             try
             {
+                if (StationFetchStarted != null)
+                    StationFetchStarted(this, null);
+
                 Status = StationsServiceStatus.Polling;
 
                 //System.Threading.Thread.Sleep(10000);
@@ -76,6 +79,9 @@ namespace Hanasu.Services.Stations
                             Stations.Add(x);
 
                         OnPropertyChanged("Stations");
+
+                        if (StationFetchCompleted != null)
+                            StationFetchCompleted(this, null);
                     }));
 
             }
@@ -102,6 +108,9 @@ namespace Hanasu.Services.Stations
         public ObservableCollection<Station> Stations { get; private set; }
 
         public StationsServiceStatus Status { get; private set; }
+
+        public event EventHandler StationFetchStarted;
+        public event EventHandler StationFetchCompleted;
     }
 }
 

@@ -27,11 +27,26 @@ namespace Hanasu
             InitializeComponent();
 
             Hanasu.Services.Stations.StationsService.Initialize();
+             Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
+            Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted += Instance_StationFetchCompleted;
 
             this.KeyUp += MainWindow_KeyUp;
 
             this.Loaded += MainWindow_Loaded;
             this.Unloaded += MainWindow_Unloaded;
+        }
+
+        void Instance_StationFetchCompleted(object sender, EventArgs e)
+        {
+            HideStationsAdorner();
+
+            Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted -= Instance_StationFetchStarted;
+            Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted -= Instance_StationFetchCompleted;
+        }
+
+        void Instance_StationFetchStarted(object sender, EventArgs e)
+        {
+            ShowStationsAdorner();
         }
 
         void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -55,6 +70,7 @@ namespace Hanasu
 
         void MainWindow_Unloaded(object sender, RoutedEventArgs e)
         {
+
             this.KeyUp -= MainWindow_KeyUp;
 
             player.PlayStateChange -= player_PlayStateChange;
@@ -195,19 +211,6 @@ namespace Hanasu
         private void pauseBtn_Click(object sender, RoutedEventArgs e)
         {
             player.Ctlcontrols.pause();
-        }
-
-        private void StationsListView_SourceUpdated(object sender, DataTransferEventArgs e)
-        {
-
-        }
-
-        private void StationsListView_TargetUpdated(object sender, DataTransferEventArgs e)
-        {
-            if (e.Property == ListView.ItemsSourceProperty && StationsService.Instance.Status == StationsServiceStatus.Idle)
-            {
-                HideStationsAdorner();
-            }
         }
 
         private void ShowStationsAdorner()
