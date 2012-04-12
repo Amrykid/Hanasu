@@ -105,7 +105,7 @@ namespace Hanasu.Services.Stations
 
             if (Stations.Count > before)
                 Hanasu.Services.Notifications.NotificationsService.AddNotification("Stations Updated",
-                    (Stations.Count - before).ToString() + " station(s) added.", 4000);
+                    (Stations.Count - before).ToString() + " station(s) added.", 4000,true);
         }
 
         public ObservableCollection<Station> Stations { get; private set; }

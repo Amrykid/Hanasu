@@ -25,12 +25,25 @@ namespace Hanasu.Services.Notifications
         {
             lock (Notifications)
             {
-                Notifications.Clear();
+                Queue<NotificationInfo> tmp = new Queue<NotificationInfo>();
+
+                while (!Notifications.IsEmpty)
+                {
+                    var d = Notifications.Peek();
+
+                    if (d.IsUrgent)
+                        tmp.Enqueue(d);
+
+                    Notifications.Dequeue();
+                }
+
+                foreach (NotificationInfo ni in tmp)
+                    Notifications.Enqueue(ni);
             }
         }
 
 
-        public static void AddNotification(string title, string message, int duration)
+        public static void AddNotification(string title, string message, int duration, bool isUrgent = false)
         {
             lock (Notifications)
             {
@@ -39,7 +52,8 @@ namespace Hanasu.Services.Notifications
                     {
                         Title = title,
                         Message = message,
-                        Duration = duration
+                        Duration = duration,
+                        IsUrgent = isUrgent
                     });
             }
 
