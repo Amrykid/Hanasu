@@ -89,6 +89,9 @@
     </Compile>
     <Compile Include="Core\BaseINPC.cs" />
     <Compile Include="Core\ObservableQueue.cs" />
+    <Compile Include="External\Adorner\AdornedControl.cs" />
+    <Compile Include="External\Adorner\AdornerPlacement.cs" />
+    <Compile Include="External\Adorner\FrameworkElementAdorner.cs" />
     <Compile Include="Services\Notifications\NotificationInfo.cs" />
     <Compile Include="Services\Notifications\NotificationsService.cs" />
     <Compile Include="Services\Notifications\NotificationsWindow.xaml.cs">
@@ -101,6 +104,7 @@
     <Compile Include="Services\Stations\RadioFormat.cs" />
     <Compile Include="Services\Stations\Station.cs" />
     <Compile Include="Services\Stations\StationsService.cs" />
+    <Compile Include="Services\Stations\StationsServiceStatus.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -210,10 +214,14 @@
   <ItemGroup>
     <Resource Include="Resources\heart.png" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="External\Adorner\README.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:stations="clr-namespace:Hanasu.Services.Stations"
+        xmlns:ac="clr-namespace:AdornedControl"
         Title="Hanasu" MinHeight="410" MinWidth="715">
     <Window.Resources>
         <ResourceDictionary>
@@ -43,7 +44,11 @@
                     <Grid>
                         <Border BorderBrush="Black" BorderThickness=".7">
                             <Grid>
-                                <ListView Foreground="Black" Name="StationsListView" ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick">
+                                <ac:AdornedControl IsAdornerVisible="True" x:Name="StationsListAdorner">
+                                    <ac:AdornedControl.AdornerContent>
+                                        <ProgressBar IsIndeterminate="True" Width="250"/>
+                                    </ac:AdornedControl.AdornerContent>
+                                    <ListView Foreground="Black" Name="StationsListView" ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True}" TargetUpdated="StationsListView_TargetUpdated" SourceUpdated="StationsListView_SourceUpdated" MouseDoubleClick="StationsListView_MouseDoubleClick" IsEnabled="False">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="Station" DisplayMemberBinding="{Binding Name}"/>
@@ -52,6 +57,8 @@
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
+                                </ac:AdornedControl>
+                                
                             </Grid>
                         </Border>
                     </Grid>

@@ -173,5 +173,19 @@ namespace Hanasu
         {
             player.Ctlcontrols.pause();
         }
+
+        private void StationsListView_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+
+        }
+
+        private void StationsListView_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            if (e.Property == ListView.ItemsSourceProperty && StationsService.Instance.Status == StationsServiceStatus.Idle)
+            {
+                StationsListAdorner.IsAdornerVisible = false;
+                StationsListView.IsEnabled = true;
+            }
+        }
     }
 }

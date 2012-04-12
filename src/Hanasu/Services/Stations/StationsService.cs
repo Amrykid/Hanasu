@@ -34,7 +34,8 @@ namespace Hanasu.Services.Stations
 
             timer.Interval = 60000 * 2; //2 minutes
 
-            LoadStationsFromRepo();
+            System.Threading.Tasks.Task.Factory.StartNew(() =>
+                LoadStationsFromRepo()).ContinueWith((tk) => tk.Dispose());
 
             timer.Start();
         }
@@ -43,9 +44,16 @@ namespace Hanasu.Services.Stations
         {
             try
             {
+                Status = StationsServiceStatus.Polling;
+
+                //System.Threading.Thread.Sleep(10000);
+
                 var doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml");
 
-                Stations.Clear();
+                System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                    {
+                        Stations.Clear();
+                    }));
 
                 RadioFormat dummie = 0;
 
@@ -61,14 +69,19 @@ namespace Hanasu.Services.Stations
                                 City = x.Element("City").Value,
                             };
 
-                
 
-                foreach (var x in stats)
-                    Stations.Add(x);
+                System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                    {
+                        foreach (var x in stats)
+                            Stations.Add(x);
+
+                        OnPropertyChanged("Stations");
+                    }));
 
             }
             catch (Exception) { }
-            OnPropertyChanged("Stations");
+
+            Status = StationsServiceStatus.Idle;
         }
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -87,6 +100,8 @@ namespace Hanasu.Services.Stations
         }
 
         public ObservableCollection<Station> Stations { get; private set; }
+
+        public StationsServiceStatus Status { get; private set; }
     }
 }
 
