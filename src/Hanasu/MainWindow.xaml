@@ -79,7 +79,7 @@
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="playBtn" Click="playBtn_Click">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/play.png"/>
                 </Button>
-                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="pauseBtn" Click="pauseBtn_Click">
+                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="pauseBtn" Click="pauseBtn_Click" IsEnabled="False">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/pause.png"/>
                 </Button>
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Visibility="Hidden">

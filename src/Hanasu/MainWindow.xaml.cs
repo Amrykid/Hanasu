@@ -47,6 +47,9 @@ namespace Hanasu
 
                         break;
                     }
+                case Key.MediaStop: player.Ctlcontrols.stop();
+                    break;
+
             }
         }
 
@@ -117,9 +120,13 @@ namespace Hanasu
                     break;
                 case (int)WMPLib.WMPPlayState.wmppsPlaying: NowPlayingGrid.Visibility = System.Windows.Visibility.Visible;
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
+                    playBtn.IsEnabled = false;
+                    pauseBtn.IsEnabled = true;
                     break;
                 case (int)WMPLib.WMPPlayState.wmppsPaused:
                 case (int)WMPLib.WMPPlayState.wmppsStopped: NowPlayingGrid.Visibility = System.Windows.Visibility.Hidden;
+                    playBtn.IsEnabled = true;
+                    pauseBtn.IsEnabled = false;
                     break;
             }
         }
