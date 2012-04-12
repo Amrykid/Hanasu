@@ -59,6 +59,7 @@ namespace Hanasu
 
             player.PlayStateChange -= player_PlayStateChange;
             player.MediaChange -= player_MediaChange;
+            player.MediaError -= player_MediaError;
 
             player.close();
             player.Dispose();
@@ -79,12 +80,23 @@ namespace Hanasu
             player.enableContextMenu = false;
             player.settings.autoStart = false;
 
+            player.MediaError += player_MediaError;
+
             player.PlayStateChange += player_PlayStateChange;
 
             player.MediaChange += player_MediaChange;
 
             VolumeSlider.Value = player.settings.volume;
-            
+
+        }
+
+        void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
+        {
+            Hanasu.Services.Notifications.NotificationsService.AddNotification(
+                "Unable to connect to station.",
+                "Hanasu was unable to connect to " + currentStation.Name + ".", 4000);
+
+            HideStationsAdorner(); //On error rename the stations listview.
         }
 
         private string lastMediaTxt = null; //prevents the below event from constantly queueing the same song title.
@@ -114,17 +126,28 @@ namespace Hanasu
         {
             //handle the wmp's status
 
-            switch (e.newState)
+            WMPLib.WMPPlayState state = (WMPLib.WMPPlayState)e.newState;
+
+            switch (state)
             {
-                case (int)WMPLib.WMPPlayState.wmppsBuffering: BufferingSP.Visibility = System.Windows.Visibility.Visible;
+                case WMPLib.WMPPlayState.wmppsTransitioning:
+                    // Connecting, disable the stations listview.
+                    ShowStationsAdorner();
+
                     break;
-                case (int)WMPLib.WMPPlayState.wmppsPlaying: NowPlayingGrid.Visibility = System.Windows.Visibility.Visible;
+                case WMPLib.WMPPlayState.wmppsBuffering: BufferingSP.Visibility = System.Windows.Visibility.Visible;
+                    break;
+                case WMPLib.WMPPlayState.wmppsPlaying: NowPlayingGrid.Visibility = System.Windows.Visibility.Visible;
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
+
+                    HideStationsAdorner(); //Playing, hide the adorner and rename the listview.
+
                     break;
-                case (int)WMPLib.WMPPlayState.wmppsPaused:
-                case (int)WMPLib.WMPPlayState.wmppsStopped: NowPlayingGrid.Visibility = System.Windows.Visibility.Hidden;
+                case WMPLib.WMPPlayState.wmppsReady:
+                case WMPLib.WMPPlayState.wmppsPaused:
+                case WMPLib.WMPPlayState.wmppsStopped: NowPlayingGrid.Visibility = System.Windows.Visibility.Hidden;
                     playBtn.IsEnabled = true;
                     pauseBtn.IsEnabled = false;
                     break;
@@ -183,9 +206,19 @@ namespace Hanasu
         {
             if (e.Property == ListView.ItemsSourceProperty && StationsService.Instance.Status == StationsServiceStatus.Idle)
             {
-                StationsListAdorner.IsAdornerVisible = false;
-                StationsListView.IsEnabled = true;
+                HideStationsAdorner();
             }
+        }
+
+        private void ShowStationsAdorner()
+        {
+            StationsListAdorner.IsAdornerVisible = true;
+            StationsListView.IsEnabled = false;
+        }
+        private void HideStationsAdorner()
+        {
+            StationsListAdorner.IsAdornerVisible = false;
+            StationsListView.IsEnabled = true;
         }
     }
 }
