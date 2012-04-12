@@ -214,7 +214,9 @@
   <ItemGroup>
     <Resource Include="Resources\heart.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="External\Slider\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="External\Adorner\README.txt" />
   </ItemGroup>
