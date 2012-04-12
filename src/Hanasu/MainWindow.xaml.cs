@@ -71,6 +71,8 @@ namespace Hanasu
         void MainWindow_Unloaded(object sender, RoutedEventArgs e)
         {
 
+            Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue();
+
             this.KeyUp -= MainWindow_KeyUp;
 
             player.PlayStateChange -= player_PlayStateChange;
@@ -180,6 +182,9 @@ namespace Hanasu
 
             if (station == null)
                 return;
+
+            if (currentStation != station)
+                Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue(); //Get rid of messages from the last station, if any.
 
             if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource))
             {

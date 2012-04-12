@@ -21,6 +21,15 @@ namespace Hanasu.Services.Notifications
         public static ObservableQueue<NotificationInfo> Notifications { get; private set; }
         public static bool QueueRunning { get; private set; }
 
+        public static void ClearNotificationQueue()
+        {
+            lock (Notifications)
+            {
+                Notifications.Clear();
+            }
+        }
+
+
         public static void AddNotification(string title, string message, int duration)
         {
             lock (Notifications)

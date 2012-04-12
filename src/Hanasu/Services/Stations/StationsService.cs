@@ -44,8 +44,11 @@ namespace Hanasu.Services.Stations
         {
             try
             {
-                if (StationFetchStarted != null)
-                    StationFetchStarted(this, null);
+                System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                    {
+                        if (StationFetchStarted != null)
+                            StationFetchStarted(this, null);
+                    }));
 
                 Status = StationsServiceStatus.Polling;
 
