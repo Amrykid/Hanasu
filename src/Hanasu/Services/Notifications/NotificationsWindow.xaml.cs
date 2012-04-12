@@ -39,8 +39,8 @@ namespace Hanasu.Services.Notifications
             aniStry.Completed += aniStry_Completed;
             tm.Elapsed += tm_Elapsed;
 
-            this.Top = System.Windows.SystemParameters.VirtualScreenHeight;
-            this.Left = System.Windows.SystemParameters.VirtualScreenWidth - this.Width;
+            this.Top = System.Windows.SystemParameters.PrimaryScreenHeight;
+            this.Left = System.Windows.SystemParameters.PrimaryScreenWidth - this.Width;
             this.WindowStartupLocation = System.Windows.WindowStartupLocation.Manual;
 
             this.T = System.Windows.SystemParameters.WorkArea.Height - this.Height;
@@ -108,7 +108,7 @@ namespace Hanasu.Services.Notifications
         public void Retract()
         {
             aniStry.Children.Remove(heightAni);
-            heightAni.To = System.Windows.SystemParameters.VirtualScreenHeight;
+            heightAni.To = System.Windows.SystemParameters.PrimaryScreenHeight;
             heightAni.From = this.Top;
             heightAni.Duration = new Duration(TimeSpan.FromSeconds(0.3));
             aniStry.Children.Add(heightAni);

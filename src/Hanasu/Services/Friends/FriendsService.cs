@@ -11,6 +11,7 @@ namespace Hanasu.Services.Friends
     public class FriendsService : BaseINPC
     {
         public const int FriendsPort = 8562;
+        public const bool FriendsEnabled = false;
 
         static FriendsService()
         {
@@ -27,15 +28,18 @@ namespace Hanasu.Services.Friends
         {
             Friends = new ObservableCollection<Friend>();
 
-            mapping = new Mono.Nat.Mapping(Mono.Nat.Protocol.Udp, FriendsPort, FriendsPort);
+            if (FriendsEnabled)
+            {
+                mapping = new Mono.Nat.Mapping(Mono.Nat.Protocol.Udp, FriendsPort, FriendsPort);
 
-            Task.Factory.StartNew(() =>
-                {
-                    Mono.Nat.NatUtility.DeviceFound += NatUtility_DeviceFound;
-                    Mono.Nat.NatUtility.StartDiscovery();
+                Task.Factory.StartNew(() =>
+                    {
+                        Mono.Nat.NatUtility.DeviceFound += NatUtility_DeviceFound;
+                        Mono.Nat.NatUtility.StartDiscovery();
 
-                }).ContinueWith((tk) => tk.Dispose());
+                    }).ContinueWith((tk) => tk.Dispose());
 
+            }
             App.Current.Exit += Current_Exit;
         }
 
@@ -51,8 +55,10 @@ namespace Hanasu.Services.Friends
 
         void Current_Exit(object sender, System.Windows.ExitEventArgs e)
         {
-            if (Router != null)
-                Router.DeletePortMap(mapping);
+            if (FriendsEnabled)
+                if (Router != null)
+                    Router.DeletePortMap(mapping);
+
             App.Current.Exit -= Current_Exit;
         }
 
