@@ -4,6 +4,7 @@
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:stations="clr-namespace:Hanasu.Services.Stations"
         xmlns:ac="clr-namespace:AdornedControl"
+        xmlns:log="clr-namespace:Hanasu.Services.Logging"
         Title="Hanasu" MinHeight="410" MinWidth="715">
     <Window.Resources>
         <ResourceDictionary>
@@ -63,11 +64,12 @@
                         </Border>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Favorites" Name="tabItem3">
-                    <ListView Foreground="Black" Name="FavSongListView" MouseDoubleClick="StationsListView_MouseDoubleClick">
+                <TabItem Header="Log" Name="tabItem3">
+                    <ListView Foreground="Black" Name="LogListView" ItemsSource="{Binding Source={x:Static log:LogService.Instance}, Path=Messages, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="LogListView_TargetUpdated">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Song" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding Sender}"/>
+                                <GridViewColumn Header="Message" Width="400" DisplayMemberBinding="{Binding Message}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>

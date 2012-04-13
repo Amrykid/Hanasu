@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using MahApps.Metro.Controls;
 using MahApps.Metro;
 using Hanasu.Services.Stations;
+using Hanasu.Services.Logging;
+using Hanasu.Core;
 
 namespace Hanasu
 {
@@ -26,11 +28,13 @@ namespace Hanasu
         {
             InitializeComponent();
 
+            Hanasu.Services.Logging.LogService.Initialize();
+
             Hanasu.Services.Stations.StationsService.Initialize();
             Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
             Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted += Instance_StationFetchCompleted;
 
-            Hanasu.Services.Friends.FriendsService.Initialize();
+            //Hanasu.Services.Friends.FriendsService.Initialize();
 
             this.KeyUp += MainWindow_KeyUp;
 
@@ -148,6 +152,9 @@ namespace Hanasu
 
             WMPLib.WMPPlayState state = (WMPLib.WMPPlayState)e.newState;
 
+            LogService.Instance.WriteLog(player,
+    "Play state changed: " + Enum.GetName(typeof(WMPLib.WMPPlayState), state));
+
             switch (state)
             {
                 case WMPLib.WMPPlayState.wmppsTransitioning:
@@ -172,7 +179,7 @@ namespace Hanasu
                     pauseBtn.IsEnabled = false;
 
                     if (Hanasu.Services.Stations.StationsService.Instance.Status != StationsServiceStatus.Polling)
-                            HideStationsAdorner();
+                        HideStationsAdorner();
                     break;
             }
         }
@@ -203,6 +210,9 @@ namespace Hanasu
                 player.URL = station.DataSource.ToString();
             }
 
+            LogService.Instance.WriteLog(typeof(MainWindow),
+    "Playing station: " + station.Name);
+
             player.Ctlcontrols.play();
 
             currentStation = station;
@@ -225,13 +235,26 @@ namespace Hanasu
 
         private void ShowStationsAdorner()
         {
+            LogService.Instance.WriteLog(typeof(MainWindow),
+    "Station adorner shown.");
+
             StationsListAdorner.IsAdornerVisible = true;
             StationsListView.IsEnabled = false;
         }
         private void HideStationsAdorner()
         {
+            LogService.Instance.WriteLog(typeof(MainWindow),
+    "Station adorner hid.");
+
             StationsListAdorner.IsAdornerVisible = false;
             StationsListView.IsEnabled = true;
+        }
+
+        private void LogListView_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            if (LogListView.ItemsSource == null) return;
+
+            LogListView.ScrollIntoView(LogListView.Items[((ObservableQueue<LogMessage>)LogListView.Items.SourceCollection).Count -1]);
         }
     }
 }

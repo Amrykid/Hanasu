@@ -97,6 +97,8 @@
     <Compile Include="External\Adorner\FrameworkElementAdorner.cs" />
     <Compile Include="Services\Friends\Friend.cs" />
     <Compile Include="Services\Friends\FriendsService.cs" />
+    <Compile Include="Services\Logging\LogMessage.cs" />
+    <Compile Include="Services\Logging\LogService.cs" />
     <Compile Include="Services\Notifications\NotificationInfo.cs" />
     <Compile Include="Services\Notifications\NotificationsService.cs" />
     <Compile Include="Services\Notifications\NotificationsWindow.xaml.cs">
@@ -226,7 +228,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

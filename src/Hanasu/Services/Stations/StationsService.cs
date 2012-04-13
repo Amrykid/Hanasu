@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using Hanasu.Core;
 using System.Xml.Linq;
 using System.Timers;
+using Hanasu.Services.Logging;
 
 namespace Hanasu.Services.Stations
 {
@@ -27,6 +28,9 @@ namespace Hanasu.Services.Stations
 
         public StationsService()
         {
+            LogService.Instance.WriteLog(this,
+                "Stations Service initialized.");
+
             Stations = new ObservableCollection<Station>();
             timer = new Timer();
 
@@ -44,6 +48,9 @@ namespace Hanasu.Services.Stations
         {
             try
             {
+                LogService.Instance.WriteLog(this,
+    "BEGIN: Station polling operation.");
+
                 System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
                     {
                         if (StationFetchStarted != null)
@@ -86,6 +93,9 @@ namespace Hanasu.Services.Stations
                         if (StationFetchCompleted != null)
                             StationFetchCompleted(this, null);
                     }));
+
+                LogService.Instance.WriteLog(this,
+    "END: Station polling operation.");
 
             }
             catch (Exception) { }

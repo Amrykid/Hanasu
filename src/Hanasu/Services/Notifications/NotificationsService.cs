@@ -8,6 +8,7 @@ using System.Threading;
 using System.Media;
 using Hanasu.Services.Notifications;
 using Hanasu.Core;
+using Hanasu.Services.Logging;
 
 namespace Hanasu.Services.Notifications
 {
@@ -16,6 +17,9 @@ namespace Hanasu.Services.Notifications
         static NotificationsService()
         {
             Notifications = new ObservableQueue<NotificationInfo>();
+
+            LogService.Instance.WriteLog(typeof(NotificationsService),
+    "Notifications Service initialized.");
         }
 
         public static ObservableQueue<NotificationInfo> Notifications { get; private set; }
@@ -39,6 +43,9 @@ namespace Hanasu.Services.Notifications
 
                 foreach (NotificationInfo ni in tmp)
                     Notifications.Enqueue(ni);
+
+                LogService.Instance.WriteLog(typeof(NotificationsService),
+    "Notifications queue cleared.");
             }
         }
 
@@ -55,6 +62,9 @@ namespace Hanasu.Services.Notifications
                         Duration = duration,
                         IsUrgent = isUrgent
                     });
+
+                LogService.Instance.WriteLog(typeof(NotificationsService),
+    "Notification added.");
             }
 
             HandleQueue();
@@ -84,6 +94,9 @@ namespace Hanasu.Services.Notifications
                                 }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
                             while (nw.IsVisible)
                                 Thread.Sleep(50);
+
+                            LogService.Instance.WriteLog(typeof(NotificationsService),
+    "Notification shown: " + ((dynamic)nw.DataContext).Title);
                         }
                         catch (Exception)
                         {

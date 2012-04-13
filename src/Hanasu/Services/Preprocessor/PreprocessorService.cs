@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using Hanasu.Services.Preprocessor.Preprocessors;
+using Hanasu.Services.Logging;
 
 namespace Hanasu.Services.Preprocessor
 {
@@ -11,6 +12,9 @@ namespace Hanasu.Services.Preprocessor
     {
         static PreprocessorService()
         {
+            LogService.Instance.WriteLog(typeof(PreprocessorService),
+    "Preprocessor Service initialized.");
+
             Preprocessors = new ObservableCollection<IPreprocessor>();
 
             RegisterPreprocessor(typeof(PLSPreprocessor));
@@ -22,6 +26,9 @@ namespace Hanasu.Services.Preprocessor
             {
                 Preprocessors.Add(
                     (IPreprocessor)Activator.CreateInstance(processor));
+
+                LogService.Instance.WriteLog(typeof(PreprocessorService),
+    "Preprocessor of type '" + processor.ToString() + "' registered.");
             }
             else
             {
@@ -43,6 +50,9 @@ namespace Hanasu.Services.Preprocessor
 
         public static void Process(ref Uri url)
         {
+            LogService.Instance.WriteLog(typeof(PreprocessorService),
+    "Preprocessing url: " + url.ToString());
+
             foreach (IPreprocessor p in Preprocessors)
                 if (p.Supports(url))
                     p.Process(ref url);
