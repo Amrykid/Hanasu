@@ -70,6 +70,7 @@
                             <GridView>
                                 <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding Sender}"/>
                                 <GridViewColumn Header="Message" Width="400" DisplayMemberBinding="{Binding Message}"/>
+                                <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Time}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>

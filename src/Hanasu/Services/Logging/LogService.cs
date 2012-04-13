@@ -38,7 +38,8 @@ namespace Hanasu.Services.Logging
                 new LogMessage()
                 {
                     Sender = from,
-                    Message = msg
+                    Message = msg,
+                    Time = DateTime.Now
                 });
 
             OnPropertyChanged("Messages");

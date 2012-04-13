@@ -9,5 +9,6 @@ namespace Hanasu.Services.Logging
     {
         public Type Sender { get; set; }
         public string Message { get; set; }
+        public DateTime Time { get; set; }
     }
 }
