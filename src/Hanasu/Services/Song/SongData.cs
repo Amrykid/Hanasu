@@ -11,5 +11,8 @@ namespace Hanasu.Services.Song
         public string Artist { get; set; }
         public string Lyrics { get; set; }
         public Uri LyricsUri { get; set; }
+        public string Album { get; set; }
+        public Uri AlbumCoverUri { get; set; }
+        public Uri BuyUri { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Hanasu.Services.Song.Lyric_Data_Sources;
 using System.Collections.ObjectModel;
+using Hanasu.Services.Song.Album_Info_Data_Source;
 
 namespace Hanasu.Services.Song
 {
@@ -35,12 +36,12 @@ namespace Hanasu.Services.Song
 
             var datasource = new LetrasTerraLyricDataSource();
 
-            var bits = newsongdata.Split('-');
+            var bits = newsongdata.Split(new string[] { " - " }, StringSplitOptions.None);
 
 
             string lyrics = null;
 
-            if (datasource.GetLyrics(bits[0].Trim(' ',' '), bits[1].Trim(' ',' '), out lyrics, out lyricsUri))
+            if (datasource.GetLyrics(bits[0].Trim(' ', ' '), bits[1].Trim(' ', ' '), out lyrics, out lyricsUri))
             {
                 var song = new SongData();
 
@@ -49,11 +50,13 @@ namespace Hanasu.Services.Song
                 song.Lyrics = lyrics;
                 song.LyricsUri = lyricsUri;
 
+                new MSMetaServices().GetAlbumInfo(ref song);
+
                 SongCache.Add(newsongdata.ToLower(), song);
 
                 return true;
             }
-            else if (datasource.GetLyrics(bits[1].Trim(' ',' '), bits[0].Trim(' ',' '), out lyrics, out lyricsUri))
+            else if (datasource.GetLyrics(bits[1].Trim(' ', ' '), bits[0].Trim(' ', ' '), out lyrics, out lyricsUri))
             {
                 var song = new SongData();
 
@@ -62,6 +65,7 @@ namespace Hanasu.Services.Song
                 song.Lyrics = lyrics;
                 song.LyricsUri = lyricsUri;
 
+                new MSMetaServices().GetAlbumInfo(ref song);
 
                 SongCache.Add(newsongdata.ToLower(), song);
 
@@ -72,6 +76,13 @@ namespace Hanasu.Services.Song
         }
         public static SongData GetSongData(string songdata)
         {
+            if (SongCache.ContainsKey(songdata.ToLower()))
+                return SongCache[songdata.ToLower()];
+
+            Uri lyricsUrl = null;
+            if (IsSongAvailable(songdata, out lyricsUrl))
+                return SongCache[songdata.ToLower()];
+
             return null;
         }
         private static string CleanSongDataStr(string songdata)

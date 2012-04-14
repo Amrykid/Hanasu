@@ -147,6 +147,13 @@ namespace Hanasu
 
                         System.Threading.Tasks.Task.Factory.StartNew(() =>
                             {
+                                var stat = currentStation;
+
+                                System.Threading.Thread.Sleep(1000 * 10); //wait 10 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
+
+                                if (stat != currentStation)
+                                    return;
+
                                 Uri lyricsUrl = null;
                                 if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
                                     Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Lyrics found",

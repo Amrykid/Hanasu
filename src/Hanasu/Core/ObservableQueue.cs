@@ -52,6 +52,9 @@ namespace Hanasu.Core
         }
         public new T Dequeue()
         {
+            if (base.Count == 0)
+                return default(T);
+
             var itm = base.Dequeue();
             foreach (var obs in Observers)
                 if (itm != null)
