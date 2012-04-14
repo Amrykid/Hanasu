@@ -112,5 +112,6 @@ namespace Hanasu.Services.Notifications
         }
 
         public delegate void EmptyDelegate();
+        public delegate object EmptyReturnDelegate();
     }
 }

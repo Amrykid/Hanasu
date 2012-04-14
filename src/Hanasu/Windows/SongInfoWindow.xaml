@@ -4,7 +4,7 @@
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:core="clr-namespace:Hanasu.Core"
         WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False"
-        Height="334" Width="506" Name="thisWindow">
+        Height="506" Width="665" Name="thisWindow" Title="Song Data">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,13 +19,20 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Image Margin="25,16,248,124" Name="image1" Stretch="Fill" Source="{Binding AlbumCoverUri, Converter={StaticResource UriToBitmapImageConverter1},TargetNullValue='pack://application:,,,/Hanasu;component/Resources/cancel.png',FallbackValue='pack://application:,,,/Hanasu;component/Resources/cancel.png'}" />
-        <GroupBox Header="Data" HorizontalAlignment="Left" Margin="254,16,0,36" Name="groupBox1" Width="218">
+        <Image Margin="25,16,0,0" Name="image1" Stretch="Fill" Source="{Binding AlbumCoverUri, Converter={StaticResource UriToBitmapImageConverter1},TargetNullValue='pack://application:,,,/Hanasu;component/Resources/cancel.png'}" Height="193" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250" />
+        <GroupBox Header="Data" HorizontalAlignment="Left" Margin="25,215,0,12" Name="groupBox1" Width="250">
             <Grid>
-                <Label ContentStringFormat="Artist: {0}" Content="{Binding Artist}" Height="28" HorizontalAlignment="Left" Margin="13,19,0,0" Name="label1" VerticalAlignment="Top" />
-                <Label ContentStringFormat="Album: {0}" Content="{Binding Album,FallbackValue=N/A}" Height="28" HorizontalAlignment="Left" Margin="13,53,0,0" Name="label2" VerticalAlignment="Top" />
+                <Label ContentStringFormat="Artist: {0}" Content="{Binding Artist,TargetNullValue='N/A'}" Height="28" HorizontalAlignment="Left" Margin="13,19,0,0" Name="label1" VerticalAlignment="Top" />
+                <Label ContentStringFormat="Album: {0}" Content="{Binding Album,TargetNullValue='N/A'}" Height="28" HorizontalAlignment="Left" Margin="13,53,0,0" Name="label2" VerticalAlignment="Top" />
             </Grid>
         </GroupBox>
         <Button Content="Close" Height="23" HorizontalAlignment="Right" Margin="0,0,90,6" Name="Close" VerticalAlignment="Bottom" Width="75" Click="Close_Click" IsDefault="True" />
+        <GroupBox Header="Lyrics" Height="418" Margin="304,12,22,0" Name="groupBox2" VerticalAlignment="Top">
+            <Grid>
+                <ScrollViewer>
+                    <TextBlock Text="{Binding Lyrics}" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Height="350" TextWrapping="Wrap" Margin="0 -38 0 0"/>
+                </ScrollViewer>
+            </Grid>
+        </GroupBox>
     </Grid>
 </metro:MetroWindow>

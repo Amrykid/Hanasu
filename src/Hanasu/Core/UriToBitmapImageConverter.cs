@@ -27,7 +27,10 @@ namespace Hanasu.Core
                     image.BeginInit();
                     image.CacheOption = BitmapCacheOption.OnLoad;
                     image.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                    image.UriSource = new Uri((string)value, UriKind.Absolute);
+                    if (value is Uri)
+                        image.UriSource = (Uri)value;
+                    else
+                        new Uri((string)value, UriKind.Absolute);
                     image.EndInit();
                 }
                 catch
