@@ -55,9 +55,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MahApps.Metro.0.7.9.57-ALPHA\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Nat">
-      <HintPath>..\..\lib\Mono.Nat.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -96,8 +93,6 @@
     <Compile Include="External\Adorner\AdornedControl.cs" />
     <Compile Include="External\Adorner\AdornerPlacement.cs" />
     <Compile Include="External\Adorner\FrameworkElementAdorner.cs" />
-    <Compile Include="Services\Friends\Friend.cs" />
-    <Compile Include="Services\Friends\FriendsService.cs" />
     <Compile Include="Services\Logging\LogMessage.cs" />
     <Compile Include="Services\Logging\LogService.cs" />
     <Compile Include="Services\Notifications\NotificationInfo.cs" />
