@@ -249,6 +249,9 @@
   <ItemGroup>
     <Resource Include="External\Adorner\README.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\settings.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

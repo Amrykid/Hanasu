@@ -20,7 +20,14 @@
     </Window.Resources>
     <metro:MetroWindow.WindowCommands>
         <metro:WindowCommands>
-            <Button Content="settings" Name="settingsBtn" Click="settingsBtn_Click"/>
+            <Button Name="settingsBtn" Click="settingsBtn_Click">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/Hanasu;component/Resources/settings.png" Width="40" Height="40" Margin="0 -5 -10 0"/>
+                        <TextBlock Text="settings" Margin="0 5 0 0"></TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
         </metro:WindowCommands>
     </metro:MetroWindow.WindowCommands>
     <Grid>
@@ -35,7 +42,7 @@
                     <StackPanel Orientation="Vertical">
                         <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="240" Height="20"></TextBlock>
                         <Button Content="More Info" Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click"/>
-                            
+
                     </StackPanel>
                 </StackPanel>
             </Grid>
