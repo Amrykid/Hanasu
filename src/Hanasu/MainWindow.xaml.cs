@@ -147,7 +147,7 @@ namespace Hanasu
                 {
                     var name = player.currentMedia.name;
 
-                    if (name.Contains(" - ") && name.Contains(currentStation.Name) == false && name.Split(' ').Length > 1 && !System.Text.RegularExpressions.Regex.IsMatch(name,@"^(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$")) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
+                    if (name.Contains(" - ") && name.Contains(currentStation.Name) == false && name.Split(' ').Length > 1 && !System.Text.RegularExpressions.Regex.IsMatch(name, @"^(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$")) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
                     {
                         MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
 
@@ -171,17 +171,17 @@ namespace Hanasu
                                     if (stat != currentStation)
                                         return;
 
-                                    if ((bool)Dispatcher.Invoke(
-                                           new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() =>
+                                    Uri lyricsUrl = null;
+                                    if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
+                                    {
+                                        if ((bool)Dispatcher.Invoke(
+                                               new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() =>
                                                {
                                                    return (n != SongDataLbl.Text);
 
                                                })))
-                                        return;
+                                            return;
 
-                                    Uri lyricsUrl = null;
-                                    if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
-                                    {
                                         Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
                                         "Lyrics and other data found for this song.", 4000);
 
