@@ -147,7 +147,7 @@ namespace Hanasu
                 {
                     var name = player.currentMedia.name;
 
-                    if (name.Contains(" - ") && name.Contains(currentStation.Name) == false && name.Split(' ').Length > 1) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
+                    if (name.Contains(" - ") && name.Contains(currentStation.Name) == false && name.Split(' ').Length > 1 && !System.Text.RegularExpressions.Regex.IsMatch(name,@"^(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$")) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
                     {
                         MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
 
