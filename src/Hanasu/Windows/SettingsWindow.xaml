@@ -23,8 +23,8 @@
                     <TabControl MinHeight="295">
                         <TabItem Header="General">
                             <Grid>
-                                <metro:ToggleSwitch Height="45" HorizontalAlignment="Left" Margin="27,-4,0,0" Name="fetchSongDataSwitch" VerticalAlignment="Top" Width="237" Content="Fetch Song Data" FontSize="15" VerticalContentAlignment="Top" IsChecked="{Binding AutomaticallyFetchSongData,Mode=OneTime}"/>
-                                <metro:ToggleSwitch Height="45" HorizontalAlignment="Left" Margin="5,35,0,0" Name="LiveStationUpdSwitch" VerticalAlignment="Top" Width="259" Content="Live Stations List Updates" FontSize="15" VerticalContentAlignment="Top" IsChecked="{Binding UpdateStationsLive,Mode=OneTime}"/>
+                                <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" Name="fetchSongDataSwitch" VerticalAlignment="Top" Width="237" Header="Fetch Song Data" FontSize="15" IsChecked="{Binding AutomaticallyFetchSongData,Mode=OneTime}"/>
+                                <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,67,0,0" Name="LiveStationUpdSwitch" VerticalAlignment="Top" Width="237" Header="Live Stations List Updates" FontSize="15" IsChecked="{Binding UpdateStationsLive,Mode=OneTime}"/>
                             </Grid>
                         </TabItem>
                     </TabControl>
