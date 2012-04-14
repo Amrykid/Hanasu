@@ -39,9 +39,17 @@ namespace Hanasu.Services.Song.Lyric_Data_Sources
 
                     lyrics = lyricdata;
 
-                    lyricsUri = new Uri(url);
+                    if (lyrics == null)
+                    {
+                        lyricsUri = null;
+                        return false;
+                    }
+                    else
+                    {
+                        lyricsUri = new Uri(url);
 
-                    return true;
+                        return true;
+                    }
                 }
             }
         }
