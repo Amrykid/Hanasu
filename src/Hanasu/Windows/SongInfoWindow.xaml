@@ -30,7 +30,7 @@
         <GroupBox Header="Lyrics" Height="418" Margin="304,12,22,0" Name="groupBox2" VerticalAlignment="Top">
             <Grid>
                 <ScrollViewer>
-                    <TextBlock Text="{Binding Lyrics}" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Height="350" TextWrapping="Wrap" Margin="0 -38 0 0"/>
+                    <TextBlock Text="{Binding Lyrics}" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="350" TextWrapping="Wrap" Margin="0 -38 0 0"/>
                 </ScrollViewer>
             </Grid>
         </GroupBox>
