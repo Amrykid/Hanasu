@@ -22,7 +22,7 @@ namespace Hanasu.Services.Song.Lyric_Data_Sources
                 var data = wc.DownloadString(
                     url);
 
-                if (data.Contains("MÃºsica nÃ£o encontrada")) //Bootlegged way to check if it was found
+                if (!data.Contains("<div id=\"cabecalho\">")) //Bootlegged way to check if it was found
                 {
                     lyrics = null;
 
@@ -33,7 +33,8 @@ namespace Hanasu.Services.Song.Lyric_Data_Sources
                 else
                 {
 
-                    var lyricdata = Regex.Match(data, "<p>.+?</p>",RegexOptions.Singleline).Value;
+                    var ptags = Regex.Matches(data, "<p>.+?</p>",RegexOptions.Singleline);
+                    var lyricdata = ptags[ptags.Count - 1].Value;
 
                     lyricdata = Regex.Replace(lyricdata, "<br/><br/>", "\r\n\r\n");
 

@@ -196,6 +196,12 @@ namespace Hanasu
                     }
                     else
                     {
+                        Dispatcher.Invoke(
+                                            new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                                            {
+                                                MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
+                                            }));
+
                         //since its not a song, might as well display it as a radio message instead of 'Now Playing'.
 
                         lastMediaTxt = name;
