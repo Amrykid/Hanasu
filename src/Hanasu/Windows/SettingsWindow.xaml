@@ -1,0 +1,40 @@
+﻿<metro:MetroWindow x:Class="Hanasu.Windows.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:Hanasu.Services.Settings"
+        Title="Settings" Height="364" Width="493" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner" DataContext="{x:Static local:SettingsService.Instance}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Border CornerRadius="0 0 5 5" BorderBrush="White" BorderThickness="2">
+            <Grid>
+                <StackPanel>
+                    <TabControl MinHeight="295">
+                        <TabItem Header="General">
+                            <Grid>
+                                <metro:ToggleSwitch Height="45" HorizontalAlignment="Left" Margin="27,-4,0,0" Name="fetchSongDataSwitch" VerticalAlignment="Top" Width="237" Content="Fetch Song Data" FontSize="15" VerticalContentAlignment="Top" IsChecked="{Binding AutomaticallyFetchSongData,Mode=OneTime}">
+
+                                </metro:ToggleSwitch>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                    <StackPanel Height="24" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">
+                        <Button Content="OK" Width="50" Name="OkBtn" Click="OkBtn_Click"/>
+                        <Button Content="Cancel" Width="50" Name="CancelBtn" Click="CancelBtn_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</metro:MetroWindow>

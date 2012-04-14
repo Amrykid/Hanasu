@@ -18,6 +18,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    <metro:MetroWindow.WindowCommands>
+        <metro:WindowCommands>
+            <Button Content="settings" Name="settingsBtn" Click="settingsBtn_Click"/>
+        </metro:WindowCommands>
+    </metro:MetroWindow.WindowCommands>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="256*" />

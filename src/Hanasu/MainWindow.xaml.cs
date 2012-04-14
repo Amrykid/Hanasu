@@ -16,6 +16,7 @@ using MahApps.Metro;
 using Hanasu.Services.Stations;
 using Hanasu.Services.Logging;
 using Hanasu.Core;
+using Hanasu.Windows;
 
 namespace Hanasu
 {
@@ -28,11 +29,15 @@ namespace Hanasu
         {
             InitializeComponent();
 
+            Hanasu.Services.Settings.SettingsService.Initialize();
+
             Hanasu.Services.Logging.LogService.Initialize();
 
+            
             Hanasu.Services.Stations.StationsService.Initialize();
             Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
             Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted += Instance_StationFetchCompleted;
+
 
             //Hanasu.Services.Friends.FriendsService.Initialize();
 
@@ -147,38 +152,39 @@ namespace Hanasu
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
                             name, 4000);
 
-                        System.Threading.Tasks.Task.Factory.StartNew(() =>
-                            {
-                                var n = name;
-                                var stat = currentStation;
-
-                                System.Threading.Thread.Sleep(1000 * 20); //wait 20 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
-
-                                if (stat != currentStation)
-                                    return;
-
-                                if ((bool)Dispatcher.Invoke(
-                                       new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() =>
-                                           {
-                                               return (n != SongDataLbl.Text);
-
-                                           })))
-                                    return;
-
-                                Uri lyricsUrl = null;
-                                if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
+                        if (Hanasu.Services.Settings.SettingsService.Instance.AutomaticallyFetchSongData)
+                            System.Threading.Tasks.Task.Factory.StartNew(() =>
                                 {
-                                    Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
-                                    "Lyrics and other data found for this song.", 4000);
+                                    var n = name;
+                                    var stat = currentStation;
 
-                                    Dispatcher.Invoke(
-                                        new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
-                                            {
-                                                MoreInfoBtn.Visibility = System.Windows.Visibility.Visible;
-                                                MoreInfoBtn.DataContext = Hanasu.Services.Song.SongService.GetSongData(name);
-                                            }));
-                                }
-                            }).ContinueWith((tk) => tk.Dispose());
+                                    System.Threading.Thread.Sleep(1000 * 20); //wait 20 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
+
+                                    if (stat != currentStation)
+                                        return;
+
+                                    if ((bool)Dispatcher.Invoke(
+                                           new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() =>
+                                               {
+                                                   return (n != SongDataLbl.Text);
+
+                                               })))
+                                        return;
+
+                                    Uri lyricsUrl = null;
+                                    if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
+                                    {
+                                        Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
+                                        "Lyrics and other data found for this song.", 4000);
+
+                                        Dispatcher.Invoke(
+                                            new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                                                {
+                                                    MoreInfoBtn.Visibility = System.Windows.Visibility.Visible;
+                                                    MoreInfoBtn.DataContext = Hanasu.Services.Song.SongService.GetSongData(name);
+                                                }));
+                                    }
+                                }).ContinueWith((tk) => tk.Dispose());
                     }
                     else
                     {
@@ -320,6 +326,13 @@ namespace Hanasu
             siw.Owner = this;
 
             siw.ShowDialog();
+        }
+
+        private void settingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow sw = new SettingsWindow();
+            sw.Owner = this;
+            sw.ShowDialog();
         }
     }
 }
