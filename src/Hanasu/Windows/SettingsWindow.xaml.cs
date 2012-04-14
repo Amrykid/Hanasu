@@ -33,6 +33,7 @@ namespace Hanasu.Windows
         private void OkBtn_Click(object sender, RoutedEventArgs e)
         {
             SettingsService.Instance.AutomaticallyFetchSongData = (bool)fetchSongDataSwitch.IsChecked;
+            SettingsService.Instance.UpdateStationsLive = (bool)LiveStationUpdSwitch.IsChecked;
 
             this.DialogResult = true;
         }

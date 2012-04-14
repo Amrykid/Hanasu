@@ -36,8 +36,10 @@ namespace Hanasu.Services.Settings
                 var doc = new XDocument(
                     new XDeclaration("1.0", "Unicode", "yes"),
                     new XElement("Settings",
+                        new XElement("UpdateStationsLive","false"),
                         new XElement("AutomaticallyFetchSongData", "false")));
 
+                UpdateStationsLive = false;
                 AutomaticallyFetchSongData = false;
 
                 doc.Save(SettingsFilepath);
@@ -58,6 +60,7 @@ namespace Hanasu.Services.Settings
             var doc = new XDocument(
                     new XDeclaration("1.0", "Unicode", "yes"),
                     new XElement("Settings",
+                        new XElement("UpdateStationsLive",UpdateStationsLive.ToString()),
                         new XElement("AutomaticallyFetchSongData", AutomaticallyFetchSongData.ToString())));
 
 
@@ -66,5 +69,6 @@ namespace Hanasu.Services.Settings
         public string SettingsFilepath { get; private set; }
 
         public bool AutomaticallyFetchSongData { get; set; }
+        public bool UpdateStationsLive { get; set; }
     }
 }

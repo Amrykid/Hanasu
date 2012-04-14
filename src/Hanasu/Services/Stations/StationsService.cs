@@ -34,14 +34,18 @@ namespace Hanasu.Services.Stations
             Stations = new ObservableCollection<Station>();
             timer = new Timer();
 
-            timer.Elapsed += timer_Elapsed;
-
-            timer.Interval = 60000 * 2; //2 minutes
 
             System.Threading.Tasks.Task.Factory.StartNew(() =>
                 LoadStationsFromRepo()).ContinueWith((tk) => tk.Dispose());
 
-            timer.Start();
+            if (Hanasu.Services.Settings.SettingsService.Instance.UpdateStationsLive)
+            {
+                timer.Elapsed += timer_Elapsed;
+
+                timer.Interval = 60000 * 2; //2 minutes
+
+                timer.Start();
+            }
         }
 
         private void LoadStationsFromRepo()
