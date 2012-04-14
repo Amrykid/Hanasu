@@ -17,6 +17,7 @@ using Hanasu.Services.Stations;
 using Hanasu.Services.Logging;
 using Hanasu.Core;
 using Hanasu.Windows;
+using System.ComponentModel;
 
 namespace Hanasu
 {
@@ -29,22 +30,29 @@ namespace Hanasu
         {
             InitializeComponent();
 
-            Hanasu.Services.Settings.SettingsService.Initialize();
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                Hanasu.Services.Settings.SettingsService.Initialize();
 
-            Hanasu.Services.Logging.LogService.Initialize();
-
-            
-            Hanasu.Services.Stations.StationsService.Initialize();
-            Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
-            Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted += Instance_StationFetchCompleted;
+                Hanasu.Services.Logging.LogService.Initialize();
 
 
-            //Hanasu.Services.Friends.FriendsService.Initialize();
+                Hanasu.Services.Stations.StationsService.Initialize();
+                Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
+                Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted += Instance_StationFetchCompleted;
 
-            this.KeyUp += MainWindow_KeyUp;
 
-            this.Loaded += MainWindow_Loaded;
-            this.Unloaded += MainWindow_Unloaded;
+                //Hanasu.Services.Friends.FriendsService.Initialize();
+
+                this.KeyUp += MainWindow_KeyUp;
+
+                this.Loaded += MainWindow_Loaded;
+                this.Unloaded += MainWindow_Unloaded;
+            }
+            else
+            {
+                //Is in the designer. Do nothing.
+            }
         }
 
         void Instance_StationFetchCompleted(object sender, EventArgs e)
