@@ -136,6 +136,8 @@ namespace Hanasu
 
                     if (name.Contains(" - ") && name.Contains(currentStation.Name) == false && name.Split(' ').Length > 1) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
                     {
+                        MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
+
                         lastMediaTxt = name;
 
                         SongDataLbl.Text = name;
@@ -149,15 +151,24 @@ namespace Hanasu
                             {
                                 var stat = currentStation;
 
-                                System.Threading.Thread.Sleep(1000 * 10); //wait 10 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
+                                System.Threading.Thread.Sleep(1000 * 20); //wait 20 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
 
                                 if (stat != currentStation)
                                     return;
 
                                 Uri lyricsUrl = null;
                                 if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
+                                {
                                     Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Lyrics found",
                                     "Lyrics found for this song.", 4000);
+
+                                    Dispatcher.Invoke(
+                                        new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                                            {
+                                                MoreInfoBtn.Visibility = System.Windows.Visibility.Visible;
+                                                MoreInfoBtn.DataContext = Hanasu.Services.Song.SongService.GetSongData(name);
+                                            }));
+                                }
                             }).ContinueWith((tk) => tk.Dispose());
                     }
                     else
@@ -288,6 +299,18 @@ namespace Hanasu
             if (LogListView.ItemsSource == null) return;
 
             //LogListView.ScrollIntoView(LogListView.Items[((ObservableQueue<LogMessage>)LogListView.Items.SourceCollection).Count - 1]);
+        }
+
+        private void MoreInfoBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Button b = (Button)sender;
+
+            Hanasu.Windows.SongInfoWindow siw = new Windows.SongInfoWindow();
+            siw.DataContext = b.DataContext;
+
+            siw.Owner = this;
+
+            siw.ShowDialog();
         }
     }
 }

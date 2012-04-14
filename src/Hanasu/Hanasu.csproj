@@ -92,6 +92,7 @@
     </Compile>
     <Compile Include="Core\BaseINPC.cs" />
     <Compile Include="Core\ObservableQueue.cs" />
+    <Compile Include="Core\UriToBitmapImageConverter.cs" />
     <Compile Include="External\Adorner\AdornedControl.cs" />
     <Compile Include="External\Adorner\AdornerPlacement.cs" />
     <Compile Include="External\Adorner\FrameworkElementAdorner.cs" />
@@ -118,6 +119,9 @@
     <Compile Include="Services\Stations\Station.cs" />
     <Compile Include="Services\Stations\StationsService.cs" />
     <Compile Include="Services\Stations\StationsServiceStatus.cs" />
+    <Compile Include="Windows\SongInfoWindow.xaml.cs">
+      <DependentUpon>SongInfoWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -133,6 +137,10 @@
     <Page Include="Services\Notifications\NotificationsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\SongInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -227,7 +235,9 @@
   <ItemGroup>
     <Resource Include="Resources\heart.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\cancel.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="External\Adorner\README.txt" />
   </ItemGroup>

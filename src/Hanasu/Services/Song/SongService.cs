@@ -21,7 +21,7 @@ namespace Hanasu.Services.Song
 
         public static bool IsSongAvailable(string songdata, out Uri lyricsUri)
         {
-            Hanasu.Services.Logging.LogService.Instance.WriteLog(typeof(SongService), "Checking if sone is available from data: " + songdata);
+            Hanasu.Services.Logging.LogService.Instance.WriteLog(typeof(SongService), "Checking if song is available from data: " + songdata);
 
             var newsongdata = CleanSongDataStr(songdata);
 
@@ -41,47 +41,55 @@ namespace Hanasu.Services.Song
 
             string lyrics = null;
 
-            if (datasource.GetLyrics(bits[0].Trim(' ', ' '), bits[1].Trim(' ', ' '), out lyrics, out lyricsUri))
+            try
             {
-                var song = new SongData();
 
-                song.Artist = bits[0].Trim(' ');
-                song.TrackTitle = bits[1].Trim(' ');
-                song.Lyrics = lyrics;
-                song.LyricsUri = lyricsUri;
+                if (datasource.GetLyrics(bits[0].Trim(' ', ' '), bits[1].Trim(' ', ' '), out lyrics, out lyricsUri))
+                {
+                    var song = new SongData();
 
-                new MSMetaServices().GetAlbumInfo(ref song);
+                    song.Artist = bits[0].Trim(' ');
+                    song.TrackTitle = bits[1].Trim(' ');
+                    song.Lyrics = lyrics;
+                    song.LyricsUri = lyricsUri;
 
-                SongCache.Add(newsongdata.ToLower(), song);
+                    new MSMetaServices().GetAlbumInfo(ref song);
 
-                return true;
+                    SongCache.Add(newsongdata.ToLower(), song);
+
+                    return true;
+                }
+                else if (datasource.GetLyrics(bits[1].Trim(' ', ' '), bits[0].Trim(' ', ' '), out lyrics, out lyricsUri))
+                {
+                    var song = new SongData();
+
+                    song.Artist = bits[1].Trim(' ');
+                    song.TrackTitle = bits[0].Trim(' ');
+                    song.Lyrics = lyrics;
+                    song.LyricsUri = lyricsUri;
+
+                    new MSMetaServices().GetAlbumInfo(ref song);
+
+                    SongCache.Add(newsongdata.ToLower(), song);
+
+                    return true;
+                }
             }
-            else if (datasource.GetLyrics(bits[1].Trim(' ', ' '), bits[0].Trim(' ', ' '), out lyrics, out lyricsUri))
+            catch (Exception)
             {
-                var song = new SongData();
-
-                song.Artist = bits[1].Trim(' ');
-                song.TrackTitle = bits[0].Trim(' ');
-                song.Lyrics = lyrics;
-                song.LyricsUri = lyricsUri;
-
-                new MSMetaServices().GetAlbumInfo(ref song);
-
-                SongCache.Add(newsongdata.ToLower(), song);
-
-                return true;
             }
+            lyricsUri = null;
 
             return false;
         }
         public static SongData GetSongData(string songdata)
         {
-            if (SongCache.ContainsKey(songdata.ToLower()))
-                return SongCache[songdata.ToLower()];
+            if (SongCache.ContainsKey(CleanSongDataStr(songdata).ToLower()))
+                return SongCache[CleanSongDataStr(songdata).ToLower()];
 
             Uri lyricsUrl = null;
             if (IsSongAvailable(songdata, out lyricsUrl))
-                return SongCache[songdata.ToLower()];
+                return SongCache[CleanSongDataStr(songdata).ToLower()];
 
             return null;
         }
@@ -90,7 +98,7 @@ namespace Hanasu.Services.Song
             if (songdata.Contains("~"))
                 songdata = songdata.Substring(0, songdata.IndexOf("~"));
 
-            songdata = Regex.Replace(songdata, @"\(.+?(\(|$)", "");
+            songdata = Regex.Replace(songdata, @"\(.+?(\)|$)", "");
 
             songdata = songdata.Trim('\n', ' ');
 

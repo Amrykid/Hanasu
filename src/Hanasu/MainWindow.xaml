@@ -24,11 +24,13 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <Grid Height="40" Margin="0,6,12,0" VerticalAlignment="Top" Panel.ZIndex="100" Name="NowPlayingGrid" HorizontalAlignment="Right" Width="341" Visibility="Hidden">
+            <Grid Height="40" Margin="0,6,12,0" VerticalAlignment="Top" Panel.ZIndex="75" Name="NowPlayingGrid" HorizontalAlignment="Right" Width="341" Visibility="Hidden">
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="19" >Now Playing:</Label>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="240"></TextBlock>
+                        <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="240" Height="20"></TextBlock>
+                        <Button Content="More Info" Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click"/>
+                            
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -50,16 +52,16 @@
                                         <ProgressBar IsIndeterminate="True" Width="250"/>
                                     </ac:AdornedControl.AdornerContent>
                                     <ListView Foreground="Black" Name="StationsListView" ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" IsEnabled="False">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="Station" DisplayMemberBinding="{Binding Name}"/>
-                                            <GridViewColumn Header="Format" DisplayMemberBinding="{Binding Format}"/>
-                                            <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}"/>
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="Station" DisplayMemberBinding="{Binding Name}"/>
+                                                <GridViewColumn Header="Format" DisplayMemberBinding="{Binding Format}"/>
+                                                <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}"/>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
                                 </ac:AdornedControl>
-                                
+
                             </Grid>
                         </Border>
                     </Grid>
