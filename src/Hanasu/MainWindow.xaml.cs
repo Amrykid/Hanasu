@@ -100,6 +100,8 @@ namespace Hanasu
             windowsFormsHost1.Child = new Hanasu.Core.AxWMP();
             player = ((Hanasu.Core.AxWMP)windowsFormsHost1.Child).axWindowsMediaPlayer1;
 
+            player.Dock = System.Windows.Forms.DockStyle.Fill;
+
             player.uiMode = "none";
             player.enableContextMenu = false;
             player.settings.autoStart = false;
@@ -130,14 +132,38 @@ namespace Hanasu
             {
                 if (lastMediaTxt != player.currentMedia.name)
                 {
-                    lastMediaTxt = player.currentMedia.name;
+                    var name = player.currentMedia.name;
 
-                    SongDataLbl.Text = player.currentMedia.name;
+                    if (name.Contains(" - ") && name.Contains(currentStation.Name) == false && name.Split(' ').Length > 1) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
+                    {
+                        lastMediaTxt = name;
 
-                    //song changed. maybe a couple of seconds late.
+                        SongDataLbl.Text = name;
 
-                    Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
-                        player.currentMedia.name, 4000);
+                        //song changed. maybe a couple of seconds late.
+
+                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
+                            name, 4000);
+
+                        System.Threading.Tasks.Task.Factory.StartNew(() =>
+                            {
+                                Uri lyricsUrl = null;
+                                if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
+                                    Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Lyrics found",
+                                    "Lyrics found for this song.", 4000);
+                            }).ContinueWith((tk) => tk.Dispose());
+                    }
+                    else
+                    {
+                        //since its not a song, might as well display it as a radio message instead of 'Now Playing'.
+
+                        lastMediaTxt = name;
+
+                        SongDataLbl.Text = "Not Available";
+
+                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Radio Message",
+                            name, 4000);
+                    }
                 }
             }
             catch (Exception)
@@ -254,7 +280,7 @@ namespace Hanasu
         {
             if (LogListView.ItemsSource == null) return;
 
-            LogListView.ScrollIntoView(LogListView.Items[((ObservableQueue<LogMessage>)LogListView.Items.SourceCollection).Count -1]);
+            //LogListView.ScrollIntoView(LogListView.Items[((ObservableQueue<LogMessage>)LogListView.Items.SourceCollection).Count - 1]);
         }
     }
 }
