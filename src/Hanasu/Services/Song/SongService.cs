@@ -20,7 +20,11 @@ namespace Hanasu.Services.Song
 
         public static bool IsSongAvailable(string songdata, out Uri lyricsUri)
         {
+            Hanasu.Services.Logging.LogService.Instance.WriteLog(typeof(SongService), "Checking if sone is available from data: " + songdata);
+
             var newsongdata = CleanSongDataStr(songdata);
+
+            Hanasu.Services.Logging.LogService.Instance.WriteLog(typeof(SongService), "Parsed song data into: " + newsongdata);
 
             if (SongCache.ContainsKey(newsongdata.ToLower()))
             {
@@ -31,7 +35,7 @@ namespace Hanasu.Services.Song
 
             var datasource = new LetrasTerraLyricDataSource();
 
-            var bits = songdata.Split('-');
+            var bits = newsongdata.Split('-');
 
 
             string lyrics = null;
@@ -75,7 +79,7 @@ namespace Hanasu.Services.Song
             if (songdata.Contains("~"))
                 songdata = songdata.Substring(0, songdata.IndexOf("~"));
 
-            songdata = Regex.Replace(songdata, @"\(.+?((\()?|$)", "");
+            songdata = Regex.Replace(songdata, @"\(.+?(\(|$)", "");
 
             songdata = songdata.Trim('\n', ' ');
 

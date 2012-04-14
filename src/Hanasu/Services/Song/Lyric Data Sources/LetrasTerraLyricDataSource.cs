@@ -11,6 +11,8 @@ namespace Hanasu.Services.Song.Lyric_Data_Sources
     {
         public bool GetLyrics(string artist, string track, out string lyrics, out Uri lyricsUri)
         {
+            Hanasu.Services.Logging.LogService.Instance.WriteLog(this, "Attempting to find lyrics for artist: " + artist + " - track: " + track);
+
             var url = String.Format(LyricFormatUrl,
                         artist,
                         track);
@@ -42,7 +44,7 @@ namespace Hanasu.Services.Song.Lyric_Data_Sources
                     if (lyrics == null)
                     {
                         lyricsUri = null;
-                        return false;
+                        return false; //Rare cause when my bootlegged way doesn't work
                     }
                     else
                     {
