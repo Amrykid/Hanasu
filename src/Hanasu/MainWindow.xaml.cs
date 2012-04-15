@@ -41,6 +41,7 @@ namespace Hanasu
                 Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
                 Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted += Instance_StationFetchCompleted;
 
+                HandleMediaKeyHooks();
 
                 //Hanasu.Services.Friends.FriendsService.Initialize();
 
@@ -53,6 +54,39 @@ namespace Hanasu
             {
                 //Is in the designer. Do nothing.
             }
+        }
+        private static Hanasu.External.InterceptKeys.LowLevelKeyboardProc keyHookproc = null;
+        private void HandleMediaKeyHooks()
+        {
+            keyHookproc = new External.InterceptKeys.LowLevelKeyboardProc(
+                (int nCode, IntPtr wParam, IntPtr lParam) =>
+                {
+                    if (nCode >= 0 && wParam == (IntPtr)Hanasu.External.InterceptKeys.WM_KEYDOWN)
+                    {
+                        int vkCode = System.Runtime.InteropServices.Marshal.ReadInt32(lParam);
+                        var key = (System.Windows.Forms.Keys)vkCode;
+                        //TODO: find a better way to do this. don't like mixing WPF and WinForms
+
+                        switch (key)
+                        {
+                            case System.Windows.Forms.Keys.MediaPlayPause:
+                                {
+                                    if (NowPlayingGrid.Visibility == System.Windows.Visibility.Visible)
+                                        player.Ctlcontrols.pause();
+                                    else
+                                        player.Ctlcontrols.play();
+
+                                    break;
+                                }
+                            case System.Windows.Forms.Keys.MediaStop: player.Ctlcontrols.stop();
+                                break;
+
+                        }
+                    }
+                    return Hanasu.External.InterceptKeys.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+                });
+
+            Hanasu.External.InterceptKeys.SetHook(keyHookproc);
         }
 
         void Instance_StationFetchCompleted(object sender, EventArgs e)
@@ -70,6 +104,9 @@ namespace Hanasu
 
         void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
+            //See HandleMediaKeyHooks
+
+            /*
             switch (e.Key)
             {
                 case Key.MediaPlayPause:
@@ -85,6 +122,7 @@ namespace Hanasu
                     break;
 
             }
+             * */
         }
 
         void MainWindow_Unloaded(object sender, RoutedEventArgs e)
