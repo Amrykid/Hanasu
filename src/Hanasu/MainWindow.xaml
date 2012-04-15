@@ -41,7 +41,7 @@
                     <Label FontSize="19" >Now Playing:</Label>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="240" Height="20"></TextBlock>
-                        <Button Content="More Info" Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click"/>
+                        <Button Content="More Info" Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click" Width="100"/>
 
                     </StackPanel>
                 </StackPanel>
