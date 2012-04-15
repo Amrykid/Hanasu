@@ -19,7 +19,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Image Margin="25,16,0,0" Name="image1" Stretch="Fill" Source="{Binding AlbumCoverUri, Converter={StaticResource UriToBitmapImageConverter1},TargetNullValue='pack://application:,,,/Hanasu;component/Resources/cancel.png'}" Height="193" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250" />
+        <Image Margin="25,16,0,0" Name="image1" Stretch="Fill" Source="{Binding AlbumCoverUri, Converter={StaticResource UriToBitmapImageConverter1},TargetNullValue='pack://application:,,,/Hanasu;component/Resources/cancel.png'}" Height="193" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250" Visibility="Hidden" />
         <GroupBox Header="Data" HorizontalAlignment="Left" Margin="25,215,0,12" Name="groupBox1" Width="250">
             <Grid>
                 <Label ContentStringFormat="Artist: {0}" Content="{Binding Artist,TargetNullValue='N/A'}" Height="28" HorizontalAlignment="Left" Margin="13,19,0,0" Name="label1" VerticalAlignment="Top" />

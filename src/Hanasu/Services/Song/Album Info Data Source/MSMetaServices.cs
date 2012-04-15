@@ -51,7 +51,6 @@ namespace Hanasu.Services.Song.Album_Info_Data_Source
                         }
                         else
                         {
-
                             song.AlbumCoverUri = new Uri("http://images.metaservices.microsoft.com/cover/" + cover.Value);
                         }
                         return true;
@@ -67,7 +66,7 @@ namespace Hanasu.Services.Song.Album_Info_Data_Source
                 }
             }
 
-            return false;
+            //return false;
         }
 
         public string WebsiteName
