@@ -34,6 +34,9 @@ namespace Hanasu.Services.Logging
         }
         public void WriteLog(Type from, string msg)
         {
+            if (System.Windows.Application.Current == null)
+                return;
+
             Messages.Enqueue(
                 new LogMessage()
                 {

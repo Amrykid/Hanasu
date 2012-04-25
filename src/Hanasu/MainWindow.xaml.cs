@@ -78,6 +78,16 @@ namespace Hanasu
 
                                     break;
                                 }
+                            case System.Windows.Forms.Keys.MediaNextTrack:
+                                {
+                                    NextStation();
+                                    break;
+                                }
+                            case System.Windows.Forms.Keys.MediaPreviousTrack:
+                                {
+                                    PreviousStation();
+                                    break;
+                                }
                             case System.Windows.Forms.Keys.MediaStop: player.Ctlcontrols.stop();
                                 break;
 
@@ -87,6 +97,25 @@ namespace Hanasu
                 });
 
             Hanasu.External.InterceptKeys.SetHook(keyHookproc);
+        }
+
+        private void NextStation()
+        {
+            if (StationsListView.HasItems)
+                if (StationsListView.Items.Count > (StationsListView.SelectedIndex - 1))
+                {
+                    StationsListView.SelectedIndex += 1;
+                    StationsListView_MouseDoubleClick(StationsListView, null);
+                }
+        }
+        private void PreviousStation()
+        {
+            if (StationsListView.HasItems)
+                if ((StationsListView.SelectedIndex - 1) > -1)
+                {
+                    StationsListView.SelectedIndex -= 1;
+                    StationsListView_MouseDoubleClick(StationsListView, null);
+                }
         }
 
         void Instance_StationFetchCompleted(object sender, EventArgs e)
@@ -385,6 +414,16 @@ namespace Hanasu
             SettingsWindow sw = new SettingsWindow();
             sw.Owner = this;
             sw.ShowDialog();
+        }
+
+        private void ffBtn_Click(object sender, RoutedEventArgs e)
+        {
+            NextStation();
+        }
+
+        private void revBtn_Click(object sender, RoutedEventArgs e)
+        {
+            PreviousStation();
         }
     }
 }

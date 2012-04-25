@@ -52,6 +52,9 @@ namespace Hanasu.Services.Notifications
 
         public static void AddNotification(string title, string message, int duration, bool isUrgent = false)
         {
+            if (System.Windows.Application.Current == null)
+                return;
+
             lock (Notifications)
             {
                 Notifications.Enqueue(
@@ -79,6 +82,12 @@ namespace Hanasu.Services.Notifications
                 {
                     while (!Notifications.IsEmpty)
                     {
+                        if (System.Windows.Application.Current == null)
+                        {
+                            QueueRunning = false;
+                            return;
+                        }
+
                         QueueRunning = true;
                         try
                         {

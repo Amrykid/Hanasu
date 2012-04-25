@@ -61,7 +61,7 @@
                             <Grid>
                                 <ac:AdornedControl IsAdornerVisible="True" x:Name="StationsListAdorner">
                                     <ac:AdornedControl.AdornerContent>
-                                        <ProgressBar IsIndeterminate="True" Width="250"/>
+                                        <metro:MetroProgressBar IsIndeterminate="True" Width="450" />
                                     </ac:AdornedControl.AdornerContent>
                                     <ListView Foreground="Black" Name="StationsListView" ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" IsEnabled="False">
                                         <ListView.View>
@@ -97,7 +97,7 @@
                 <metro:ProgressIndicator Width="200" Height="17" ProgressColour="LightBlue"></metro:ProgressIndicator>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Visibility="Hidden">
+                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Click="revBtn_Click">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/rew.png"/>
                 </Button>
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="playBtn" Click="playBtn_Click">
@@ -106,7 +106,7 @@
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="pauseBtn" Click="pauseBtn_Click" IsEnabled="False">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/pause.png"/>
                 </Button>
-                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Visibility="Hidden">
+                <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Click="ffBtn_Click">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/ff.png"/>
                 </Button>
             </StackPanel>
