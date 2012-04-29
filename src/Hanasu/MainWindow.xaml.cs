@@ -196,11 +196,12 @@ namespace Hanasu
 
         }
 
+
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
         {
             Hanasu.Services.Notifications.NotificationsService.AddNotification(
                 "Unable to connect to station.",
-                "Hanasu was unable to connect to " + currentStation.Name + ".", 4000);
+                "Hanasu was unable to connect to " + currentStation.Name + ".", 4000, false, Services.Notifications.NotificationType.Error);
 
             HideStationsAdorner(); //On error rename the stations listview.
         }
@@ -225,7 +226,7 @@ namespace Hanasu
                         //song changed. maybe a couple of seconds late.
 
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
-                            name, 4000,false,Services.Notifications.NotificationType.Now_Playing);
+                            name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
 
                         if (Hanasu.Services.Settings.SettingsService.Instance.AutomaticallyFetchSongData)
                             System.Threading.Tasks.Task.Factory.StartNew(() =>
@@ -250,7 +251,7 @@ namespace Hanasu
                                             return;
 
                                         Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
-                                        "Lyrics and other data found for this song.", 4000,false,Services.Notifications.NotificationType.Music_Data);
+                                        "Lyrics and other data found for this song.", 4000, false, Services.Notifications.NotificationType.Music_Data);
 
                                         Dispatcher.Invoke(
                                             new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
@@ -276,7 +277,7 @@ namespace Hanasu
                         SongDataLbl.Text = "Not Available";
 
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Radio Message",
-                            name, 4000,false,Services.Notifications.NotificationType.Information);
+                            name, 4000, false, Services.Notifications.NotificationType.Information);
                     }
                 }
             }

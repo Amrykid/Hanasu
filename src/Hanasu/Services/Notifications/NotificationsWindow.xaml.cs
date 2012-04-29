@@ -83,6 +83,8 @@ namespace Hanasu.Services.Notifications
                     break;
                 case NotificationType.Music_Data: iconRectBrush.Visual = (Visual)this.Resources["appbar_music"];
                     break;
+                case NotificationType.Error: iconRectBrush.Visual = (Visual)this.Resources["appbar_error"];
+                    break;
             }
             
 

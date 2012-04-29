@@ -10,5 +10,6 @@ namespace Hanasu.Services.Notifications
         Information = 0,
         Now_Playing = 1,
         Music_Data = 2,
+        Error = 3,
     }
 }
