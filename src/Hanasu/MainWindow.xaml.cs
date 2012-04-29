@@ -250,7 +250,7 @@ namespace Hanasu
                                             return;
 
                                         Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
-                                        "Lyrics and other data found for this song.", 4000,false,Services.Notifications.NotificationType.Now_Playing);
+                                        "Lyrics and other data found for this song.", 4000,false,Services.Notifications.NotificationType.Music_Data);
 
                                         Dispatcher.Invoke(
                                             new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>

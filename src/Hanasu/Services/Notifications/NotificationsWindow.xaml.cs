@@ -81,6 +81,8 @@ namespace Hanasu.Services.Notifications
                     break;
                 case NotificationType.Now_Playing: iconRectBrush.Visual = (Visual)this.Resources["appbar_play"];
                     break;
+                case NotificationType.Music_Data: iconRectBrush.Visual = (Visual)this.Resources["appbar_music"];
+                    break;
             }
             
 
