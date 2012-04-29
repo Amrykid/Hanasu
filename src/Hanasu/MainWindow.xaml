@@ -77,6 +77,18 @@
                                     <ListView Foreground="Black" Name="StationsListView" ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" IsEnabled="False">
                                         <ListView.View>
                                             <GridView>
+                                                <GridViewColumn Header="*" Width="42">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Rectangle Width="30" Height="30">
+                                                                <Rectangle.Fill>
+                                                                    <VisualBrush Stretch="Fill"
+                            					                        Visual="{StaticResource appbar_music}" />
+                                                                </Rectangle.Fill>
+                                                            </Rectangle>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
                                                 <GridViewColumn Header="Station" DisplayMemberBinding="{Binding Name}"/>
                                                 <GridViewColumn Header="Format" DisplayMemberBinding="{Binding Format}"/>
                                                 <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}"/>
@@ -93,6 +105,18 @@
                     <ListView Foreground="Black" Name="LogListView" ItemsSource="{Binding Source={x:Static log:LogService.Instance}, Path=Messages, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="LogListView_TargetUpdated">
                         <ListView.View>
                             <GridView>
+                                <GridViewColumn Header="*" Width="42">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Rectangle Width="30" Height="30">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_message}" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
                                 <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding Sender}"/>
                                 <GridViewColumn Header="Message" Width="400" DisplayMemberBinding="{Binding Message}"/>
                                 <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Time}"/>

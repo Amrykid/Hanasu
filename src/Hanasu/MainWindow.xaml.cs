@@ -194,8 +194,43 @@ namespace Hanasu
 
             VolumeSlider.Value = player.settings.volume;
 
+           HandleWindowsTaskbarstuff();
+
+
         }
 
+        #region Windows 7+ Taskbar stuff
+        private void HandleWindowsTaskbarstuff()
+        {
+            //http://joshsmithonwpf.wordpress.com/2007/03/09/how-to-programmatically-click-a-button/
+
+            //check if W7 or higher
+            if (
+                (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1) /* if windows 7 */
+                || Environment.OSVersion.Version.Major > 6 /* if windows 8, etc */ )
+            {
+                this.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
+                this.TaskbarItemInfo.ThumbButtonInfos = new System.Windows.Shell.ThumbButtonInfoCollection();
+
+                /*
+                CommandBinding commandBinding = new CommandBinding(ButtonClickCommand, (object sender2, ExecutedRoutedEventArgs e2) =>
+                {
+                    playBtn_Click(null, null);
+                });
+                this.CommandBindings.Add(commandBinding);
+
+                this.TaskbarItemInfo.ThumbButtonInfos.Add(new System.Windows.Shell.ThumbButtonInfo()
+                {
+                    Description = "play",
+                    CommandTarget = playBtn,
+                    Command = ButtonClickCommand,
+                    ImageSource = (ImageSource)((Image)playBtn.Content).Source,
+                }); */
+            }
+        }
+
+        public static RoutedCommand ButtonClickCommand = new RoutedCommand();
+        #endregion
 
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
         {
@@ -393,6 +428,9 @@ namespace Hanasu
 
             StationsListAdorner.IsAdornerVisible = true;
             StationsListView.IsEnabled = false;
+
+            if (this.TaskbarItemInfo != null)
+                this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
         }
         private void HideStationsAdorner()
         {
@@ -401,6 +439,9 @@ namespace Hanasu
 
             StationsListAdorner.IsAdornerVisible = false;
             StationsListView.IsEnabled = true;
+
+            if (this.TaskbarItemInfo != null)
+                this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
         }
 
         private void LogListView_TargetUpdated(object sender, DataTransferEventArgs e)
