@@ -88,6 +88,13 @@ namespace Hanasu.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap i_black {
+            get {
+                object obj = ResourceManager.GetObject("i_black", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap pause {
             get {
                 object obj = ResourceManager.GetObject("pause", resourceCulture);

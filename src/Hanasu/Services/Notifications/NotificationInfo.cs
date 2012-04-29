@@ -11,5 +11,6 @@ namespace Hanasu.Services.Notifications
         public string Message { get; set; }
         public int Duration { get; set; }
         public bool IsUrgent { get; set; }
+        public NotificationType Type { get; set; }
     }
 }

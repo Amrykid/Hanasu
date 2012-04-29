@@ -73,7 +73,18 @@ namespace Hanasu.Services.Notifications
 
         void NotificationsWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            tm.Interval = ((NotificationInfo)this.DataContext).Duration;
+            var info = ((NotificationInfo)this.DataContext);
+
+            switch (info.Type)
+            {
+                case NotificationType.Information: iconRectBrush.Visual = (Visual)this.Resources["appbar_notification"];
+                    break;
+                case NotificationType.Now_Playing: iconRectBrush.Visual = (Visual)this.Resources["appbar_play"];
+                    break;
+            }
+            
+
+            tm.Interval = info.Duration;
             this.Show();
             aniStry.Begin(this);
         }

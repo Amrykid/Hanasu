@@ -225,7 +225,7 @@ namespace Hanasu
                         //song changed. maybe a couple of seconds late.
 
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
-                            name, 4000);
+                            name, 4000,false,Services.Notifications.NotificationType.Now_Playing);
 
                         if (Hanasu.Services.Settings.SettingsService.Instance.AutomaticallyFetchSongData)
                             System.Threading.Tasks.Task.Factory.StartNew(() =>
@@ -250,7 +250,7 @@ namespace Hanasu
                                             return;
 
                                         Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
-                                        "Lyrics and other data found for this song.", 4000);
+                                        "Lyrics and other data found for this song.", 4000,false,Services.Notifications.NotificationType.Now_Playing);
 
                                         Dispatcher.Invoke(
                                             new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
@@ -276,7 +276,7 @@ namespace Hanasu
                         SongDataLbl.Text = "Not Available";
 
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Radio Message",
-                            name, 4000);
+                            name, 4000,false,Services.Notifications.NotificationType.Information);
                     }
                 }
             }
@@ -309,6 +309,8 @@ namespace Hanasu
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
 
+                    VolumeMuteBtn.IsEnabled = true;
+
                     HideStationsAdorner(); //Playing, hide the adorner and rename the listview.
 
                     break;
@@ -317,6 +319,8 @@ namespace Hanasu
                 case WMPLib.WMPPlayState.wmppsStopped: NowPlayingGrid.Visibility = System.Windows.Visibility.Hidden;
                     playBtn.IsEnabled = true;
                     pauseBtn.IsEnabled = false;
+
+                    VolumeMuteBtn.IsEnabled = false;
 
                     if (Hanasu.Services.Stations.StationsService.Instance.Status != StationsServiceStatus.Polling)
                         HideStationsAdorner();
@@ -424,6 +428,30 @@ namespace Hanasu
         private void revBtn_Click(object sender, RoutedEventArgs e)
         {
             PreviousStation();
+        }
+
+        private void VolumeMuteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (player.settings.mute)
+            {
+                this.VolumeMuteBtnVisualBrush.Visual = (Visual)this.Resources["appbar_sound_3"];
+
+                VolumeSlider.IsEnabled = true;
+
+                player.settings.mute = false;
+
+                player.settings.volume = (int)VolumeSlider.Value;
+
+            }
+            else
+            {
+                this.VolumeMuteBtnVisualBrush.Visual = (Visual)this.Resources["appbar_sound_mute"];
+
+                VolumeSlider.IsEnabled = false;
+
+                player.settings.mute = true;
+
+            }
         }
     }
 }

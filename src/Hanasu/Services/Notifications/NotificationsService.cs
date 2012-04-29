@@ -50,7 +50,7 @@ namespace Hanasu.Services.Notifications
         }
 
 
-        public static void AddNotification(string title, string message, int duration, bool isUrgent = false)
+        public static void AddNotification(string title, string message, int duration, bool isUrgent = false, NotificationType type = NotificationType.Information)
         {
             if (System.Windows.Application.Current == null)
                 return;
@@ -63,7 +63,8 @@ namespace Hanasu.Services.Notifications
                         Title = title,
                         Message = message,
                         Duration = duration,
-                        IsUrgent = isUrgent
+                        IsUrgent = isUrgent,
+                        Type = type
                     });
 
                 LogService.Instance.WriteLog(typeof(NotificationsService),
