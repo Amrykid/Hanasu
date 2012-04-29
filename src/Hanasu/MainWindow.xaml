@@ -152,7 +152,7 @@
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
-                <Slider Margin="0 -2 0 0" Name="VolumeSlider" Height="35" Width="90" ValueChanged="VolumeSlider_ValueChanged" Maximum="100" Minimum="0" TickFrequency="5" IsMoveToPointEnabled="True" />
+                <Slider Margin="0 -2 0 0" Name="VolumeSlider" Height="35" Width="90" ValueChanged="VolumeSlider_ValueChanged" Maximum="100" Minimum="0" TickFrequency="5" IsMoveToPointEnabled="True" IsEnabled="False" />
             </StackPanel>
         </Grid>
     </Grid>

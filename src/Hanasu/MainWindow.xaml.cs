@@ -309,6 +309,12 @@ namespace Hanasu
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
 
+                    player.settings.mute = isMuted;
+
+                    if (!player.settings.mute)
+                    {
+                        VolumeSlider.IsEnabled = true;
+                    }
                     VolumeMuteBtn.IsEnabled = true;
 
                     HideStationsAdorner(); //Playing, hide the adorner and rename the listview.
@@ -320,6 +326,8 @@ namespace Hanasu
                     playBtn.IsEnabled = true;
                     pauseBtn.IsEnabled = false;
 
+
+                    VolumeSlider.IsEnabled = false;
                     VolumeMuteBtn.IsEnabled = false;
 
                     if (Hanasu.Services.Stations.StationsService.Instance.Status != StationsServiceStatus.Polling)
@@ -430,6 +438,7 @@ namespace Hanasu
             PreviousStation();
         }
 
+        private bool isMuted = false;
         private void VolumeMuteBtn_Click(object sender, RoutedEventArgs e)
         {
             if (player.settings.mute)
@@ -442,6 +451,7 @@ namespace Hanasu
 
                 player.settings.volume = (int)VolumeSlider.Value;
 
+                isMuted = false;
             }
             else
             {
@@ -450,6 +460,8 @@ namespace Hanasu
                 VolumeSlider.IsEnabled = false;
 
                 player.settings.mute = true;
+
+                isMuted = true;
 
             }
         }
