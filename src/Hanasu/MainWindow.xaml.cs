@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MahApps.Metro.Controls;
-using MahApps.Metro;
-using Hanasu.Services.Stations;
 using Hanasu.Services.Logging;
-using Hanasu.Core;
-using Hanasu.Windows;
-using System.ComponentModel;
 using Hanasu.Services.Song;
+using Hanasu.Services.Stations;
+using Hanasu.Windows;
+using MahApps.Metro.Controls;
 
 namespace Hanasu
 {
@@ -262,6 +253,10 @@ namespace Hanasu
 
                         SongDataLbl.Text = name;
 
+                        SongIsLiked = false;
+
+                        LikeBtnInfo.IsEnabled = true;
+
                         //song changed. maybe a couple of seconds late.
 
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
@@ -315,6 +310,10 @@ namespace Hanasu
                         //since its not a song, might as well display it as a radio message instead of 'Now Playing'.
 
                         currentSong = null;
+
+                        SongIsLiked = false;
+
+                        LikeBtnInfo.IsEnabled = false;
 
                         lastMediaTxt = name;
 
@@ -528,6 +527,7 @@ namespace Hanasu
             }
         }
 
+        public bool SongIsLiked = false;
         private void LikeBtnInfo_Click(object sender, RoutedEventArgs e)
         {
             Hanasu.Services.Events.EventService.RaiseEvent(Services.Events.EventType.Song_Liked,
@@ -536,6 +536,9 @@ namespace Hanasu
                     CurrentSong = currentSong,
                     CurrentStation = currentStation
                 });
+            SongIsLiked = true;
+
+            LikeBtnInfo.IsEnabled = false;
 
         }
         public class SongLikedEventInfo : StationEventInfo
