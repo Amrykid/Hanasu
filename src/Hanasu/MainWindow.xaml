@@ -145,6 +145,14 @@
                         <Button Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}">
                             <Image Source="pack://application:,,,/Hanasu;component/Resources/i_black.png"/>
                         </Button>
+                        <Button Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Name="LikeBtnInfo" Click="LikeBtnInfo_Click" Visibility="{Binding ElementName=MoreInfoBtn,Path=Visibility,UpdateSourceTrigger=PropertyChanged}">
+                            <Rectangle Width="22" Height="22" Margin="0 4 -1 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_heart}" x:Name="LikeBtnVisualBrush" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </StackPanel>

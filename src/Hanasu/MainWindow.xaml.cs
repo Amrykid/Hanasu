@@ -18,6 +18,7 @@ using Hanasu.Services.Logging;
 using Hanasu.Core;
 using Hanasu.Windows;
 using System.ComponentModel;
+using Hanasu.Services.Song;
 
 namespace Hanasu
 {
@@ -35,6 +36,8 @@ namespace Hanasu
                 Hanasu.Services.Settings.SettingsService.Initialize();
 
                 Hanasu.Services.Logging.LogService.Initialize();
+
+                Hanasu.Services.Events.EventService.Initialize();
 
 
                 Hanasu.Services.Stations.StationsService.Initialize();
@@ -242,6 +245,7 @@ namespace Hanasu
         }
 
         private string lastMediaTxt = null; //prevents the below event from constantly queueing the same song title.
+        private SongData currentSong = null;
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
         {
             try
@@ -292,7 +296,10 @@ namespace Hanasu
                                             new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
                                                 {
                                                     MoreInfoBtn.Visibility = System.Windows.Visibility.Visible;
-                                                    MoreInfoBtn.DataContext = Hanasu.Services.Song.SongService.GetSongData(name);
+
+                                                    currentSong = Hanasu.Services.Song.SongService.GetSongData(name);
+
+                                                    MoreInfoBtn.DataContext = currentSong;
                                                 }));
                                     }
                                 }).ContinueWith((tk) => tk.Dispose());
@@ -306,6 +313,8 @@ namespace Hanasu
                                             }));
 
                         //since its not a song, might as well display it as a radio message instead of 'Now Playing'.
+
+                        currentSong = null;
 
                         lastMediaTxt = name;
 
@@ -404,6 +413,17 @@ namespace Hanasu
             player.Ctlcontrols.play();
 
             currentStation = station;
+
+            Hanasu.Services.Events.EventService.RaiseEvent(Services.Events.EventType.Station_Changed
+                , new StationEventInfo()
+                {
+                    CurrentStation = currentStation
+                });
+        }
+
+        public class StationEventInfo : Hanasu.Services.Events.EventInfo
+        {
+            public Station CurrentStation { get; internal set; }
         }
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -506,6 +526,21 @@ namespace Hanasu
                 isMuted = true;
 
             }
+        }
+
+        private void LikeBtnInfo_Click(object sender, RoutedEventArgs e)
+        {
+            Hanasu.Services.Events.EventService.RaiseEvent(Services.Events.EventType.Song_Liked,
+                new SongLikedEventInfo()
+                {
+                    CurrentSong = currentSong,
+                    CurrentStation = currentStation
+                });
+
+        }
+        public class SongLikedEventInfo : StationEventInfo
+        {
+            public SongData CurrentSong { get; set; }
         }
     }
 }
