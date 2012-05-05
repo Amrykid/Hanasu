@@ -53,7 +53,11 @@ namespace Hanasu.Services.Facebook
                 }
 
                 if (Instance.NeedsToAuth)
+                {
+                    Hanasu.Services.Notifications.NotificationsService.AddNotification("Facebook Authorization Failed",
+                        "Was unable to authenicate with Facebook.", 3000, true, Notifications.NotificationType.Error);
                     return; //Auth failed. Stop
+                }
                 else
                 {
                     //Post song
@@ -65,6 +69,9 @@ namespace Hanasu.Services.Facebook
                     parameters.message = "I liked " + sl.CurrentSong.TrackTitle + " by " + sl.CurrentSong.Artist + ". (" + sl.CurrentStation.Name + ")";
 
                     fb.PostTaskAsync("me/feed", parameters);
+
+                    Hanasu.Services.Notifications.NotificationsService.AddNotification("Song shared",
+                        "Post to Facebook was completed.", 3000, true, Notifications.NotificationType.Information);
                 }
             }
         }
