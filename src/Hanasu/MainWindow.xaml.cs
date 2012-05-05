@@ -40,6 +40,8 @@ namespace Hanasu
 
                 //Hanasu.Services.Friends.FriendsService.Initialize();
 
+                Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+
                 this.KeyUp += MainWindow_KeyUp;
 
                 this.Loaded += MainWindow_Loaded;
@@ -49,6 +51,27 @@ namespace Hanasu
             {
                 //Is in the designer. Do nothing.
             }
+        }
+
+        void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+
+            ErrorWindow ew = new ErrorWindow();
+            ew.DataContext = e.Exception;
+
+            try
+            {
+                ew.Owner = this;
+
+                ew.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
+            }
+            catch (Exception)
+            {
+                ew.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            }
+
+            ew.ShowDialog();
         }
         private static Hanasu.External.InterceptKeys.LowLevelKeyboardProc keyHookproc = null;
         private void HandleMediaKeyHooks()

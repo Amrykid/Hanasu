@@ -126,6 +126,9 @@
     <Compile Include="Services\Stations\Station.cs" />
     <Compile Include="Services\Stations\StationsService.cs" />
     <Compile Include="Services\Stations\StationsServiceStatus.cs" />
+    <Compile Include="Windows\ErrorWindow.xaml.cs">
+      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -155,6 +158,10 @@
     <Page Include="Services\Notifications\NotificationsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ErrorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
