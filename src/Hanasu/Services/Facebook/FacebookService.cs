@@ -66,7 +66,21 @@ namespace Hanasu.Services.Facebook
 
 
                     dynamic parameters = new ExpandoObject();
-                    parameters.message = "I liked " + sl.CurrentSong.TrackTitle + " by " + sl.CurrentSong.Artist + ". (" + sl.CurrentStation.Name + ")";
+                    parameters.message = "I liked [" + sl.CurrentSong.TrackTitle + " by " + sl.CurrentSong.Artist + "].";
+                    parameters.picture = "https://github.com/Amrykid/Hanasu/raw/master/res/metro.icons/black/favs.png";
+                    parameters.link = sl.CurrentStation.Homepage.ToString();
+                    parameters.name = "Streaming [" + sl.CurrentStation.Name + "] powered by Hanasu.";
+
+
+                    dynamic dlHanasu = new ExpandoObject();
+                    dlHanasu.name = "Download Hanasu";
+                    dlHanasu.link = "https://github.com/Amrykid/Hanasu/downloads";
+
+                    /*dynamic visitStation = new ExpandoObject();
+                    visitStation.name = "Go To " + sl.CurrentStation.Name;
+                    visitStation.link = sl.CurrentStation.Homepage.ToString(); */
+
+                    parameters.actions = new ExpandoObject[] { dlHanasu };
 
                     fb.PostTaskAsync("me/feed", parameters);
 
