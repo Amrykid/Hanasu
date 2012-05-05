@@ -144,6 +144,9 @@
                         </TextBlock>
                         <Button Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}">
                             <Image Source="pack://application:,,,/Hanasu;component/Resources/i_black.png"/>
+                            <Button.ToolTip>
+                                <ToolTip Content="Shows information on the current song."/>
+                            </Button.ToolTip>
                         </Button>
                         <Button Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Name="LikeBtnInfo" Click="LikeBtnInfo_Click" Visibility="{Binding ElementName=MoreInfoBtn,Path=Visibility,UpdateSourceTrigger=PropertyChanged}">
                             <Rectangle Width="22" Height="22" Margin="0 4 -1 0">
@@ -198,8 +201,15 @@
                             					Visual="{StaticResource appbar_sound_3}" x:Name="VolumeMuteBtnVisualBrush" />
                         </Rectangle.Fill>
                     </Rectangle>
+                    <Button.ToolTip>
+                        <ToolTip Content="Mutes/Unmutes the audio stream."/>
+                    </Button.ToolTip>
                 </Button>
-                <Slider Margin="0 -2 0 0" Name="VolumeSlider" Height="35" Width="90" ValueChanged="VolumeSlider_ValueChanged" Maximum="100" Minimum="0" TickFrequency="5" IsMoveToPointEnabled="True" IsEnabled="False" />
+                <Slider Margin="0 -2 0 0" Name="VolumeSlider" Height="35" Width="90" ValueChanged="VolumeSlider_ValueChanged" Maximum="100" Minimum="0" TickFrequency="5" IsMoveToPointEnabled="True" IsEnabled="False" AutoToolTipPlacement="TopLeft">
+                    <Slider.ToolTip>
+                        <ToolTip Content="Controles the volume of the audio stream." />
+                    </Slider.ToolTip>
+                </Slider>
             </StackPanel>
         </Grid>
     </Grid>
