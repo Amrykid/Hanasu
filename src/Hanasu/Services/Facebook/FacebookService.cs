@@ -9,6 +9,7 @@ using System.Dynamic;
 using Facebook;
 using System.Windows;
 using System.Windows.Controls;
+using System.Threading.Tasks;
 
 namespace Hanasu.Services.Facebook
 {
@@ -82,10 +83,26 @@ namespace Hanasu.Services.Facebook
 
                     parameters.actions = new ExpandoObject[] { dlHanasu };
 
-                    fb.PostTaskAsync("me/feed", parameters);
+                    if (fb == null)
+                        fb = new FacebookClient(FBAccessToken);
 
-                    Hanasu.Services.Notifications.NotificationsService.AddNotification("Song shared",
-                        "Post to Facebook was completed.", 3000, true, Notifications.NotificationType.Information);
+                    Task<object> t = fb.PostTaskAsync("me/feed", parameters);
+
+                    t.ContinueWith((tk) =>
+                        {
+                            if (tk.Exception == null)
+                            {
+                                Hanasu.Services.Notifications.NotificationsService.AddNotification("Song shared",
+                                    "Post to Facebook was completed.", 3000, true, Notifications.NotificationType.Information);
+                            }
+                            else
+                            {
+                                Hanasu.Services.Notifications.NotificationsService.AddNotification("Song share error",
+                                    "Was unable to post song data to Facebook.", 3000, true, Notifications.NotificationType.Error);
+                            }
+
+                            tk.Dispose();
+                        });
                 }
             }
         }
