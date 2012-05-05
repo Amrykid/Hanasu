@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Hanasu.Services.Settings"
+        xmlns:fb="clr-namespace:Hanasu.Services.Facebook"
         Title="Settings" Height="364" Width="493" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner" DataContext="{x:Static local:SettingsService.Instance}">
     <Window.Resources>
         <ResourceDictionary>
@@ -26,6 +27,9 @@
                                 <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" Name="fetchSongDataSwitch" VerticalAlignment="Top" Width="237" Header="Fetch Song Data" FontSize="15" IsChecked="{Binding AutomaticallyFetchSongData,Mode=OneTime}"/>
                                 <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,67,0,0" Name="LiveStationUpdSwitch" VerticalAlignment="Top" Width="237" Header="Live Stations List Updates" FontSize="15" IsChecked="{Binding UpdateStationsLive,Mode=OneTime}"/>
                             </Grid>
+                        </TabItem>
+                        <TabItem Header="Sharing">
+                            <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" Name="fbpostSwitch" VerticalAlignment="Top" Width="237" Header="Post Liked songs to Facebook" FontSize="15" IsChecked="{Binding Source={x:Static fb:FacebookService.Instance},Path=UseFacebook,Mode=OneTime}"/>
                         </TabItem>
                     </TabControl>
                     <StackPanel Height="24" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">

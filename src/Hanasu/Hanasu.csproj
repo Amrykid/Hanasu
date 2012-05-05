@@ -51,6 +51,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Facebook">
+      <HintPath>..\..\packages\Facebook.6.0.16\lib\net40-client\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MahApps.Metro.0.7.9.59-ALPHA\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -97,6 +100,9 @@
     <Compile Include="Services\Events\EventReference.cs" />
     <Compile Include="Services\Events\EventService.cs" />
     <Compile Include="Services\Events\EventType.cs" />
+    <Compile Include="Services\Facebook\FacebookService.cs" />
+    <Compile Include="Services\IService.cs" />
+    <Compile Include="Services\IShareProviderService.cs" />
     <Compile Include="Services\Logging\LogMessage.cs" />
     <Compile Include="Services\Logging\LogService.cs" />
     <Compile Include="Services\Notifications\NotificationInfo.cs" />
@@ -267,10 +273,11 @@
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

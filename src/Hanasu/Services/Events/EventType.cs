@@ -9,5 +9,8 @@ namespace Hanasu.Services.Events
     {
         Station_Changed = 1,
         Song_Liked = 2,
+        Settings_Loaded = 3,
+        Settings_Saving = 4,
+        Settings_Created = 5,
     }
 }

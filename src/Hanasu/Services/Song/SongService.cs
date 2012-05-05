@@ -9,7 +9,7 @@ using Hanasu.Services.Song.Album_Info_Data_Source;
 
 namespace Hanasu.Services.Song
 {
-    public class SongService
+    public class SongService: IStaticService
     {
 
         private static Dictionary<string, SongData> SongCache = null;

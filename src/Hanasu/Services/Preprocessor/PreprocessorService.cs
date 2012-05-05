@@ -8,7 +8,7 @@ using Hanasu.Services.Logging;
 
 namespace Hanasu.Services.Preprocessor
 {
-    public static class PreprocessorService
+    public class PreprocessorService : IStaticService
     {
         static PreprocessorService()
         {

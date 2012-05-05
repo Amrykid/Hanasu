@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Hanasu.Core;
+using Hanasu.Services.Events;
 
 namespace Hanasu.Services.Settings
 {
-    public class SettingsService : BaseINPC
+    public class SettingsService : BaseINPC, IStaticService
     {
         static SettingsService()
         {
@@ -34,10 +35,22 @@ namespace Hanasu.Services.Settings
                 //Create the settings xml
 
                 var doc = new XDocument(
-                    new XDeclaration("1.0", "Unicode", "yes"),
-                    new XElement("Settings",
-                        new XElement("UpdateStationsLive","false"),
-                        new XElement("AutomaticallyFetchSongData", "false")));
+                    new XDeclaration("1.0", "Unicode", "yes"));
+
+                var settings = new XElement("Settings",
+                        new XElement("UpdateStationsLive", "false"),
+                        new XElement("AutomaticallyFetchSongData", "false"));
+
+                //Pass the settings to subscribers so they can update the settings xml as needed.
+                var sinfo = new SettingsDataEventInfo()
+                {
+                    SettingsDocument = doc,
+                    SettingsElement = settings
+                };
+
+                EventService.RaiseEvent(EventType.Settings_Created, sinfo);
+
+                settings = sinfo.SettingsElement;
 
                 UpdateStationsLive = false;
                 AutomaticallyFetchSongData = false;
@@ -49,20 +62,45 @@ namespace Hanasu.Services.Settings
                 //It exist. Load it
 
                 var doc = XDocument.Load(SettingsFilepath);
-                var songfetch = (doc.LastNode as XElement).Element("AutomaticallyFetchSongData");
+                var settings = (doc.LastNode as XElement);
+                var songfetch = settings.Element("AutomaticallyFetchSongData");
 
                 AutomaticallyFetchSongData = bool.Parse(songfetch.Value);
+
+                var liveupdate = settings.Element("UpdateStationsLive");
+
+                UpdateStationsLive = bool.Parse(liveupdate.Value);
+
+                var sinfo = new SettingsDataEventInfo()
+                {
+                    SettingsDocument = doc,
+                    SettingsElement = settings
+                };
+
+                EventService.RaiseEvent(EventType.Settings_Loaded, sinfo);
             }
         }
 
         void Current_Exit(object sender, System.Windows.ExitEventArgs e)
         {
-            var doc = new XDocument(
-                    new XDeclaration("1.0", "Unicode", "yes"),
-                    new XElement("Settings",
-                        new XElement("UpdateStationsLive",UpdateStationsLive.ToString()),
-                        new XElement("AutomaticallyFetchSongData", AutomaticallyFetchSongData.ToString())));
+            XDocument doc = new XDocument(
+                     new XDeclaration("1.0", "Unicode", "yes"));
 
+            var settings = new XElement("Settings",
+                          new XElement("UpdateStationsLive", UpdateStationsLive.ToString()),
+                          new XElement("AutomaticallyFetchSongData", AutomaticallyFetchSongData.ToString()));
+
+            var sinfo = new SettingsDataEventInfo()
+            {
+                SettingsDocument = doc,
+                SettingsElement = settings
+            };
+
+            EventService.RaiseEvent(EventType.Settings_Saving, sinfo);
+
+            settings = sinfo.SettingsElement;
+
+            doc.Add(settings);
 
             doc.Save(SettingsFilepath);
         }
@@ -70,5 +108,12 @@ namespace Hanasu.Services.Settings
 
         public bool AutomaticallyFetchSongData { get; set; }
         public bool UpdateStationsLive { get; set; }
+
+
+        internal class SettingsDataEventInfo : EventInfo
+        {
+            public XDocument SettingsDocument { get; set; }
+            public XElement SettingsElement { get; set; }
+        }
     }
 }

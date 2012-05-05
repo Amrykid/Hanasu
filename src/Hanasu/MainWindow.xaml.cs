@@ -24,11 +24,12 @@ namespace Hanasu
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
+                Hanasu.Services.Events.EventService.Initialize();
+                Hanasu.Services.Facebook.FacebookService.Initialize();
+
                 Hanasu.Services.Settings.SettingsService.Initialize();
 
                 Hanasu.Services.Logging.LogService.Initialize();
-
-                Hanasu.Services.Events.EventService.Initialize();
 
 
                 Hanasu.Services.Stations.StationsService.Initialize();
@@ -413,7 +414,7 @@ namespace Hanasu
 
             currentStation = station;
 
-            Hanasu.Services.Events.EventService.RaiseEvent(Services.Events.EventType.Station_Changed
+            Hanasu.Services.Events.EventService.RaiseEventAsync(Services.Events.EventType.Station_Changed
                 , new StationEventInfo()
                 {
                     CurrentStation = currentStation

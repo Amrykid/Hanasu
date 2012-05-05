@@ -6,7 +6,7 @@ using Hanasu.Core;
 
 namespace Hanasu.Services.Logging
 {
-    public class LogService : BaseINPC
+    public class LogService : BaseINPC, IStaticService
     {
         static LogService()
         {

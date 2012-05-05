@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hanasu.Services.Events
 {
-    public class EventService
+    public class EventService : IStaticService
     {
         static EventService()
         {
@@ -34,15 +34,23 @@ namespace Hanasu.Services.Events
             EventHandlers.Remove(eref);
         }
 
+        public static void RaiseEventAsync(EventType type, EventInfo data)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                RaiseEvent(type, data);
+            }).ContinueWith(t => t.Dispose());
+        }
+        public static void RaiseEvent(EventType type, ref EventInfo data)
+        {
+            RaiseEvent(type, data);
+        }
         public static void RaiseEvent(EventType type, EventInfo data)
         {
             data.EventType = type;
 
-            Task.Factory.StartNew(() =>
-            {
-                foreach (EventReference eref in EventHandlers.Where(rf => rf.EventType == type))
-                    eref.HandlerMethod.Invoke(data);
-            }).ContinueWith(t => t.Dispose());
+            foreach (EventReference eref in EventHandlers.Where(rf => rf.EventType == type))
+                eref.HandlerMethod.Invoke(data);
         }
     }
 }

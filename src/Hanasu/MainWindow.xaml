@@ -152,6 +152,9 @@
                             					Visual="{StaticResource appbar_heart}" x:Name="LikeBtnVisualBrush" />
                                 </Rectangle.Fill>
                             </Rectangle>
+                            <Button.ToolTip>
+                                <ToolTip Content="Share on Facebook?"/>
+                            </Button.ToolTip>
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -160,15 +163,27 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Click="revBtn_Click">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/rew.png"/>
+                    <Button.ToolTip>
+                        <ToolTip Content="Change station to the one above the current one."/>
+                    </Button.ToolTip>
                 </Button>
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="playBtn" Click="playBtn_Click">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/play.png"/>
+                    <Button.ToolTip>
+                        <ToolTip Content="Begins streaming the current station."/>
+                    </Button.ToolTip>
                 </Button>
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="pauseBtn" Click="pauseBtn_Click" IsEnabled="False">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/pause.png"/>
+                    <Button.ToolTip>
+                        <ToolTip Content="Pauses/stops the stream."/>
+                    </Button.ToolTip>
                 </Button>
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Click="ffBtn_Click">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/ff.png"/>
+                    <Button.ToolTip>
+                        <ToolTip Content="Change station to the one below the current one."/>
+                    </Button.ToolTip>
                 </Button>
             </StackPanel>
 

@@ -10,7 +10,7 @@ using Hanasu.Services.Logging;
 
 namespace Hanasu.Services.Stations
 {
-    public class StationsService : BaseINPC
+    public class StationsService : BaseINPC, IStaticService
     {
         static StationsService()
         {

@@ -12,7 +12,7 @@ using Hanasu.Services.Logging;
 
 namespace Hanasu.Services.Notifications
 {
-    public class NotificationsService
+    public class NotificationsService :IStaticService
     {
         static NotificationsService()
         {
@@ -123,5 +123,6 @@ namespace Hanasu.Services.Notifications
 
         public delegate void EmptyDelegate();
         public delegate object EmptyReturnDelegate();
+
     }
 }
