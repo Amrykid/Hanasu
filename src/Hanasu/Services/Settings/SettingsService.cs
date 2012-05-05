@@ -55,6 +55,8 @@ namespace Hanasu.Services.Settings
                 UpdateStationsLive = false;
                 AutomaticallyFetchSongData = false;
 
+                doc.Add(settings);
+
                 doc.Save(SettingsFilepath);
             }
             else
