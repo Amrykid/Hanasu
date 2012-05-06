@@ -36,6 +36,11 @@ namespace Hanasu.Windows
             SettingsService.Instance.UpdateStationsLive = (bool)LiveStationUpdSwitch.IsChecked;
 
             Hanasu.Services.Facebook.FacebookService.FacebookEnabled = ((bool)fetchSongDataSwitch.IsChecked == true ? (bool)fbpostSwitch.IsChecked : false);
+
+           //checks if auth is needed.
+
+            if (Hanasu.Services.Facebook.FacebookService.FacebookEnabled && Hanasu.Services.Facebook.FacebookService.Instance.NeedsToAuth)
+                Hanasu.Services.Facebook.FacebookService.DoFirstTimeAuth();
             
             this.DialogResult = true;
         }
@@ -47,5 +52,6 @@ namespace Hanasu.Windows
             if (fetchSongDataSwitch.IsChecked == false && fbpostSwitch.IsEnabled == false)
                 fbpostSwitch.IsChecked = false;
         }
+
     }
 }

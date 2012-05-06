@@ -50,7 +50,14 @@ namespace Hanasu.Services.Facebook
                 {
                     DoFirstTimeAuth();
 
-                    fb = new FacebookClient(FBAccessToken);
+                    if (!string.IsNullOrEmpty(FBAccessToken))
+                        fb = new FacebookClient(FBAccessToken);
+                    else
+                    {
+                        Hanasu.Services.Notifications.NotificationsService.AddNotification("Facebook Authorization Failed",
+                        "Was unable to authenicate with Facebook.", 3000, true, Notifications.NotificationType.Error);
+                        return; //Auth failed. Stop
+                    }
                 }
 
                 if (Instance.NeedsToAuth)
@@ -176,7 +183,7 @@ namespace Hanasu.Services.Facebook
             var tmp = new FacebookClient();
             return tmp.GetLoginUrl(parameters).ToString();
         }
-        private static void DoFirstTimeAuth()
+        internal static void DoFirstTimeAuth()
         {
             try
             {
