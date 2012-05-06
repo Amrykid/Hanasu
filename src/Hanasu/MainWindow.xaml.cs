@@ -490,8 +490,10 @@ namespace Hanasu
         private void LogListView_TargetUpdated(object sender, DataTransferEventArgs e)
         {
             if (LogListView.ItemsSource == null) return;
+            LogListView.ScrollIntoView(LogListView.SelectedItem);
 
-            //LogListView.ScrollIntoView(LogListView.Items[((ObservableQueue<LogMessage>)LogListView.Items.SourceCollection).Count - 1]);
+            LogListView.SelectedIndex = LogListView.Items.Count - 1;
+            LogListView.ScrollIntoView(LogListView.SelectedItem);
         }
 
         private void MoreInfoBtn_Click(object sender, RoutedEventArgs e)

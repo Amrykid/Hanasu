@@ -102,7 +102,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Log" Name="tabItem3">
-                    <ListView Foreground="Black" Name="LogListView" ItemsSource="{Binding Source={x:Static log:LogService.Instance}, Path=Messages, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="LogListView_TargetUpdated">
+                    <ListView Foreground="Black" Name="LogListView" ItemsSource="{Binding Source={x:Static log:LogService.Instance}, Path=Messages, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="LogListView_TargetUpdated" IsEnabled="False">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="*" Width="42">
