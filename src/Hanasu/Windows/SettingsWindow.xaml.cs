@@ -35,7 +35,7 @@ namespace Hanasu.Windows
             SettingsService.Instance.AutomaticallyFetchSongData = (bool)fetchSongDataSwitch.IsChecked;
             SettingsService.Instance.UpdateStationsLive = (bool)LiveStationUpdSwitch.IsChecked;
 
-            Hanasu.Services.Facebook.FacebookService.FacebookEnabled = (bool)fbpostSwitch.IsChecked;
+            Hanasu.Services.Facebook.FacebookService.FacebookEnabled = ((bool)fetchSongDataSwitch.IsChecked == true ? (bool)fbpostSwitch.IsChecked : false);
 
             this.DialogResult = true;
         }
