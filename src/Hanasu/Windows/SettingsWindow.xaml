@@ -31,7 +31,7 @@
                             </Grid>
                         </TabItem>
                         <TabItem Header="Sharing">
-                            <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="fbpostSwitch" VerticalAlignment="Top" Width="237" Header="Post Liked songs to Facebook" FontSize="15" IsEnabled="{Binding ElementName='fetchSongDataSwitch',Path=IsChecked}"  IsChecked="{Binding Source={x:Static fb:FacebookService.Instance},Path=UseFacebook,Mode=OneTime}"/>
+                            <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="fbpostSwitch" VerticalAlignment="Top" Width="237" Header="Post Liked songs to Facebook" FontSize="15" IsEnabled="{Binding ElementName='fetchSongDataSwitch',Path=IsChecked}"  IsChecked="{Binding Source={x:Static fb:FacebookService.Instance},Path=UseFacebook,Mode=OneTime}" IsEnabledChanged="fbpostSwitch_IsEnabledChanged"/>
                         </TabItem>
                     </TabControl>
                     <StackPanel Height="50" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">

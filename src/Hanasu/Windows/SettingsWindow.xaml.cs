@@ -36,8 +36,16 @@ namespace Hanasu.Windows
             SettingsService.Instance.UpdateStationsLive = (bool)LiveStationUpdSwitch.IsChecked;
 
             Hanasu.Services.Facebook.FacebookService.FacebookEnabled = ((bool)fetchSongDataSwitch.IsChecked == true ? (bool)fbpostSwitch.IsChecked : false);
-
+            
             this.DialogResult = true;
+        }
+
+        private void fbpostSwitch_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            //didn't want to do it this way but XAML was acting stupid today.
+
+            if (fetchSongDataSwitch.IsChecked == false && fbpostSwitch.IsEnabled == false)
+                fbpostSwitch.IsChecked = false;
         }
     }
 }
