@@ -121,7 +121,7 @@
   </Station>
   <Station>
     <Name>Keiichi.net EX²</Name>
-    <DataSource>http://149.255.33.69:8038</DataSource>
+    <DataSource><![CDATA[http://www.loudcity.com/launch?file=pls&id=3168&playid=6253201205031331323168]]></DataSource>
     <Homepage>http://radio.keiichi.net/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>

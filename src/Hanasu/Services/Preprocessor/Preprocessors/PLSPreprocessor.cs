@@ -31,7 +31,7 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
                     {
                         l = l.Substring(4, l.IndexOf("=") - 4);
 
-                        var file = line.Substring(line.IndexOf("=") + 1);
+                        var file = line.Substring(line.IndexOf("=") + 1).TrimEnd('\r', '\n');
 
                         if (list.ContainsKey(l))
                             ((dynamic)list[l]).File = file;
@@ -48,7 +48,7 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
                     {
                         l = l.Substring(5, l.IndexOf("=") - 5);
 
-                        var title = line.Substring(line.IndexOf("=") + 1);
+                        var title = line.Substring(line.IndexOf("=") + 1).TrimEnd('\r', '\n');
 
                         if (list.ContainsKey(l))
                             ((dynamic)list[l]).Title = title;
@@ -65,7 +65,7 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
                     {
                         l = l.Substring(5, l.IndexOf("=") - 5);
 
-                        var length = int.Parse(line.Substring(line.IndexOf("=") + 1));
+                        var length = int.Parse(line.Substring(line.IndexOf("=") + 1).TrimEnd('\r', '\n'));
 
                         if (list.ContainsKey(l))
                             ((dynamic)list[l]).Length = length;
