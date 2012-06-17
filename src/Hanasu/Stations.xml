@@ -119,4 +119,11 @@
     <Format>Info</Format>
     <City>N/A</City>
   </Station>
+  <Station>
+    <Name>Keiichi.net EX²</Name>
+    <DataSource>http://149.255.33.69:8038</DataSource>
+    <Homepage>http://radio.keiichi.net/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+  </Station>
 </Stations>
