@@ -15,17 +15,17 @@ namespace Hanasu.Services.Preprocessor
             LogService.Instance.WriteLog(typeof(PreprocessorService),
     "Preprocessor Service initialized.");
 
-            Preprocessors = new ObservableCollection<IPreprocessor>();
+            Preprocessors = new ObservableCollection<IFileFormatPreprocessor>();
 
             RegisterPreprocessor(typeof(PLSPreprocessor));
         }
 
         public static void RegisterPreprocessor(Type processor)
         {
-            if (processor.BaseType == typeof(IPreprocessor) || processor.BaseType == typeof(BasePreprocessor))
+            if (processor.BaseType == typeof(IFileFormatPreprocessor) || processor.BaseType == typeof(BasePreprocessor))
             {
                 Preprocessors.Add(
-                    (IPreprocessor)Activator.CreateInstance(processor));
+                    (IFileFormatPreprocessor)Activator.CreateInstance(processor));
 
                 LogService.Instance.WriteLog(typeof(PreprocessorService),
     "Preprocessor of type '" + processor.ToString() + "' registered.");
@@ -36,22 +36,22 @@ namespace Hanasu.Services.Preprocessor
             }
         }
 
-        public static bool CheckIfPreprocessingIsNeeded(Uri url)
+        public static bool CheckIfPreprocessingIsNeeded(Uri url, string ExplicitExtension = "")
         {
             return Preprocessors.Any((pre) =>
             {
-                return pre.Supports(url);
+                return pre.Supports(url) || pre.Extension == ExplicitExtension;
             });
         }
-        public static bool CheckIfPreprocessingIsNeeded(string url)
+        public static bool CheckIfPreprocessingIsNeeded(string url, string ExplicitExtension = "")
         {
-            return CheckIfPreprocessingIsNeeded(new Uri(url));
+            return CheckIfPreprocessingIsNeeded(new Uri(url), ExplicitExtension);
         }
 
-        public static IPreprocessor GetProcessor(Uri url)
+        public static IFileFormatPreprocessor GetProcessor(Uri url, string ExplicitExtension = "")
         {
-            foreach (IPreprocessor p in Preprocessors)
-                if (p.Supports(url))
+            foreach (IFileFormatPreprocessor p in Preprocessors)
+                if (p.Supports(url) || p.Extension == ExplicitExtension)
                     return p;
 
             return null;
@@ -67,6 +67,6 @@ namespace Hanasu.Services.Preprocessor
                     p.Process(ref url);
         }
 
-        public static ObservableCollection<IPreprocessor> Preprocessors { get; private set; }
+        public static ObservableCollection<IFileFormatPreprocessor> Preprocessors { get; private set; }
     }
 }

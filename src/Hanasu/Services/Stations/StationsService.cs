@@ -84,6 +84,7 @@ namespace Hanasu.Services.Stations
                                     (RadioFormat)Enum.Parse(typeof(RadioFormat), x.Element("Format").Value) : 
                                     RadioFormat.Mix),
                                 City = x.Element("City").Value,
+                                ExplicitExtension = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : ""
                             };
 
 

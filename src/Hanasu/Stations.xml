@@ -125,5 +125,6 @@
     <Homepage>http://radio.keiichi.net/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
   </Station>
 </Stations>

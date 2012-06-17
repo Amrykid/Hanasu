@@ -10,4 +10,8 @@ namespace Hanasu.Services.Preprocessor
         bool Supports(Uri url);
         void Process(ref Uri url);
     }
+    public interface IFileFormatPreprocessor : IPreprocessor
+    {
+        string Extension { get; }
+    }
 }

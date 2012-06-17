@@ -110,6 +110,11 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
         {
             get { return true; }
         }
+
+        public override string Extension
+        {
+            get { return ".pls"; }
+        }
     }
     public struct PLSEntry
     {

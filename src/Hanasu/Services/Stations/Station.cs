@@ -12,5 +12,6 @@ namespace Hanasu.Services.Stations
         public Uri DataSource { get; set; }
         public string City { get; set; }
         public RadioFormat Format { get; set; }
+        public string ExplicitExtension { get; set; }
     }
 }

@@ -418,7 +418,7 @@ namespace Hanasu
             if (currentStation != station)
                 Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue(); //Get rid of messages from the last station, if any.
 
-            if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource))
+            if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource, station.ExplicitExtension))
             {
                 var d = station.DataSource;
                 //Hanasu.Services.Preprocessor.PreprocessorService.Process(ref d);

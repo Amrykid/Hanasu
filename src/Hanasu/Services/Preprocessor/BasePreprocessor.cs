@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hanasu.Services.Preprocessor
 {
-    public abstract class BasePreprocessor : IPreprocessor
+    public abstract class BasePreprocessor : IFileFormatPreprocessor
     {
         //public static implicit operator string(Uri url)
         //{
@@ -20,6 +20,8 @@ namespace Hanasu.Services.Preprocessor
         public abstract void Process(ref Uri url);
 
         public abstract bool SupportsMultiples { get; }
+
+        public abstract string Extension { get; }
 
     }
 }
