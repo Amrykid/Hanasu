@@ -51,18 +51,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Facebook">
-      <HintPath>..\..\packages\Facebook.6.0.16\lib\net40-client\Facebook.dll</HintPath>
+    <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Facebook.6.0.20\lib\net40-client\Facebook.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MahApps.Metro.0.7.9.59-ALPHA\lib\net40\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MahApps.Metro.0.8.9.20-ALPHA\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MahApps.Metro.0.7.9.59-ALPHA\lib\net40\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\..\packages\MahApps.Metro.0.8.9.20-ALPHA\lib\net40\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />

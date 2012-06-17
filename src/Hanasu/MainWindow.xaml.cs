@@ -212,7 +212,7 @@ namespace Hanasu
 
             VolumeSlider.Value = player.settings.volume;
 
-           HandleWindowsTaskbarstuff();
+            HandleWindowsTaskbarstuff();
 
 
         }
@@ -421,6 +421,30 @@ namespace Hanasu
             if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource))
             {
                 var d = station.DataSource;
+                //Hanasu.Services.Preprocessor.PreprocessorService.Process(ref d);
+
+                var pro = Hanasu.Services.Preprocessor.PreprocessorService.GetProcessor(d);
+
+                if (pro is Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor)
+                {
+                    Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor p = (Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor)pro;
+
+                    var entries = p.Parse(d);
+
+                    if (entries.Length == 0)
+                    {
+                        throw new Exception("No stations found!");
+                    }
+                    else if (entries.Length == 1)
+                    {
+                        d = new Uri(entries[0].File);
+                    }
+                    else
+                    {
+                        //show a GUI here for choosing.
+                    }
+                }
+
                 Hanasu.Services.Preprocessor.PreprocessorService.Process(ref d);
 
                 player.URL = d.ToString();

@@ -48,6 +48,15 @@ namespace Hanasu.Services.Preprocessor
             return CheckIfPreprocessingIsNeeded(new Uri(url));
         }
 
+        public static IPreprocessor GetProcessor(Uri url)
+        {
+            foreach (IPreprocessor p in Preprocessors)
+                if (p.Supports(url))
+                    return p;
+
+            return null;
+        }
+
         public static void Process(ref Uri url)
         {
             LogService.Instance.WriteLog(typeof(PreprocessorService),

@@ -18,5 +18,8 @@ namespace Hanasu.Services.Preprocessor
         public abstract bool Supports(Uri url);
 
         public abstract void Process(ref Uri url);
+
+        public abstract bool SupportsMultiples { get; }
+
     }
 }
