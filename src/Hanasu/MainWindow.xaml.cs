@@ -423,9 +423,9 @@ namespace Hanasu
                 var d = station.DataSource;
                 //Hanasu.Services.Preprocessor.PreprocessorService.Process(ref d);
 
-                var pro = Hanasu.Services.Preprocessor.PreprocessorService.GetProcessor(d);
+                var pro = Hanasu.Services.Preprocessor.PreprocessorService.GetProcessor(d, station.ExplicitExtension);
 
-                if (pro is Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor)
+                if (pro.GetType() == typeof(Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor))
                 {
                     Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor p = (Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor)pro;
 
@@ -442,6 +442,20 @@ namespace Hanasu
                     else
                     {
                         //show a GUI here for choosing.
+                        PLSStreamChooseWindow pls = new PLSStreamChooseWindow();
+                        pls.DataContext = entries;
+                        pls.Owner = this;
+
+                        if (pls.ShowDialog() == true)
+                        {
+                            Hanasu.Services.Preprocessor.Preprocessors.PLSEntry en = (Hanasu.Services.Preprocessor.Preprocessors.PLSEntry)pls.listBox1.SelectedItem;
+
+                            d = new Uri(en.File);
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                 }
 

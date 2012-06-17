@@ -1,0 +1,49 @@
+﻿<metro:MetroWindow x:Class="Hanasu.Windows.PLSStreamChooseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="Choose a Stream" Height="420" Width="520" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Icons.xaml" />
+                <!-- From MahApps.Metro.Resources package-->
+
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Rectangle Margin="8,13,0,0" Height="81" VerticalAlignment="Top" HorizontalAlignment="Left" Width="73">
+            <Rectangle.Fill>
+                <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_question}" />
+            </Rectangle.Fill>
+        </Rectangle>
+        <TextBlock Text="The station you selected has multiple radio streams. Please choose which you want to connect to." Height="68" Margin="87,22,12,0" Name="label1" VerticalAlignment="Top" TextWrapping="Wrap" FontSize="17" />
+        <ListBox Height="238" Margin="14,104,12,0" Name="listBox1" VerticalAlignment="Top" ItemsSource="{Binding}" MouseLeftButtonUp="listBox1_MouseLeftButtonUp">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Left">
+                           <Label Content="{Binding Title}" FontFamily="Segoe UI" FontSize="18"/>
+                            <Label Content="{Binding File}" FontSize="12"/>
+                        </StackPanel>
+                        <Rectangle Margin="445 0 0 0" Height="40" HorizontalAlignment="Right" Width="40">
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_play}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label Content="Click to select a stream." Height="28" Margin="174,346,176,0" Name="label2" VerticalAlignment="Top" />
+    </Grid>
+</metro:MetroWindow>

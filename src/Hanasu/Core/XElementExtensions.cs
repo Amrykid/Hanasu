@@ -12,7 +12,10 @@ namespace Hanasu.Core
         {
             try
             {
-                element.Element(name);
+                var d = element.Element(name);
+
+                if (d == null)
+                    return false;
 
                 return true;
             }

@@ -63,7 +63,7 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
                     }
                     else if (l.StartsWith("length"))
                     {
-                        l = l.Substring(5, l.IndexOf("=") - 5);
+                        l = l.Substring(6, l.IndexOf("=") - 6);
 
                         var length = int.Parse(line.Substring(line.IndexOf("=") + 1).TrimEnd('\r', '\n'));
 
