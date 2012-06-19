@@ -138,4 +138,22 @@
     <ExplicitExtension>.asx</ExplicitExtension>
     <StationType>TV</StationType>
   </Station>
+  <Station>
+    <Name>Seebit TV</Name>
+    <DataSource><![CDATA[mms://see.broadcast-neo.tv/neo_s]]></DataSource>
+    <Homepage>http://www.seebit.tv/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension></ExplicitExtension>
+    <StationType>TV</StationType>
+  </Station>
+  <Station>
+    <Name>JPopsuki TV</Name>
+    <DataSource><![CDATA[mms://see.broadcast-neo.tv/neo_s]]></DataSource>
+    <Homepage>http://jpopsuki.eu/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension></ExplicitExtension>
+    <StationType>TV</StationType>
+  </Station>
 </Stations>
