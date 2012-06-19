@@ -80,11 +80,12 @@ namespace Hanasu.Services.Stations
                                 Name = x.Element("Name").Value,
                                 DataSource = new Uri(x.Element("DataSource").Value),
                                 Homepage = new Uri(x.Element("Homepage").Value),
-                                Format = (Enum.TryParse<RadioFormat>(x.Element("Format").Value, out dummie) == true ? 
-                                    (RadioFormat)Enum.Parse(typeof(RadioFormat), x.Element("Format").Value) : 
+                                Format = (Enum.TryParse<RadioFormat>(x.Element("Format").Value, out dummie) == true ?
+                                    (RadioFormat)Enum.Parse(typeof(RadioFormat), x.Element("Format").Value) :
                                     RadioFormat.Mix),
                                 City = x.Element("City").Value,
-                                ExplicitExtension = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : null
+                                ExplicitExtension = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : null,
+                                StationType = x.ContainsElement("StationType") ? (StationType)Enum.Parse(typeof(StationType), x.Element("StationType").Value) : StationType.Radio
                             };
 
 
@@ -120,7 +121,7 @@ namespace Hanasu.Services.Stations
 
             if (Stations.Count > before)
                 Hanasu.Services.Notifications.NotificationsService.AddNotification("Stations Updated",
-                    (Stations.Count - before).ToString() + " station(s) added.", 4000,true);
+                    (Stations.Count - before).ToString() + " station(s) added.", 4000, true);
         }
 
         public ObservableCollection<Station> Stations { get; private set; }

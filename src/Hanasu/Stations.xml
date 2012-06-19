@@ -127,4 +127,13 @@
     <City>N/A</City>
     <ExplicitExtension>.pls</ExplicitExtension>
   </Station>
+  <Station>
+    <Name>Odoroku TV</Name>
+    <DataSource><![CDATA[http://www.odoroku.tv/cgi-bin/mov/live.cgi?no=1&bps=512]]></DataSource>
+    <Homepage>http://www.odoroku.tv/index.html</Homepage>
+    <Format>Mix</Format>
+    <City>Odoroku</City>
+    <ExplicitExtension>.asx</ExplicitExtension>
+    <StationType>TV</StationType>
+  </Station>
 </Stations>
