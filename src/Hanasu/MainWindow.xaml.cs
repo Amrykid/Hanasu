@@ -204,6 +204,8 @@ namespace Hanasu
             player.enableContextMenu = false;
             player.settings.autoStart = false;
 
+            player.stretchToFit = true;
+
             player.MediaError += player_MediaError;
 
             player.PlayStateChange += player_PlayStateChange;
@@ -484,6 +486,9 @@ namespace Hanasu
                 {
                     CurrentStation = currentStation
                 });
+
+            if (station.StationType == StationType.TV)
+                tabControl1.SelectedIndex = 0;
         }
 
         public class StationEventInfo : Hanasu.Services.Events.EventInfo
