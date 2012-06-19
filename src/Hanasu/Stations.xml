@@ -149,11 +149,20 @@
   </Station>
   <Station>
     <Name>JPopsuki TV</Name>
-    <DataSource><![CDATA[mms://see.broadcast-neo.tv/neo_s]]></DataSource>
+    <DataSource><![CDATA[http://91.121.117.196:8800]]></DataSource>
     <Homepage>http://jpopsuki.eu/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
     <ExplicitExtension></ExplicitExtension>
+    <StationType>TV</StationType>
+  </Station>
+  <Station>
+    <Name>Fuji News Network</Name>
+    <DataSource><![CDATA[http://www.fnn-news.com/news/playlist/video/wmv/news_300.asx]]></DataSource>
+    <Homepage>http://www.fnn-news.com/</Homepage>
+    <Format>Info</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.asx</ExplicitExtension>
     <StationType>TV</StationType>
   </Station>
 </Stations>
