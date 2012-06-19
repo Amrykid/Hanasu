@@ -347,7 +347,7 @@ namespace Hanasu
 
                         SongDataLbl.Text = "Not Available";
 
-                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Radio Message",
+                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - "  + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
                             name, 4000, false, Services.Notifications.NotificationType.Information);
                     }
                 }
@@ -503,7 +503,11 @@ namespace Hanasu
 
         private void pauseBtn_Click(object sender, RoutedEventArgs e)
         {
-            player.Ctlcontrols.pause();
+            if (currentStation != null)
+                if (currentStation.StationType == StationType.Radio)
+                    player.Ctlcontrols.pause();
+                else if (currentStation.StationType == StationType.TV)
+                    player.Ctlcontrols.stop();
         }
 
         private void ShowStationsAdorner()
