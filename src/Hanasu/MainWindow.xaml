@@ -5,7 +5,7 @@
         xmlns:stations="clr-namespace:Hanasu.Services.Stations"
         xmlns:ac="clr-namespace:AdornedControl"
         xmlns:log="clr-namespace:Hanasu.Services.Logging"
-        Title="Hanasu" MinHeight="410" MinWidth="715">
+        Title="Hanasu" MinHeight="410" MinWidth="715" xmlns:my="clr-namespace:Hanasu.Core.Converters">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <my:VisualStationTypeConverter x:Key="VisualStationTypeConverter1" />
         </ResourceDictionary>
     </Window.Resources>
     <metro:MetroWindow.WindowCommands>
@@ -80,12 +81,7 @@
                                                 <GridViewColumn Header="*" Width="42">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <Rectangle Width="30" Height="30">
-                                                                <Rectangle.Fill>
-                                                                    <VisualBrush Stretch="Fill"
-                            					                        Visual="{StaticResource appbar_music}" />
-                                                                </Rectangle.Fill>
-                                                            </Rectangle>
+                                                            <ContentPresenter Content="{Binding StationTypeCanvas}"/>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
@@ -207,7 +203,7 @@
                 </Button>
                 <Slider Margin="0 -2 0 0" Name="VolumeSlider" Height="35" Width="90" ValueChanged="VolumeSlider_ValueChanged" Maximum="100" Minimum="0" TickFrequency="5" IsMoveToPointEnabled="True" IsEnabled="False" AutoToolTipPlacement="TopLeft">
                     <Slider.ToolTip>
-                        <ToolTip Content="Controles the volume of the audio stream." />
+                        <ToolTip Content="Controls the volume of the audio stream." />
                     </Slider.ToolTip>
                 </Slider>
             </StackPanel>

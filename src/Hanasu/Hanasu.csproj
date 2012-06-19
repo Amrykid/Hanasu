@@ -90,6 +90,7 @@
       <DependentUpon>AxWMP.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\BaseINPC.cs" />
+    <Compile Include="Core\Converters\VisualStationTypeConverter.cs" />
     <Compile Include="Core\ObservableQueue.cs" />
     <Compile Include="Core\UriToBitmapImageConverter.cs" />
     <Compile Include="Core\XElementExtensions.cs" />
@@ -289,9 +290,7 @@
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

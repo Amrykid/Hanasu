@@ -118,6 +118,7 @@
     <Homepage>http://www3.nhk.or.jp/nhkworld/english/radio/program/index.html</Homepage>
     <Format>Info</Format>
     <City>N/A</City>
+    <StationType>Radio</StationType>
   </Station>
   <Station>
     <Name>Keiichi.net EX²</Name>
@@ -126,6 +127,7 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
   </Station>
   <Station>
     <Name>Odoroku TV</Name>
