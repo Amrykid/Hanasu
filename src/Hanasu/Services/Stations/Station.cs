@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hanasu.Core;
 
 namespace Hanasu.Services.Stations
 {
@@ -14,7 +15,5 @@ namespace Hanasu.Services.Stations
         public RadioFormat Format { get; set; }
         public string ExplicitExtension { get; set; }
         public StationType StationType { get; set; }
-
-        public object StationTypeCanvas { get { return new Hanasu.Core.Converters.VisualStationTypeConverter().Convert(StationType, null, null, null); } }
     }
 }

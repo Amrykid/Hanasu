@@ -14,19 +14,23 @@ namespace Hanasu.Core.Converters
         {
             StationType s = (StationType)value;
 
+            object res = null;
+
             try
             {
                 switch (s)
                 {
-                    case StationType.Radio: return (System.Windows.Media.Visual)Application.Current.MainWindow.FindResource("appbar_music");
-                    case StationType.TV: return (System.Windows.Media.Visual)Application.Current.MainWindow.FindResource("appbar_tv");
+                    case StationType.Radio: res = Application.Current.MainWindow.FindResource("appbar_music");
+                        break;
+                    case StationType.TV: res = Application.Current.MainWindow.FindResource("appbar_tv");
+                        break;
                 }
             }
             catch (Exception ex)
             {
             }
 
-            return Application.Current.MainWindow.FindResource("appbar_music");
+            return res;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
