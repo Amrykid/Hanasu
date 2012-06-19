@@ -297,29 +297,33 @@ namespace Hanasu
                                     if (stat != currentStation)
                                         return;
 
-                                    Uri lyricsUrl = null;
-                                    if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
+                                    if (stat.StationType == StationType.Radio)
                                     {
-                                        if ((bool)Dispatcher.Invoke(
-                                               new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() =>
-                                               {
-                                                   return (n != SongDataLbl.Text);
 
-                                               })))
-                                            return;
+                                        Uri lyricsUrl = null;
+                                        if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
+                                        {
+                                            if ((bool)Dispatcher.Invoke(
+                                                   new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() =>
+                                                   {
+                                                       return (n != SongDataLbl.Text);
 
-                                        Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
-                                        "Lyrics and other data found for this song.", 4000, false, Services.Notifications.NotificationType.Music_Data);
+                                                   })))
+                                                return;
 
-                                        Dispatcher.Invoke(
-                                            new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
-                                                {
-                                                    MoreInfoBtn.Visibility = System.Windows.Visibility.Visible;
+                                            Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
+                                            "Lyrics and other data found for this song.", 4000, false, Services.Notifications.NotificationType.Music_Data);
 
-                                                    currentSong = Hanasu.Services.Song.SongService.GetSongData(name);
+                                            Dispatcher.Invoke(
+                                                new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                                                    {
+                                                        MoreInfoBtn.Visibility = System.Windows.Visibility.Visible;
 
-                                                    MoreInfoBtn.DataContext = currentSong;
-                                                }));
+                                                        currentSong = Hanasu.Services.Song.SongService.GetSongData(name);
+
+                                                        MoreInfoBtn.DataContext = currentSong;
+                                                    }));
+                                        }
                                     }
                                 }).ContinueWith((tk) => tk.Dispose());
                     }
