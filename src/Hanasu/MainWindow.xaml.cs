@@ -10,6 +10,7 @@ using Hanasu.Services.Song;
 using Hanasu.Services.Stations;
 using Hanasu.Windows;
 using MahApps.Metro.Controls;
+using System.Timers;
 
 namespace Hanasu
 {
@@ -183,6 +184,9 @@ namespace Hanasu
             player.MediaChange -= player_MediaChange;
             player.MediaError -= player_MediaError;
 
+            bufferTimer.Elapsed -= bufferTimer_Elapsed;
+            bufferTimer.Dispose();
+
             player.close();
             player.Dispose();
 
@@ -216,7 +220,25 @@ namespace Hanasu
 
             HandleWindowsTaskbarstuff();
 
+            bufferTimer = new Timer();
+            bufferTimer.Elapsed += bufferTimer_Elapsed;
 
+            bufferTimer.Interval = 1000;
+        }
+
+        void bufferTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                {
+                    BufferingSP.Visibility = System.Windows.Visibility.Visible;
+                    BufferPB.Value = player.network.bufferingProgress;
+
+                    if (this.TaskbarItemInfo != null)
+                    {
+                        this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+                        this.TaskbarItemInfo.ProgressValue = BufferPB.Value / 100;
+                    }
+                }));
         }
 
         #region Windows 7+ Taskbar stuff
@@ -251,6 +273,9 @@ namespace Hanasu
 
         public static RoutedCommand ButtonClickCommand = new RoutedCommand();
         #endregion
+
+
+        private Timer bufferTimer = null;
 
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
         {
@@ -377,9 +402,12 @@ namespace Hanasu
 
                     break;
                 case WMPLib.WMPPlayState.wmppsBuffering: BufferingSP.Visibility = System.Windows.Visibility.Visible;
+                    BufferPB.Value = player.network.bufferingProgress;
+                    bufferTimer.Start();
                     break;
                 case WMPLib.WMPPlayState.wmppsPlaying: NowPlayingGrid.Visibility = System.Windows.Visibility.Visible;
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
+                    bufferTimer.Stop();
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
 
@@ -400,6 +428,8 @@ namespace Hanasu
                     playBtn.IsEnabled = true;
                     pauseBtn.IsEnabled = false;
 
+                    bufferTimer.Stop();
+                    BufferingSP.Visibility = System.Windows.Visibility.Hidden;
 
                     VolumeSlider.IsEnabled = false;
                     VolumeMuteBtn.IsEnabled = false;
