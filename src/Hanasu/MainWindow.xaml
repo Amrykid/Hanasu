@@ -42,7 +42,7 @@
         <Grid Grid.Row="0">
             <StackPanel HorizontalAlignment="Right" Orientation="Vertical" Width="200" Name="BufferingSP" Visibility="Hidden" Margin="0,6,12,0" VerticalAlignment="Top" Panel.ZIndex="75" Height="40">
                 <Label FontSize="15" Margin="0 -7 0 0" HorizontalAlignment="Center">Buffering.....</Label>
-                <metro:MetroProgressBar Width="200" Height="17" Foreground="LightBlue" Margin="0 -3 0 0" Name="BufferPB" />
+                <metro:MetroProgressBar Width="200" Height="17" Margin="0 -3 0 0" Name="BufferPB" Foreground="{StaticResource AccentColorBrush}" BorderBrush="DarkGray" BorderThickness="1" />
             </StackPanel>
             <TabControl Name="tabControl1" Panel.ZIndex="50">
                 <TabItem Header="Now Playing" Name="tabItem1">

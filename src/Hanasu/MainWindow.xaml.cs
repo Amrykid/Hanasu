@@ -279,13 +279,19 @@ namespace Hanasu
 
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
         {
-            Hanasu.Services.Notifications.NotificationsService.AddNotification(
-                "Unable to connect to station.",
-                "Hanasu was unable to connect to " + currentStation.Name + ".", 4000, false, Services.Notifications.NotificationType.Error);
+            if (!unableToConnectNotificationShown)
+            {
+                Hanasu.Services.Notifications.NotificationsService.AddNotification(
+                    "Unable to connect to station.",
+                    "Hanasu was unable to connect to " + currentStation.Name + ".", 4000, false, Services.Notifications.NotificationType.Error);
 
-            HideStationsAdorner(); //On error rename the stations listview.
+                unableToConnectNotificationShown = true;
+
+                HideStationsAdorner(); //On error rename the stations listview.
+            }
         }
 
+        private bool unableToConnectNotificationShown = false;
         private string lastMediaTxt = null; //prevents the below event from constantly queueing the same song title.
         private SongData currentSong = null;
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
@@ -411,6 +417,8 @@ namespace Hanasu
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
 
+                    unableToConnectNotificationShown = false;
+
                     player.settings.mute = isMuted;
 
                     if (!player.settings.mute)
@@ -430,6 +438,8 @@ namespace Hanasu
 
                     bufferTimer.Stop();
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
+
+                    unableToConnectNotificationShown = false;
 
                     VolumeSlider.IsEnabled = false;
                     VolumeMuteBtn.IsEnabled = false;
@@ -506,6 +516,11 @@ namespace Hanasu
 
             LogService.Instance.WriteLog(typeof(MainWindow),
     "Playing station: " + station.Name);
+
+            if (station.StationType == StationType.TV)
+                player.network.bufferingTime = 10000; // 10 seconds ahead
+            else
+                player.network.bufferingTime = 2000; // 2 seconds
 
             player.Ctlcontrols.play();
 
