@@ -13,13 +13,14 @@ using MahApps.Metro.Controls;
 using System.Timers;
 using WMPLib;
 using System.Collections;
+using Hanasu.Core;
 
 namespace Hanasu
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow : MetroWindow, INotifyPropertyChanged
     {
         public MainWindow()
         {
@@ -330,7 +331,7 @@ namespace Hanasu
         private bool unableToConnectNotificationShown = false;
         private string lastMediaTxt = null; //prevents the below event from constantly queueing the same song title.
         private SongData currentSong = null;
-        private Hashtable currentStationAttributes = null;
+        internal Hashtable currentStationAttributes { get; set; }
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
         {
             try
@@ -474,6 +475,8 @@ namespace Hanasu
 
                         currentStationAttributes.Add(x, y);
                     }
+
+                    OnPropertyChanged("currentStationAttributes");
 
                     //for (int i = 0; i < player.currentPlaylist.count; i++)
                     //{
@@ -745,5 +748,25 @@ namespace Hanasu
                     break;
             }
         }
+
+        private void StationAttributesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            StationAttributesWindow saw = new StationAttributesWindow();
+            saw.DataContext = this;
+            saw.Owner = this;
+            saw.ShowDialog();
+        }
+
+        #region INotifyPropertyChanged / BaseINPC
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+        #endregion
     }
 }

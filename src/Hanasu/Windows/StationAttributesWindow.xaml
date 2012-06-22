@@ -1,0 +1,28 @@
+﻿<metro:MetroWindow x:Class="Hanasu.Windows.StationAttributesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False" WindowStartupLocation="CenterOwner"
+        x:Name="this"
+        Title="Station Attributes" Height="366" Width="545" Loaded="MetroWindow_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <DataGrid Name="DG" CanUserDeleteRows="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserSortColumns="True" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Attribute" Binding="{Binding Key}" Width="300" />
+                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="200" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</metro:MetroWindow>

@@ -140,12 +140,19 @@
                             					Visual="{StaticResource appbar_play}" />
                             </Rectangle.Fill>
                         </Rectangle>
-                        <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="180" Height="40" FontSize="14" Padding="5" Margin="0 -10 0 0" Foreground="{StaticResource AccentColorBrush}" FontWeight="Bold">
-                            <TextBlock.ToolTip>
-                                <ToolTip Placement="Bottom" StaysOpen="True" Content="{Binding}" DataContext="{Binding ElementName=SongDataLbl, Path=Text, UpdateSourceTrigger=PropertyChanged}">
-                                </ToolTip>
-                            </TextBlock.ToolTip>
+                        <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="180" Height="40" FontSize="14" Padding="5" Margin="0 -10 0 0" Foreground="{StaticResource AccentColorBrush}" FontWeight="Bold" ToolTip="{Binding ElementName=SongDataLbl, Path=Text, UpdateSourceTrigger=PropertyChanged}">
                         </TextBlock>
+                        <Button Height="40" Width="40" Name="StationAttributesBtn" Click="StationAttributesBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}">
+                            <Rectangle Width="22" Height="22" Margin="0 4 0 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_list1}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Button.ToolTip>
+                                <ToolTip Content="Shows attributes of the current station."/>
+                            </Button.ToolTip>
+                        </Button>
                         <Button Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}">
                             <Image Source="pack://application:,,,/Hanasu;component/Resources/i_black.png"/>
                             <Button.ToolTip>
@@ -153,7 +160,7 @@
                             </Button.ToolTip>
                         </Button>
                         <Button Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Name="LikeBtnInfo" Click="LikeBtnInfo_Click" Visibility="{Binding ElementName=MoreInfoBtn,Path=Visibility,UpdateSourceTrigger=PropertyChanged}">
-                            <Rectangle Width="22" Height="22" Margin="0 4 -1 0">
+                            <Rectangle Width="22" Height="22" Margin="0 4 0 0">
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill"
                             					Visual="{StaticResource appbar_heart}" x:Name="LikeBtnVisualBrush" />
