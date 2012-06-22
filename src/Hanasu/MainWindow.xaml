@@ -79,7 +79,7 @@
                                     </ac:AdornedControl.AdornerContent>
                                     <Grid>
                                         <Grid.Background>
-                                            <ImageBrush Opacity=".1"  ImageSource="pack://application:,,,/Hanasu;component/Resources/luka.jpg" Stretch="Uniform"/>
+                                            <ImageBrush Opacity=".15"  ImageSource="pack://application:,,,/Hanasu;component/Resources/luka.jpg" Stretch="Uniform"/>
                                         </Grid.Background>
                                         <ListView Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" IsEnabled="False">
                                             <ListView.View>
