@@ -323,4 +323,15 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
   </Station>
+  <Station>
+    <Name>Radio MIHAMA</Name>
+    <DataSource><![CDATA[http://live.radiomihama.com:7707/listen.pls?sid=1]]></DataSource>
+    <Homepage>http://www.radiomihama.com/Site/HOME.html</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
 </Stations>
