@@ -525,7 +525,7 @@ namespace Hanasu
 
             if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource, station.ExplicitExtension))
             {
-                var d = station.Cacheable && station.StationType != StationType.TV ? station.LocalStationFile : station.DataSource;
+                var d = station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null ? station.LocalStationFile : station.DataSource;
                 //Hanasu.Services.Preprocessor.PreprocessorService.Process(ref d);
 
                 var pro = Hanasu.Services.Preprocessor.PreprocessorService.GetProcessor(d, station.ExplicitExtension);
@@ -571,7 +571,7 @@ namespace Hanasu
             }
             else
             {
-                if (station.Cacheable && station.StationType != StationType.TV)
+                if (station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null)
                     player.URL = station.LocalStationFile.ToString();
                 else
                     player.URL = station.DataSource.ToString();
