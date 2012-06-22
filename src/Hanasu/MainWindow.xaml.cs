@@ -241,6 +241,8 @@ namespace Hanasu
             bufferTimer.Interval = 1000;
 
             currentStationAttributes = new Hashtable();
+
+            this.tabControl1.SelectedIndex = 1;
         }
 
         void player_CurrentMediaItemAvailable(object sender, AxWMPLib._WMPOCXEvents_CurrentMediaItemAvailableEvent e)
@@ -635,6 +637,7 @@ namespace Hanasu
 
             StationsListAdorner.IsAdornerVisible = true;
             StationsListView.IsEnabled = false;
+            this.IsEnabled = false;
 
             if (this.TaskbarItemInfo != null)
                 this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
@@ -647,6 +650,8 @@ namespace Hanasu
             StationsListAdorner.IsAdornerVisible = false;
             StationsListView.IsEnabled = true;
 
+            this.IsEnabled = true;
+
             if (this.TaskbarItemInfo != null)
                 this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
         }
@@ -654,10 +659,12 @@ namespace Hanasu
         private void LogListView_TargetUpdated(object sender, DataTransferEventArgs e)
         {
             if (LogListView.ItemsSource == null) return;
-            LogListView.ScrollIntoView(LogListView.SelectedItem);
 
-            LogListView.SelectedIndex = LogListView.Items.Count - 1;
-            LogListView.ScrollIntoView(LogListView.SelectedItem);
+            if (LogListView.Items.Count > 0)
+            {
+                LogListView.SelectedIndex = LogListView.Items.Count - 1;
+                LogListView.ScrollIntoView(LogListView.SelectedItem);
+            }
         }
 
         private void MoreInfoBtn_Click(object sender, RoutedEventArgs e)
