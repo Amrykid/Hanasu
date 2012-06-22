@@ -7,6 +7,8 @@
     <Format>Mix</Format>
     <City>Tokyo</City>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+    <ExplicitExtension>.m3u</ExplicitExtension>
   </Station>
   <Station>
     <Name>Gensokyo Radio</Name>
@@ -15,6 +17,7 @@
     <Format>Mix</Format>
     <City>Tokyo</City>
     <Language>Japanese</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>Nihon Radio</Name>
@@ -23,6 +26,7 @@
     <Format>Mix</Format>
     <City>Tokyo</City>
     <Language>Japanese</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>Radio Hikari.pl</Name>
@@ -31,6 +35,7 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>AnimeID</Name>
@@ -39,6 +44,8 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+    <ExplicitExtension>.asx</ExplicitExtension>
   </Station>
   <Station>
     <Name>Armitage's Dimension</Name>
@@ -55,6 +62,7 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>XAMFM2</Name>
@@ -63,6 +71,7 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>Vocaloid.FM</Name>
@@ -71,6 +80,8 @@
     <Format>Vocaloid</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+    <ExplicitExtension>.m3u</ExplicitExtension>
   </Station>
   <Station>
     <Name>AnimeAMAZE</Name>
@@ -79,6 +90,8 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <ExplicitExtension>.asx</ExplicitExtension>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>JPHiP</Name>
@@ -87,6 +100,7 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>AnimeNexus</Name>
@@ -95,6 +109,7 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>JPopsuki</Name>
@@ -103,6 +118,7 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>Big B Radio</Name>
@@ -111,6 +127,7 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>Japan-A-Radio</Name>
@@ -119,6 +136,7 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>LeekRadio</Name>
@@ -127,6 +145,7 @@
     <Format>Vocaloid</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>NHK World Radio Japan</Name>
@@ -135,18 +154,20 @@
     <Format>Info</Format>
     <City>N/A</City>
     <StationType>Radio</StationType>
-    <Language>Japanese</Language>
+    <Language>English</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>Keiichi.net EX²</Name>
     <DataSource><![CDATA[http://149.255.33.69:8038]]></DataSource>
-    <!--http://www.loudcity.com/launch?file=pls&id=3168&playid=6253201205031331323168-->
+    <!--http://www.loudcity.com/launch?file=pls&id=3168&playid=6253201205031331323168 Loudcity makes it /really/ hard to hotlink.-->
     <Homepage>http://radio.keiichi.net/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
+    <ExplicitExtension></ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>Odoroku TV</Name>
@@ -167,6 +188,7 @@
     <ExplicitExtension></ExplicitExtension>
     <StationType>TV</StationType>
     <Language>Japanese</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>JPopsuki TV</Name>
@@ -177,6 +199,7 @@
     <ExplicitExtension></ExplicitExtension>
     <StationType>TV</StationType>
     <Language>Japanese</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>Fuji News Network</Name>
@@ -187,6 +210,7 @@
     <ExplicitExtension>.asx</ExplicitExtension>
     <StationType>TV</StationType>
     <Language>Japanese</Language>
+    <Cacheable>False</Cacheable>
   </Station>
   <Station>
     <Name>Touhou Radio</Name>
@@ -197,6 +221,7 @@
     <ExplicitExtension></ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>Bakagami Radio</Name>
@@ -207,6 +232,7 @@
     <ExplicitExtension></ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>SEOULFM!</Name>
@@ -217,6 +243,7 @@
     <ExplicitExtension>.pls</ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>Korean</Language>
+    <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>SoulNB</Name>
@@ -227,5 +254,6 @@
     <ExplicitExtension>.pls</ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>Korean</Language>
+    <Cacheable>True</Cacheable>
   </Station>
 </Stations>

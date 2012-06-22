@@ -7,6 +7,8 @@ using Hanasu.Core;
 using System.Xml.Linq;
 using System.Timers;
 using Hanasu.Services.Logging;
+using System.IO;
+using System.Net;
 
 namespace Hanasu.Services.Stations
 {
@@ -34,6 +36,14 @@ namespace Hanasu.Services.Stations
             Stations = new ObservableCollection<Station>();
             timer = new Timer();
 
+            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Hanasu\\"))
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Hanasu\\");
+
+            StationsCacheDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Hanasu\\Cache\\";
+            if (!Directory.Exists(StationsCacheDir))
+                Directory.CreateDirectory(StationsCacheDir);
+
+
 
             System.Threading.Tasks.Task.Factory.StartNew(() =>
                 LoadStationsFromRepo()).ContinueWith((tk) => tk.Dispose());
@@ -42,11 +52,13 @@ namespace Hanasu.Services.Stations
             {
                 timer.Elapsed += timer_Elapsed;
 
-                timer.Interval = 60000 * 2; //2 minutes
+                timer.Interval = 60000 * 30; //30 minutes
 
                 timer.Start();
             }
         }
+
+        public string StationsCacheDir = null;
 
         private void LoadStationsFromRepo()
         {
@@ -86,9 +98,23 @@ namespace Hanasu.Services.Stations
                                 City = x.Element("City").Value,
                                 ExplicitExtension = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : null,
                                 StationType = x.ContainsElement("StationType") ? (StationType)Enum.Parse(typeof(StationType), x.Element("StationType").Value) : StationType.Radio,
-                                Language = x.ContainsElement("Language") ? (StationLanguage)Enum.Parse(typeof(StationLanguage), x.Element("Language").Value) : StationLanguage.English
+                                Language = x.ContainsElement("Language") ? (StationLanguage)Enum.Parse(typeof(StationLanguage), x.Element("Language").Value) : StationLanguage.English,
+                                Cacheable = x.ContainsElement("Cacheable") ? bool.Parse(x.Element("Cacheable").Value) : false
                             };
 
+                foreach(Station st in stats)
+                    if (st.ExplicitExtension != "" && Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(st.DataSource,st.ExplicitExtension) && st.Cacheable && st.StationType == StationType.Radio)
+                    {
+                        var cachefile = StationsCacheDir + st.Name + "_" + st.DataSource.LocalPath.Substring(st.DataSource.LocalPath.LastIndexOf("/") + 1);
+                        if (!File.Exists(cachefile))
+                            using (WebClient wc = new WebClient())
+                            {
+                                wc.DownloadFile(st.DataSource, cachefile);
+                                st.LocalStationFile = cachefile;
+                            }
+                        else
+                            st.LocalStationFile = cachefile;
+                    }
 
                 System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
                     {

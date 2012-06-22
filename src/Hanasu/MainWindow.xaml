@@ -12,7 +12,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
                 <!-- From MahApps.Metro.Resources package-->
 
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
@@ -20,6 +20,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <my:VisualStationTypeConverter x:Key="VisualStationTypeConverter1" />
+            <my:EnumToIntConverter x:Key="EnumToIntConverter1" />
         </ResourceDictionary>
     </Window.Resources>
     <metro:MetroWindow.WindowCommands>
@@ -82,44 +83,12 @@
                                                 <GridViewColumn Header="*" Width="42">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <Button>
-                                                                <Button.Style>
-                                                                    <Style>
-                                                                        <Setter Property="Button.Template">
-                                                                            <Setter.Value>
-                                                                                <ControlTemplate TargetType="Button">
-                                                                                    <ContentPresenter Name="cp" ContentSource="Content"/>
-                                                                                    <ControlTemplate.Triggers>
-                                                                                        <DataTrigger Binding="{Binding StationType,Mode=OneTime}" Value="0">
-                                                                                            <Setter Property="Button.Content">
-                                                                                                <Setter.Value>
-                                                                                                    <Rectangle Width="30" Height="30">
-                                                                                                        <Rectangle.Fill>
-                                                                                                            <VisualBrush Stretch="Fill"
-                            					Visual="{StaticResource appbar_music}" />
-                                                                                                        </Rectangle.Fill>
-                                                                                                    </Rectangle>
-                                                                                                </Setter.Value>
-                                                                                            </Setter>
-                                                                                        </DataTrigger>
-                                                                                        <DataTrigger Binding="{Binding StationType,Mode=OneTime}" Value="1">
-                                                                                            <Setter Property="Button.Content">
-                                                                                                <Setter.Value>
-                                                                                                    <Rectangle Width="30" Height="30">
-                                                                                                        <Rectangle.Fill>
-                                                                                                            <VisualBrush Stretch="Fill"
-                            					Visual="{StaticResource appbar_tv}" />
-                                                                                                        </Rectangle.Fill>
-                                                                                                    </Rectangle>
-                                                                                                </Setter.Value>
-                                                                                            </Setter>
-                                                                                        </DataTrigger>
-                                                                                    </ControlTemplate.Triggers>
-                                                                                </ControlTemplate>
-                                                                            </Setter.Value>
-                                                                        </Setter>
-                                                                    </Style>
-                                                                </Button.Style>
+                                                            <Button DataContext="{Binding StationType}" Name="StationsListViewGridItemButton" Loaded="StationsListViewGridItemButton_Loaded">
+                                                                <Button.Template>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <ContentPresenter ContentSource="Content"/>
+                                                                    </ControlTemplate>
+                                                                </Button.Template>
                                                             </Button>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>

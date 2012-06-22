@@ -729,5 +729,18 @@ namespace Hanasu
         {
             public SongData CurrentSong { get; set; }
         }
+
+        private Lazy<object> StationListViewGridButtonImageValueMusic = new Lazy<object>(new Func<object>(() => (Visual)Application.Current.MainWindow.Resources["appbar_music"]));
+        private Lazy<object> StationListViewGridButtonImageValueTV = new Lazy<object>(new Func<object>(() => (Visual)Application.Current.MainWindow.Resources["appbar_tv"]));
+        private void StationsListViewGridItemButton_Loaded(object sender, RoutedEventArgs e)
+        {
+            switch ((StationType)((Button)sender).DataContext)
+            {
+                case StationType.Radio: ((Button)sender).Content = (Visual)StationListViewGridButtonImageValueMusic.Value;
+                    break;
+                case StationType.TV: ((Button)sender).Content = (Visual)StationListViewGridButtonImageValueTV.Value;
+                    break;
+            }
+        }
     }
 }
