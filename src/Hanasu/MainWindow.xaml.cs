@@ -530,6 +530,7 @@ namespace Hanasu
 
                 var pro = Hanasu.Services.Preprocessor.PreprocessorService.GetProcessor(d, station.ExplicitExtension);
 
+                //Check if its a multi-stream station.
                 if (pro.GetType().BaseType == typeof(Hanasu.Services.Preprocessor.MultiStreamPreprocessor))
                 {
                     var p = (Hanasu.Services.Preprocessor.MultiStreamPreprocessor)pro;
