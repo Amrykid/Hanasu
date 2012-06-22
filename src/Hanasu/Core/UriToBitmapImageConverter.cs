@@ -25,18 +25,30 @@ namespace Hanasu.Core
                 try
                 {
                     image.BeginInit();
-                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.CacheOption = BitmapCacheOption.Default;
                     image.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                     if (value is Uri)
                         image.UriSource = (Uri)value;
                     else
-                        new Uri((string)value, UriKind.Absolute);
+                        image.UriSource = new Uri((string)value, UriKind.Absolute);
                     image.EndInit();
+
+                    //while (image.IsDownloading) ;
                 }
                 catch
                 {
-                    image = null;
+                    image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/cancel.png", UriKind.Absolute);
+                    image.EndInit();
                 }
+            }
+            else
+            {
+                image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/cancel.png", UriKind.Absolute);
+                image.EndInit();
             }
 
             return image;

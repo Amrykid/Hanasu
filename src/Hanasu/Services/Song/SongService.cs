@@ -53,7 +53,7 @@ namespace Hanasu.Services.Song
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
 
-                    new MSMetaServices().GetAlbumInfo(ref song);
+                    new YesAsia().GetAlbumInfo(ref song);
 
                     SongCache.Add(newsongdata.ToLower(), song);
 
@@ -68,7 +68,7 @@ namespace Hanasu.Services.Song
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
 
-                    new MSMetaServices().GetAlbumInfo(ref song);
+                    new YesAsia().GetAlbumInfo(ref song);
 
                     SongCache.Add(newsongdata.ToLower(), song);
 

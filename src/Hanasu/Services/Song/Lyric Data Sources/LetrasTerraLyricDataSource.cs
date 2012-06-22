@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Text.RegularExpressions;
+using Hanasu.Core;
 
 namespace Hanasu.Services.Song.Lyric_Data_Sources
 {
@@ -40,7 +41,7 @@ namespace Hanasu.Services.Song.Lyric_Data_Sources
 
                     lyricdata = Regex.Replace(lyricdata, "<.+?>", "");
 
-                    lyrics = lyricdata;
+                    lyrics = HtmlDecoder.Decode(lyricdata);
 
                     if (lyrics == null)
                     {

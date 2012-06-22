@@ -92,6 +92,7 @@
     <Compile Include="Core\BaseINPC.cs" />
     <Compile Include="Core\Converters\EnumToIntConverter.cs" />
     <Compile Include="Core\Converters\VisualStationTypeConverter.cs" />
+    <Compile Include="Core\HtmlDecoder.cs" />
     <Compile Include="Core\ObservableQueue.cs" />
     <Compile Include="Core\UriToBitmapImageConverter.cs" />
     <Compile Include="Core\XElementExtensions.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Services\Preprocessor\Preprocessors\PLS\PLSPreprocessor.cs" />
     <Compile Include="Services\Settings\SettingsService.cs" />
     <Compile Include="Services\Song\Album Info Data Source\MSMetaServices.cs" />
+    <Compile Include="Services\Song\Album Info Data Source\YesAsia.cs" />
     <Compile Include="Services\Song\IAlbumInfoDataSource.cs" />
     <Compile Include="Services\Song\ILyricsDataSource.cs" />
     <Compile Include="Services\Song\Lyric Data Sources\LetrasTerraLyricDataSource.cs" />
