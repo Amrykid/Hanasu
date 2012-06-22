@@ -5,6 +5,8 @@ using System.Text;
 using System.Collections.ObjectModel;
 using Hanasu.Services.Preprocessor.Preprocessors;
 using Hanasu.Services.Logging;
+using Hanasu.Services.Preprocessor.Preprocessors.PLS;
+using Hanasu.Services.Preprocessor.Preprocessors.M3U;
 
 namespace Hanasu.Services.Preprocessor
 {
@@ -18,11 +20,12 @@ namespace Hanasu.Services.Preprocessor
             Preprocessors = new ObservableCollection<IFileFormatPreprocessor>();
 
             RegisterPreprocessor(typeof(PLSPreprocessor));
+            RegisterPreprocessor(typeof(M3UPreprocessor));
         }
 
         public static void RegisterPreprocessor(Type processor)
         {
-            if (processor.BaseType == typeof(IFileFormatPreprocessor) || processor.BaseType == typeof(BasePreprocessor))
+            if (processor.BaseType == typeof(IFileFormatPreprocessor) || processor.BaseType == typeof(BasePreprocessor) || processor.BaseType.BaseType == typeof(BasePreprocessor))
             {
                 Preprocessors.Add(
                     (IFileFormatPreprocessor)Activator.CreateInstance(processor));

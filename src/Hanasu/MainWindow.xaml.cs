@@ -530,9 +530,9 @@ namespace Hanasu
 
                 var pro = Hanasu.Services.Preprocessor.PreprocessorService.GetProcessor(d, station.ExplicitExtension);
 
-                if (pro.GetType() == typeof(Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor))
+                if (pro.GetType().BaseType == typeof(Hanasu.Services.Preprocessor.MultiStreamPreprocessor))
                 {
-                    Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor p = (Hanasu.Services.Preprocessor.Preprocessors.PLSPreprocessor)pro;
+                    var p = (Hanasu.Services.Preprocessor.MultiStreamPreprocessor)pro;
 
                     var entries = p.Parse(d);
 
@@ -547,13 +547,13 @@ namespace Hanasu
                     else
                     {
                         //show a GUI here for choosing.
-                        PLSStreamChooseWindow pls = new PLSStreamChooseWindow();
+                        MultiStreamChooseWindow pls = new MultiStreamChooseWindow();
                         pls.DataContext = entries;
                         pls.Owner = this;
 
                         if (pls.ShowDialog() == true)
                         {
-                            Hanasu.Services.Preprocessor.Preprocessors.PLSEntry en = (Hanasu.Services.Preprocessor.Preprocessors.PLSEntry)pls.listBox1.SelectedItem;
+                            Hanasu.Services.Preprocessor.IMultiStreamEntry en = (Hanasu.Services.Preprocessor.IMultiStreamEntry)pls.listBox1.SelectedItem;
 
                             d = new Uri(en.File);
                         }

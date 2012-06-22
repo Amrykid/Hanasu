@@ -17,9 +17,9 @@ namespace Hanasu.Windows
     /// <summary>
     /// Interaction logic for PLSStreamChooseWindow.xaml
     /// </summary>
-    public partial class PLSStreamChooseWindow : MetroWindow
+    public partial class MultiStreamChooseWindow : MetroWindow
     {
-        public PLSStreamChooseWindow()
+        public MultiStreamChooseWindow()
         {
             InitializeComponent();
         }

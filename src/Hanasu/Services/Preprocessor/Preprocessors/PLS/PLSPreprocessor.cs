@@ -5,16 +5,16 @@ using System.Text;
 using System.Net;
 using System.Collections;
 
-namespace Hanasu.Services.Preprocessor.Preprocessors
+namespace Hanasu.Services.Preprocessor.Preprocessors.PLS
 {
-    public class PLSPreprocessor : BasePreprocessor
+    public class PLSPreprocessor : MultiStreamPreprocessor
     {
         public override bool Supports(Uri url)
         {
-            return url.Segments.Last().ToLower().EndsWith(".pls");
+            return url.Segments.Last().ToLower().EndsWith(Extension);
         }
 
-        public PLSEntry[] Parse(Uri url)
+        public override IMultiStreamEntry[] Parse(Uri url)
         {
             var list = new Hashtable();
 
@@ -81,7 +81,7 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
                 }
             }
 
-            return list.Values.Cast<PLSEntry>().ToArray();
+            return (IMultiStreamEntry[])list.Values.Cast<IMultiStreamEntry>().ToArray();
         }
 
         public override void Process(ref Uri url)
@@ -116,7 +116,7 @@ namespace Hanasu.Services.Preprocessor.Preprocessors
             get { return ".pls"; }
         }
     }
-    public struct PLSEntry
+    public struct PLSEntry : IMultiStreamEntry
     {
         public string File { get; set; }
         public string Title { get; set; }

@@ -1,4 +1,4 @@
-﻿<metro:MetroWindow x:Class="Hanasu.Windows.PLSStreamChooseWindow"
+﻿<metro:MetroWindow x:Class="Hanasu.Windows.MultiStreamChooseWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
@@ -31,10 +31,10 @@
                 <DataTemplate>
                     <Grid>
                         <StackPanel HorizontalAlignment="Left">
-                           <Label Content="{Binding Title}" FontFamily="Segoe UI" FontSize="18"/>
+                           <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" FontFamily="Segoe UI" FontSize="18" Width="410" ToolTip="{Binding Title}"/>
                             <Label Content="{Binding File}" FontSize="12"/>
                         </StackPanel>
-                        <Rectangle Margin="445 0 0 0" Height="40" HorizontalAlignment="Right" Width="40">
+                        <Rectangle Margin="0 0 -60 0" Height="40" HorizontalAlignment="Right" Width="40">
                             <Rectangle.Fill>
                                 <VisualBrush Stretch="Fill"
                             					Visual="{StaticResource appbar_play}" />
