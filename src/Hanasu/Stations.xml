@@ -6,6 +6,7 @@
     <Homepage>http://www.animenfo.com/</Homepage>
     <Format>Mix</Format>
     <City>Tokyo</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Gensokyo Radio</Name>
@@ -13,6 +14,7 @@
     <Homepage>http://www.gensokyoradio.net/</Homepage>
     <Format>Mix</Format>
     <City>Tokyo</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Nihon Radio</Name>
@@ -20,6 +22,7 @@
     <Homepage>http://nihonradio.net/2/</Homepage>
     <Format>Mix</Format>
     <City>Tokyo</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Radio Hikari.pl</Name>
@@ -27,6 +30,7 @@
     <Homepage>http://www.radiohikari.pl/news.php</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>AnimeID</Name>
@@ -34,6 +38,7 @@
     <Homepage>http://www.animeidradio.jp/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Armitage's Dimension</Name>
@@ -41,6 +46,7 @@
     <Homepage>http://www.armitunes.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>XAMFM</Name>
@@ -48,6 +54,7 @@
     <Homepage>http://www.xamfm.com/index.php/xamfm</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>XAMFM2</Name>
@@ -55,6 +62,7 @@
     <Homepage>http://www.xamfm.com/index.php/xamfm</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Vocaloid.FM</Name>
@@ -62,6 +70,7 @@
     <Homepage>http://labs.m2hq.net/vocaloid_fm/</Homepage>
     <Format>Vocaloid</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>AnimeAMAZE</Name>
@@ -69,6 +78,7 @@
     <Homepage>http://www.animeamaze.net/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>JPHiP</Name>
@@ -76,6 +86,7 @@
     <Homepage>http://jphip.com/radio.html</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>AnimeNexus</Name>
@@ -83,6 +94,7 @@
     <Homepage>http://www.animenexus.net/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>JPopsuki</Name>
@@ -90,6 +102,7 @@
     <Homepage>http://jpopsuki.eu/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Big B Radio</Name>
@@ -97,6 +110,7 @@
     <Homepage>http://bigbradio.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Japan-A-Radio</Name>
@@ -104,6 +118,7 @@
     <Homepage>http://www.japanaradio.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>LeekRadio</Name>
@@ -111,6 +126,7 @@
     <Homepage>http://miku.someone5544.net/leekradio/</Homepage>
     <Format>Vocaloid</Format>
     <City>N/A</City>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>NHK World Radio Japan</Name>
@@ -119,6 +135,7 @@
     <Format>Info</Format>
     <City>N/A</City>
     <StationType>Radio</StationType>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Keiichi.net EX²</Name>
@@ -129,6 +146,7 @@
     <City>N/A</City>
     <ExplicitExtension>.pls</ExplicitExtension>
     <StationType>Radio</StationType>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Odoroku TV</Name>
@@ -138,6 +156,7 @@
     <City>Odoroku</City>
     <ExplicitExtension>.asx</ExplicitExtension>
     <StationType>TV</StationType>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Seebit TV</Name>
@@ -147,6 +166,7 @@
     <City>N/A</City>
     <ExplicitExtension></ExplicitExtension>
     <StationType>TV</StationType>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>JPopsuki TV</Name>
@@ -156,6 +176,7 @@
     <City>N/A</City>
     <ExplicitExtension></ExplicitExtension>
     <StationType>TV</StationType>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Fuji News Network</Name>
@@ -165,6 +186,7 @@
     <City>N/A</City>
     <ExplicitExtension>.asx</ExplicitExtension>
     <StationType>TV</StationType>
+    <Language>Japanese</Language>
   </Station>
   <Station>
     <Name>Touhou Radio</Name>
@@ -174,5 +196,36 @@
     <City>N/A</City>
     <ExplicitExtension></ExplicitExtension>
     <StationType>Radio</StationType>
+    <Language>Japanese</Language>
+  </Station>
+  <Station>
+    <Name>Bakagami Radio</Name>
+    <DataSource><![CDATA[http://99.104.192.66:8000/listen.pls?sid=2]]></DataSource>
+    <Homepage>http://www.bakaradio.com/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension></ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language></Language>
+  </Station>
+  <Station>
+    <Name>SEOULFM!</Name>
+    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=11632]]></DataSource>
+    <Homepage>http://seoul.fm/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Korean</Language>
+  </Station>
+  <Station>
+    <Name>SoulNB</Name>
+    <DataSource><![CDATA[http://www.soulnb.com/soulnb.pls]]></DataSource>
+    <Homepage>http://www.soulnb.com/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Korean</Language>
   </Station>
 </Stations>
