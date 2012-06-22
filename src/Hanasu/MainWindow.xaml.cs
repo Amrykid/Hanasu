@@ -11,6 +11,8 @@ using Hanasu.Services.Stations;
 using Hanasu.Windows;
 using MahApps.Metro.Controls;
 using System.Timers;
+using WMPLib;
+using System.Collections;
 
 namespace Hanasu
 {
@@ -183,6 +185,10 @@ namespace Hanasu
             player.PlayStateChange -= player_PlayStateChange;
             player.MediaChange -= player_MediaChange;
             player.MediaError -= player_MediaError;
+            player.ScriptCommand -= player_ScriptCommand;
+            player.MarkerHit -= player_MarkerHit;
+            player.EndOfStream -= player_EndOfStream;
+            player.CurrentMediaItemAvailable -= player_CurrentMediaItemAvailable;
 
             bufferTimer.Elapsed -= bufferTimer_Elapsed;
             bufferTimer.Dispose();
@@ -216,6 +222,14 @@ namespace Hanasu
 
             player.MediaChange += player_MediaChange;
 
+            player.ScriptCommand += player_ScriptCommand;
+
+            player.CurrentMediaItemAvailable += player_CurrentMediaItemAvailable;
+
+            player.MarkerHit += player_MarkerHit;
+
+            player.EndOfStream += player_EndOfStream;
+
             VolumeSlider.Value = player.settings.volume;
 
             HandleWindowsTaskbarstuff();
@@ -224,6 +238,28 @@ namespace Hanasu
             bufferTimer.Elapsed += bufferTimer_Elapsed;
 
             bufferTimer.Interval = 1000;
+
+            currentStationAttributes = new Hashtable();
+        }
+
+        void player_CurrentMediaItemAvailable(object sender, AxWMPLib._WMPOCXEvents_CurrentMediaItemAvailableEvent e)
+        {
+                 
+        }
+
+        void player_EndOfStream(object sender, AxWMPLib._WMPOCXEvents_EndOfStreamEvent e)
+        {
+            
+        }
+
+        void player_MarkerHit(object sender, AxWMPLib._WMPOCXEvents_MarkerHitEvent e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void player_ScriptCommand(object sender, AxWMPLib._WMPOCXEvents_ScriptCommandEvent e)
+        {
+            throw new NotImplementedException();
         }
 
         void bufferTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -294,6 +330,7 @@ namespace Hanasu
         private bool unableToConnectNotificationShown = false;
         private string lastMediaTxt = null; //prevents the below event from constantly queueing the same song title.
         private SongData currentSong = null;
+        private Hashtable currentStationAttributes = null;
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
         {
             try
@@ -380,7 +417,7 @@ namespace Hanasu
 
                         SongDataLbl.Text = "Not Available";
 
-                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - "  + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
+                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
                             name, 4000, false, Services.Notifications.NotificationType.Information);
                     }
                 }
@@ -428,6 +465,28 @@ namespace Hanasu
                     VolumeMuteBtn.IsEnabled = true;
 
                     HideStationsAdorner(); //Playing, hide the adorner and rename the listview.
+
+                    currentStationAttributes.Clear();
+                    for (int i = 0; i < player.currentMedia.attributeCount; i++)
+                    {
+                        var x = player.currentMedia.getAttributeName(i);
+                        var y = player.currentMedia.getItemInfo(x);
+
+                        currentStationAttributes.Add(x, y);
+                    }
+
+                    //for (int i = 0; i < player.currentPlaylist.count; i++)
+                    //{
+                    //    var x = player.currentPlaylist.get_Item(i);
+                    //    var y = player.currentPlaylist.getItemInfo(x.name);
+
+                    //    var z = 6;
+                    //}
+                    //for (int i = 0; i < player.currentPlaylist.attributeCount; i++)
+                    //{
+                    //    var x = player.currentPlaylist.get_attributeName(i);
+                    //    var y = 0;
+                    //}
 
                     break;
                 case WMPLib.WMPPlayState.wmppsReady:
@@ -521,6 +580,8 @@ namespace Hanasu
                 player.network.bufferingTime = 10000; // 10 seconds ahead
             else
                 player.network.bufferingTime = 2000; // 2 seconds
+
+            currentStationAttributes.Clear();
 
             player.Ctlcontrols.play();
 

@@ -93,7 +93,7 @@
   </Station>
   <Station>
     <Name>Big B Radio</Name>
-    <DataSource>http://178.33.227.116:8104</DataSource>
+    <DataSource>http://www.fileden.com/files/2008/4/27/1886400/Big.B.Radio-All.Channels.PL.pls</DataSource> <!--http://178.33.227.116:8104-->
     <Homepage>http://bigbradio.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
