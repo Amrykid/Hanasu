@@ -257,4 +257,70 @@
     <Language>Korean</Language>
     <Cacheable>True</Cacheable>
   </Station>
+  <Station>
+    <Name>J-Jams Radio</Name>
+    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=195951]]></DataSource>
+    <Homepage>http://j-jams.co.cc/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
+  <Station>
+    <Name>O-Line Radio</Name>
+    <DataSource><![CDATA[http://orangeline.org:8000/listen.pls]]></DataSource>
+    <Homepage>http://orangeline.org/~o-line/i-mode/radio.htm</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
+  <Station>
+    <Name>Radio FanSite</Name>
+    <DataSource><![CDATA[http://radio.denialstream.com/tunein.php/fansite/playlist.pls]]></DataSource>
+    <Homepage>http://www.fansite.cl/sitio/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
+  <Station>
+    <Name>In-Nae Radio</Name>
+    <DataSource><![CDATA[http://sc1.usa.myhostingservices.com.au/tunein.php/karreyes/playlist.pls]]></DataSource>
+    <Homepage>http://www.innae-radio.com/18.php</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
+  <Station>
+    <Name>AmanteAnime Radio</Name>
+    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=231757]]></DataSource>
+    <Homepage>http://amanteanime.net/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
+  <Station>
+    <Name>BABEL ROCK RADIO</Name>
+    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=44725]]></DataSource>
+    <Homepage>http://www.babelentertainment.com/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
 </Stations>
