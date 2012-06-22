@@ -167,11 +167,11 @@
   </Station>
   <Station>
     <Name>Touhou Radio</Name>
-    <DataSource><![CDATA[http://miku.fm/mikufm.m3u]]></DataSource>
+    <DataSource><![CDATA[http://miku.fm:8000/touhouradio.mp3]]></DataSource><!--http://miku.fm/mikufm.m3u-->
     <Homepage>http://www.touhouradio.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
-    <ExplicitExtension>.m3u</ExplicitExtension>
+    <ExplicitExtension></ExplicitExtension>
     <StationType>Radio</StationType>
   </Station>
 </Stations>
