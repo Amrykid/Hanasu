@@ -244,12 +244,12 @@ namespace Hanasu
 
         void player_CurrentMediaItemAvailable(object sender, AxWMPLib._WMPOCXEvents_CurrentMediaItemAvailableEvent e)
         {
-                 
+
         }
 
         void player_EndOfStream(object sender, AxWMPLib._WMPOCXEvents_EndOfStreamEvent e)
         {
-            
+
         }
 
         void player_MarkerHit(object sender, AxWMPLib._WMPOCXEvents_MarkerHitEvent e)
@@ -525,7 +525,7 @@ namespace Hanasu
 
             if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource, station.ExplicitExtension))
             {
-                var d = station.DataSource;
+                var d = station.Cacheable && station.StationType != StationType.TV ? station.LocalStationFile : station.DataSource;
                 //Hanasu.Services.Preprocessor.PreprocessorService.Process(ref d);
 
                 var pro = Hanasu.Services.Preprocessor.PreprocessorService.GetProcessor(d, station.ExplicitExtension);
@@ -571,7 +571,10 @@ namespace Hanasu
             }
             else
             {
-                player.URL = station.DataSource.ToString();
+                if (station.Cacheable && station.StationType != StationType.TV)
+                    player.URL = station.LocalStationFile.ToString();
+                else
+                    player.URL = station.DataSource.ToString();
             }
 
             LogService.Instance.WriteLog(typeof(MainWindow),

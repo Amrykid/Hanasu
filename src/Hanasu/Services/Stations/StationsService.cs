@@ -102,23 +102,29 @@ namespace Hanasu.Services.Stations
                                 Cacheable = x.ContainsElement("Cacheable") ? bool.Parse(x.Element("Cacheable").Value) : false
                             };
 
-                foreach(Station st in stats)
-                    if (st.ExplicitExtension != "" && Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(st.DataSource,st.ExplicitExtension) && st.Cacheable && st.StationType == StationType.Radio)
+                var finalstats = new List<Station>();
+                foreach (Station st in stats)
+                {
+                    //Checks if its possible to cache the playlist file.
+                    if (st.ExplicitExtension != "" && Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(st.DataSource, st.ExplicitExtension) && st.Cacheable && st.StationType == StationType.Radio)
                     {
                         var cachefile = StationsCacheDir + st.Name + "_" + st.DataSource.LocalPath.Substring(st.DataSource.LocalPath.LastIndexOf("/") + 1);
                         if (!File.Exists(cachefile))
                             using (WebClient wc = new WebClient())
                             {
                                 wc.DownloadFile(st.DataSource, cachefile);
-                                st.LocalStationFile = cachefile;
+                                st.LocalStationFile = new Uri(cachefile);
                             }
                         else
-                            st.LocalStationFile = cachefile;
+                            st.LocalStationFile = new Uri(cachefile);
                     }
+
+                    finalstats.Add(st);
+                }
 
                 System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
                     {
-                        foreach (var x in stats)
+                        foreach (var x in finalstats)
                             Stations.Add(x);
 
                         OnPropertyChanged("Stations");

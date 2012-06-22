@@ -12,12 +12,13 @@
   </Station>
   <Station>
     <Name>Gensokyo Radio</Name>
-    <DataSource>http://stream.gensokyoradio.net:8000/listen.m3u?sid=1</DataSource>
+    <DataSource>http://www.gensokyoradio.net/GensokyoRadio.pls</DataSource>
     <Homepage>http://www.gensokyoradio.net/</Homepage>
     <Format>Mix</Format>
     <City>Tokyo</City>
     <Language>Japanese</Language>
-    <Cacheable>False</Cacheable>
+    <Cacheable>True</Cacheable>
+    <ExplicitExtension>.pls</ExplicitExtension>
   </Station>
   <Station>
     <Name>Nihon Radio</Name>

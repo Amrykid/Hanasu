@@ -17,7 +17,7 @@ namespace Hanasu.Services.Stations
         public StationType StationType { get; set; }
         public StationLanguage Language { get; set; }
 
-        public string LocalStationFile { get; set; }
+        public Uri LocalStationFile { get; set; }
         public bool Cacheable { get; set; }
     }
 }
