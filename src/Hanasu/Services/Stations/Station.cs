@@ -15,5 +15,6 @@ namespace Hanasu.Services.Stations
         public RadioFormat Format { get; set; }
         public string ExplicitExtension { get; set; }
         public StationType StationType { get; set; }
+        public StationLanguage Language { get; set; }
     }
 }

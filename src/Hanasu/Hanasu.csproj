@@ -128,6 +128,7 @@
     <Compile Include="Services\Song\SongService.cs" />
     <Compile Include="Services\Stations\RadioFormat.cs" />
     <Compile Include="Services\Stations\Station.cs" />
+    <Compile Include="Services\Stations\StationLanguage.cs" />
     <Compile Include="Services\Stations\StationsService.cs" />
     <Compile Include="Services\Stations\StationsServiceStatus.cs" />
     <Compile Include="Services\Stations\StationType.cs" />

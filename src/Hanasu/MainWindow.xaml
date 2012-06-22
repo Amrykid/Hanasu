@@ -126,7 +126,7 @@
                                                 </GridViewColumn>
                                                 <GridViewColumn Header="Station" DisplayMemberBinding="{Binding Name}"/>
                                                 <GridViewColumn Header="Format" DisplayMemberBinding="{Binding Format}"/>
-                                                <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}"/>
+                                                <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Language}"/>
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
