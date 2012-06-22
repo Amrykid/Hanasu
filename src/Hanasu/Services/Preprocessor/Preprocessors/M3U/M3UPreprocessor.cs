@@ -19,28 +19,45 @@ namespace Hanasu.Services.Preprocessor.Preprocessors.M3U
 
                 var lines = data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-                var item = new M3UEntry();
+                
+
+                bool m3uIsValid = true;
 
                 if (!lines[0].StartsWith("#EXTM3U"))
-                    throw new InvalidOperationException("Invalid M3U");
+                    m3uIsValid = false;
 
-                for (int i = 1; i < lines.Length; i++)
+                if (m3uIsValid)
                 {
-                    var line = lines[i];
-
-                    if (line.StartsWith("#EXTINF"))
+                    var item = new M3UEntry();
+                    for (int i = 1; i < lines.Length; i++)
                     {
-                        item = new M3UEntry();
+                        var line = lines[i];
 
-                        var m3udata = line.Substring(8);
+                        if (line.StartsWith("#EXTINF"))
+                        {
+                            item = new M3UEntry();
 
-                        item.Length = int.Parse(m3udata.Substring(0,m3udata.IndexOf(",")));
+                            var m3udata = line.Substring(8);
 
-                        item.Title = m3udata.Substring(m3udata.IndexOf(",") + 1).TrimEnd('\r', '\n');
+                            item.Length = int.Parse(m3udata.Substring(0, m3udata.IndexOf(",")));
+
+                            item.Title = m3udata.Substring(m3udata.IndexOf(",") + 1).TrimEnd('\r', '\n');
+                        }
+                        else
+                        {
+                            item.File = line;
+                            list.Add(item);
+                        }
                     }
-                    else
+                }
+                else
+                {
+                    foreach (string line in lines)
                     {
+                        var item = new M3UEntry();
+                        item.Title = line;
                         item.File = line;
+
                         list.Add(item);
                     }
                 }
