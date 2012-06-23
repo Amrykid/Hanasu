@@ -40,9 +40,20 @@ namespace Hanasu.Windows
            //checks if auth is needed.
 
             if (Hanasu.Services.Facebook.FacebookService.FacebookEnabled && Hanasu.Services.Facebook.FacebookService.Instance.NeedsToAuth)
+            {
+                this.Hide();
                 Hanasu.Services.Facebook.FacebookService.DoFirstTimeAuth();
-            
-            this.DialogResult = true;
+                this.Show();
+            }
+
+            try
+            {
+                this.DialogResult = true;
+            }
+            catch (InvalidOperationException)
+            {
+                this.Close();
+            }
         }
 
         private void fbpostSwitch_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -51,6 +62,15 @@ namespace Hanasu.Windows
 
             if (fetchSongDataSwitch.IsChecked == false && fbpostSwitch.IsEnabled == false)
                 fbpostSwitch.IsChecked = false;
+        }
+
+        private void ReauthFBBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to reauthenicate Hanasu with your Facebook profile? You should only do this if you are receiving errors when you are trying to post songs to your profile!", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                MessageBox.Show("Press okay (the check button) on the settings window and the authenication window will show.");
+                Hanasu.Services.Facebook.FacebookService.FBAccessToken = "";
+            }
         }
 
     }

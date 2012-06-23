@@ -104,8 +104,13 @@ namespace Hanasu.Services.Facebook
                             }
                             else
                             {
+                                var errmsg = "Was unable to post song data to Facebook.";
+                                var exp = tk.Exception.InnerExceptions[0];
+                                if (exp.Message.StartsWith("(OAuthException - #190)"))
+                                    errmsg += " Auth token is now invalid because FB password was changed since initial auth.";
+
                                 Hanasu.Services.Notifications.NotificationsService.AddNotification("Song share error",
-                                    "Was unable to post song data to Facebook.", 3000, true, Notifications.NotificationType.Error);
+                                    errmsg, 3000, true, Notifications.NotificationType.Error);
                             }
 
                             tk.Dispose();

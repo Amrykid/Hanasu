@@ -11,8 +11,9 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" /><!-- From MahApps.Metro.Resources package-->
-                
+                <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
+                <!-- From MahApps.Metro.Resources package-->
+
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
@@ -31,7 +32,10 @@
                             </Grid>
                         </TabItem>
                         <TabItem Header="Sharing">
-                            <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="fbpostSwitch" VerticalAlignment="Top" Width="237" Header="Post Liked songs to Facebook" FontSize="15" IsEnabled="{Binding ElementName='fetchSongDataSwitch',Path=IsChecked}"  IsChecked="{Binding Source={x:Static fb:FacebookService.Instance},Path=UseFacebook,Mode=OneTime}" IsEnabledChanged="fbpostSwitch_IsEnabledChanged"/>
+                            <Grid>
+                                <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="fbpostSwitch" VerticalAlignment="Top" Width="237" Header="Post Liked songs to Facebook" FontSize="15" IsEnabled="{Binding ElementName='fetchSongDataSwitch',Path=IsChecked}"  IsChecked="{Binding Source={x:Static fb:FacebookService.Instance},Path=UseFacebook,Mode=OneTime}" IsEnabledChanged="fbpostSwitch_IsEnabledChanged"/>
+                                <Button Height="20" Width="66" Margin="8,0,0,8" VerticalAlignment="Bottom" HorizontalAlignment="Left" Name="ReauthFBBtn" Click="ReauthFBBtn_Click">Reauth FB</Button>
+                            </Grid>
                         </TabItem>
                     </TabControl>
                     <StackPanel Height="50" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">
