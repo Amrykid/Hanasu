@@ -359,19 +359,19 @@ namespace Hanasu
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
                             name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
 
-                        if (Hanasu.Services.Settings.SettingsService.Instance.AutomaticallyFetchSongData)
-                            System.Threading.Tasks.Task.Factory.StartNew(() =>
-                                {
-                                    var n = name;
-                                    var stat = currentStation;
 
-                                    System.Threading.Thread.Sleep(1000 * 20); //wait 20 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
-
-                                    if (stat != currentStation)
-                                        return;
-
-                                    if (stat.StationType == StationType.Radio)
+                        if (currentStation.StationType == StationType.Radio)
+                        {
+                            if (Hanasu.Services.Settings.SettingsService.Instance.AutomaticallyFetchSongData)
+                                System.Threading.Tasks.Task.Factory.StartNew(() =>
                                     {
+                                        var n = name;
+                                        var stat = currentStation;
+
+                                        System.Threading.Thread.Sleep(1000 * 20); //wait 20 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
+
+                                        if (stat != currentStation)
+                                            return;
 
                                         Uri lyricsUrl = null;
                                         if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
@@ -397,8 +397,8 @@ namespace Hanasu
                                                         MoreInfoBtn.DataContext = currentSong;
                                                     }));
                                         }
-                                    }
-                                }).ContinueWith((tk) => tk.Dispose());
+                                    }).ContinueWith((tk) => tk.Dispose());
+                        }
                     }
                     else
                     {
@@ -408,7 +408,8 @@ namespace Hanasu
                                                 MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
                                             }));
 
-                        //since its not a song, might as well display it as a radio message instead of 'Now Playing'.
+
+                        //since its not a verified song, might as well display it as a radio message instead of 'Now Playing'.
 
                         currentSong = null;
 
@@ -418,7 +419,10 @@ namespace Hanasu
 
                         lastMediaTxt = name;
 
-                        SongDataLbl.Text = "Not Available";
+                        if (currentStation.StationType == StationType.Radio)
+                            SongDataLbl.Text = "Not Available";
+                        else if (currentStation.StationType == StationType.TV)
+                            SongDataLbl.Text = currentStation.Name;
 
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
                             name, 4000, false, Services.Notifications.NotificationType.Information);
