@@ -17,6 +17,7 @@ namespace Hanasu.Services.Song
         static SongService()
         {
             SongCache = new Dictionary<string, SongData>();
+            DataSource = new YesAsia();
         }
 
         public static bool IsSongAvailable(string songdata, out Uri lyricsUri)
@@ -53,7 +54,7 @@ namespace Hanasu.Services.Song
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
 
-                    new YesAsia().GetAlbumInfo(ref song);
+                    DataSource.GetAlbumInfo(ref song);
 
                     SongCache.Add(newsongdata.ToLower(), song);
 
@@ -68,7 +69,7 @@ namespace Hanasu.Services.Song
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
 
-                    new YesAsia().GetAlbumInfo(ref song);
+                    DataSource.GetAlbumInfo(ref song);
 
                     SongCache.Add(newsongdata.ToLower(), song);
 
@@ -104,5 +105,7 @@ namespace Hanasu.Services.Song
 
             return songdata;
         }
+
+        public static IAlbumInfoDataSource DataSource { get; set; }
     }
 }
