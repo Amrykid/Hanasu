@@ -58,7 +58,7 @@
   </Station>
   <Station>
     <Name>XAMFM</Name>
-    <DataSource>http://www.xamfm.com/siteplayer/xamfm.wpl</DataSource>
+    <DataSource>http://www.xamfm.com/siteplayer/xamfm.pls</DataSource>
     <Homepage>http://www.xamfm.com/index.php/xamfm</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
@@ -67,7 +67,7 @@
   </Station>
   <Station>
     <Name>XAMFM2</Name>
-    <DataSource>http://www.xamfm.com/siteplayer/xamfm2.wpl</DataSource>
+    <DataSource>http://www.xamfm.com/siteplayer/xamfm2.pls</DataSource>
     <Homepage>http://www.xamfm.com/index.php/xamfm</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
