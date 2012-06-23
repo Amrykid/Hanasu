@@ -5,7 +5,7 @@
         xmlns:stations="clr-namespace:Hanasu.Services.Stations"
         xmlns:ac="clr-namespace:AdornedControl"
         xmlns:log="clr-namespace:Hanasu.Services.Logging"
-        Title="Hanasu" MinHeight="410" MinWidth="715" xmlns:my="clr-namespace:Hanasu.Core.Converters">
+        Title="Hanasu" MinHeight="410" MinWidth="715" xmlns:my="clr-namespace:Hanasu.Core.Converters" Icon="pack://application:,,,/Hanasu;component/Resources/vector_icon.png">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
