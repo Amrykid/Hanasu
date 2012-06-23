@@ -175,7 +175,7 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                             <Button.ToolTip>
-                                <ToolTip Content="Shows attributes of the current station."/>
+                                <ToolTip Content="Shows the attributes of the current station."/>
                             </Button.ToolTip>
                         </Button>
                         <Button Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}">
@@ -203,7 +203,7 @@
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Click="revBtn_Click">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/rew.png"/>
                     <Button.ToolTip>
-                        <ToolTip Content="Change station to the one above the current one."/>
+                        <ToolTip Content="Changes station to the one above the current one."/>
                     </Button.ToolTip>
                 </Button>
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="playBtn" Click="playBtn_Click">
@@ -221,7 +221,7 @@
                 <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Click="ffBtn_Click">
                     <Image Source="pack://application:,,,/Hanasu;component/Resources/ff.png"/>
                     <Button.ToolTip>
-                        <ToolTip Content="Change station to the one below the current one."/>
+                        <ToolTip Content="Changes station to the one below the current one."/>
                     </Button.ToolTip>
                 </Button>
             </StackPanel>
