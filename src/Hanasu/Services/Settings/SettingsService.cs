@@ -39,7 +39,8 @@ namespace Hanasu.Services.Settings
 
                 var settings = new XElement("Settings",
                         new XElement("UpdateStationsLive", "false"),
-                        new XElement("AutomaticallyFetchSongData", "false"));
+                        new XElement("AutomaticallyFetchSongData", "false"),
+                        new XElement("LastSetVolume", 50));
 
                 //Pass the settings to subscribers so they can update the settings xml as needed.
                 var sinfo = new SettingsDataEventInfo()
@@ -73,6 +74,8 @@ namespace Hanasu.Services.Settings
 
                 UpdateStationsLive = bool.Parse(liveupdate.Value);
 
+                LastSetVolume = settings.ContainsElement("LastSetVolume") ? int.Parse(settings.Element("LastSetVolume").Value) : 15;
+
                 var sinfo = new SettingsDataEventInfo()
                 {
                     SettingsDocument = doc,
@@ -90,7 +93,8 @@ namespace Hanasu.Services.Settings
 
             var settings = new XElement("Settings",
                           new XElement("UpdateStationsLive", UpdateStationsLive.ToString()),
-                          new XElement("AutomaticallyFetchSongData", AutomaticallyFetchSongData.ToString()));
+                          new XElement("AutomaticallyFetchSongData", AutomaticallyFetchSongData.ToString()),
+                          new XElement("LastSetVolume", LastSetVolume));
 
             var sinfo = new SettingsDataEventInfo()
             {
@@ -110,6 +114,8 @@ namespace Hanasu.Services.Settings
 
         public bool AutomaticallyFetchSongData { get; set; }
         public bool UpdateStationsLive { get; set; }
+
+        public int LastSetVolume { get; set; }
 
 
         internal class SettingsDataEventInfo : EventInfo

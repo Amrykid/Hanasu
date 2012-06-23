@@ -245,6 +245,8 @@ namespace Hanasu
 
             this.tabControl1.SelectedIndex = 1;
 
+            VolumeSlider.Value = Hanasu.Services.Settings.SettingsService.Instance.LastSetVolume;
+
 #if !DEBUG
             tabItem3.Visibility = System.Windows.Visibility.Hidden;
 #endif
@@ -623,6 +625,8 @@ namespace Hanasu
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             player.settings.volume = (int)VolumeSlider.Value;
+
+            Hanasu.Services.Settings.SettingsService.Instance.LastSetVolume = player.settings.volume;
         }
 
         private void playBtn_Click(object sender, RoutedEventArgs e)
@@ -752,18 +756,18 @@ namespace Hanasu
             public SongData CurrentSong { get; set; }
         }
 
-        private Lazy<object> StationListViewGridButtonImageValueMusic = new Lazy<object>(new Func<object>(() => (Visual)Application.Current.MainWindow.Resources["appbar_music"]));
+        /*private Lazy<object> StationListViewGridButtonImageValueMusic = new Lazy<object>(new Func<object>(() => (Visual)Application.Current.MainWindow.Resources["appbar_music"]));
         private Lazy<object> StationListViewGridButtonImageValueTV = new Lazy<object>(new Func<object>(() => ((Visual)Application.Current.MainWindow.Resources["appbar_tv"])));
         private void StationsListViewGridItemButton_Loaded(object sender, RoutedEventArgs e)
         {
-            switch ((StationType)((Button)sender).DataContext)
+            /*switch ((StationType)((Button)sender).DataContext)
             {
                 case StationType.Radio: ((Button)sender).Content = (Visual)StationListViewGridButtonImageValueMusic.Value;
                     break;
                 case StationType.TV: ((Button)sender).Content = (Visual)StationListViewGridButtonImageValueTV.Value;
                     break;
             }
-        }
+        }*/
 
         private void StationAttributesBtn_Click(object sender, RoutedEventArgs e)
         {
