@@ -75,9 +75,9 @@ namespace Hanasu.Services.Facebook
 
                     dynamic parameters = new ExpandoObject();
                     parameters.message = "I liked [" + sl.CurrentSong.TrackTitle + " by " + sl.CurrentSong.Artist + "].";
-                    parameters.picture = "https://github.com/Amrykid/Hanasu/raw/master/res/metro.icons/black/favs.png";
-                    parameters.link = sl.CurrentStation.Homepage.ToString();
-                    parameters.name = "Streaming [" + sl.CurrentStation.Name + "] powered by Hanasu.";
+                    parameters.picture = sl.CurrentSong.AlbumCoverUri == null ? "https://github.com/Amrykid/Hanasu/raw/master/res/metro.icons/black/favs.png" : sl.CurrentSong.AlbumCoverUri.ToString();
+                    parameters.link = sl.CurrentSong.BuyUri != null ? sl.CurrentSong.BuyUri.ToString() : sl.CurrentStation.Homepage.ToString();
+                    parameters.name = sl.CurrentSong.BuyUri != null ? "Buy " + sl.CurrentSong.Album + " from " + Song.SongService.DataSource.WebsiteName + "." : "Streaming [" + sl.CurrentStation.Name + "] powered by Hanasu.";
 
 
                     dynamic dlHanasu = new ExpandoObject();
