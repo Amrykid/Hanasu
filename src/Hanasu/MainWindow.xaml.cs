@@ -232,7 +232,8 @@ namespace Hanasu
 
             player.EndOfStream += player_EndOfStream;
 
-            VolumeSlider.Value = player.settings.volume;
+
+            VolumeSlider.Value = Hanasu.Services.Settings.SettingsService.Instance.LastSetVolume;
 
             HandleWindowsTaskbarstuff();
 
@@ -244,8 +245,6 @@ namespace Hanasu
             currentStationAttributes = new Hashtable();
 
             this.tabControl1.SelectedIndex = 1;
-
-            VolumeSlider.Value = Hanasu.Services.Settings.SettingsService.Instance.LastSetVolume;
 
 #if !DEBUG
             tabItem3.Visibility = System.Windows.Visibility.Hidden;
