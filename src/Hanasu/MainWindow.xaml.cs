@@ -15,6 +15,7 @@ using WMPLib;
 using System.Collections;
 using Hanasu.Core;
 using System.Diagnostics;
+using System.IO;
 
 namespace Hanasu
 {
@@ -540,7 +541,7 @@ namespace Hanasu
 
             if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource, station.ExplicitExtension))
             {
-                var d = station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null ? station.LocalStationFile : station.DataSource;
+                var d = station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null && File.Exists(station.LocalStationFile.ToString()) ? station.LocalStationFile : station.DataSource;
                 //Hanasu.Services.Preprocessor.PreprocessorService.Process(ref d);
 
                 var pro = Hanasu.Services.Preprocessor.PreprocessorService.GetProcessor(d, station.ExplicitExtension);
@@ -586,7 +587,7 @@ namespace Hanasu
             }
             else
             {
-                if (station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null)
+                if (station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null && File.Exists(station.LocalStationFile.ToString()))
                     player.URL = station.LocalStationFile.ToString();
                 else
                     player.URL = station.DataSource.ToString();

@@ -37,6 +37,13 @@
                                 <Button Height="20" Width="66" Margin="8,0,0,8" VerticalAlignment="Bottom" HorizontalAlignment="Left" Name="ReauthFBBtn" Click="ReauthFBBtn_Click">Reauth FB</Button>
                             </Grid>
                         </TabItem>
+                        <TabItem Header="Misc">
+                            <Grid>
+                                <GroupBox Header="Data" BorderThickness="0" FontSize="20" Padding="5">
+                                    <Button Height="20" Width="78" Margin="8,0,0,8" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ViewCacheBtn" Click="ViewCacheBtn_Click">View Cache</Button>
+                                </GroupBox>
+                            </Grid>
+                        </TabItem>
                     </TabControl>
                     <StackPanel Height="50" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">
                         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Name="OkBtn" Click="OkBtn_Click">

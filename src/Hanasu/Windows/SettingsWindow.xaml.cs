@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls;
 using Hanasu.Services.Settings;
+using System.Diagnostics;
 
 namespace Hanasu.Windows
 {
@@ -71,6 +72,11 @@ namespace Hanasu.Windows
                 MessageBox.Show("Press okay (the check button) on the settings window and the authenication window will show.");
                 Hanasu.Services.Facebook.FacebookService.FBAccessToken = "";
             }
+        }
+
+        private void ViewCacheBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(Hanasu.Services.Stations.StationsService.Instance.StationsCacheDir);
         }
 
     }
