@@ -14,6 +14,7 @@ using System.Timers;
 using WMPLib;
 using System.Collections;
 using Hanasu.Core;
+using System.Diagnostics;
 
 namespace Hanasu
 {
@@ -243,6 +244,10 @@ namespace Hanasu
             currentStationAttributes = new Hashtable();
 
             this.tabControl1.SelectedIndex = 1;
+
+#if !DEBUG
+            tabItem3.Visibility = System.Windows.Visibility.Hidden;
+#endif
         }
 
         void player_CurrentMediaItemAvailable(object sender, AxWMPLib._WMPOCXEvents_CurrentMediaItemAvailableEvent e)
@@ -779,5 +784,11 @@ namespace Hanasu
             }
         }
         #endregion
+
+        private void StationsListViewViewHomepageMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (StationsListView.SelectedItem != null)
+                Process.Start(((Station)StationsListView.SelectedItem).Homepage.ToString());
+        }
     }
 }

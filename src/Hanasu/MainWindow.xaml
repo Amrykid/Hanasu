@@ -102,6 +102,11 @@
                                                     <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Language}"/>
                                                 </GridView>
                                             </ListView.View>
+                                            <ListView.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="View Homepage" Name="StationsListViewViewHomepageMenuItem" Click="StationsListViewViewHomepageMenuItem_Click"/>
+                                                </ContextMenu>
+                                            </ListView.ContextMenu>
                                         </ListView>
                                     </Grid>
 
