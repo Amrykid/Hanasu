@@ -257,7 +257,12 @@ namespace Hanasu
 
         void player_CurrentMediaItemAvailable(object sender, AxWMPLib._WMPOCXEvents_CurrentMediaItemAvailableEvent e)
         {
-
+            if (currentStation.StationType == StationType.Radio)
+            {
+                IWMPMedia3 media = (IWMPMedia3)player.mediaCollection.getByName(e.bstrItemName);
+                IWMPMetadataPicture pic = (IWMPMetadataPicture)media.getItemInfoByType("WM/Picture", "", 0);
+            }
+            var x = 0;
         }
 
         void player_EndOfStream(object sender, AxWMPLib._WMPOCXEvents_EndOfStreamEvent e)
@@ -330,6 +335,10 @@ namespace Hanasu
         {
             if (!unableToConnectNotificationShown)
             {
+                WMPLib.IWMPMedia2 errSource = (IWMPMedia2)e.pMediaObject;
+
+                WMPLib.IWMPErrorItem err = errSource.Error;
+
                 Hanasu.Services.Notifications.NotificationsService.AddNotification(
                     "Unable to connect to station.",
                     "Hanasu was unable to connect to " + currentStation.Name + ".", 4000, false, Services.Notifications.NotificationType.Error);
@@ -448,7 +457,7 @@ namespace Hanasu
         void player_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
         {
             //handle the wmp's status
-
+            
             WMPLib.WMPPlayState state = (WMPLib.WMPPlayState)e.newState;
 
             LogService.Instance.WriteLog(player,
