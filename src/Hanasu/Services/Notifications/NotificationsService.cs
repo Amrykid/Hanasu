@@ -12,7 +12,7 @@ using Hanasu.Services.Logging;
 
 namespace Hanasu.Services.Notifications
 {
-    public class NotificationsService :IStaticService
+    public class NotificationsService : IStaticService
     {
         static NotificationsService()
         {
@@ -50,10 +50,17 @@ namespace Hanasu.Services.Notifications
         }
 
 
-        public static void AddNotification(string title, string message, int duration, bool isUrgent = false, NotificationType type = NotificationType.Information)
+        public static void AddNotification(string title, string message = "", int duration = 3000, bool isUrgent = false, NotificationType type = NotificationType.Information)
         {
             if (System.Windows.Application.Current == null)
                 return;
+
+            if (title == null)
+                throw new ArgumentNullException("title");
+            if (message == null)
+                throw new ArgumentNullException("message");
+            if (duration == 0)
+                throw new ArgumentOutOfRangeException("duration");
 
             lock (Notifications)
             {
