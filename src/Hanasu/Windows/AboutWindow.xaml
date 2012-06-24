@@ -1,0 +1,56 @@
+﻿<metro:MetroWindow x:Class="Hanasu.Windows.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="About" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False" Height="320" Width="501">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Label Content="Created by Amrykid" FontSize="25" Height="42" Margin="157,12,20,0" Name="label1" VerticalAlignment="Top" />
+        <RichTextBox Height="156" Margin="23,89,20,0" Name="textBlock1" VerticalAlignment="Top" IsReadOnly="True" IsReadOnlyCaretVisible="False">
+            <FlowDocument>
+                <Paragraph TextAlignment="Center" FontSize="18">
+                    Special Thanks to all bug testers:
+                </Paragraph>
+                <List>
+                    <List.ListItems>
+                        <ListItem>
+                            <Paragraph>
+                                <Hyperlink NavigateUri="https://github.com/RyanSweigert">Phalanxia</Hyperlink>
+                            </Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>
+                                <Hyperlink NavigateUri="https://github.com/XAMPP">XAMPP</Hyperlink>
+                            </Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>dallbee</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>
+                                <Hyperlink NavigateUri="https://www.facebook.com/tobi.thao">TobiT1094
+                                </Hyperlink>
+                            </Paragraph>
+                        </ListItem>
+                    </List.ListItems>
+                </List>
+                <Paragraph>
+                    Also, thanks to MahApps.Metro and
+                    <Hyperlink>http://metro.windowswiki.info/</Hyperlink> .
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <Label Content="Label" Height="33" Margin="113,55,40,0" Name="label2" FontSize="19" VerticalAlignment="Top" />
+        <Button Content="Close" Height="23" HorizontalAlignment="Left" Margin="193,251,0,0" Name="button1" VerticalAlignment="Top" Width="75" IsCancel="True" />
+    </Grid>
+</metro:MetroWindow>

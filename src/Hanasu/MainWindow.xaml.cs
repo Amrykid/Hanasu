@@ -814,5 +814,13 @@ namespace Hanasu
             if (control.TryFindParent<GridViewColumnHeader>() != null)
                 e.Handled = true;
         }
+
+        private void aboutBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow aw = new AboutWindow();
+            aw.Owner = this;
+            aw.ShowDialog();
+            aw.Close();
+        }
     }
 }
