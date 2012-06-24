@@ -12,5 +12,13 @@ namespace Hanasu
     /// </summary>
     public partial class App : Application
     {
+        public Hanasu.Windows.SplashScreen SplashScreen { get; set; }
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            //Start the splash screen.
+            SplashScreen = new Windows.SplashScreen();
+            SplashScreen.Show();
+            SplashScreen.Focus();
+        }
     }
 }

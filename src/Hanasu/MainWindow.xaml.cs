@@ -209,7 +209,6 @@ namespace Hanasu
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //configure the wmp control
-
             windowsFormsHost1.Child = new Hanasu.Core.AxWMP();
             player = ((Hanasu.Core.AxWMP)windowsFormsHost1.Child).axWindowsMediaPlayer1;
 
@@ -248,6 +247,8 @@ namespace Hanasu
             currentStationAttributes = new Hashtable();
 
             this.tabControl1.SelectedIndex = 1;
+
+            ((App)App.Current).SplashScreen.Close(); //close the splash screen.
 
 #if !DEBUG
             tabItem3.Visibility = System.Windows.Visibility.Hidden;

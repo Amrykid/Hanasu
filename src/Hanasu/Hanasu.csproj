@@ -156,6 +156,9 @@
     <Compile Include="Windows\SongInfoWindow.xaml.cs">
       <DependentUpon>SongInfoWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SplashScreen.xaml.cs">
+      <DependentUpon>SplashScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\StationAttributesWindow.xaml.cs">
       <DependentUpon>StationAttributesWindow.xaml</DependentUpon>
     </Compile>
@@ -172,6 +175,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Windows\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SplashScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -326,6 +333,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\video.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pink-hair-anime-girl-listening-to-music_1920x1200.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
