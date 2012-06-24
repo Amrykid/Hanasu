@@ -81,7 +81,7 @@
                                         <Grid.Background>
                                             <ImageBrush Opacity=".15"  ImageSource="pack://application:,,,/Hanasu;component/Resources/luka.jpg" Stretch="Uniform"/>
                                         </Grid.Background>
-                                        <ListView Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" IsEnabled="False">
+                                        <ListView Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" IsEnabled="False">
                                             <ListView.View>
                                                 <GridView>
                                                     <GridViewColumn Header="*" Width="42">

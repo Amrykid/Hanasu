@@ -16,6 +16,7 @@ using System.Collections;
 using Hanasu.Core;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Shapes;
 
 namespace Hanasu
 {
@@ -349,7 +350,7 @@ namespace Hanasu
                 {
                     var name = player.currentMedia.name;
 
-                    if (name.Contains(" - ") && name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1 && !System.Text.RegularExpressions.Regex.IsMatch(name, @"^(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$",System.Text.RegularExpressions.RegexOptions.Compiled)) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
+                    if (name.Contains(" - ") && name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1 && !System.Text.RegularExpressions.Regex.IsMatch(name, @"^(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$", System.Text.RegularExpressions.RegexOptions.Compiled)) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
                     {
                         MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
 
@@ -793,6 +794,16 @@ namespace Hanasu
         {
             if (StationsListView.SelectedItem != null)
                 Process.Start(((Station)StationsListView.SelectedItem).Homepage.ToString());
+        }
+
+        private void StationsListView_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //Prevents double clicking of headers so they don't connect to stations.
+
+            UIElement control = (UIElement)e.MouseDevice.DirectlyOver;
+
+            if (control.TryFindParent<GridViewColumnHeader>() != null)
+                e.Handled = true;
         }
     }
 }
