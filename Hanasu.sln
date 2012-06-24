@@ -18,6 +18,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_ConfigurationName = Debug
+		BuildVersion_ConfigurationName = Any
 	EndGlobalSection
 EndGlobal

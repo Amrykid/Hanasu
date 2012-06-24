@@ -122,10 +122,7 @@ namespace Hanasu.Services.Stations
                         stats = from x in StreamStationsXml()
                                 select ParseStation(ref dummie, x);
 
-                        using (var wc = new WebClient())
-                        {
-                            wc.DownloadFileAsync(new Uri(StationsUrl), StationsCachedFile);
-                        }
+                        DownloadStationsToCache();
                     }
                     else
                     {
@@ -175,6 +172,14 @@ namespace Hanasu.Services.Stations
             Status = StationsServiceStatus.Idle;
         }
 
+        private void DownloadStationsToCache()
+        {
+            using (var wc = new WebClient())
+            {
+                wc.DownloadFileAsync(new Uri(StationsUrl), StationsCachedFile);
+            }
+        }
+
         private static Station ParseStation(ref RadioFormat dummie, XElement x)
         {
             return new Station()
@@ -219,17 +224,24 @@ namespace Hanasu.Services.Stations
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            int before = Stations.Count;
+            if (NetworkUtils.IsConnectedToInternet())
+            {
+                int before = Stations.Count;
 
-            System.Windows.Application.Current.Dispatcher.Invoke(
-                new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
-                    {
-                        LoadStationsFromRepo();
-                    }));
+                System.Windows.Application.Current.Dispatcher.Invoke(
+                    new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                        {
+                            LoadStationsFromRepo();
+                        }));
 
-            if (Stations.Count > before)
-                Hanasu.Services.Notifications.NotificationsService.AddNotification("Stations Updated",
-                    (Stations.Count - before).ToString() + " station(s) added.", 4000, true);
+                if (Stations.Count > before)
+                {
+                    Hanasu.Services.Notifications.NotificationsService.AddNotification("Stations Updated",
+                        (Stations.Count - before).ToString() + " station(s) added.", 4000, true);
+
+                    DownloadStationsToCache();
+                }
+            }
         }
 
         private delegate void EmptyParameterizedDelegate(object obj);
