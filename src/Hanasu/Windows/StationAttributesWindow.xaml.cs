@@ -23,6 +23,13 @@ namespace Hanasu.Windows
         public StationAttributesWindow()
         {
             InitializeComponent();
+            this.Unloaded += StationAttributesWindow_Unloaded;
+        }
+
+        void StationAttributesWindow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.@this.Loaded -= new System.Windows.RoutedEventHandler(this.MetroWindow_Loaded);
+            this.Unloaded -= StationAttributesWindow_Unloaded;
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)

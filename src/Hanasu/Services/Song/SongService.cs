@@ -6,17 +6,18 @@ using System.Text.RegularExpressions;
 using Hanasu.Services.Song.Lyric_Data_Sources;
 using System.Collections.ObjectModel;
 using Hanasu.Services.Song.Album_Info_Data_Source;
+using System.Collections;
 
 namespace Hanasu.Services.Song
 {
     public class SongService: IStaticService
     {
 
-        private static Dictionary<string, SongData> SongCache = null;
+        private static Hashtable SongCache = null;
 
         static SongService()
         {
-            SongCache = new Dictionary<string, SongData>();
+            SongCache = new Hashtable();
             DataSource = new YesAsia();
         }
 
@@ -30,7 +31,7 @@ namespace Hanasu.Services.Song
 
             if (SongCache.ContainsKey(newsongdata.ToLower()))
             {
-                lyricsUri = SongCache[newsongdata.ToLower()].LyricsUri; ;
+                lyricsUri = ((SongData)SongCache[newsongdata.ToLower()]).LyricsUri; ;
 
                 return true;
             }
@@ -86,13 +87,13 @@ namespace Hanasu.Services.Song
         public static SongData GetSongData(string songdata)
         {
             if (SongCache.ContainsKey(CleanSongDataStr(songdata).ToLower()))
-                return SongCache[CleanSongDataStr(songdata).ToLower()];
+                return (SongData)SongCache[CleanSongDataStr(songdata).ToLower()];
 
             Uri lyricsUrl = null;
             if (IsSongAvailable(songdata, out lyricsUrl))
-                return SongCache[CleanSongDataStr(songdata).ToLower()];
+                return (SongData)SongCache[CleanSongDataStr(songdata).ToLower()];
 
-            return null;
+            throw new Exception("Song data doesn't exist");
         }
         private static string CleanSongDataStr(string songdata)
         {

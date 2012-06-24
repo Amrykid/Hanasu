@@ -22,6 +22,14 @@ namespace Hanasu.Windows
         public MultiStreamChooseWindow()
         {
             InitializeComponent();
+            this.Unloaded += MultiStreamChooseWindow_Unloaded;
+        }
+
+        void MultiStreamChooseWindow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.listBox1.MouseLeftButtonUp -= this.listBox1_MouseLeftButtonUp;
+            this.Unloaded -= MultiStreamChooseWindow_Unloaded;
+
         }
 
         private void listBox1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

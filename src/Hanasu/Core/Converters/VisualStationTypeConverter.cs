@@ -20,7 +20,7 @@ namespace Hanasu.Core.Converters
                 res.BeginInit();
                 res.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/play.png", UriKind.Absolute);
                 res.EndInit();
-                return res;
+                return (BitmapImage)res.GetAsFrozen();
             }));
         private Lazy<BitmapImage> TVLazy = new Lazy<BitmapImage>(new Func<BitmapImage>(() =>
         {
@@ -28,11 +28,11 @@ namespace Hanasu.Core.Converters
             res.BeginInit();
             res.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/video.png", UriKind.Absolute);
             res.EndInit();
-            return res;
+            return (BitmapImage)res.GetAsFrozen();
         }));
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            StationType s = (StationType)value;
+            StationType s = (StationType)value; 
             try
             {
                 switch (s)

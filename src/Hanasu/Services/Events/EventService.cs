@@ -20,7 +20,13 @@ namespace Hanasu.Services.Events
             EventHandlers = new Collection<EventReference>();
         }
         private static Collection<EventReference> EventHandlers = null;
-        public static EventReference AttachHandler(EventType type, Action<EventInfo> act)
+        public static void AttachHandler(EventType type, Action<EventInfo> act)
+        {
+            var eref = new EventReference(type, act);
+
+            EventHandlers.Add(eref);
+        }
+        public static EventReference AttachHandlerForRef(EventType type, Action<EventInfo> act)
         {
             var eref = new EventReference(type, act);
 

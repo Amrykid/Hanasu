@@ -24,6 +24,21 @@ namespace Hanasu.Windows
         public SettingsWindow()
         {
             InitializeComponent();
+            this.Unloaded += SettingsWindow_Unloaded;
+        }
+
+        void SettingsWindow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.fbpostSwitch.IsEnabledChanged -= new System.Windows.DependencyPropertyChangedEventHandler(this.fbpostSwitch_IsEnabledChanged);
+
+            this.ReauthFBBtn.Click -= new System.Windows.RoutedEventHandler(this.ReauthFBBtn_Click);
+
+            this.ViewCacheBtn.Click -= new System.Windows.RoutedEventHandler(this.ViewCacheBtn_Click);
+
+            this.OkBtn.Click -= new System.Windows.RoutedEventHandler(this.OkBtn_Click);
+
+            this.CancelBtn.Click -= new System.Windows.RoutedEventHandler(this.CancelBtn_Click);
+            this.Unloaded -= SettingsWindow_Unloaded;
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
@@ -38,7 +53,7 @@ namespace Hanasu.Windows
 
             Hanasu.Services.Facebook.FacebookService.FacebookEnabled = ((bool)fetchSongDataSwitch.IsChecked == true ? (bool)fbpostSwitch.IsChecked : false);
 
-           //checks if auth is needed.
+            //checks if auth is needed.
 
             if (Hanasu.Services.Facebook.FacebookService.FacebookEnabled && Hanasu.Services.Facebook.FacebookService.Instance.NeedsToAuth)
             {

@@ -20,8 +20,8 @@
     <Grid>
         <DataGrid Name="DG" CanUserDeleteRows="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserSortColumns="True" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Attribute" Binding="{Binding Key}" Width="300" />
-                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="200" />
+                <DataGridTextColumn Header="Attribute" Binding="{Binding Key, Mode=OneTime}" Width="300" />
+                <DataGridTextColumn Header="Value" Binding="{Binding Value, Mode=OneTime}" Width="200" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

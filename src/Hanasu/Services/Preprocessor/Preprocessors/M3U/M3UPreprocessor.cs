@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Net;
+using System.IO;
 
 namespace Hanasu.Services.Preprocessor.Preprocessors.M3U
 {
@@ -12,54 +13,57 @@ namespace Hanasu.Services.Preprocessor.Preprocessors.M3U
         public override IMultiStreamEntry[] Parse(Uri url)
         {
             var list = new ArrayList();
+            string data = null;
+            string[] lines = null;
 
-            using (WebClient wc = new WebClient())
-            {
-                var data = wc.DownloadString(url);
-
-                var lines = data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-                
-
-                bool m3uIsValid = true;
-
-                if (!lines[0].StartsWith("#EXTM3U"))
-                    m3uIsValid = false;
-
-                if (m3uIsValid)
+            if (url.Host != "")
+                using (WebClient wc = new WebClient())
                 {
-                    var item = new M3UEntry();
-                    for (int i = 1; i < lines.Length; i++)
-                    {
-                        var line = lines[i];
-
-                        if (line.StartsWith("#EXTINF"))
-                        {
-                            item = new M3UEntry();
-
-                            var m3udata = line.Substring(8);
-
-                            item.Length = int.Parse(m3udata.Substring(0, m3udata.IndexOf(",")));
-
-                            item.Title = m3udata.Substring(m3udata.IndexOf(",") + 1).TrimEnd('\r', '\n');
-                        }
-                        else
-                        {
-                            item.File = line;
-                            list.Add(item);
-                        }
-                    }
+                    data = wc.DownloadString(url);
+                    lines = data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 }
-                else
-                {
-                    foreach (string line in lines)
-                    {
-                        var item = new M3UEntry();
-                        item.Title = line;
-                        item.File = line;
+            else
+                lines = File.ReadAllLines(url.LocalPath);
 
+
+            bool m3uIsValid = true;
+
+            if (!lines[0].StartsWith("#EXTM3U"))
+                m3uIsValid = false;
+
+            if (m3uIsValid)
+            {
+                var item = new M3UEntry();
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    var line = lines[i];
+
+                    if (line.StartsWith("#EXTINF"))
+                    {
+                        item = new M3UEntry();
+
+                        var m3udata = line.Substring(8);
+
+                        item.Length = int.Parse(m3udata.Substring(0, m3udata.IndexOf(",")));
+
+                        item.Title = m3udata.Substring(m3udata.IndexOf(",") + 1).TrimEnd('\r', '\n');
+                    }
+                    else
+                    {
+                        item.File = line;
                         list.Add(item);
                     }
+                }
+            }
+            else
+            {
+                foreach (string line in lines)
+                {
+                    var item = new M3UEntry();
+                    item.Title = line;
+                    item.File = line;
+
+                    list.Add(item);
                 }
             }
 

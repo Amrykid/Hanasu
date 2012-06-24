@@ -24,6 +24,15 @@ namespace Hanasu.Windows
         public SongInfoWindow()
         {
             InitializeComponent();
+            this.Unloaded += SongInfoWindow_Unloaded;
+        }
+
+        void SongInfoWindow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.thisWindow.Loaded -= new System.Windows.RoutedEventHandler(this.thisWindow_Loaded);
+            this.CloseBtn.Click -= new System.Windows.RoutedEventHandler(this.Close_Click);
+            this.buyAlbumbtn.Click -= new System.Windows.RoutedEventHandler(this.buyAlbumbtn_Click);
+            this.Unloaded -= SongInfoWindow_Unloaded;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)

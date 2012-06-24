@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hanasu.Services.Song
 {
-    public class SongData
+    public struct SongData
     {
         public string TrackTitle { get; set; }
         public string Artist { get; set; }

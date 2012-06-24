@@ -96,21 +96,21 @@
                                                     <GridViewColumn Header="Station">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
-                                                                <Label Content="{Binding Name}" FontSize="17" Foreground="Black"/>
+                                                                <Label Content="{Binding Name, Mode=OneTime}" FontSize="17" Foreground="Black"/>
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
                                                     <GridViewColumn Header="Format">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
-                                                                <Label Content="{Binding Format}" FontSize="17" Foreground="Black"/>
+                                                                <Label Content="{Binding Format, Mode=OneTime}" FontSize="17" Foreground="Black"/>
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
                                                     <GridViewColumn Header="Language" Width="100">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
-                                                                <Label Content="{Binding Language}" FontSize="17" Foreground="Black"/>
+                                                                <Label Content="{Binding Language, Mode=OneTime}" FontSize="17" Foreground="Black"/>
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
@@ -146,9 +146,9 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding Sender}"/>
-                                <GridViewColumn Header="Message" Width="400" DisplayMemberBinding="{Binding Message}"/>
-                                <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Time}"/>
+                                <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding Sender, Mode=OneTime}"/>
+                                <GridViewColumn Header="Message" Width="400" DisplayMemberBinding="{Binding Message, Mode=OneTime}"/>
+                                <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Time, Mode=OneTime}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>

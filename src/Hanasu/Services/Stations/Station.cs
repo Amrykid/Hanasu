@@ -6,7 +6,7 @@ using Hanasu.Core;
 
 namespace Hanasu.Services.Stations
 {
-    public class Station
+    public struct Station
     {
         public string Name { get; set; }
         public Uri Homepage { get; set; }

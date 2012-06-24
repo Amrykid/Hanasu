@@ -26,13 +26,13 @@
             </Rectangle.Fill>
         </Rectangle>
         <TextBlock Text="The station you selected has multiple radio streams. Please choose which you want to connect to." Height="68" Margin="87,22,12,0" Name="label1" VerticalAlignment="Top" TextWrapping="Wrap" FontSize="17" />
-        <ListBox Height="238" Margin="14,104,12,0" Name="listBox1" VerticalAlignment="Top" ItemsSource="{Binding}" MouseLeftButtonUp="listBox1_MouseLeftButtonUp">
+        <ListBox Height="238" Margin="14,104,12,0" Name="listBox1" VerticalAlignment="Top" ItemsSource="{Binding ., Mode=OneTime}" MouseLeftButtonUp="listBox1_MouseLeftButtonUp">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <StackPanel HorizontalAlignment="Left">
-                           <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" FontFamily="Segoe UI" FontSize="18" Width="410" ToolTip="{Binding Title}"/>
-                            <Label Content="{Binding File}" FontSize="12"/>
+                           <TextBlock Text="{Binding Title, Mode=OneTime}" TextTrimming="CharacterEllipsis" FontFamily="Segoe UI" FontSize="18" Width="410" ToolTip="{Binding Title}"/>
+                            <Label Content="{Binding File, Mode=OneTime}" FontSize="12"/>
                         </StackPanel>
                         <Rectangle Margin="0 0 -60 0" Height="40" HorizontalAlignment="Right" Width="40">
                             <Rectangle.Fill>

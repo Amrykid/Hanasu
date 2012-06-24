@@ -12,8 +12,8 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Label Content="{Binding Title}" Height="40" Margin="67,2,12,0" Name="label1" VerticalAlignment="Top" FontSize="17" Foreground="Black" Opacity="1.0" />
-        <TextBlock Margin="15,39,12,12" Name="textBlock1" Text="{Binding Message}" TextWrapping="Wrap" Foreground="Black" FontSize="15" />
+        <Label Content="{Binding Title,Mode=OneTime}" Height="40" Margin="67,2,12,0" Name="label1" VerticalAlignment="Top" FontSize="17" Foreground="Black" Opacity="1.0" />
+        <TextBlock Margin="15,39,12,12" Name="textBlock1" Text="{Binding Message,Mode=OneTime}" TextWrapping="Wrap" Foreground="Black" FontSize="15" />
         <Rectangle HorizontalAlignment="Left" Margin="12,2,0,0" Name="iconRect" Width="35" Height="35" VerticalAlignment="Top">
             <Rectangle.Fill>
                 <VisualBrush Stretch="Fill" x:Name="iconRectBrush"/>

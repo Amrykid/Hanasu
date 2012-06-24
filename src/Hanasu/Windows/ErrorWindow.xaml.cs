@@ -22,6 +22,14 @@ namespace Hanasu.Windows
         public ErrorWindow()
         {
             InitializeComponent();
+            this.Unloaded += ErrorWindow_Unloaded;
+        }
+
+        void ErrorWindow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.button1.Click -= new System.Windows.RoutedEventHandler(this.button1_Click);
+            this.button2.Click -= new System.Windows.RoutedEventHandler(this.button2_Click);
+            this.Unloaded -= ErrorWindow_Unloaded;
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)

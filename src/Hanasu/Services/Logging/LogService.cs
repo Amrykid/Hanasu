@@ -29,11 +29,14 @@ namespace Hanasu.Services.Logging
 
         public void WriteLog(object from, string msg)
         {
+#if DEBUG
             WriteLog(from.GetType(),
                 msg);
+#endif
         }
         public void WriteLog(Type from, string msg)
         {
+#if DEBUG
             if (System.Windows.Application.Current == null)
                 return;
 
@@ -46,6 +49,7 @@ namespace Hanasu.Services.Logging
                 });
 
             OnPropertyChanged("Messages");
+#endif
         }
     }
 }

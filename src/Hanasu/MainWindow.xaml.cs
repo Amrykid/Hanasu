@@ -79,6 +79,7 @@ namespace Hanasu
             }
 
             ew.ShowDialog();
+            ew.Close();
         }
         private static Hanasu.External.InterceptKeys.LowLevelKeyboardProc keyHookproc = null;
         private void HandleMediaKeyHooks()
@@ -340,7 +341,7 @@ namespace Hanasu
 
         private bool unableToConnectNotificationShown = false;
         private string lastMediaTxt = null; //prevents the below event from constantly queueing the same song title.
-        private SongData currentSong = null;
+        private SongData currentSong;
         internal Hashtable currentStationAttributes { get; set; }
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
         {
@@ -378,7 +379,7 @@ namespace Hanasu
 
                                         System.Threading.Thread.Sleep(1000 * 20); //wait 20 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
 
-                                        if (stat != currentStation)
+                                        if (stat.Name != currentStation.Name)
                                             return;
 
                                         Uri lyricsUrl = null;
@@ -419,7 +420,7 @@ namespace Hanasu
 
                         //since its not a verified song, might as well display it as a radio message instead of 'Now Playing'.
 
-                        currentSong = null;
+                        currentSong = new SongData();
 
                         SongIsLiked = false;
 
@@ -526,7 +527,7 @@ namespace Hanasu
             }
         }
 
-        private Station currentStation = null;
+        private Station currentStation;
 
         private void StationsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -534,15 +535,18 @@ namespace Hanasu
 
             var station = (Station)StationsListView.SelectedItem;
 
-            if (station == null)
+            if (station.Name == null)
                 return;
 
-            if (currentStation != station)
+            if (currentStation.Name != station.Name)
                 Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue(); //Get rid of messages from the last station, if any.
+
+            if (player.playState == WMPPlayState.wmppsPlaying)
+                player.close();
 
             if (Hanasu.Services.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(station.DataSource, station.ExplicitExtension))
             {
-                var d = station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null && File.Exists(station.LocalStationFile.ToString()) ? station.LocalStationFile : station.DataSource;
+                var d = station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null && File.Exists(station.LocalStationFile.LocalPath) ? station.LocalStationFile : station.DataSource;
                 //Hanasu.Services.Preprocessor.PreprocessorService.Process(ref d);
 
                 var pro = Hanasu.Services.Preprocessor.PreprocessorService.GetProcessor(d, station.ExplicitExtension);
@@ -574,9 +578,11 @@ namespace Hanasu
                             Hanasu.Services.Preprocessor.IMultiStreamEntry en = (Hanasu.Services.Preprocessor.IMultiStreamEntry)pls.listBox1.SelectedItem;
 
                             d = new Uri(en.File);
+                            pls.Close();
                         }
                         else
                         {
+                            pls.Close();
                             return;
                         }
                     }
@@ -637,7 +643,7 @@ namespace Hanasu
 
         private void pauseBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (currentStation != null)
+            if (currentStation.Name != null)
                 if (currentStation.StationType == StationType.Radio)
                     player.Ctlcontrols.pause();
                 else if (currentStation.StationType == StationType.TV)
@@ -691,6 +697,7 @@ namespace Hanasu
             siw.Owner = this;
 
             siw.ShowDialog();
+            siw.Close();
         }
 
         private void settingsBtn_Click(object sender, RoutedEventArgs e)
@@ -698,6 +705,7 @@ namespace Hanasu
             SettingsWindow sw = new SettingsWindow();
             sw.Owner = this;
             sw.ShowDialog();
+            sw.Close();
         }
 
         private void ffBtn_Click(object sender, RoutedEventArgs e)
@@ -776,6 +784,7 @@ namespace Hanasu
             saw.DataContext = this;
             saw.Owner = this;
             saw.ShowDialog();
+            saw.Close();
         }
 
         #region INotifyPropertyChanged / BaseINPC

@@ -20,7 +20,7 @@
     <Grid>
         <Label Content="Something bad happened!" Height="69" Margin="26,10,45,0" FontSize="25" Name="label1" VerticalAlignment="Top" />
         <Label Content="Please contact Amrykid with the following data." Height="41" FontSize="16" Margin="66,51,57,0" Name="label2" VerticalAlignment="Top" />
-        <TextBlock Height="161" Margin="32,85,0,0" Name="textBlock1" Text="{Binding}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="442" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+        <TextBlock Height="161" Margin="32,85,0,0" Name="textBlock1" Text="{Binding .,Mode=OneTime}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="442" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" />
         <Button Content="Copy" Height="23" Margin="26,0,0,12" Name="button1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Click="button1_Click" />
         <Button Content="Close" Height="23" HorizontalAlignment="Right" Margin="0,0,16,8" Name="button2" VerticalAlignment="Bottom" Width="75" Click="button2_Click" />
     </Grid>

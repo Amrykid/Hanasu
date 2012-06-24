@@ -34,12 +34,12 @@ namespace Hanasu.Services.Song.Lyric_Data_Sources
                 else
                 {
 
-                    var ptags = Regex.Matches(data, "<p>.+?</p>",RegexOptions.Singleline);
+                    var ptags = Regex.Matches(data, "<p>.+?</p>", RegexOptions.Singleline | RegexOptions.Compiled);
                     var lyricdata = ptags[ptags.Count - 1].Value;
 
-                    lyricdata = Regex.Replace(lyricdata, "<br/><br/>", "\r\n\r\n");
+                    lyricdata = Regex.Replace(lyricdata, "<br/><br/>", "\r\n\r\n", RegexOptions.Compiled);
 
-                    lyricdata = Regex.Replace(lyricdata, "<.+?>", "");
+                    lyricdata = Regex.Replace(lyricdata, "<.+?>", "", RegexOptions.Compiled);
 
                     lyrics = HtmlDecoder.Decode(lyricdata);
 

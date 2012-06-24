@@ -9,6 +9,7 @@ using System.Timers;
 using Hanasu.Services.Logging;
 using System.IO;
 using System.Net;
+using System.Xml;
 
 namespace Hanasu.Services.Stations
 {
@@ -67,26 +68,28 @@ namespace Hanasu.Services.Stations
                 LogService.Instance.WriteLog(this,
     "BEGIN: Station polling operation.");
 
-                System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                System.Windows.Application.Current.Dispatcher.Invoke(new EmptyParameterizedDelegate((t) =>
                     {
                         if (StationFetchStarted != null)
-                            StationFetchStarted(this, null);
-                    }));
+                            StationFetchStarted((StationsService)t, null);
+                    }), this);
 
                 Status = StationsServiceStatus.Polling;
 
                 //System.Threading.Thread.Sleep(10000);
-
-                var doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml");
-
+                
                 System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
                     {
                         Stations.Clear();
                     }));
 
+               
+                //var doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml");
+
+
                 RadioFormat dummie = 0;
 
-                var stats = from x in doc.Element("Stations").Elements("Station")
+                var stats = from x in StreamStationsXml()
                             select new Station()
                             {
                                 Name = x.Element("Name").Value,
@@ -106,6 +109,7 @@ namespace Hanasu.Services.Stations
                 foreach (Station st in stats)
                 {
                     //Checks if its possible to cache the playlist file.
+                    var s = st;
                     if (st.ExplicitExtension != "" && Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(st.DataSource, st.ExplicitExtension) && st.Cacheable && st.StationType == StationType.Radio)
                     {
                         var cachefile = StationsCacheDir + st.Name + "_" + st.DataSource.LocalPath.Substring(st.DataSource.LocalPath.LastIndexOf("/") + 1);
@@ -113,25 +117,25 @@ namespace Hanasu.Services.Stations
                             using (WebClient wc = new WebClient())
                             {
                                 wc.DownloadFile(st.DataSource, cachefile);
-                                st.LocalStationFile = new Uri(cachefile);
+                                s.LocalStationFile = new Uri(cachefile);
                             }
                         else
-                            st.LocalStationFile = new Uri(cachefile);
+                            s.LocalStationFile = new Uri(cachefile);
                     }
 
-                    finalstats.Add(st);
+                    finalstats.Add(s);
                 }
 
-                System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                System.Windows.Application.Current.Dispatcher.Invoke(new EmptyParameterizedDelegate2((f,g) =>
                     {
-                        foreach (var x in finalstats)
+                        foreach (var x in (List<Station>)f)
                             Stations.Add(x);
 
                         OnPropertyChanged("Stations");
 
                         if (StationFetchCompleted != null)
-                            StationFetchCompleted(this, null);
-                    }));
+                            StationFetchCompleted((StationsService)g, null);
+                    }), finalstats, this );
 
                 LogService.Instance.WriteLog(this,
     "END: Station polling operation.");
@@ -140,6 +144,30 @@ namespace Hanasu.Services.Stations
             catch (Exception) { }
 
             Status = StationsServiceStatus.Idle;
+        }
+
+        private IEnumerable<XElement> StreamStationsXml()
+        {
+            using (XmlReader reader = XmlReader.Create("https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"))
+            {
+                reader.MoveToContent();
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            if (reader.Name == "Station")
+                            {
+                                XElement el = XElement.ReadFrom(reader)
+                                                      as XElement;
+                                if (el != null)
+                                    yield return el;
+                            }
+                            break;
+                    }
+                }
+                reader.Close();
+            }
         }
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -156,6 +184,9 @@ namespace Hanasu.Services.Stations
                 Hanasu.Services.Notifications.NotificationsService.AddNotification("Stations Updated",
                     (Stations.Count - before).ToString() + " station(s) added.", 4000, true);
         }
+
+        private delegate void EmptyParameterizedDelegate(object obj);
+        private delegate void EmptyParameterizedDelegate2(object obj, object obj2);
 
         public ObservableCollection<Station> Stations { get; private set; }
 

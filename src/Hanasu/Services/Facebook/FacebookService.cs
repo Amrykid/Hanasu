@@ -10,6 +10,7 @@ using Facebook;
 using System.Windows;
 using System.Windows.Controls;
 using System.Threading.Tasks;
+using Hanasu.Core;
 
 namespace Hanasu.Services.Facebook
 {
@@ -123,8 +124,8 @@ namespace Hanasu.Services.Facebook
         {
             Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
 
-            FacebookEnabled = bool.Parse(sdei.SettingsElement.Element("UseFacebook").Value);
-            FBAccessToken = sdei.SettingsElement.Element("FBAccessToken").Value;
+            FacebookEnabled = sdei.SettingsElement.ContainsElement("UseFacebook") ? bool.Parse(sdei.SettingsElement.Element("UseFacebook").Value) : false;
+            FBAccessToken = sdei.SettingsElement.ContainsElement("FBAccessToken") ? sdei.SettingsElement.Element("FBAccessToken").Value : null;
 
             if (FacebookEnabled && String.IsNullOrEmpty(FBAccessToken) == false)
                 fb = new FacebookClient(FBAccessToken);
@@ -248,6 +249,7 @@ namespace Hanasu.Services.Facebook
                 wc.ShowDialog();
 
                 web.Navigated -= handler;
+                web.Dispose();
             }
             catch (Exception)
             {

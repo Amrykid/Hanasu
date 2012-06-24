@@ -86,8 +86,9 @@ namespace Hanasu.Services.Notifications
             if (QueueRunning)
                 return;
 
-            Thread t = new Thread(() =>
+            ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
                 {
+
                     while (!Notifications.IsEmpty)
                     {
                         if (System.Windows.Application.Current == null)
@@ -111,6 +112,12 @@ namespace Hanasu.Services.Notifications
                                 }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
                             while (nw.IsVisible)
                                 Thread.Sleep(50);
+                            Application.Current.Dispatcher.Invoke(new EmptyDelegate(
+                                () =>
+                                {
+                                    nw.Close();
+                                }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+
 
                             LogService.Instance.WriteLog(typeof(NotificationsService),
     "Notification shown: " + ((dynamic)nw.DataContext).Title);
@@ -123,9 +130,7 @@ namespace Hanasu.Services.Notifications
                     }
 
                     QueueRunning = false;
-                });
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
+                }));
         }
 
         public delegate void EmptyDelegate();
