@@ -82,6 +82,12 @@
                                             <ImageBrush Opacity=".15"  ImageSource="pack://application:,,,/Hanasu;component/Resources/luka.jpg" Stretch="Uniform"/>
                                         </Grid.Background>
                                         <ListView Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" IsEnabled="False">
+                                            <ListView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
+                                                    </VirtualizingStackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ListView.ItemsPanel>
                                             <ListView.View>
                                                 <GridView>
                                                     <GridViewColumn Header="*" Width="42">
