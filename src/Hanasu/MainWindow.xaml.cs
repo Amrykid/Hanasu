@@ -594,7 +594,7 @@ namespace Hanasu
             }
             else
             {
-                if (station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null && File.Exists(station.LocalStationFile.ToString()))
+                if (station.Cacheable && station.StationType != StationType.TV && station.LocalStationFile != null && File.Exists(station.LocalStationFile.LocalPath))
                     player.URL = station.LocalStationFile.ToString();
                 else
                     player.URL = station.DataSource.ToString();
