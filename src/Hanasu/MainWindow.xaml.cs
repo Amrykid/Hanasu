@@ -539,6 +539,12 @@ namespace Hanasu
             if (station.Name == null)
                 return;
 
+            if (NetworkUtils.IsConnectedToInternet() == false)
+            {
+                MessageBox.Show("No internet connection detected!");
+                return;
+            }
+
             if (currentStation.Name != station.Name)
                 Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue(); //Get rid of messages from the last station, if any.
 

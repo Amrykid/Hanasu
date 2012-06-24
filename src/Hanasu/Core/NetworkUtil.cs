@@ -25,7 +25,7 @@ namespace Hanasu.Core
 
         public static bool IsConnectedToInternet()
         {
-            //In function for checking internet
+            //In function for checking internet 
             InternetConnectionState_e flags = 0;
             return InternetGetConnectedState(ref flags, 0);
         }
