@@ -10,6 +10,7 @@ using Hanasu.Services.Logging;
 using System.IO;
 using System.Net;
 using System.Xml;
+using System.Windows;
 
 namespace Hanasu.Services.Stations
 {
@@ -60,6 +61,8 @@ namespace Hanasu.Services.Stations
         }
 
         public string StationsCacheDir = null;
+        public string StationsCachedFile { get { return StationsCacheDir + "Stations.xml"; } }
+        public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"; } }
 
         private void LoadStationsFromRepo()
         {
@@ -77,33 +80,59 @@ namespace Hanasu.Services.Stations
                 Status = StationsServiceStatus.Polling;
 
                 //System.Threading.Thread.Sleep(10000);
-                
+
                 System.Windows.Application.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
                     {
                         Stations.Clear();
                     }));
 
-               
+
                 //var doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml");
 
 
                 RadioFormat dummie = 0;
+                dynamic stats = null;
 
-                var stats = from x in StreamStationsXml()
-                            select new Station()
-                            {
-                                Name = x.Element("Name").Value,
-                                DataSource = new Uri(x.Element("DataSource").Value),
-                                Homepage = new Uri(x.Element("Homepage").Value),
-                                Format = (Enum.TryParse<RadioFormat>(x.Element("Format").Value, out dummie) == true ?
-                                    (RadioFormat)Enum.Parse(typeof(RadioFormat), x.Element("Format").Value) :
-                                    RadioFormat.Mix),
-                                City = x.Element("City").Value,
-                                ExplicitExtension = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : null,
-                                StationType = x.ContainsElement("StationType") ? (StationType)Enum.Parse(typeof(StationType), x.Element("StationType").Value) : StationType.Radio,
-                                Language = x.ContainsElement("Language") ? (StationLanguage)Enum.Parse(typeof(StationLanguage), x.Element("Language").Value) : StationLanguage.English,
-                                Cacheable = x.ContainsElement("Cacheable") ? bool.Parse(x.Element("Cacheable").Value) : false
-                            };
+                if (File.Exists(StationsCachedFile))
+                {
+                    try
+                    {
+                        var doc = XDocument.Load(StationsCachedFile);
+                        stats = from x in doc.Element("Stations").Elements("Station")
+                                select ParseStation(ref dummie, x);
+                    }
+                    catch (Exception)
+                    {
+                        if (NetworkUtils.IsConnectedToInternet())
+                        {
+                            stats = from x in StreamStationsXml()
+                                    select ParseStation(ref dummie, x);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Unable to load cached Stations file. Also, unable to connect to online Stations file. Hanasu will now exit.");
+                            Application.Current.Shutdown();
+                        }
+                    }
+                }
+                else
+                    if (NetworkUtils.IsConnectedToInternet())
+                    {
+
+                        stats = from x in StreamStationsXml()
+                                select ParseStation(ref dummie, x);
+
+                        using (var wc = new WebClient())
+                        {
+                            wc.DownloadFileAsync(new Uri(StationsUrl), StationsCachedFile);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to connect to online Stations file. Hanasu will now exit.");
+                        Application.Current.Shutdown();
+                    }
+
 
                 var finalstats = new List<Station>();
                 foreach (Station st in stats)
@@ -126,7 +155,7 @@ namespace Hanasu.Services.Stations
                     finalstats.Add(s);
                 }
 
-                System.Windows.Application.Current.Dispatcher.Invoke(new EmptyParameterizedDelegate2((f,g) =>
+                System.Windows.Application.Current.Dispatcher.Invoke(new EmptyParameterizedDelegate2((f, g) =>
                     {
                         foreach (var x in (List<Station>)f)
                             Stations.Add(x);
@@ -135,7 +164,7 @@ namespace Hanasu.Services.Stations
 
                         if (StationFetchCompleted != null)
                             StationFetchCompleted((StationsService)g, null);
-                    }), finalstats, this );
+                    }), finalstats, this);
 
                 LogService.Instance.WriteLog(this,
     "END: Station polling operation.");
@@ -144,6 +173,24 @@ namespace Hanasu.Services.Stations
             catch (Exception) { }
 
             Status = StationsServiceStatus.Idle;
+        }
+
+        private static Station ParseStation(ref RadioFormat dummie, XElement x)
+        {
+            return new Station()
+            {
+                Name = x.Element("Name").Value,
+                DataSource = new Uri(x.Element("DataSource").Value),
+                Homepage = new Uri(x.Element("Homepage").Value),
+                Format = (Enum.TryParse<RadioFormat>(x.Element("Format").Value, out dummie) == true ?
+                    (RadioFormat)Enum.Parse(typeof(RadioFormat), x.Element("Format").Value) :
+                    RadioFormat.Mix),
+                City = x.Element("City").Value,
+                ExplicitExtension = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : null,
+                StationType = x.ContainsElement("StationType") ? (StationType)Enum.Parse(typeof(StationType), x.Element("StationType").Value) : StationType.Radio,
+                Language = x.ContainsElement("Language") ? (StationLanguage)Enum.Parse(typeof(StationLanguage), x.Element("Language").Value) : StationLanguage.English,
+                Cacheable = x.ContainsElement("Cacheable") ? bool.Parse(x.Element("Cacheable").Value) : false
+            };
         }
 
         private IEnumerable<XElement> StreamStationsXml()

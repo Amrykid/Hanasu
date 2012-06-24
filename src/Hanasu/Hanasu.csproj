@@ -99,6 +99,7 @@
     <Compile Include="Core\Converters\EnumToIntConverter.cs" />
     <Compile Include="Core\Converters\VisualStationTypeConverter.cs" />
     <Compile Include="Core\HtmlDecoder.cs" />
+    <Compile Include="Core\NetworkUtil.cs" />
     <Compile Include="Core\ObservableQueue.cs" />
     <Compile Include="Core\UriToBitmapImageConverter.cs" />
     <Compile Include="Core\XElementExtensions.cs" />
