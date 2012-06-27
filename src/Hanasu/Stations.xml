@@ -4,9 +4,9 @@
     <Name>AnimeNfo</Name>
     <DataSource>http://www.animenfo.com/radio/listen.m3u</DataSource>
     <Homepage>http://www.animenfo.com/</Homepage>
-    <Format>Mix</Format>
+    <Format>Anime</Format>
     <City>Tokyo</City>
-    <Language>Japanese</Language>
+    <Language>English</Language>
     <Cacheable>True</Cacheable>
     <ExplicitExtension>.m3u</ExplicitExtension>
   </Station>
@@ -35,7 +35,7 @@
     <Homepage>http://www.radiohikari.pl/news.php</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
-    <Language>Japanese</Language>
+    <Language>Polish</Language>
     <Cacheable>False</Cacheable>
   </Station>
   <Station>
@@ -60,18 +60,18 @@
     <Name>XAMFM</Name>
     <DataSource>http://www.xamfm.com/siteplayer/xamfm.pls</DataSource>
     <Homepage>http://www.xamfm.com/index.php/xamfm</Homepage>
-    <Format>Mix</Format>
+    <Format>JPop</Format>
     <City>N/A</City>
-    <Language>Japanese</Language>
+    <Language>English</Language>
     <Cacheable>True</Cacheable>
   </Station>
   <Station>
     <Name>XAMFM2</Name>
     <DataSource>http://www.xamfm.com/siteplayer/xamfm2.pls</DataSource>
     <Homepage>http://www.xamfm.com/index.php/xamfm</Homepage>
-    <Format>Mix</Format>
+    <Format>JRock</Format>
     <City>N/A</City>
-    <Language>Japanese</Language>
+    <Language>English</Language>
     <Cacheable>True</Cacheable>
   </Station>
   <Station>
@@ -90,7 +90,7 @@
     <Homepage>http://www.animeamaze.net/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
-    <Language>Japanese</Language>
+    <Language>English</Language>
     <ExplicitExtension>.asx</ExplicitExtension>
     <Cacheable>True</Cacheable>
   </Station>
@@ -116,7 +116,7 @@
     <Name>JPopsuki</Name>
     <DataSource>http://play.internet-radio-guide.net/asx.php?id=220233</DataSource>
     <Homepage>http://jpopsuki.eu/</Homepage>
-    <Format>Mix</Format>
+    <Format>JPop</Format>
     <City>N/A</City>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
@@ -316,7 +316,7 @@
     <Name>BABEL ROCK RADIO</Name>
     <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=44725]]></DataSource>
     <Homepage>http://www.babelentertainment.com/</Homepage>
-    <Format>Mix</Format>
+    <Format>JRock</Format>
     <City>N/A</City>
     <ExplicitExtension>.pls</ExplicitExtension>
     <StationType>Radio</StationType>
@@ -330,6 +330,17 @@
     <Format>Mix</Format>
     <City>N/A</City>
     <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
+  <Station>
+    <Name>Otaku no Radio</Name>
+    <DataSource><![CDATA[http://radio.otakunopodcast.com:8000/otakunoradio.m3u]]></DataSource>
+    <Homepage>http://radio.otakunopodcast.com/cgi-bin/icecast/playing.cgi</Homepage>
+    <Format>Mix</Format>
+    <City>Santa Maria, CA, USA</City>
+    <ExplicitExtension>.m3u</ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>

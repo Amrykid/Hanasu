@@ -357,6 +357,10 @@ namespace Hanasu
         {
             try
             {
+                player_parseAttributes();
+
+                WMPLib.IWMPMedia3 changedItem = (WMPLib.IWMPMedia3)e.item;
+
                 if (lastMediaTxt != player.currentMedia.name)
                 {
                     var name = player.currentMedia.name;
@@ -492,16 +496,7 @@ namespace Hanasu
 
                     HideStationsAdorner(); //Playing, hide the adorner and rename the listview.
 
-                    currentStationAttributes.Clear();
-                    for (int i = 0; i < player.currentMedia.attributeCount; i++)
-                    {
-                        var x = player.currentMedia.getAttributeName(i);
-                        var y = player.currentMedia.getItemInfo(x);
-
-                        currentStationAttributes.Add(x, y);
-                    }
-
-                    OnPropertyChanged("currentStationAttributes");
+                    player_parseAttributes();
 
                     //for (int i = 0; i < player.currentPlaylist.count; i++)
                     //{
@@ -535,6 +530,20 @@ namespace Hanasu
                         HideStationsAdorner();
                     break;
             }
+        }
+
+        private void player_parseAttributes()
+        {
+            currentStationAttributes.Clear();
+            for (int i = 0; i < player.currentMedia.attributeCount; i++)
+            {
+                var x = player.currentMedia.getAttributeName(i);
+                var y = player.currentMedia.getItemInfo(x);
+
+                currentStationAttributes.Add(x, y);
+            }
+
+            OnPropertyChanged("currentStationAttributes");
         }
 
         private Station currentStation;

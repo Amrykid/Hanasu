@@ -5,7 +5,7 @@
         xmlns:stations="clr-namespace:Hanasu.Services.Stations"
         xmlns:ac="clr-namespace:AdornedControl"
         xmlns:log="clr-namespace:Hanasu.Services.Logging"
-        Title="Hanasu" MinHeight="410" MinWidth="715" xmlns:my="clr-namespace:Hanasu.Core.Converters" Icon="pack://application:,,,/Hanasu;component/Resources/vector_icon.png">
+        Title="Hanasu" MinHeight="410" MinWidth="715" xmlns:my="clr-namespace:Hanasu.Core.Converters" Icon="pack://application:,,,/Hanasu;component/Resources/vector_icon.png" x:Name="thisWindow">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -21,6 +21,7 @@
             </ResourceDictionary.MergedDictionaries>
             <my:VisualStationTypeConverter x:Key="VisualStationTypeConverter1" />
             <my:EnumToIntConverter x:Key="EnumToIntConverter1" />
+            <my:IntCalcConverter x:Key="IntCalcConverter1" />
         </ResourceDictionary>
     </Window.Resources>
     <metro:MetroWindow.WindowCommands>
@@ -62,7 +63,7 @@
                         </WindowsFormsHost>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Stations">
+                <TabItem Header="Stations" Name="StationsTab">
                     <Grid>
                         <Border BorderBrush="Black" BorderThickness=".7">
                             <Grid>
@@ -89,53 +90,65 @@
                                         <Grid.Background>
                                             <ImageBrush Opacity=".15"  ImageSource="pack://application:,,,/Hanasu;component/Resources/luka.jpg" Stretch="Uniform"/>
                                         </Grid.Background>
-                                        <ListView Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" IsEnabled="False">
-                                            <ListView.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
-                                                    </VirtualizingStackPanel>
-                                                </ItemsPanelTemplate>
-                                            </ListView.ItemsPanel>
-                                            <ListView.View>
-                                                <GridView>
-                                                    <GridViewColumn Header="*" Width="42">
-                                                        <GridViewColumn.CellTemplate>
-                                                            <DataTemplate>
-                                                                <Grid Height="34">
-                                                                    <Image Source="{Binding Converter={StaticResource VisualStationTypeConverter1}, Path=StationType, IsAsync=True}" Name="StationsListViewGridItemButton" Width="45" Height="42" Margin="0 -5 0 0"/>
-                                                                </Grid>
-                                                            </DataTemplate>
-                                                        </GridViewColumn.CellTemplate>
-                                                    </GridViewColumn>
-                                                    <GridViewColumn Header="Station">
-                                                        <GridViewColumn.CellTemplate>
-                                                            <DataTemplate>
-                                                                <Label Content="{Binding Name, Mode=OneTime}" FontSize="17" Foreground="Black"/>
-                                                            </DataTemplate>
-                                                        </GridViewColumn.CellTemplate>
-                                                    </GridViewColumn>
-                                                    <GridViewColumn Header="Format">
-                                                        <GridViewColumn.CellTemplate>
-                                                            <DataTemplate>
-                                                                <Label Content="{Binding Format, Mode=OneTime}" FontSize="17" Foreground="Black"/>
-                                                            </DataTemplate>
-                                                        </GridViewColumn.CellTemplate>
-                                                    </GridViewColumn>
-                                                    <GridViewColumn Header="Language" Width="100">
-                                                        <GridViewColumn.CellTemplate>
-                                                            <DataTemplate>
-                                                                <Label Content="{Binding Language, Mode=OneTime}" FontSize="17" Foreground="Black"/>
-                                                            </DataTemplate>
-                                                        </GridViewColumn.CellTemplate>
-                                                    </GridViewColumn>
-                                                </GridView>
-                                            </ListView.View>
-                                            <ListView.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Header="View Homepage" Name="StationsListViewViewHomepageMenuItem" Click="StationsListViewViewHomepageMenuItem_Click"/>
-                                                </ContextMenu>
-                                            </ListView.ContextMenu>
-                                        </ListView>
+                                        <!--<TreeView Name="StationsTreeview">
+                                            <TreeViewItem>
+                                                <TreeViewItem.Header>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="pack://application:,,,/Hanasu;component/Resources/vector_icon.png" Height="40"/>
+                                                        <Label FontSize="19">Hanasu Catalog</Label>
+                                                    </StackPanel>
+                                                </TreeViewItem.Header>
+                                        Width="{Binding ElementName=thisWindow, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntCalcConverter1}, ConverterParameter=-;%7}" -->
+                                                <ListView Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" IsEnabled="False">
+                                                    <ListView.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
+                                                            </VirtualizingStackPanel>
+                                                        </ItemsPanelTemplate>
+                                                    </ListView.ItemsPanel>
+                                                    <ListView.View>
+                                                        <GridView>
+                                                            <GridViewColumn Header="*" Width="42">
+                                                                <GridViewColumn.CellTemplate>
+                                                                    <DataTemplate>
+                                                                        <Grid Height="34">
+                                                                            <Image Source="{Binding Converter={StaticResource VisualStationTypeConverter1}, Path=StationType, IsAsync=True}" Name="StationsListViewGridItemButton" Width="45" Height="42" Margin="0 -5 0 0"/>
+                                                                        </Grid>
+                                                                    </DataTemplate>
+                                                                </GridViewColumn.CellTemplate>
+                                                            </GridViewColumn>
+                                                            <GridViewColumn Header="Station">
+                                                                <GridViewColumn.CellTemplate>
+                                                                    <DataTemplate>
+                                                                        <Label Content="{Binding Name, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                                    </DataTemplate>
+                                                                </GridViewColumn.CellTemplate>
+                                                            </GridViewColumn>
+                                                            <GridViewColumn Header="Format">
+                                                                <GridViewColumn.CellTemplate>
+                                                                    <DataTemplate>
+                                                                        <Label Content="{Binding Format, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                                    </DataTemplate>
+                                                                </GridViewColumn.CellTemplate>
+                                                            </GridViewColumn>
+                                                            <GridViewColumn Header="Station Language (not Music Language)" Width="265">
+                                                                <GridViewColumn.CellTemplate>
+                                                                    <DataTemplate>
+                                                                        <Label Content="{Binding Language, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                                    </DataTemplate>
+                                                                </GridViewColumn.CellTemplate>
+                                                            </GridViewColumn>
+                                                        </GridView>
+                                                    </ListView.View>
+                                                    <ListView.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="View Homepage" Name="StationsListViewViewHomepageMenuItem" Click="StationsListViewViewHomepageMenuItem_Click"/>
+                                                        </ContextMenu>
+                                                    </ListView.ContextMenu>
+                                                </ListView>
+                                            <!--</TreeViewItem>
+                                        </TreeView>-->
+
                                     </Grid>
 
                                 </ac:AdornedControl>
