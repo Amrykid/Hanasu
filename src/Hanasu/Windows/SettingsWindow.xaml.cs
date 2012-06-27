@@ -97,9 +97,11 @@ namespace Hanasu.Windows
 
         private void UpdateCatalogBtn_Click(object sender, RoutedEventArgs e)
         {
-            Hanasu.Services.Stations.StationsService.Instance.DownloadStationsToCache();
-
-            MessageBox.Show("The updated catalog will be downloaded in the background. Your stations listing will refresh on restart.");
+            Hanasu.Services.Stations.StationsService.Instance.DownloadStationsToCacheAsync().ContinueWith(
+                t =>
+                {
+                    Hanasu.Services.Stations.StationsService.Instance.LoadStationsFromRepo();
+                });
 
             UpdateCatalogBtn.IsEnabled = false;
         }

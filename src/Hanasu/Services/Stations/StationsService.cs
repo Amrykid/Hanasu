@@ -64,7 +64,7 @@ namespace Hanasu.Services.Stations
         public string StationsCachedFile { get { return StationsCacheDir + "Stations.xml"; } }
         public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"; } }
 
-        private void LoadStationsFromRepo()
+        internal void LoadStationsFromRepo()
         {
             try
             {
@@ -178,6 +178,16 @@ namespace Hanasu.Services.Stations
             {
                 wc.DownloadFileAsync(new Uri(StationsUrl), StationsCachedFile);
             }
+        }
+        internal System.Threading.Tasks.Task DownloadStationsToCacheAsync()
+        {
+            return System.Threading.Tasks.Task.Factory.StartNew(() =>
+                {
+                    using (var wc = new WebClient())
+                    {
+                        wc.DownloadFile(new Uri(StationsUrl), StationsCachedFile);
+                    }
+                }).ContinueWith(t => t.Dispose());
         }
 
         private static Station ParseStation(ref RadioFormat dummie, XElement x)
