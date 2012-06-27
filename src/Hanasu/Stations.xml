@@ -334,7 +334,7 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
   </Station>
-  <Station>
+  <!--<Station>
     <Name>Otaku no Radio</Name>
     <DataSource><![CDATA[http://radio.otakunopodcast.com:8000/otakunoradio.m3u]]></DataSource>
     <Homepage>http://radio.otakunopodcast.com/cgi-bin/icecast/playing.cgi</Homepage>
@@ -344,7 +344,7 @@
     <StationType>Radio</StationType>
     <Language>English</Language>
     <Cacheable>True</Cacheable>
-  </Station>
+  </Station>-->
   <Station>
     <Name>Final Fantasy Radio</Name>
     <DataSource><![CDATA[http://finalfantasyradio.net/radio/playlist.pls]]></DataSource>
