@@ -5,7 +5,7 @@
     <DataSource>http://www.animenfo.com/radio/listen.m3u</DataSource>
     <Homepage>http://www.animenfo.com/</Homepage>
     <Format>Anime</Format>
-    <City>Tokyo</City>
+    <City>Tokyo, Japan</City>
     <Language>English</Language>
     <Cacheable>True</Cacheable>
     <ExplicitExtension>.m3u</ExplicitExtension>
@@ -15,7 +15,7 @@
     <DataSource>http://www.gensokyoradio.net/GensokyoRadio.pls</DataSource>
     <Homepage>http://www.gensokyoradio.net/</Homepage>
     <Format>Mix</Format>
-    <City>Tokyo</City>
+    <City>Tokyo, Japan</City>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <ExplicitExtension>.pls</ExplicitExtension>
@@ -25,7 +25,7 @@
     <DataSource><![CDATA[http://www.makeavoice.com/shoutcast/tuneinlinks.php?file=m3u&host=67.215.229.100&port=8290]]></DataSource>
     <Homepage>http://nihonradio.net/2/</Homepage>
     <Format>Mix</Format>
-    <City>Tokyo</City>
+    <City>Tokyo, Japan</City>
     <Language>Japanese</Language>
     <Cacheable>False</Cacheable>
   </Station>
@@ -53,7 +53,7 @@
     <DataSource>http://www.armitunes.com/wmplaylist.php?server=http://149.255.33.76:8004</DataSource>
     <Homepage>http://www.armitunes.com/</Homepage>
     <Format>Mix</Format>
-    <City>N/A</City>
+    <City>Herndon, VA, United States</City>
     <Language>Japanese</Language>
   </Station>
   <Station>
@@ -164,7 +164,7 @@
     <!--http://www.loudcity.com/launch?file=pls&id=3168&playid=6253201205031331323168 Loudcity makes it /really/ hard to hotlink.-->
     <Homepage>http://radio.keiichi.net/</Homepage>
     <Format>Mix</Format>
-    <City>N/A</City>
+    <City>Denton, TX, United States</City>
     <ExplicitExtension></ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
@@ -339,10 +339,43 @@
     <DataSource><![CDATA[http://radio.otakunopodcast.com:8000/otakunoradio.m3u]]></DataSource>
     <Homepage>http://radio.otakunopodcast.com/cgi-bin/icecast/playing.cgi</Homepage>
     <Format>Mix</Format>
-    <City>Santa Maria, CA, USA</City>
+    <City>Santa Maria, CA, United States</City>
     <ExplicitExtension>.m3u</ExplicitExtension>
     <StationType>Radio</StationType>
-    <Language>Japanese</Language>
+    <Language>English</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
+  <Station>
+    <Name>Final Fantasy Radio</Name>
+    <DataSource><![CDATA[http://finalfantasyradio.net/radio/playlist.pls]]></DataSource>
+    <Homepage>http://www.finalfantasyradio.net/</Homepage>
+    <Format>JPop</Format>
+    <City>United States</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>English</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
+  <Station>
+    <Name>Radio Anime Obsesión</Name>
+    <DataSource><![CDATA[http://www.anime-obsesion.net/playlist.pls]]></DataSource>
+    <Homepage>http://www.anime-obsesion.net/</Homepage>
+    <Format>Anime</Format>
+    <City>United States</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Spanish</Language>
+    <Cacheable>True</Cacheable>
+  </Station>
+  <Station>
+    <Name>Anime Layer Radio</Name>
+    <DataSource><![CDATA[http://animelayer.ru:5190/play.m3u]]></DataSource>
+    <Homepage>http://www.animelayer.ru/</Homepage>
+    <Format>Anime</Format>
+    <City>Moscow, Russia</City>
+    <ExplicitExtension>.m3u</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Russian</Language>
     <Cacheable>True</Cacheable>
   </Station>
 </Stations>

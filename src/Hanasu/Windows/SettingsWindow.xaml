@@ -40,7 +40,10 @@
                         <TabItem Header="Misc">
                             <Grid>
                                 <GroupBox Header="Data" BorderThickness="0" FontSize="20" Padding="5">
-                                    <Button Height="20" Width="78" Margin="8,0,0,8" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ViewCacheBtn" Click="ViewCacheBtn_Click">View Cache</Button>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Height="20" Width="78" Margin="8,0,0,8" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ViewCacheBtn" Click="ViewCacheBtn_Click">View Cache</Button>
+                                        <Button Height="20" Width="100" Margin="8,0,0,8" VerticalAlignment="Top" HorizontalAlignment="Left" Name="UpdateCatalogBtn" Click="UpdateCatalogBtn_Click">Update Catalog</Button>
+                                    </StackPanel>
                                 </GroupBox>
                             </Grid>
                         </TabItem>

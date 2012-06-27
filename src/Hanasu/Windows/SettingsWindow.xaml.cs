@@ -34,6 +34,7 @@ namespace Hanasu.Windows
             this.ReauthFBBtn.Click -= new System.Windows.RoutedEventHandler(this.ReauthFBBtn_Click);
 
             this.ViewCacheBtn.Click -= new System.Windows.RoutedEventHandler(this.ViewCacheBtn_Click);
+            this.UpdateCatalogBtn.Click -= new System.Windows.RoutedEventHandler(this.UpdateCatalogBtn_Click);
 
             this.OkBtn.Click -= new System.Windows.RoutedEventHandler(this.OkBtn_Click);
 
@@ -92,6 +93,15 @@ namespace Hanasu.Windows
         private void ViewCacheBtn_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(Hanasu.Services.Stations.StationsService.Instance.StationsCacheDir);
+        }
+
+        private void UpdateCatalogBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Hanasu.Services.Stations.StationsService.Instance.DownloadStationsToCache();
+
+            MessageBox.Show("The updated catalog will be downloaded in the background. Your stations listing will refresh on restart.");
+
+            UpdateCatalogBtn.IsEnabled = false;
         }
 
     }

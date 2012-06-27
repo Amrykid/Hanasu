@@ -172,7 +172,7 @@ namespace Hanasu.Services.Stations
             Status = StationsServiceStatus.Idle;
         }
 
-        private void DownloadStationsToCache()
+        internal void DownloadStationsToCache()
         {
             using (var wc = new WebClient())
             {
