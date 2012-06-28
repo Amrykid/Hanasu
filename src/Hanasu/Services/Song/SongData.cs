@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hanasu.Services.Stations;
 
 namespace Hanasu.Services.Song
 {
+    [Serializable]
     public struct SongData
     {
         public string TrackTitle { get; set; }
@@ -14,5 +16,6 @@ namespace Hanasu.Services.Song
         public string Album { get; set; }
         public Uri AlbumCoverUri { get; set; }
         public Uri BuyUri { get; set; }
+        public Station OriginallyPlayedStation { get; set; }
     }
 }

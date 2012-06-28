@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Hanasu.Services.Stations
 {
+    [Serializable]
     public enum StationLanguage
     {
         English = 0,

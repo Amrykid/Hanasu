@@ -17,6 +17,8 @@ namespace Hanasu.Services.Events
 
         public static void Initialize()
         {
+            if (EventHandlers != null) return;
+
             EventHandlers = new Collection<EventReference>();
         }
         private static Collection<EventReference> EventHandlers = null;
@@ -56,7 +58,7 @@ namespace Hanasu.Services.Events
             data.EventType = type;
 
             foreach (EventReference eref in EventHandlers.Where(rf => rf.EventType == type))
-                eref.HandlerMethod.Invoke(data);
+                    eref.HandlerMethod.Invoke(data);
         }
     }
 }

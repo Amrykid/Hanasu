@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:stations="clr-namespace:Hanasu.Services.Stations"
+        xmlns:liked="clr-namespace:Hanasu.Services.LikedSongs"
         xmlns:ac="clr-namespace:AdornedControl"
+        xmlns:core="clr-namespace:Hanasu.Core"
         xmlns:log="clr-namespace:Hanasu.Services.Logging"
         Title="Hanasu" MinHeight="410" MinWidth="715" xmlns:my="clr-namespace:Hanasu.Core.Converters" Icon="pack://application:,,,/Hanasu;component/Resources/vector_icon.png" x:Name="thisWindow">
     <Window.Resources>
@@ -22,6 +24,7 @@
             <my:VisualStationTypeConverter x:Key="VisualStationTypeConverter1" />
             <my:EnumToIntConverter x:Key="EnumToIntConverter1" />
             <my:IntCalcConverter x:Key="IntCalcConverter1" />
+            <core:UriToBitmapImageConverter x:Key="UrlToBitmapConv" />
         </ResourceDictionary>
     </Window.Resources>
     <metro:MetroWindow.WindowCommands>
@@ -157,6 +160,55 @@
                         </Border>
                     </Grid>
                 </TabItem>
+                <TabItem Header="Liked" Name="LikedTab">
+                    <ListView Foreground="Black" Name="LikedSongsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static liked:LikedSongService.Instance}, Path=LikedSongs, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
+                                </VirtualizingStackPanel>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="*" Width="42">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid Height="34">
+                                                <Image Width="80" Height="80" Margin="0 -5 0 0" Source="{Binding Path=AlbumCoverUri,Converter={StaticResource UrlToBitmapConv},Mode=OneTime}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Song">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding TrackTitle, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Artist">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding Artist, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Station">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding Path=OriginallyPlayedStation.Name, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                              
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                    </ListView>
+                </TabItem>
                 <TabItem Header="Log" Name="tabItem3">
                     <ListView Foreground="Black" Name="LogListView" ItemsSource="{Binding Source={x:Static log:LogService.Instance}, Path=Messages, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="LogListView_TargetUpdated" IsEnabled="False">
                         <ListView.View>
@@ -219,7 +271,7 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                             <Button.ToolTip>
-                                <ToolTip Content="Share on Facebook?"/>
+                                <ToolTip Content="Like this song (and share on Facebook, if enabled)?"/>
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>

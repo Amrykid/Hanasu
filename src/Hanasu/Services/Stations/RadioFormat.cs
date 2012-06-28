@@ -6,6 +6,7 @@ using System.Text;
 namespace Hanasu.Services.Stations
 {
     //Needs to be expanded.
+    [Serializable]
     public enum RadioFormat
     {
         Classical = 0,

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Hanasu.Services.Stations
 {
+    [Serializable]
     public enum StationType
     {
         Radio = 0,

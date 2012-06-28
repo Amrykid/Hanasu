@@ -114,6 +114,7 @@
     <Compile Include="Services\Facebook\FacebookService.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Services\IShareProviderService.cs" />
+    <Compile Include="Services\LikedSongs\LikedSongService.cs" />
     <Compile Include="Services\Logging\LogMessage.cs" />
     <Compile Include="Services\Logging\LogService.cs" />
     <Compile Include="Services\Notifications\NotificationInfo.cs" />
@@ -341,7 +342,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" />
+      <UserProperties BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -43,6 +43,8 @@ namespace Hanasu
                 Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
                 Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted += Instance_StationFetchCompleted;
 
+                Hanasu.Services.LikedSongs.LikedSongService.Initialize();
+
                 HandleMediaKeyHooks();
 
                 //Hanasu.Services.Friends.FriendsService.Initialize();
@@ -397,7 +399,7 @@ namespace Hanasu
                                             return;
 
                                         Uri lyricsUrl = null;
-                                        if (Hanasu.Services.Song.SongService.IsSongAvailable(name, out lyricsUrl))
+                                        if (Hanasu.Services.Song.SongService.IsSongAvailable(name, currentStation, out lyricsUrl))
                                         {
                                             if ((bool)Dispatcher.Invoke(
                                                    new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() =>
@@ -415,7 +417,7 @@ namespace Hanasu
                                                     {
                                                         MoreInfoBtn.Visibility = System.Windows.Visibility.Visible;
 
-                                                        currentSong = Hanasu.Services.Song.SongService.GetSongData(name);
+                                                        currentSong = Hanasu.Services.Song.SongService.GetSongData(name, currentStation);
 
                                                         MoreInfoBtn.DataContext = currentSong;
                                                     }));

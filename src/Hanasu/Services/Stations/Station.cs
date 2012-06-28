@@ -6,6 +6,7 @@ using Hanasu.Core;
 
 namespace Hanasu.Services.Stations
 {
+    [Serializable]
     public struct Station
     {
         public string Name { get; set; }

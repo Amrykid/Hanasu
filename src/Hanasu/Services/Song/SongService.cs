@@ -7,6 +7,7 @@ using Hanasu.Services.Song.Lyric_Data_Sources;
 using System.Collections.ObjectModel;
 using Hanasu.Services.Song.Album_Info_Data_Source;
 using System.Collections;
+using Hanasu.Services.Stations;
 
 namespace Hanasu.Services.Song
 {
@@ -21,7 +22,7 @@ namespace Hanasu.Services.Song
             DataSource = new YesAsia();
         }
 
-        public static bool IsSongAvailable(string songdata, out Uri lyricsUri)
+        public static bool IsSongAvailable(string songdata, Station station, out Uri lyricsUri)
         {
             Hanasu.Services.Logging.LogService.Instance.WriteLog(typeof(SongService), "Checking if song is available from data: " + songdata);
 
@@ -54,6 +55,7 @@ namespace Hanasu.Services.Song
                     song.TrackTitle = bits[1].Trim(' ');
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
+                    song.OriginallyPlayedStation = station;
 
                     DataSource.GetAlbumInfo(ref song);
 
@@ -69,6 +71,7 @@ namespace Hanasu.Services.Song
                     song.TrackTitle = bits[0].Trim(' ');
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
+                    song.OriginallyPlayedStation = station;
 
                     DataSource.GetAlbumInfo(ref song);
 
@@ -84,13 +87,13 @@ namespace Hanasu.Services.Song
 
             return false;
         }
-        public static SongData GetSongData(string songdata)
+        public static SongData GetSongData(string songdata, Station station)
         {
             if (SongCache.ContainsKey(CleanSongDataStr(songdata).ToLower()))
                 return (SongData)SongCache[CleanSongDataStr(songdata).ToLower()];
 
             Uri lyricsUrl = null;
-            if (IsSongAvailable(songdata, out lyricsUrl))
+            if (IsSongAvailable(songdata, station, out lyricsUrl))
                 return (SongData)SongCache[CleanSongDataStr(songdata).ToLower()];
 
             throw new Exception("Song data doesn't exist");
