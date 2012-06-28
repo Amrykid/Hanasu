@@ -16,7 +16,7 @@
     </Window.Resources>
     <Grid>
         <Label Content="Created by Amrykid" FontSize="25" Height="42" Margin="157,12,20,0" Name="label1" VerticalAlignment="Top" />
-        <RichTextBox Height="156" Margin="23,89,20,0" Name="textBlock1" VerticalAlignment="Top" IsReadOnly="True" IsReadOnlyCaretVisible="False">
+        <RichTextBox Height="156" Margin="23,89,20,0" Name="textBlock1" VerticalAlignment="Top" IsReadOnly="True" IsReadOnlyCaretVisible="False" IsDocumentEnabled="True" BorderThickness="0">
             <FlowDocument>
                 <Paragraph TextAlignment="Center" FontSize="18">
                     Special Thanks to all bug testers:
@@ -25,12 +25,12 @@
                     <List.ListItems>
                         <ListItem>
                             <Paragraph>
-                                <Hyperlink NavigateUri="https://github.com/RyanSweigert">Phalanxia</Hyperlink>
+                                <Hyperlink NavigateUri="https://github.com/RyanSweigert" RequestNavigate="Hyperlink_RequestNavigate" Name="PhalanxiaLink">Phalanxia</Hyperlink>
                             </Paragraph>
                         </ListItem>
                         <ListItem>
                             <Paragraph>
-                                <Hyperlink NavigateUri="https://github.com/XAMPP">XAMPP</Hyperlink>
+                                <Hyperlink NavigateUri="https://github.com/XAMPP" RequestNavigate="Hyperlink_RequestNavigate" Name="XAMPPLink">XAMPP</Hyperlink>
                             </Paragraph>
                         </ListItem>
                         <ListItem>
@@ -38,7 +38,7 @@
                         </ListItem>
                         <ListItem>
                             <Paragraph>
-                                <Hyperlink NavigateUri="https://www.facebook.com/tobi.thao">TobiT1094
+                                <Hyperlink NavigateUri="https://www.facebook.com/tobi.thao" RequestNavigate="Hyperlink_RequestNavigate" Name="TobiLink">TobiT1094
                                 </Hyperlink>
                             </Paragraph>
                         </ListItem>
