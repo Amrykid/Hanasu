@@ -60,7 +60,7 @@ namespace Hanasu.Services.Stations
             }
         }
 
-        public string StationsCacheDir = null;
+        public static string StationsCacheDir { get; private set; }
         public string StationsCachedFile { get { return StationsCacheDir + "Stations.xml"; } }
         public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"; } }
 
@@ -134,20 +134,8 @@ namespace Hanasu.Services.Stations
                 var finalstats = new List<Station>();
                 foreach (Station st in stats)
                 {
-                    //Checks if its possible to cache the playlist file.
-                    var s = st;
-                    if (st.ExplicitExtension != "" && Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(st.DataSource, st.ExplicitExtension) && st.Cacheable && st.StationType == StationType.Radio)
-                    {
-                        var cachefile = StationsCacheDir + st.Name + "_" + st.DataSource.LocalPath.Substring(st.DataSource.LocalPath.LastIndexOf("/") + 1);
-                        if (!File.Exists(cachefile))
-                            using (WebClient wc = new WebClient())
-                            {
-                                wc.DownloadFile(st.DataSource, cachefile);
-                                s.LocalStationFile = new Uri(cachefile);
-                            }
-                        else
-                            s.LocalStationFile = new Uri(cachefile);
-                    }
+                    var o = st;
+                    var s = CheckAndDownloadCacheableStation(ref o);
 
                     finalstats.Add(s);
                 }
@@ -172,6 +160,25 @@ namespace Hanasu.Services.Stations
             Status = StationsServiceStatus.Idle;
         }
 
+        internal static Station CheckAndDownloadCacheableStation(ref Station st)
+        {
+            //Checks if its possible to cache the playlist file.
+            var s = st;
+            if (st.ExplicitExtension != "" && Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(st.DataSource, st.ExplicitExtension) && st.Cacheable && st.StationType == StationType.Radio)
+            {
+                var cachefile = StationsCacheDir + st.Name + "_" + st.DataSource.LocalPath.Substring(st.DataSource.LocalPath.LastIndexOf("/") + 1);
+                if (!File.Exists(cachefile))
+                    using (WebClient wc = new WebClient())
+                    {
+                        wc.DownloadFile(st.DataSource, cachefile);
+                        s.LocalStationFile = new Uri(cachefile);
+                    }
+                else
+                    s.LocalStationFile = new Uri(cachefile);
+            }
+            return s;
+        }
+
         internal void DownloadStationsToCache()
         {
             using (var wc = new WebClient())
@@ -190,7 +197,7 @@ namespace Hanasu.Services.Stations
                 }).ContinueWith(t => t.Dispose());
         }
 
-        private static Station ParseStation(ref RadioFormat dummie, XElement x)
+        internal static Station ParseStation(ref RadioFormat dummie, XElement x)
         {
             return new Station()
             {
@@ -208,7 +215,7 @@ namespace Hanasu.Services.Stations
             };
         }
 
-        private IEnumerable<XElement> StreamStationsXml()
+        internal static IEnumerable<XElement> StreamStationsXml()
         {
             using (XmlReader reader = XmlReader.Create("https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"))
             {

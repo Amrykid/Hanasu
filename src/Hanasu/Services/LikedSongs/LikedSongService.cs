@@ -29,7 +29,7 @@ namespace Hanasu.Services.LikedSongs
 
             System.Windows.Application.Current.Exit += Current_Exit;
 
-            var dir = Hanasu.Services.Stations.StationsService.Instance.StationsCacheDir;
+            var dir = Hanasu.Services.Stations.StationsService.StationsCacheDir;
 
             Instance.LikedSongDBFile = dir.Replace("\\Cache", "") + "LikedSongs.bin";
 

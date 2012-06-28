@@ -32,33 +32,7 @@ namespace Hanasu.Services.Settings
 
             if (!System.IO.File.Exists(SettingsFilepath))
             {
-                //Create the settings xml
-
-                var doc = new XDocument(
-                    new XDeclaration("1.0", "Unicode", "yes"));
-
-                var settings = new XElement("Settings",
-                        new XElement("UpdateStationsLive", "false"),
-                        new XElement("AutomaticallyFetchSongData", "false"),
-                        new XElement("LastSetVolume", 50));
-
-                //Pass the settings to subscribers so they can update the settings xml as needed.
-                var sinfo = new SettingsDataEventInfo()
-                {
-                    SettingsDocument = doc,
-                    SettingsElement = settings
-                };
-
-                EventService.RaiseEvent(EventType.Settings_Created, sinfo);
-
-                settings = sinfo.SettingsElement;
-
-                UpdateStationsLive = false;
-                AutomaticallyFetchSongData = false;
-
-                doc.Add(settings);
-
-                doc.Save(SettingsFilepath);
+                CreateNewSettingsFile();
             }
             else
             {
@@ -84,6 +58,37 @@ namespace Hanasu.Services.Settings
 
                 EventService.RaiseEvent(EventType.Settings_Loaded, sinfo);
             }
+        }
+
+        internal void CreateNewSettingsFile(string file = null)
+        {
+            //Create the settings xml
+
+            var doc = new XDocument(
+                new XDeclaration("1.0", "Unicode", "yes"));
+
+            var settings = new XElement("Settings",
+                    new XElement("UpdateStationsLive", "false"),
+                    new XElement("AutomaticallyFetchSongData", "false"),
+                    new XElement("LastSetVolume", 50));
+
+            //Pass the settings to subscribers so they can update the settings xml as needed.
+            var sinfo = new SettingsDataEventInfo()
+            {
+                SettingsDocument = doc,
+                SettingsElement = settings
+            };
+
+            EventService.RaiseEvent(EventType.Settings_Created, sinfo);
+
+            settings = sinfo.SettingsElement;
+
+            UpdateStationsLive = false;
+            AutomaticallyFetchSongData = false;
+
+            doc.Add(settings);
+
+            doc.Save(file == null ? SettingsFilepath : file);
         }
 
         void Current_Exit(object sender, System.Windows.ExitEventArgs e)

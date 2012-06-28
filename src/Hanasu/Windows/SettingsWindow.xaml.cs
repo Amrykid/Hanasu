@@ -92,7 +92,7 @@ namespace Hanasu.Windows
 
         private void ViewCacheBtn_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(Hanasu.Services.Stations.StationsService.Instance.StationsCacheDir);
+            Process.Start(Hanasu.Services.Stations.StationsService.StationsCacheDir);
         }
 
         private void UpdateCatalogBtn_Click(object sender, RoutedEventArgs e)
