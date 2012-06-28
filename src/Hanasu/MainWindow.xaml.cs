@@ -849,5 +849,22 @@ namespace Hanasu
             aw.ShowDialog();
             aw.Close();
         }
+
+        private void LikedSongsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (LikedSongsListView.SelectedItem == null) return;
+
+            SongData b = (SongData)LikedSongsListView.SelectedItem;
+
+            Hanasu.Windows.SongInfoWindow siw = new Windows.SongInfoWindow();
+            siw.DataContext = b;
+
+            LikedSongsListView.SelectedItem = null;
+
+            siw.Owner = this;
+
+            siw.ShowDialog();
+            siw.Close();
+        }
     }
 }

@@ -161,7 +161,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Liked" Name="LikedTab">
-                    <ListView Foreground="Black" Name="LikedSongsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static liked:LikedSongService.Instance}, Path=LikedSongs, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
+                    <ListView Foreground="Black" Name="LikedSongsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static liked:LikedSongService.Instance}, Path=LikedSongs, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
