@@ -55,7 +55,7 @@ namespace Hanasu.Core
         }
         public static string Decode(string html)
         {
-            return html.Replace("&nbsp", " ").Replace("&quot;", "\"").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&#039;", "'").Replace("&rsquo;", "’");
+            return html.Replace("&nbsp", " ").Replace("&quot;", "\"").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&#039;", "'").Replace("&rsquo;", "’").Replace("&amp;", "&").Replace("&iuml;", "ï");
         }
     }
 }

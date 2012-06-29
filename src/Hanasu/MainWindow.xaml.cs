@@ -588,7 +588,7 @@ namespace Hanasu
 
                     if (entries.Length == 0)
                     {
-                        throw new Exception("No stations found!");
+                        return;
                     }
                     else if (entries.Length == 1)
                     {

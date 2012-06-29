@@ -103,9 +103,12 @@ namespace Hanasu.Services.Song
             if (songdata.Contains("~"))
                 songdata = songdata.Substring(0, songdata.IndexOf("~"));
 
-            songdata = Regex.Replace(songdata, @"\(.+?(\)|$)", "");
+            songdata = Regex.Replace(songdata, @"\(.+?(\)|$)", "", RegexOptions.Compiled);
 
             songdata = songdata.Trim('\n', ' ');
+            songdata = songdata.Replace("�", "");
+
+            songdata = Regex.Replace(songdata, @"\W(ft|FT|feat|FEAT)\..+?(\n|$)", "", RegexOptions.Compiled);
 
             return songdata;
         }

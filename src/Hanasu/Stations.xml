@@ -159,7 +159,7 @@
     <Cacheable>False</Cacheable>
   </Station>
   <Station>
-    <Name>Keiichi.net EX²</Name>
+    <Name>Keiichi.net EX2</Name>
     <DataSource><![CDATA[http://149.255.33.69:8038]]></DataSource>
     <!--http://www.loudcity.com/launch?file=pls&id=3168&playid=6253201205031331323168 Loudcity makes it /really/ hard to hotlink.-->
     <Homepage>http://radio.keiichi.net/</Homepage>
