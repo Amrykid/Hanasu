@@ -866,5 +866,20 @@ namespace Hanasu
             siw.ShowDialog();
             siw.Close();
         }
+
+        private void DeleteSelectedLikeItemsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (LikedSongsListView.SelectedItems != null)
+            {
+                //this is to prevent the 'collecton was modified' exception.
+                ArrayList items = new ArrayList();
+
+                foreach (var i in LikedSongsListView.SelectedItems)
+                    items.Add(i);
+
+                foreach (var song in items)
+                    Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs.Remove((SongData)song);
+            }
+        }
     }
 }

@@ -204,7 +204,7 @@
                         </ListView.View>
                         <ListView.ContextMenu>
                             <ContextMenu>
-                              
+                                <MenuItem Header="Deleted Selected Item(s)" Name="DeleteSelectedLikeItemsMenuItem" Click="DeleteSelectedLikeItemsMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                     </ListView>
