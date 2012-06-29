@@ -33,6 +33,7 @@ namespace Hanasu.Windows
         {
             this.XAMPPLink.RequestNavigate -= new System.Windows.Navigation.RequestNavigateEventHandler(this.Hyperlink_RequestNavigate);
             this.PhalanxiaLink.RequestNavigate -= new System.Windows.Navigation.RequestNavigateEventHandler(this.Hyperlink_RequestNavigate);
+            this.dallbeeLink.RequestNavigate -= new System.Windows.Navigation.RequestNavigateEventHandler(this.Hyperlink_RequestNavigate);
             this.TobiLink.RequestNavigate -= new System.Windows.Navigation.RequestNavigateEventHandler(this.Hyperlink_RequestNavigate);
             this.Unloaded -= new RoutedEventHandler(AboutWindow_Unloaded);
         }

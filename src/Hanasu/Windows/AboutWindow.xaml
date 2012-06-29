@@ -34,7 +34,10 @@
                             </Paragraph>
                         </ListItem>
                         <ListItem>
-                            <Paragraph>dallbee</Paragraph>
+                            <Paragraph>
+                                <Hyperlink NavigateUri="http://dallbee.com" RequestNavigate="Hyperlink_RequestNavigate" Name="dallbeeLink">dallbee
+                                </Hyperlink>
+                            </Paragraph>
                         </ListItem>
                         <ListItem>
                             <Paragraph>
