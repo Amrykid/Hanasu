@@ -17,6 +17,7 @@ using Hanasu.Core;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Shapes;
+using Hanasu.Core;
 
 namespace Hanasu
 {
@@ -384,8 +385,7 @@ namespace Hanasu
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
                             name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
 
-
-                        if (currentStation.StationType == StationType.Radio)
+                        if (currentStation.StationType == StationType.Radio && !Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
                         {
                             if (Hanasu.Services.Settings.SettingsService.Instance.AutomaticallyFetchSongData)
                                 System.Threading.Tasks.Task.Factory.StartNew(() =>
@@ -399,6 +399,7 @@ namespace Hanasu
                                             return;
 
                                         Uri lyricsUrl = null;
+
                                         if (Hanasu.Services.Song.SongService.IsSongAvailable(name, currentStation, out lyricsUrl))
                                         {
                                             if ((bool)Dispatcher.Invoke(
@@ -463,7 +464,7 @@ namespace Hanasu
         void player_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
         {
             //handle the wmp's status
-            
+
             WMPLib.WMPPlayState state = (WMPLib.WMPPlayState)e.newState;
 
             LogService.Instance.WriteLog(player,
