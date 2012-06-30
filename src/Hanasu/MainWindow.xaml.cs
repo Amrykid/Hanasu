@@ -896,11 +896,15 @@ namespace Hanasu
 
         private void AddLikedSongFromFileBtn_Click(object sender, RoutedEventArgs e)
         {
+#if DEBUG
             OpenFileDialog odf = new OpenFileDialog();
             odf.Filter = "Audio Files (*.mp3;*.wav;*.wma)|*.mp3;*.wma;*.wav";
             odf.FilterIndex = 1;
             if (odf.ShowDialog() == true)
                 Hanasu.Data.ID3.ID3Parser.Parse(odf.FileName);
+#else
+            MessageBox.Show("This was not implemented.");
+#endif
         }
 
         private void LikedSongsSearchBox_TextChanged(object sender, TextChangedEventArgs e)

@@ -112,7 +112,7 @@
                                                         <Rectangle Width="25" Height="25" Margin="0 0 0 0">
                                                             <Rectangle.Fill>
                                                                 <VisualBrush Stretch="Fill"
-                            					Visual="{StaticResource appbar_add}" />
+                            					Visual="{StaticResource appbar_refresh}" />
                                                             </Rectangle.Fill>
                                                         </Rectangle>
                                                         <Button.ToolTip>
