@@ -21,7 +21,8 @@ namespace Hanasu.Services.Song.Album_Info_Data_Source
                 var m = Regex.Match(sec.Value, "<span class=\"cover\">.+?</span>", RegexOptions.Compiled | RegexOptions.Singleline);
                 var urlm = Regex.Match(m.Value, "src=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled);
                 var imgurl = urlm.Value.Substring(5).Trim('\"');
-                var albumtxt = Regex.Match(m.Value, "alt=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value.Substring(5).Trim('\"');
+                var albumtxt = Regex.Replace(Hanasu.Core.HtmlDecoder.Decode(Regex.Match(m.Value, "alt=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value.Substring(5).Trim('\"')),
+                    @"\(.+?Version\)","",RegexOptions.Compiled | RegexOptions.Singleline);
 
                 var artist = Regex.Replace(Regex.Match(
                     Regex.Match(sec.Value, "<span class=\"artist\">.+?</span>.+?</span>", RegexOptions.Singleline | RegexOptions.Compiled).Value,
