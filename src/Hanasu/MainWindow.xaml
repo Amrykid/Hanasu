@@ -100,9 +100,31 @@
                                                         <Image Source="pack://application:,,,/Hanasu;component/Resources/vector_icon.png" Height="40"/>
                                                         <Label FontSize="19">Hanasu Catalog</Label>
                                                     </StackPanel>
-                                                </TreeViewItem.Header>
-                                        Width="{Binding ElementName=thisWindow, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntCalcConverter1}, ConverterParameter=-;%7}" -->
-                                        <ListView Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" IsEnabled="False">
+                                                </TreeViewItem.Header>-->
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="45"/>
+                                            <RowDefinition Height="410*"/>
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="0" BorderThickness=".5" BorderBrush="{StaticResource AccentColorBrush}">
+                                            <Grid>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Height="45" Width="45" Name="StationsListViewRefresh" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10">
+                                                        <Rectangle Width="25" Height="25" Margin="0 0 0 0">
+                                                            <Rectangle.Fill>
+                                                                <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_add}" />
+                                                            </Rectangle.Fill>
+                                                        </Rectangle>
+                                                        <Button.ToolTip>
+                                                            <ToolTip Content="Refreshes the stations catalog."/>
+                                                        </Button.ToolTip>
+                                                    </Button>
+                                                </StackPanel>
+                                                <TextBox HorizontalAlignment="Right" Name="StationsSearchBox" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Stations..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="StationsSearchBox_TextChanged" Width="200"/>
+                                            </Grid>
+                                        </Border>
+                                       <!-- Width="{Binding ElementName=thisWindow, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntCalcConverter1}, ConverterParameter=-;%7}" -->
+                                        <ListView Grid.Row="1" Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" IsEnabled="False">
                                             <ListView.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
@@ -167,19 +189,22 @@
                             <RowDefinition Height="410*"/>
                         </Grid.RowDefinitions>
                         <Border Grid.Row="0" BorderThickness=".5" BorderBrush="{StaticResource AccentColorBrush}">
-                            <StackPanel Orientation="Horizontal">
-                                <Button Height="45" Width="45" Name="AddLikedSongFromFileBtn" Click="AddLikedSongFromFileBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10">
-                                    <Rectangle Width="25" Height="25" Margin="0 0 0 0">
-                                        <Rectangle.Fill>
-                                            <VisualBrush Stretch="Fill"
+                            <Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Height="45" Width="45" Name="AddLikedSongFromFileBtn" Click="AddLikedSongFromFileBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10">
+                                        <Rectangle Width="25" Height="25" Margin="0 0 0 0">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill"
                             					Visual="{StaticResource appbar_add}" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    <Button.ToolTip>
-                                        <ToolTip Content="Adds a song to the liked songs tab by reading its metadata."/>
-                                    </Button.ToolTip>
-                                </Button>
-                            </StackPanel>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <Button.ToolTip>
+                                            <ToolTip Content="Adds a song to the liked songs tab by reading its metadata."/>
+                                        </Button.ToolTip>
+                                    </Button>
+                                </StackPanel>
+                                <TextBox HorizontalAlignment="Right" Name="LikedSongsSearchBox" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Liked..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="LikedSongsSearchBox_TextChanged" Width="200"/>
+                            </Grid>
                         </Border>
                         <ListView Grid.Row="1" Foreground="Black" Name="LikedSongsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static liked:LikedSongService.Instance}, Path=LikedSongs, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
                             <ListView.ItemsPanel>

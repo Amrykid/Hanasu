@@ -902,5 +902,52 @@ namespace Hanasu
             if (odf.ShowDialog() == true)
                 Hanasu.Data.ID3.ID3Parser.Parse(odf.FileName);
         }
+
+        private void LikedSongsSearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //http://svetoslavsavov.blogspot.com/2009/09/sorting-and-filtering-databound.html
+
+            // Get the default view from the listview
+            ICollectionView view = CollectionViewSource.GetDefaultView(LikedSongsListView.ItemsSource);
+
+            view.Filter = null;
+            view.Filter = new Predicate<object>(t =>
+                {
+                    var item = (SongData)t;
+                    if (item.TrackTitle == null) return false;
+
+                    string textFilter = LikedSongsSearchBox.Text;
+
+                    if (textFilter.Trim().Length == 0) return true; // the filter is empty - pass all items
+
+                    // apply the filter
+                    if (item.TrackTitle.ToLower().Contains(textFilter.ToLower()) || item.Artist.ToLower().Contains(textFilter.ToLower()) || (item.Album == null ? false : item.Album.ToLower().Contains(textFilter.ToLower()))) return true;
+                    return false;
+
+                });
+
+        }
+
+        private void StationsSearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Get the default view from the listview
+            ICollectionView view = CollectionViewSource.GetDefaultView(StationsListView.ItemsSource);
+
+            view.Filter = null;
+            view.Filter = new Predicate<object>(t =>
+            {
+                var item = (Station)t;
+                if (item.Name == null) return false;
+
+                string textFilter = StationsSearchBox.Text;
+
+                if (textFilter.Trim().Length == 0) return true; // the filter is empty - pass all items
+
+                // apply the filter
+                if (item.Name.ToLower().Contains(textFilter.ToLower()) || item.City.ToLower().Contains(textFilter.ToLower())) return true;
+                return false;
+
+            });
+        }
     }
 }
