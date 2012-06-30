@@ -368,13 +368,15 @@ namespace Hanasu
             {
                 player_parseAttributes();
 
-                WMPLib.IWMPMedia3 changedItem = (WMPLib.IWMPMedia3)e.item;
+                //WMPLib.IWMPMedia3 changedItem = (WMPLib.IWMPMedia3)e.item;
 
                 if (lastMediaTxt != player.currentMedia.name)
                 {
                     var name = player.currentMedia.name;
 
-                    if (name.Contains(" - ") && name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1 && !System.Text.RegularExpressions.Regex.IsMatch(name, @"^(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$", System.Text.RegularExpressions.RegexOptions.Compiled)) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
+                    if (
+                        (name.Contains(" - ") && name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1 && !System.Text.RegularExpressions.Regex.IsMatch(name, @"^(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$", System.Text.RegularExpressions.RegexOptions.Compiled))
+                        || Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name)) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
                     {
                         MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
 
