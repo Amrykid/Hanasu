@@ -301,7 +301,7 @@
                                 </Rectangle>
                                 <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="180" Height="40" FontSize="14" Padding="5" Margin="0 -10 0 0" Foreground="{StaticResource AccentColorBrush}" FontWeight="Bold" ToolTip="{Binding ElementName=SongDataLbl, Path=Text, UpdateSourceTrigger=PropertyChanged}">
                                 </TextBlock>
-                                <Button Height="45" Width="45" Name="StationAttributesBtn" Click="StationAttributesBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 -5 0 0">
+                                <Button Height="45" Width="45" Name="StationAttributesBtn" Click="StationAttributesBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 0 0 0">
                                     <Rectangle Width="20" Height="20" Margin="0 0 0 0">
                                         <Rectangle.Fill>
                                             <VisualBrush Stretch="Fill"
