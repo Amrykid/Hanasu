@@ -29,10 +29,10 @@
                 <DataTemplate>
                     <Grid>
                         <StackPanel HorizontalAlignment="Left">
-                           <TextBlock Text="{Binding Title, Mode=OneTime}" TextTrimming="CharacterEllipsis" FontFamily="Segoe UI" FontSize="18" Width="410" ToolTip="{Binding Title}"/>
+                            <TextBlock Text="{Binding Title, Mode=OneTime}" TextTrimming="CharacterEllipsis" FontFamily="Segoe UI" FontSize="18" Width="410" ToolTip="{Binding Title}"/>
                             <Label Content="{Binding File, Mode=OneTime}" FontSize="12"/>
                         </StackPanel>
-                        <Rectangle Margin="0 0 -60 0" Height="40" HorizontalAlignment="Right" Width="40">
+                        <Rectangle Margin="5 0 -60 0" Height="40" HorizontalAlignment="Right" Width="40">
                             <Rectangle.Fill>
                                 <VisualBrush Stretch="Fill"
                             					Visual="{StaticResource appbar_play}" />
@@ -43,5 +43,6 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Label Content="Click to select a stream." Height="28" Margin="174,346,176,0" Name="label2" VerticalAlignment="Top" />
+        <Button Content="Cancel" Height="23" HorizontalAlignment="Right" Margin="0,0,13,6" Name="button1" VerticalAlignment="Bottom" Width="75" IsCancel="True" />
     </Grid>
 </metro:MetroWindow>
