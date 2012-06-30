@@ -120,7 +120,7 @@
                                                         </Button.ToolTip>
                                                     </Button>
                                                 </StackPanel>
-                                                <TextBox HorizontalAlignment="Right" Name="StationsSearchBox" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Stations..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="StationsSearchBox_TextChanged" Width="200"/>
+                                                <TextBox Margin="0 0 5 0" FontSize="16" HorizontalAlignment="Right" Name="StationsSearchBox" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Stations..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="StationsSearchBox_TextChanged" Width="200"/>
                                             </Grid>
                                         </Border>
                                        <!-- Width="{Binding ElementName=thisWindow, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntCalcConverter1}, ConverterParameter=-;%7}" -->
@@ -203,7 +203,7 @@
                                         </Button.ToolTip>
                                     </Button>
                                 </StackPanel>
-                                <TextBox HorizontalAlignment="Right" Name="LikedSongsSearchBox" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Liked..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="LikedSongsSearchBox_TextChanged" Width="200"/>
+                                <TextBox FontSize="16" Margin="0 0 5 0" HorizontalAlignment="Right" Name="LikedSongsSearchBox" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Liked..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="LikedSongsSearchBox_TextChanged" Width="200"/>
                             </Grid>
                         </Border>
                         <ListView Grid.Row="1" Foreground="Black" Name="LikedSongsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static liked:LikedSongService.Instance}, Path=LikedSongs, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
