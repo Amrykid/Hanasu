@@ -17,11 +17,18 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <DataGrid Name="DG" CanUserDeleteRows="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserSortColumns="True" IsReadOnly="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="500*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="0" Name="DG" CanUserDeleteRows="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserSortColumns="True" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Attribute" Binding="{Binding Key, Mode=OneTime}" Width="300" />
                 <DataGridTextColumn Header="Value" Binding="{Binding Value, Mode=OneTime}" Width="200" />
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Row="1">
+            <Button Content="Close" IsCancel="True" Height="25" Width="60"/>
+        </Grid>
     </Grid>
 </metro:MetroWindow>
