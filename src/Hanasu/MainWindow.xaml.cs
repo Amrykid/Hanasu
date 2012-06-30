@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Shapes;
 using Hanasu.Core;
+using Microsoft.Win32;
 
 namespace Hanasu
 {
@@ -262,10 +263,15 @@ namespace Hanasu
         {
             if (currentStation.StationType == StationType.Radio)
             {
-                IWMPMedia3 media = (IWMPMedia3)player.mediaCollection.getByName(e.bstrItemName);
-                IWMPMetadataPicture pic = (IWMPMetadataPicture)media.getItemInfoByType("WM/Picture", "", 0);
+                try
+                {
+                    IWMPMedia3 media = (IWMPMedia3)player.mediaCollection.getByName(e.bstrItemName);
+                    IWMPMetadataPicture pic = (IWMPMetadataPicture)media.getItemInfoByType("WM/Picture", "", 0);
+                }
+                catch (Exception)
+                {
+                }
             }
-            var x = 0;
         }
 
         void player_EndOfStream(object sender, AxWMPLib._WMPOCXEvents_EndOfStreamEvent e)
@@ -446,7 +452,12 @@ namespace Hanasu
                         lastMediaTxt = name;
 
                         if (currentStation.StationType == StationType.Radio)
-                            SongDataLbl.Text = "Not Available";
+                            if (currentStationAttributes.ContainsKey("WM/AlbumTitle"))
+                                SongDataLbl.Text = (string)currentStationAttributes["WM/AlbumTitle"];
+                            else if (currentStationAttributes.ContainsKey("Title"))
+                                SongDataLbl.Text = (string)currentStationAttributes["Title"];
+                            else
+                                SongDataLbl.Text = "Not Available";
                         else if (currentStation.StationType == StationType.TV)
                             SongDataLbl.Text = currentStation.Name;
 
@@ -881,6 +892,15 @@ namespace Hanasu
                 foreach (var song in items)
                     Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs.Remove((SongData)song);
             }
+        }
+
+        private void AddLikedSongFromFileBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog odf = new OpenFileDialog();
+            odf.Filter = "Audio Files (*.mp3;*.wav;*.wma)|*.mp3;*.wma;*.wav";
+            odf.FilterIndex = 1;
+            if (odf.ShowDialog() == true)
+                Hanasu.Data.ID3.ID3Parser.Parse(odf.FileName);
         }
     }
 }

@@ -11,7 +11,7 @@ using Hanasu.Services.Stations;
 
 namespace Hanasu.Services.Song
 {
-    public class SongService: IStaticService
+    public class SongService : IStaticService
     {
 
         private static Hashtable SongCache = null;
@@ -100,18 +100,34 @@ namespace Hanasu.Services.Song
         }
         private static string CleanSongDataStr(string songdata)
         {
-            if (songdata.Contains("~"))
+            if (songdata.Contains("~") && songdata.Contains(" - ") && songdata.IndexOf(" - ") < songdata.IndexOf("~"))
                 songdata = songdata.Substring(0, songdata.IndexOf("~"));
+            else if (songdata.Contains(" ~ ") && !songdata.Contains(" - "))
+                songdata = songdata.Replace(" ~ ", " - ").TrimEnd('-');
 
             songdata = Regex.Replace(songdata, @"\(.+?(\)|$)", "", RegexOptions.Compiled);
 
             songdata = songdata.Trim('\n', ' ');
             songdata = songdata.Replace("�", "");
 
-            songdata = Regex.Replace(songdata, @"\W(ft|FT|feat|FEAT)\..+?(\n|$)", "", RegexOptions.Compiled);
+            var tmpSplt = songdata.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (tmpSplt.Length == 2)
+            {
+
+                if (Regex.IsMatch(songdata, NearEndFeatureRegex, RegexOptions.Compiled))
+                    songdata = Regex.Replace(songdata, NearEndFeatureRegex, "", RegexOptions.Compiled);
+                else if (Regex.IsMatch(songdata, NearFrontFeatureRegex, RegexOptions.Compiled))
+                    songdata = Regex.Replace(songdata, NearFrontFeatureRegex, "", RegexOptions.Compiled);
+            }
+            else if (tmpSplt.Length > 2)
+            {
+            }
 
             return songdata;
         }
+        public const string NearFrontFeatureRegex = "";
+        public const string NearEndFeatureRegex = @"\W(ft|FT|feat|FEAT)\..+?(\n|$)";
 
         public static IAlbumInfoDataSource DataSource { get; set; }
     }
