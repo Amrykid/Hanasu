@@ -463,9 +463,15 @@ namespace Hanasu
 
                         if (currentStation.StationType == StationType.Radio)
                             if (currentStationAttributes.ContainsKey("WM/AlbumTitle"))
+                            {
                                 SongDataLbl.Text = (string)currentStationAttributes["WM/AlbumTitle"];
+                                lastMediaTxt = (string)currentStationAttributes["WM/AlbumTitle"];
+                            }
                             else if (currentStationAttributes.ContainsKey("Title"))
+                            {
                                 SongDataLbl.Text = (string)currentStationAttributes["Title"];
+                                lastMediaTxt = (string)currentStationAttributes["Title"];
+                            }
                             else
                                 SongDataLbl.Text = "Not Available";
                         else if (currentStation.StationType == StationType.TV)
@@ -672,7 +678,10 @@ namespace Hanasu
                 SongDataLbl.Text = station.Name;
             }
             else
+            {
                 player.network.bufferingTime = 2000; // 2 seconds
+                SongDataLbl.Text = "Not Available";
+            }
 
             currentStationAttributes.Clear();
 
@@ -979,6 +988,43 @@ namespace Hanasu
                 return false;
 
             });
+        }
+
+        private void StationsListViewRefreshBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Hanasu.Services.Stations.StationsService.Instance.DownloadStationsToCacheAsync().ContinueWith(
+                t =>
+                {
+                    Hanasu.Services.Stations.StationsService.Instance.LoadStationsFromRepo();
+                });
+
+            CoolDown(StationsListViewRefreshBtn, 0.5);
+        }
+
+        private void CoolDown(Control c, double mins)
+        {
+            var initialTooltip = c.ToolTip;
+
+            Timer cooldown = new Timer();
+            ElapsedEventHandler hnd = null;
+            hnd = new ElapsedEventHandler((t, i) =>
+            {
+                cooldown.Elapsed -= hnd;
+                cooldown.Stop();
+                cooldown.Dispose();
+
+                Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                {
+                    c.ToolTip = initialTooltip;
+                    c.IsEnabled = true;
+                }));
+            });
+            cooldown.Elapsed += hnd;
+            cooldown.Interval = (1000 * 60) * mins; // 3 minutes
+            cooldown.Start();
+
+            c.IsEnabled = false;
+            c.ToolTip = "Cooling down...";
         }
     }
 }

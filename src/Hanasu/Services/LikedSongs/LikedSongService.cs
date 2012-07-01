@@ -83,10 +83,15 @@ namespace Hanasu.Services.LikedSongs
 
         internal bool IsSongLikedFromString(string name)
         {
-            var bits = name.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+            if (name.Contains(" - "))
+            {
+                var bits = name.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
 
-            var res = LikedSongs.Any(i => (i.TrackTitle == bits[0].Trim(' ') && i.Artist == bits[1].Trim(' '))  || (i.TrackTitle == bits[1].Trim(' ') && i.Artist == bits[0].Trim(' ')));
-            return res;
+                var res = LikedSongs.Any(i => (i.TrackTitle == bits[0].Trim(' ') && i.Artist == bits[1].Trim(' ')) || (i.TrackTitle == bits[1].Trim(' ') && i.Artist == bits[0].Trim(' ')));
+                return res;
+            }
+            else
+                return false;
         }
     }
 }
