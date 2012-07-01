@@ -22,7 +22,7 @@ namespace Hanasu.Services.Song.Album_Info_Data_Source
                 var urlm = Regex.Match(m.Value, "src=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled);
                 var imgurl = urlm.Value.Substring(5).Trim('\"');
                 var albumtxt = Regex.Replace(Regex.Replace(Hanasu.Core.HtmlDecoder.Decode(Regex.Match(m.Value, "alt=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value.Substring(5).Trim('\"')),
-                    @"\((Korea|Japan|Hong Kong)\WVersion\)", "", RegexOptions.Compiled | RegexOptions.Singleline),
+                    @"\((Korea|Japan|Hong Kong|Taiwan)\WVersion\)", "", RegexOptions.Compiled | RegexOptions.Singleline),
                     @"\((Normal|Special)\WEdition\)", "", RegexOptions.Compiled | RegexOptions.Singleline);
 
                 var artist = Regex.Replace(Regex.Match(
