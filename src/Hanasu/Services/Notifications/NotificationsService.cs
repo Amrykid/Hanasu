@@ -101,22 +101,29 @@ namespace Hanasu.Services.Notifications
                         try
                         {
                             NotificationsWindow nw = null;
-                            Application.Current.Dispatcher.Invoke(new EmptyDelegate(
-                                () =>
-                                {
-                                    nw = new NotificationsWindow();
-                                    nw.DataContext = Notifications.Dequeue();
+                            var msg = Notifications.Dequeue();
 
-                                    nw.Show();
+                            if (msg != null)
+                            {
+                                Application.Current.Dispatcher.Invoke(new EmptyDelegate(
+                                    () =>
+                                    {
+                                        nw = new NotificationsWindow();
 
-                                }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
-                            while (nw.IsVisible)
-                                Thread.Sleep(50);
-                            Application.Current.Dispatcher.Invoke(new EmptyDelegate(
-                                () =>
-                                {
-                                    nw.Close();
-                                }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                                        nw.DataContext = msg;
+
+                                        nw.Show();
+
+
+                                    }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                                while (nw.IsVisible)
+                                    Thread.Sleep(50);
+                                Application.Current.Dispatcher.Invoke(new EmptyDelegate(
+                                    () =>
+                                    {
+                                        nw.Close();
+                                    }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                            }
 
 
                             LogService.Instance.WriteLog(typeof(NotificationsService),

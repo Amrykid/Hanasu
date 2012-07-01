@@ -258,6 +258,10 @@ namespace Hanasu
 
             currentStationAttributes = new Hashtable();
 
+            attemptToConnectTimer = new Timer();
+            attemptToConnectTimer.Elapsed += new ElapsedEventHandler(attemptToConnectTimer_Elapsed);
+            attemptToConnectTimer.Interval = 20000; // 20 seconds
+
             this.tabControl1.SelectedIndex = 1;
 
             ((App)App.Current).SplashScreen.Close(); //close the splash screen.
@@ -265,6 +269,24 @@ namespace Hanasu
 #if !DEBUG
             tabItem3.Visibility = System.Windows.Visibility.Hidden;
 #endif
+        }
+
+        void attemptToConnectTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var state = player.playState;
+            if (player.playState != WMPPlayState.wmppsPlaying || player.playState != WMPPlayState.wmppsBuffering)
+            {
+                player.Ctlcontrols.stop();
+
+                Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                    {
+                        ShowUnableToConnect();
+                    }));
+
+                attemptToConnectTimer.Stop();
+
+                Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue();
+            }
         }
 
         void player_CurrentMediaItemAvailable(object sender, AxWMPLib._WMPOCXEvents_CurrentMediaItemAvailableEvent e)
@@ -289,12 +311,16 @@ namespace Hanasu
 
         void player_MarkerHit(object sender, AxWMPLib._WMPOCXEvents_MarkerHitEvent e)
         {
+#if DEBUG
             throw new NotImplementedException();
+#endif
         }
 
         void player_ScriptCommand(object sender, AxWMPLib._WMPOCXEvents_ScriptCommandEvent e)
         {
+#if DEBUG
             throw new NotImplementedException();
+#endif
         }
 
         void bufferTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -349,13 +375,18 @@ namespace Hanasu
         private Timer bufferTimer = null;
 
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
+        {                
+            //WMPLib.IWMPMedia2 errSource = (IWMPMedia2)e.pMediaObject;
+
+            //    WMPLib.IWMPErrorItem err = errSource.Error;
+            attemptToConnectTimer.Stop();
+            ShowUnableToConnect();
+        }
+
+        private void ShowUnableToConnect()
         {
             if (!unableToConnectNotificationShown)
             {
-                WMPLib.IWMPMedia2 errSource = (IWMPMedia2)e.pMediaObject;
-
-                WMPLib.IWMPErrorItem err = errSource.Error;
-
                 Hanasu.Services.Notifications.NotificationsService.AddNotification(
                     "Unable to connect to station.",
                     "Hanasu was unable to connect to " + currentStation.Name + ".", 4000, false, Services.Notifications.NotificationType.Error);
@@ -509,9 +540,11 @@ namespace Hanasu
                 case WMPLib.WMPPlayState.wmppsBuffering: BufferingSP.Visibility = System.Windows.Visibility.Visible;
                     BufferPB.Value = player.network.bufferingProgress;
                     bufferTimer.Start();
+                    attemptToConnectTimer.Stop();
                     break;
                 case WMPPlayState.wmppsWaiting:
                     {
+                        attemptToConnectTimer.Stop();
                         if (this.TaskbarItemInfo != null)
                             this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
                     }
@@ -519,6 +552,7 @@ namespace Hanasu
                 case WMPLib.WMPPlayState.wmppsPlaying: NowPlayingGrid.Visibility = System.Windows.Visibility.Visible;
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
                     bufferTimer.Stop();
+                    attemptToConnectTimer.Stop();
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
 
@@ -687,6 +721,8 @@ namespace Hanasu
 
             player.Ctlcontrols.play();
 
+            attemptToConnectTimer.Start();
+
             currentStation = station;
 
             Hanasu.Services.Events.EventService.RaiseEventAsync(Services.Events.EventType.Station_Changed
@@ -698,6 +734,9 @@ namespace Hanasu
             if (station.StationType == StationType.TV)
                 tabControl1.SelectedIndex = 0;
         }
+
+        private Timer attemptToConnectTimer = null;
+
 
         public class StationEventInfo : Hanasu.Services.Events.EventInfo
         {
