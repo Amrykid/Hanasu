@@ -114,7 +114,6 @@ namespace Hanasu.Services.Song
 
             if (tmpSplt.Length == 2)
             {
-
                 if (Regex.IsMatch(songdata, NearEndFeatureRegex, RegexOptions.Compiled))
                     songdata = Regex.Replace(songdata, NearEndFeatureRegex, "", RegexOptions.Compiled);
                 else if (Regex.IsMatch(songdata, NearFrontFeatureRegex, RegexOptions.Compiled))

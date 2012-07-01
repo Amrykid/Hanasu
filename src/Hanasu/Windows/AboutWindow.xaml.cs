@@ -51,9 +51,9 @@ namespace Hanasu.Windows
         {
             konamiCode.Add(e.Key);
 
-            if (konamiCode.Count == 8)
+            if (konamiCode.Count == 10)
             {
-                var ifCorrect = konamiCode[0] == Key.Up && konamiCode[1] == Key.Up && konamiCode[2] == Key.Down && konamiCode[3] == Key.Down && konamiCode[4] == Key.Left && konamiCode[5] == Key.Right && konamiCode[6] == Key.Left && konamiCode[7] == Key.Right;
+                var ifCorrect = konamiCode[0] == Key.Up && konamiCode[1] == Key.Up && konamiCode[2] == Key.Down && konamiCode[3] == Key.Down && konamiCode[4] == Key.Left && konamiCode[5] == Key.Right && konamiCode[6] == Key.Left && konamiCode[7] == Key.Right && konamiCode[8] == Key.B && konamiCode[9] == Key.A;
                 if (ifCorrect)
                 {
                     ThreadPool.QueueUserWorkItem(new WaitCallback(t =>

@@ -40,7 +40,6 @@ namespace Hanasu
 
                 Hanasu.Services.Logging.LogService.Initialize();
 
-
                 Hanasu.Services.Stations.StationsService.Initialize();
                 Hanasu.Services.Stations.StationsService.Instance.StationFetchStarted += Instance_StationFetchStarted;
                 Hanasu.Services.Stations.StationsService.Instance.StationFetchCompleted += Instance_StationFetchCompleted;
@@ -57,11 +56,13 @@ namespace Hanasu
 
                 this.Loaded += MainWindow_Loaded;
                 this.Unloaded += MainWindow_Unloaded;
+                //MahApps.Metro.ThemeManager.ChangeTheme(this, new MahApps.Metro.Accent("Blue", new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml", UriKind.Absolute)), MahApps.Metro.Theme.Light);
             }
             else
             {
                 //Is in the designer. Do nothing.
             }
+
         }
 
         void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
