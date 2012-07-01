@@ -133,6 +133,7 @@
     <Compile Include="Services\Preprocessor\Preprocessors\M3U\M3UPreprocessor.cs" />
     <Compile Include="Services\Preprocessor\Preprocessors\PLS\PLSPreprocessor.cs" />
     <Compile Include="Services\Settings\SettingsService.cs" />
+    <Compile Include="Services\Settings\SettingsThemeHelper.cs" />
     <Compile Include="Services\Song\Album Info Data Source\MSMetaServices.cs" />
     <Compile Include="Services\Song\Album Info Data Source\YesAsia.cs" />
     <Compile Include="Services\Song\IAlbumInfoDataSource.cs" />
@@ -352,7 +353,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

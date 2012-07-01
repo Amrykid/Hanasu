@@ -23,12 +23,19 @@ namespace Hanasu.Windows
         {
             InitializeComponent();
             this.Unloaded += MultiStreamChooseWindow_Unloaded;
+            this.Loaded += MultiStreamChooseWindow_Loaded;
+        }
+
+        void MultiStreamChooseWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
         }
 
         void MultiStreamChooseWindow_Unloaded(object sender, RoutedEventArgs e)
         {
             this.listBox1.MouseLeftButtonUp -= this.listBox1_MouseLeftButtonUp;
             this.Unloaded -= MultiStreamChooseWindow_Unloaded;
+            this.Loaded -= MultiStreamChooseWindow_Loaded;
 
         }
 

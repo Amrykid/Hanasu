@@ -28,11 +28,18 @@ namespace Hanasu.Windows
 
             label2.Content = "Build Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.Unloaded += new RoutedEventHandler(AboutWindow_Unloaded);
+            this.Loaded += new RoutedEventHandler(AboutWindow_Loaded);
             this.Focus();
+        }
+
+        void AboutWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
         }
 
         void AboutWindow_Unloaded(object sender, RoutedEventArgs e)
         {
+            this.Loaded -= new RoutedEventHandler(AboutWindow_Loaded);
             this.KeyUp -= new KeyEventHandler(this.MetroWindow_KeyUp);
             this.XAMPPLink.RequestNavigate -= new System.Windows.Navigation.RequestNavigateEventHandler(this.Hyperlink_RequestNavigate);
             this.PhalanxiaLink.RequestNavigate -= new System.Windows.Navigation.RequestNavigateEventHandler(this.Hyperlink_RequestNavigate);

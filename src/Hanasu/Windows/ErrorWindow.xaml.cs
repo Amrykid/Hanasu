@@ -22,13 +22,20 @@ namespace Hanasu.Windows
         public ErrorWindow()
         {
             InitializeComponent();
+            this.Loaded += ErrorWindow_Loaded;
             this.Unloaded += ErrorWindow_Unloaded;
+        }
+
+        void ErrorWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
         }
 
         void ErrorWindow_Unloaded(object sender, RoutedEventArgs e)
         {
             this.button1.Click -= new System.Windows.RoutedEventHandler(this.button1_Click);
             this.button2.Click -= new System.Windows.RoutedEventHandler(this.button2_Click);
+            this.Loaded -= ErrorWindow_Loaded;
             this.Unloaded -= ErrorWindow_Unloaded;
         }
 

@@ -26,7 +26,6 @@ namespace Hanasu.Windows
             InitializeComponent();
             this.Unloaded += SongInfoWindow_Unloaded;
         }
-
         void SongInfoWindow_Unloaded(object sender, RoutedEventArgs e)
         {
             this.thisWindow.Loaded -= new System.Windows.RoutedEventHandler(this.thisWindow_Loaded);
@@ -48,6 +47,8 @@ namespace Hanasu.Windows
 
         private void thisWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
+
             if (((SongData)this.DataContext).BuyUri == null)
                 buyAlbumbtn.IsEnabled = false;
         }

@@ -48,6 +48,12 @@ namespace Hanasu
 
                 HandleMediaKeyHooks();
 
+                Hanasu.Services.Events.EventService.AttachHandler(Services.Events.EventType.Theme_Changed,
+                    e =>
+                    {
+                        Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
+                    });
+
                 //Hanasu.Services.Friends.FriendsService.Initialize();
 
                 Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
@@ -56,12 +62,13 @@ namespace Hanasu
 
                 this.Loaded += MainWindow_Loaded;
                 this.Unloaded += MainWindow_Unloaded;
-                //MahApps.Metro.ThemeManager.ChangeTheme(this, new MahApps.Metro.Accent("Blue", new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml", UriKind.Absolute)), MahApps.Metro.Theme.Light);
             }
             else
             {
                 //Is in the designer. Do nothing.
             }
+
+            Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
 
         }
 

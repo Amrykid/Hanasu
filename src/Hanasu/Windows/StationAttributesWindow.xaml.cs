@@ -34,6 +34,7 @@ namespace Hanasu.Windows
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
             DG.ItemsSource = (this.DataContext as MainWindow).currentStationAttributes;
         }
     }

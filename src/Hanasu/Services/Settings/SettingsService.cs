@@ -50,6 +50,8 @@ namespace Hanasu.Services.Settings
 
                 LastSetVolume = settings.ContainsElement("LastSetVolume") ? int.Parse(settings.Element("LastSetVolume").Value) : 15;
 
+                _theme = settings.ContainsElement("Theme") ? Enum.IsDefined(typeof(SettingsThemes), settings.Element("Theme").Value) ? (SettingsThemes)Enum.Parse(typeof(SettingsThemes), settings.Element("Theme").Value) : SettingsThemes.Red : SettingsThemes.Red;
+
                 var sinfo = new SettingsDataEventInfo()
                 {
                     SettingsDocument = doc,
@@ -70,7 +72,8 @@ namespace Hanasu.Services.Settings
             var settings = new XElement("Settings",
                     new XElement("UpdateStationsLive", "false"),
                     new XElement("AutomaticallyFetchSongData", "false"),
-                    new XElement("LastSetVolume", 50));
+                    new XElement("LastSetVolume", 50),
+                    new XElement("Theme", Enum.GetName(typeof(SettingsThemes),SettingsThemes.Red)));
 
             //Pass the settings to subscribers so they can update the settings xml as needed.
             var sinfo = new SettingsDataEventInfo()
@@ -85,6 +88,7 @@ namespace Hanasu.Services.Settings
 
             UpdateStationsLive = false;
             AutomaticallyFetchSongData = false;
+            _theme = SettingsThemes.Red;
 
             doc.Add(settings);
 
@@ -99,7 +103,8 @@ namespace Hanasu.Services.Settings
             var settings = new XElement("Settings",
                           new XElement("UpdateStationsLive", UpdateStationsLive.ToString()),
                           new XElement("AutomaticallyFetchSongData", AutomaticallyFetchSongData.ToString()),
-                          new XElement("LastSetVolume", LastSetVolume));
+                          new XElement("LastSetVolume", LastSetVolume),
+                          new XElement("Theme", Enum.GetName(typeof(SettingsThemes),Theme)));
 
             var sinfo = new SettingsDataEventInfo()
             {
@@ -122,11 +127,17 @@ namespace Hanasu.Services.Settings
 
         public int LastSetVolume { get; set; }
 
+        private SettingsThemes _theme;
+        public SettingsThemes Theme { get { return _theme; } set { _theme = value; EventService.RaiseEvent(EventType.Theme_Changed, new ThemeChangedEventInfo()); } }
+
 
         internal class SettingsDataEventInfo : EventInfo
         {
             public XDocument SettingsDocument { get; set; }
             public XElement SettingsElement { get; set; }
+        }
+        internal class ThemeChangedEventInfo : EventInfo
+        {
         }
     }
 }

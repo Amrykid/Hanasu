@@ -25,10 +25,17 @@ namespace Hanasu.Windows
         {
             InitializeComponent();
             this.Unloaded += SettingsWindow_Unloaded;
+            this.Loaded += SettingsWindow_Loaded;
+        }
+
+        void SettingsWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
         }
 
         void SettingsWindow_Unloaded(object sender, RoutedEventArgs e)
         {
+            this.Loaded -= SettingsWindow_Loaded;
             this.fbpostSwitch.IsEnabledChanged -= new System.Windows.DependencyPropertyChangedEventHandler(this.fbpostSwitch_IsEnabledChanged);
 
             this.ReauthFBBtn.Click -= new System.Windows.RoutedEventHandler(this.ReauthFBBtn_Click);
@@ -53,6 +60,8 @@ namespace Hanasu.Windows
             SettingsService.Instance.UpdateStationsLive = (bool)LiveStationUpdSwitch.IsChecked;
 
             Hanasu.Services.Facebook.FacebookService.FacebookEnabled = ((bool)fetchSongDataSwitch.IsChecked == true ? (bool)fbpostSwitch.IsChecked : false);
+
+            SettingsService.Instance.Theme = (SettingsThemes)ThemesComboBox.SelectedItem;
 
             //checks if auth is needed.
 
