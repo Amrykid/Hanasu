@@ -274,6 +274,7 @@ namespace Hanasu
         void attemptToConnectTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             var state = player.playState;
+
             if (player.playState != WMPPlayState.wmppsPlaying || player.playState != WMPPlayState.wmppsBuffering)
             {
                 player.Ctlcontrols.stop();
@@ -283,10 +284,11 @@ namespace Hanasu
                         ShowUnableToConnect();
                     }));
 
-                attemptToConnectTimer.Stop();
 
                 Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue();
             }
+
+            attemptToConnectTimer.Stop();
         }
 
         void player_CurrentMediaItemAvailable(object sender, AxWMPLib._WMPOCXEvents_CurrentMediaItemAvailableEvent e)
@@ -375,7 +377,7 @@ namespace Hanasu
         private Timer bufferTimer = null;
 
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
-        {                
+        {
             //WMPLib.IWMPMedia2 errSource = (IWMPMedia2)e.pMediaObject;
 
             //    WMPLib.IWMPErrorItem err = errSource.Error;
