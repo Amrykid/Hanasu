@@ -64,7 +64,7 @@ namespace Hanasu.Windows
                                 {
                                     w = new Window();
                                     wb = new WebBrowser();
-                                    wb.NavigateToString("<object width=\"420\" height=\"315\"><param name=\"movie\" value=\"http://www.youtube.com/v/kTdsijn32HQ?version=3&amp;hl=en_US&amp;rel=0&autoplay=1\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"http://www.youtube.com/v/kTdsijn32HQ?version=3&amp;hl=en_US&amp;rel=0&autoplay=1\" type=\"application/x-shockwave-flash\" width=\"420\" height=\"315\" allowscriptaccess=\"always\" allowfullscreen=\"true\"></embed></object>");
+                                    wb.NavigateToString("<object width=\"420\" height=\"315\"><param name=\"movie\" value=\"http://www.youtube.com/v/Jm8Vus-VQwE?version=3&amp;hl=en_US&amp;rel=0&autoplay=1\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"http://www.youtube.com/v/Jm8Vus-VQwE?version=3&amp;hl=en_US&amp;rel=0&autoplay=1\" type=\"application/x-shockwave-flash\" width=\"420\" height=\"315\" allowscriptaccess=\"always\" allowfullscreen=\"true\"></embed></object>");
                                     w.Content = wb;
                                     w.ShowInTaskbar = false;
                                     w.Topmost = true;
@@ -72,10 +72,11 @@ namespace Hanasu.Windows
                                     w.Hide();
                                 }));
 
-                            System.Threading.Thread.Sleep((1000 * 60) * 3);
+                            System.Threading.Thread.Sleep((1000 * 60) * 4);
 
                             Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
                                {
+                                   wb.NavigateToString("");
                                    wb.Dispose();
                                    w.Close();
                                }));
