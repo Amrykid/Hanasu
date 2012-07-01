@@ -490,7 +490,9 @@ namespace Hanasu
 
             LogService.Instance.WriteLog(player,
     "Play state changed: " + Enum.GetName(typeof(WMPLib.WMPPlayState), state));
-
+            var prog = player.network.downloadProgress;
+            var buff = player.network.bufferingTime;
+            var buffprog = player.network.bufferingProgress;
             switch (state)
             {
                 case WMPLib.WMPPlayState.wmppsTransitioning:
@@ -502,11 +504,20 @@ namespace Hanasu
                     BufferPB.Value = player.network.bufferingProgress;
                     bufferTimer.Start();
                     break;
+                case WMPPlayState.wmppsWaiting:
+                    {
+                        if (this.TaskbarItemInfo != null)
+                            this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
+                    }
+                    break;
                 case WMPLib.WMPPlayState.wmppsPlaying: NowPlayingGrid.Visibility = System.Windows.Visibility.Visible;
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
                     bufferTimer.Stop();
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
+
+                    if (this.TaskbarItemInfo != null)
+                        this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
 
                     unableToConnectNotificationShown = false;
 
@@ -552,6 +563,9 @@ namespace Hanasu
 
                     if (Hanasu.Services.Stations.StationsService.Instance.Status != StationsServiceStatus.Polling)
                         HideStationsAdorner();
+
+                    if (this.TaskbarItemInfo != null)
+                        this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
                     break;
             }
         }
@@ -653,7 +667,10 @@ namespace Hanasu
     "Playing station: " + station.Name);
 
             if (station.StationType == StationType.TV)
+            {
                 player.network.bufferingTime = 10000; // 10 seconds ahead
+                SongDataLbl.Text = station.Name;
+            }
             else
                 player.network.bufferingTime = 2000; // 2 seconds
 
