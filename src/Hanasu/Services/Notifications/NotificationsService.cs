@@ -116,8 +116,10 @@ namespace Hanasu.Services.Notifications
 
 
                                     }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+
                                 while (nw.IsVisible)
                                     Thread.Sleep(50);
+
                                 Application.Current.Dispatcher.Invoke(new EmptyDelegate(
                                     () =>
                                     {

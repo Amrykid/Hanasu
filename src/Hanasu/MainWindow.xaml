@@ -60,7 +60,6 @@
             <TabControl Name="tabControl1" Panel.ZIndex="50">
                 <TabItem Header="Now Playing" Name="tabItem1">
                     <Grid Background="Black">
-                        <!--<MediaElement Name="MediaPlayer" LoadedBehavior="Manual" UnloadedBehavior="Manual" />-->
                         <WindowsFormsHost Name="windowsFormsHost1" Background="Black">
 
                         </WindowsFormsHost>
@@ -191,7 +190,7 @@
                         <Border Grid.Row="0" BorderThickness=".5" BorderBrush="{StaticResource AccentColorBrush}">
                             <Grid>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Height="45" Width="45" Name="AddLikedSongFromFileBtn" Click="AddLikedSongFromFileBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10">
+                                    <Button Height="45" Width="45" Name="AddLikedSongFromFileBtn" Click="AddLikedSongFromFileBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10" Visibility="Hidden">
                                         <Rectangle Width="25" Height="25" Margin="0 0 0 0">
                                             <Rectangle.Fill>
                                                 <VisualBrush Stretch="Fill"
@@ -383,7 +382,6 @@
                     </StackPanel>
                 </Grid>
             </Border>
-
         </Grid>
     </Grid>
 </metro:MetroWindow>

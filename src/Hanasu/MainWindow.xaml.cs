@@ -17,7 +17,6 @@ using Hanasu.Core;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Shapes;
-using Hanasu.Core;
 using Microsoft.Win32;
 
 namespace Hanasu
@@ -171,30 +170,11 @@ namespace Hanasu
 
         void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
-            //See HandleMediaKeyHooks
 
-            /*
-            switch (e.Key)
-            {
-                case Key.MediaPlayPause:
-                    {
-                        if (NowPlayingGrid.Visibility == System.Windows.Visibility.Visible)
-                            player.Ctlcontrols.pause();
-                        else
-                            player.Ctlcontrols.play();
-
-                        break;
-                    }
-                case Key.MediaStop: player.Ctlcontrols.stop();
-                    break;
-
-            }
-             * */
         }
 
         void MainWindow_Unloaded(object sender, RoutedEventArgs e)
         {
-
             Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue();
 
             this.KeyUp -= MainWindow_KeyUp;
@@ -378,9 +358,6 @@ namespace Hanasu
 
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
         {
-            //WMPLib.IWMPMedia2 errSource = (IWMPMedia2)e.pMediaObject;
-
-            //    WMPLib.IWMPErrorItem err = errSource.Error;
             attemptToConnectTimer.Stop();
             ShowUnableToConnect();
         }
@@ -408,8 +385,6 @@ namespace Hanasu
             try
             {
                 player_parseAttributes();
-
-                //WMPLib.IWMPMedia3 changedItem = (WMPLib.IWMPMedia3)e.item;
 
                 if (lastMediaTxt != player.currentMedia.name)
                 {
@@ -506,7 +481,10 @@ namespace Hanasu
                                 lastMediaTxt = (string)currentStationAttributes["Title"];
                             }
                             else
+                            {
                                 SongDataLbl.Text = "Not Available";
+                                lastMediaTxt = "Not Available";
+                            }
                         else if (currentStation.StationType == StationType.TV)
                             SongDataLbl.Text = currentStation.Name;
 
@@ -529,9 +507,7 @@ namespace Hanasu
 
             LogService.Instance.WriteLog(player,
     "Play state changed: " + Enum.GetName(typeof(WMPLib.WMPPlayState), state));
-            var prog = player.network.downloadProgress;
-            var buff = player.network.bufferingTime;
-            var buffprog = player.network.bufferingProgress;
+
             switch (state)
             {
                 case WMPLib.WMPPlayState.wmppsTransitioning:
@@ -575,18 +551,6 @@ namespace Hanasu
 
                     player_parseAttributes();
 
-                    //for (int i = 0; i < player.currentPlaylist.count; i++)
-                    //{
-                    //    var x = player.currentPlaylist.get_Item(i);
-                    //    var y = player.currentPlaylist.getItemInfo(x.name);
-
-                    //    var z = 6;
-                    //}
-                    //for (int i = 0; i < player.currentPlaylist.attributeCount; i++)
-                    //{
-                    //    var x = player.currentPlaylist.get_attributeName(i);
-                    //    var y = 0;
-                    //}
 
                     break;
                 case WMPLib.WMPPlayState.wmppsReady:
@@ -880,19 +844,6 @@ namespace Hanasu
         {
             public SongData CurrentSong { get; set; }
         }
-
-        /*private Lazy<object> StationListViewGridButtonImageValueMusic = new Lazy<object>(new Func<object>(() => (Visual)Application.Current.MainWindow.Resources["appbar_music"]));
-        private Lazy<object> StationListViewGridButtonImageValueTV = new Lazy<object>(new Func<object>(() => ((Visual)Application.Current.MainWindow.Resources["appbar_tv"])));
-        private void StationsListViewGridItemButton_Loaded(object sender, RoutedEventArgs e)
-        {
-            /*switch ((StationType)((Button)sender).DataContext)
-            {
-                case StationType.Radio: ((Button)sender).Content = (Visual)StationListViewGridButtonImageValueMusic.Value;
-                    break;
-                case StationType.TV: ((Button)sender).Content = (Visual)StationListViewGridButtonImageValueTV.Value;
-                    break;
-            }
-        }*/
 
         private void StationAttributesBtn_Click(object sender, RoutedEventArgs e)
         {
