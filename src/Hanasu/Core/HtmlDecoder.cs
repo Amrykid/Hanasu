@@ -11,6 +11,15 @@ namespace Hanasu.Core
     //Old code I wrote years ago. Dont mind it.
     public class HtmlDecoder
     {
+        public static string GetHTML(string url)
+        {
+            string result = null;
+            using (var wc = new WebClient())
+            {
+                result = wc.DownloadString(url);
+            }
+            return result;
+        }
         public static string Decode(string html)
         {
             return html.Replace("&nbsp", " ").Replace("&quot;", "\"").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&#039;", "'").Replace("&rsquo;", "’").Replace("&amp;", "&").Replace("&iuml;", "ï");

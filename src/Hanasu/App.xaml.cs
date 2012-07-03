@@ -16,8 +16,11 @@ namespace Hanasu
     public partial class App : Application
     {
         public Hanasu.Windows.SplashScreen SplashScreen { get; set; }
+        public string[] Arguments { get; set; }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            Arguments = e.Args;
+
             if (NetworkUtils.IsConnectedToInternet())
             {
                 var dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Hanasu\\";

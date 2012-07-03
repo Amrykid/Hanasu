@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using System.Windows.Shell;
 
 namespace Hanasu
 {
@@ -321,36 +322,53 @@ namespace Hanasu
         }
 
         #region Windows 7+ Taskbar stuff
+        private bool IsWindows7OrHigher()
+        {
+            return ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1) /* if windows 7 */
+                || Environment.OSVersion.Version.Major > 6); /* if windows 8, etc */
+        }
+        private JumpList HanasuJumpList = null;
         private void HandleWindowsTaskbarstuff()
         {
             //http://joshsmithonwpf.wordpress.com/2007/03/09/how-to-programmatically-click-a-button/
 
             //check if W7 or higher
-            if (
-                (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1) /* if windows 7 */
-                || Environment.OSVersion.Version.Major > 6 /* if windows 8, etc */ )
+            if (IsWindows7OrHigher())
             {
+                HanasuJumpList = new JumpList();
+
                 this.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
                 this.TaskbarItemInfo.ThumbButtonInfos = new System.Windows.Shell.ThumbButtonInfoCollection();
 
-                /*
-                CommandBinding commandBinding = new CommandBinding(ButtonClickCommand, (object sender2, ExecutedRoutedEventArgs e2) =>
-                {
-                    playBtn_Click(null, null);
-                });
-                this.CommandBindings.Add(commandBinding);
+                HanasuJumpList.ShowRecentCategory = true;
+                JumpList.SetJumpList(Application.Current, HanasuJumpList);
 
-                this.TaskbarItemInfo.ThumbButtonInfos.Add(new System.Windows.Shell.ThumbButtonInfo()
-                {
-                    Description = "play",
-                    CommandTarget = playBtn,
-                    Command = ButtonClickCommand,
-                    ImageSource = (ImageSource)((Image)playBtn.Content).Source,
-                }); */
+                UriToBitmapImageConverter uri = new UriToBitmapImageConverter();
+
+                AddThumbButton("Play", ButtonPlayClickCommand, playBtn, (ImageSource)uri.Convert("pack://application:,,,/Hanasu;component/Resources/play.png", null, new int[] { 400, 400 }, null), (e, s) => playBtn_Click(null, null));
+                AddThumbButton("Pause/Stop", ButtonPauseClickCommand, pauseBtn, (ImageSource)uri.Convert("pack://application:,,,/Hanasu;component/Resources/pause.png", null, new int[] { 400, 400 }, null), (e, s) => pauseBtn_Click(null, null));
+
             }
         }
+        private void AddThumbButton(string desc, RoutedCommand cmd, IInputElement CommandTarget, ImageSource imagesource, Action<object, ExecutedRoutedEventArgs> act)
+        {
+            CommandBinding commandBinding = new CommandBinding(cmd, (object sender2, ExecutedRoutedEventArgs e2) =>
+            {
+                act(sender2, e2);
+            });
+            this.CommandBindings.Add(commandBinding);
 
-        public static RoutedCommand ButtonClickCommand = new RoutedCommand();
+            this.TaskbarItemInfo.ThumbButtonInfos.Add(new System.Windows.Shell.ThumbButtonInfo()
+            {
+                Description = desc,
+                CommandTarget = CommandTarget,
+                Command = cmd,
+                ImageSource = imagesource,
+            });
+        }
+
+        public static RoutedCommand ButtonPlayClickCommand = new RoutedCommand();
+        public static RoutedCommand ButtonPauseClickCommand = new RoutedCommand();
         #endregion
 
 
@@ -551,6 +569,22 @@ namespace Hanasu
 
                     player_parseAttributes();
 
+                    if (IsWindows7OrHigher())
+                    {
+                        if (HanasuJumpList.JumpItems.Find(t => ((JumpTask)t).Title == currentStation.Name) == null)
+                        {
+                            HanasuJumpList.JumpItems.Add(
+                                new JumpTask()
+                                {
+                                    ApplicationPath = Application.ResourceAssembly.Location,
+                                    Description = "Play " + currentStation.Name,
+                                    Title = currentStation.Name,
+                                    CustomCategory = "Recent",
+                                    Arguments = "/play_station " + currentStation.Name,
+                                });
+                            HanasuJumpList.Apply();
+                        }
+                    }
 
                     break;
                 case WMPLib.WMPPlayState.wmppsReady:
@@ -1017,6 +1051,42 @@ namespace Hanasu
 
             c.IsEnabled = false;
             c.ToolTip = "Cooling down...";
+        }
+
+        private bool HasHandledArgs = false;
+        private void StationsListView_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            try
+            {
+                if (((App)App.Current).Arguments != null && HasHandledArgs == false)
+                {
+                    var args = ((App)App.Current).Arguments;
+
+                    if (args.Length == 0) return;
+
+                    if (args[0].ToLower() == "/play_station" && StationsListView.ItemsSource != null)
+                    {
+                        if (StationsListView.Items.Count > 0) //Relying on there always being more than one item after this has updated.
+                        {
+                            foreach (Station s in StationsListView.ItemsSource)
+                            {
+                                if (s.Name == args[1])
+                                {
+                                    StationsListView.SelectedItem = s;
+                                    StationsListView_MouseDoubleClick(StationsListView, null);
+                                    break;
+                                }
+
+                            }
+                            HasHandledArgs = true;
+                        }
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

@@ -31,6 +31,15 @@ namespace Hanasu.Core
                         image.UriSource = (Uri)value;
                     else
                         image.UriSource = new Uri((string)value, UriKind.Absolute);
+
+                    if (parameter != null)
+                    {
+                        int[] info = (int[])parameter;
+
+                        image.DecodePixelHeight = info[0];
+                        image.DecodePixelWidth = info[1];
+                    }
+
                     image.EndInit();
 
                     //while (image.IsDownloading) ;

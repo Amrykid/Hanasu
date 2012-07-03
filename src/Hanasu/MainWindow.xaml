@@ -123,7 +123,7 @@
                                             </Grid>
                                         </Border>
                                         <!-- Width="{Binding ElementName=thisWindow, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntCalcConverter1}, ConverterParameter=-;%7}" -->
-                                        <ListView Grid.Row="1" Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" IsEnabled="False">
+                                        <ListView Grid.Row="1" Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="StationsListView_TargetUpdated" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" IsEnabled="False">
                                             <ListView.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
