@@ -117,7 +117,7 @@ namespace Hanasu.Services.Song
                 if (Regex.IsMatch(songdata, NearEndFeatureRegex, RegexOptions.Compiled))
                     songdata = Regex.Replace(songdata, NearEndFeatureRegex, "", RegexOptions.Compiled);
                 else if (Regex.IsMatch(songdata, NearFrontFeatureRegex, RegexOptions.Compiled))
-                    songdata = Regex.Replace(songdata, NearFrontFeatureRegex, "", RegexOptions.Compiled);
+                    songdata = Regex.Replace(songdata, NearFrontFeatureRegex, " -", RegexOptions.Compiled);
             }
             else if (tmpSplt.Length > 2)
             {
@@ -125,7 +125,7 @@ namespace Hanasu.Services.Song
 
             return songdata;
         }
-        public const string NearFrontFeatureRegex = "";
+        public const string NearFrontFeatureRegex = @"\W(ft|FT|feat|FEAT)\.(\W)?.+?\-";
         public const string NearEndFeatureRegex = @"\W(ft|FT|feat|FEAT)\..+?(\n|$)";
 
         public static IAlbumInfoDataSource DataSource { get; set; }

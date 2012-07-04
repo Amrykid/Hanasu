@@ -93,5 +93,17 @@ namespace Hanasu.Services.LikedSongs
             else
                 return false;
         }
+        internal SongData GetSongFromString(string name)
+        {
+            if (name.Contains(" - "))
+            {
+                var bits = name.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+
+                var res = LikedSongs.First(i => (i.TrackTitle == bits[0].Trim(' ') && i.Artist == bits[1].Trim(' ')) || (i.TrackTitle == bits[1].Trim(' ') && i.Artist == bits[0].Trim(' ')));
+                return res;
+            }
+            else
+                throw new Exception("Not found!");
+        }
     }
 }

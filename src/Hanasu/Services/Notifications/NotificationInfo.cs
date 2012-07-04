@@ -12,5 +12,6 @@ namespace Hanasu.Services.Notifications
         public int Duration { get; set; }
         public bool IsUrgent { get; set; }
         public NotificationType Type { get; set; }
+        public Action<NotificationInfo> OnClickCallback { get; set; }
     }
 }

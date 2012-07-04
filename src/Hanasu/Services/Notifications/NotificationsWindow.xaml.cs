@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using System.Timers;
+using System.Threading;
 
 namespace Hanasu.Services.Notifications
 {
@@ -23,7 +24,7 @@ namespace Hanasu.Services.Notifications
     {
         private Storyboard aniStry;
         private DoubleAnimation heightAni;
-        private Timer tm;
+        private System.Timers.Timer tm;
         private bool r = false;
 
         public NotificationsWindow()
@@ -35,7 +36,7 @@ namespace Hanasu.Services.Notifications
             this.MouseDoubleClick += NotificationsWindow_MouseDoubleClick;
             aniStry = new Storyboard();
             heightAni = new DoubleAnimation();
-            tm = new Timer();
+            tm = new System.Timers.Timer();
             aniStry.Completed += aniStry_Completed;
             tm.Elapsed += tm_Elapsed;
 
@@ -55,6 +56,7 @@ namespace Hanasu.Services.Notifications
 
         void NotificationsWindow_Unloaded(object sender, RoutedEventArgs e)
         {
+            this.MouseLeftButtonUp -= NotificationsWindow_MouseLeftButtonUp;
             this.Loaded -= NotificationsWindow_Loaded;
             this.Unloaded -= NotificationsWindow_Unloaded;
             this.MouseDoubleClick -= NotificationsWindow_MouseDoubleClick;
@@ -86,11 +88,29 @@ namespace Hanasu.Services.Notifications
                 case NotificationType.Error: iconRectBrush.Visual = (Visual)this.Resources["appbar_error"];
                     break;
             }
-            
+
+            this.MouseLeftButtonUp += NotificationsWindow_MouseLeftButtonUp;
 
             tm.Interval = info.Duration;
             this.Show();
             aniStry.Begin(this);
+        }
+
+        void NotificationsWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Action<NotificationInfo> act = ((NotificationInfo)this.DataContext).OnClickCallback;
+
+            if (act != null)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+                    {
+                        Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                            {
+                                act((NotificationInfo)this.DataContext);
+                            }));
+
+                    }));
+            }
         }
 
         void NotificationsWindow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
