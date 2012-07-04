@@ -56,6 +56,7 @@ namespace Hanasu.Services.Song
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
                     song.OriginallyPlayedStation = station;
+                    song.OriginallyBroadcastSongData = songdata;
 
                     DataSource.GetAlbumInfo(ref song);
 
@@ -72,6 +73,7 @@ namespace Hanasu.Services.Song
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
                     song.OriginallyPlayedStation = station;
+                    song.OriginallyBroadcastSongData = songdata;
 
                     DataSource.GetAlbumInfo(ref song);
 

@@ -87,7 +87,7 @@ namespace Hanasu.Services.LikedSongs
             {
                 var bits = name.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
 
-                var res = LikedSongs.Any(i => (i.TrackTitle == bits[0].Trim(' ') && i.Artist == bits[1].Trim(' ')) || (i.TrackTitle == bits[1].Trim(' ') && i.Artist == bits[0].Trim(' ')));
+                var res = LikedSongs.Any(i => (i.TrackTitle == bits[0].Trim(' ') && i.Artist == bits[1].Trim(' ')) || (i.TrackTitle == bits[1].Trim(' ') && i.Artist == bits[0].Trim(' ')) || name == i.OriginallyBroadcastSongData);
                 return res;
             }
             else
@@ -100,10 +100,21 @@ namespace Hanasu.Services.LikedSongs
                 var bits = name.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
 
                 var res = LikedSongs.First(i => (i.TrackTitle == bits[0].Trim(' ') && i.Artist == bits[1].Trim(' ')) || (i.TrackTitle == bits[1].Trim(' ') && i.Artist == bits[0].Trim(' ')));
-                return res;
+
+                if (res.TrackTitle == null)
+                    throw new Exception("Not found!");
+                else
+                    return res;
             }
             else
-                throw new Exception("Not found!");
+            {
+                var res = LikedSongs.First(i => name == i.OriginallyBroadcastSongData);
+
+                if (res.TrackTitle == null)
+                    throw new Exception("Not found!");
+                else
+                    return res;
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
         xmlns:ac="clr-namespace:AdornedControl"
         xmlns:core="clr-namespace:Hanasu.Core"
         xmlns:log="clr-namespace:Hanasu.Services.Logging"
-        Title="Hanasu" MinHeight="410" MinWidth="715" xmlns:my="clr-namespace:Hanasu.Core.Converters" Icon="pack://application:,,,/Hanasu;component/Resources/vector_icon.png" x:Name="thisWindow">
+        Title="Hanasu" MinHeight="410" MinWidth="755" xmlns:my="clr-namespace:Hanasu.Core.Converters" Icon="pack://application:,,,/Hanasu;component/Resources/vector_icon.png" x:Name="thisWindow" SizeChanged="thisWindow_SizeChanged">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -50,7 +50,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="256*" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <StackPanel HorizontalAlignment="Right" Orientation="Vertical" Width="200" Name="BufferingSP" Visibility="Hidden" Margin="0,6,12,0" VerticalAlignment="Top" Panel.ZIndex="75" Height="40">
@@ -190,7 +190,7 @@
                         <Border Grid.Row="0" BorderThickness=".5" BorderBrush="{StaticResource AccentColorBrush}">
                             <Grid>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Height="45" Width="45" Name="AddLikedSongFromFileBtn" Click="AddLikedSongFromFileBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10" Visibility="Hidden">
+                                    <Button Height="45" Width="45" Name="AddRawSongToLikedBtn" Click="AddRawSongToLikedBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10" Visibility="Hidden">
                                         <Rectangle Width="25" Height="25" Margin="0 0 0 0">
                                             <Rectangle.Fill>
                                                 <VisualBrush Stretch="Fill"
@@ -198,7 +198,7 @@
                                             </Rectangle.Fill>
                                         </Rectangle>
                                         <Button.ToolTip>
-                                            <ToolTip Content="Adds a song to the liked songs tab by reading its metadata."/>
+                                            <ToolTip Content="Adds a song to the liked songs tab by using a wizard."/>
                                         </Button.ToolTip>
                                     </Button>
                                 </StackPanel>
@@ -290,7 +290,7 @@
             <Border BorderBrush="{StaticResource AccentColorBrush}" BorderThickness=".5">
                 <Grid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Grid Height="40" Name="NowPlayingGrid" HorizontalAlignment="Right" Width="341" Visibility="Hidden" Margin="10 -10 0 0">
+                        <Grid Name="NowPlayingGrid" HorizontalAlignment="Right" Visibility="Hidden" Margin="10 0 0 0">
                             <StackPanel Orientation="Horizontal">
                                 <Rectangle Width="30" Height="30" Margin="0 0 0 0">
                                     <Rectangle.Fill>
@@ -298,41 +298,56 @@
                             					Visual="{StaticResource appbar_play}" />
                                     </Rectangle.Fill>
                                 </Rectangle>
-                                <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="180" Height="40" FontSize="14" Padding="5" Margin="0 -10 0 0" Foreground="{StaticResource AccentColorBrush}" FontWeight="Bold" ToolTip="{Binding ElementName=SongDataLbl, Path=Text, UpdateSourceTrigger=PropertyChanged}">
-                                </TextBlock>
-                                <Button Height="45" Width="45" Name="StationAttributesBtn" Click="StationAttributesBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 0 0 0">
-                                    <Rectangle Width="20" Height="20" Margin="0 0 0 0">
-                                        <Rectangle.Fill>
-                                            <VisualBrush Stretch="Fill"
+                                <StackPanel>
+                                    <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="250" Height="30" FontSize="17" Padding="5" Margin="0 -5 0 0" Foreground="{StaticResource AccentColorBrush}" FontWeight="Bold" ToolTip="{Binding ElementName=SongDataLbl, Path=Text, UpdateSourceTrigger=PropertyChanged}">
+                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                                        <Button Height="35" Width="35" Name="AddRawSongToLikedBtn2" Click="AddRawSongToLikedBtn_Click"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 0 0 0" Visibility="{Binding ElementName=AddRawSongToLikedBtn, Path=Visibility, UpdateSourceTrigger=PropertyChanged}">
+                                            <Rectangle Width="15" Height="15" Margin="0 0 0 0">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_add}" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                            <Button.ToolTip>
+                                                <ToolTip Content="Opens a wizard to add this song to the Liked Songs."/>
+                                            </Button.ToolTip>
+                                        </Button>
+                                        <Button Height="35" Width="35" Name="StationAttributesBtn" Click="StationAttributesBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 0 0 0">
+                                            <Rectangle Width="15" Height="15" Margin="0 0 0 0">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill"
                             					Visual="{StaticResource appbar_list1}" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    <Button.ToolTip>
-                                        <ToolTip Content="Shows the attributes of the current station."/>
-                                    </Button.ToolTip>
-                                </Button>
-                                <Button Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}">
-                                    <Image Source="pack://application:,,,/Hanasu;component/Resources/i_black.png"/>
-                                    <Button.ToolTip>
-                                        <ToolTip Content="Shows information on the current song."/>
-                                    </Button.ToolTip>
-                                </Button>
-                                <Button Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Name="LikeBtnInfo" Click="LikeBtnInfo_Click" Visibility="{Binding ElementName=MoreInfoBtn,Path=Visibility,UpdateSourceTrigger=PropertyChanged}">
-                                    <Rectangle Width="22" Height="22" Margin="0 4 0 0">
-                                        <Rectangle.Fill>
-                                            <VisualBrush Stretch="Fill"
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                            <Button.ToolTip>
+                                                <ToolTip Content="Shows the attributes of the current station."/>
+                                            </Button.ToolTip>
+                                        </Button>
+                                        <Button Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click" Height="35" Width="35" Style="{DynamicResource MetroCircleButtonStyle}">
+                                            <Image Source="pack://application:,,,/Hanasu;component/Resources/i_black.png"/>
+                                            <Button.ToolTip>
+                                                <ToolTip Content="Shows information on the current song."/>
+                                            </Button.ToolTip>
+                                        </Button>
+                                        <Button Height="35" Width="35" Style="{DynamicResource MetroCircleButtonStyle}" Name="LikeBtnInfo" Click="LikeBtnInfo_Click" Visibility="{Binding ElementName=MoreInfoBtn,Path=Visibility,UpdateSourceTrigger=PropertyChanged}">
+                                            <Rectangle Width="15" Height="15" Margin="0 4 0 0">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill"
                             					Visual="{StaticResource appbar_heart}" x:Name="LikeBtnVisualBrush" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    <Button.ToolTip>
-                                        <ToolTip Content="Like this song (and share on Facebook, if enabled)?"/>
-                                    </Button.ToolTip>
-                                </Button>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                            <Button.ToolTip>
+                                                <ToolTip Content="Like this song (and share on Facebook, if enabled)?"/>
+                                            </Button.ToolTip>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Name="MediaControlPanel">
                         <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Click="revBtn_Click">
                             <Image Source="pack://application:,,,/Hanasu;component/Resources/rew.png"/>
                             <Button.ToolTip>
@@ -363,7 +378,7 @@
                         <Button Style="{DynamicResource MetroCircleButtonStyle}"
                             		Height="45"
                             		Width="45"
-                            		VerticalAlignment="Top" Name="VolumeMuteBtn" Click="VolumeMuteBtn_Click" IsEnabled="False">
+                            		VerticalAlignment="Center" Name="VolumeMuteBtn" Click="VolumeMuteBtn_Click" IsEnabled="False">
                             <Rectangle Width="20" Height="20">
                                 <Rectangle.Fill>
                                     <VisualBrush Stretch="Fill"

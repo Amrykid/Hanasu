@@ -17,5 +17,6 @@ namespace Hanasu.Services.Song
         public Uri AlbumCoverUri { get; set; }
         public Uri BuyUri { get; set; }
         public Station OriginallyPlayedStation { get; set; }
+        public string OriginallyBroadcastSongData { get; set; }
     }
 }
