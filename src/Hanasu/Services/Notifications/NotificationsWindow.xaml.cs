@@ -89,6 +89,12 @@ namespace Hanasu.Services.Notifications
                     break;
             }
 
+            if (info.OnClickCallback != null)
+            {
+                this.Cursor = Cursors.Hand;
+                this.ForceCursor = true;
+            }
+
             this.MouseLeftButtonUp += NotificationsWindow_MouseLeftButtonUp;
 
             tm.Interval = info.Duration;
@@ -123,8 +129,14 @@ namespace Hanasu.Services.Notifications
         {
             tm.Stop();
             if (!r)
+            {
+                while (this.IsMouseOver) { System.Threading.Thread.Sleep(50); } //If the mouse is over, keep the window up.
+
                 Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
-                    this.Retract()));
+                    {
+                        this.Retract();
+                    }));
+            }
             else
             {
                 Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
