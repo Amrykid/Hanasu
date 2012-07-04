@@ -36,6 +36,8 @@ namespace Hanasu.Windows
 
         private void OkayBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (String.IsNullOrEmpty(TextBoxArtist.Text) || String.IsNullOrEmpty(TextBoxTrack.Text)) return;
+
             DialogResult = true;
         }
     }
