@@ -1155,8 +1155,13 @@ namespace Hanasu
 
                     dat = (SongData)ars.DataContext; //Get edited version back.
 
-                    LikeBtnInfo.IsEnabled = false;
-                    AddRawSongToLikedBtn.Visibility = Visibility.Hidden;
+                    if (SongDataLbl.Text == dat.OriginallyBroadcastSongData)
+                    {
+                        //make sure the song hasn't change since opening this dialog.
+
+                        LikeBtnInfo.IsEnabled = false;
+                        AddRawSongToLikedBtn.Visibility = Visibility.Hidden;
+                    }
 
                     Hanasu.Services.Events.EventService.RaiseEvent(Services.Events.EventType.Song_Liked,
                     new SongLikedEventInfo()

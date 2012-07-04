@@ -37,16 +37,16 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Label FontSize="17" Margin="0 -5 0 0">Raw Song Data:</Label>
-                    <TextBlock Height="35" VerticalAlignment="Bottom" IsEnabled="False" Text="{Binding OriginallyBroadcastSongData, Mode=OneTime}" Margin="10 0 10 0"></TextBlock>
+                    <TextBlock Height="35" VerticalAlignment="Bottom" IsEnabled="False" Text="{Binding OriginallyBroadcastSongData, Mode=OneTime}" Margin="10 0 10 0" Foreground="{StaticResource AccentColorBrush}" FontSize="15"></TextBlock>
                 </Grid>
                 <Grid Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
                         <GroupBox Width="200" Header="Artist:" BorderThickness="0" FontSize="17">
-                            <TextBox Name="TextBoxArtist" Text="{Binding Artist,Mode=TwoWay}"/>
+                            <TextBox Name="TextBoxArtist" Text="{Binding Artist,Mode=TwoWay}" FontSize="15"/>
                         </GroupBox>
                         <Separator/>
                         <GroupBox Width="200" Header="Song Name:" BorderThickness="0" FontSize="17">
-                            <TextBox Name="TextBoxTrack" Text="{Binding TrackTitle,Mode=TwoWay}"/>
+                            <TextBox Name="TextBoxTrack" Text="{Binding TrackTitle,Mode=TwoWay}" FontSize="15"/>
                         </GroupBox>
                     </StackPanel>
                 </Grid>
@@ -56,12 +56,12 @@
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0 -3 0 0">
                                     <Label Height="40">Album Name:</Label>
-                                    <TextBox Name="AlbumTextBox" Height="20" Width="100"></TextBox>
+                                    <TextBox Name="AlbumTextBox" Height="20" Width="100" FontSize="15"></TextBox>
                                 </StackPanel>
                                 <StackPanel Margin="5 0 0 0">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                         <Label>Cover URL:</Label>
-                                        <TextBox Name="AlbumCoverUrlBox" Text="{Binding AlbumCoverUri,Mode=TwoWay,Converter={StaticResource UrlStringConv}}" Height="20" Width="150"/>
+                                        <TextBox Name="AlbumCoverUrlBox" Text="{Binding AlbumCoverUri,Mode=TwoWay,Converter={StaticResource UrlStringConv}}" Height="20" Width="150" FontSize="15"/>
                                     </StackPanel>
 
                                     <Image Source="{Binding ElementName=AlbumCoverUrlBox,Path=Text,Converter={StaticResource UrlToBitmapConv},UpdateSourceTrigger=PropertyChanged}" Width="100"/>

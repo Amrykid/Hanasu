@@ -36,7 +36,11 @@ namespace Hanasu.Windows
 
         private void OkayBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrEmpty(TextBoxArtist.Text) || String.IsNullOrEmpty(TextBoxTrack.Text)) return;
+            if (String.IsNullOrEmpty(TextBoxArtist.Text) || String.IsNullOrEmpty(TextBoxTrack.Text))
+            {
+                MessageBox.Show("Artist/Song Name cannot be empty!");
+                return;
+            }
 
             DialogResult = true;
         }
