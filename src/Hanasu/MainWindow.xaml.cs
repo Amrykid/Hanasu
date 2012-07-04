@@ -477,6 +477,8 @@ namespace Hanasu
                             }
                             else
                             {
+                                AddRawSongToLikedBtn.Visibility = System.Windows.Visibility.Hidden;
+
                                 SongData dat = new SongData();
                                 try
                                 {
@@ -917,6 +919,7 @@ namespace Hanasu
             SongIsLiked = true;
 
             LikeBtnInfo.IsEnabled = false;
+            AddRawSongToLikedBtn.Visibility = System.Windows.Visibility.Collapsed;
 
         }
         public class SongLikedEventInfo : StationEventInfo
