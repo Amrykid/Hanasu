@@ -13,6 +13,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
+                <!-- From MahApps.Metro.Resources package-->
             </ResourceDictionary.MergedDictionaries>
             <core:UriToBitmapImageConverter x:Key="UriToBitmapImageConverter1" />
         </ResourceDictionary>
@@ -25,14 +27,38 @@
                 <TextBlock Text="{Binding Album,Mode=OneTime,TargetNullValue='N/A',StringFormat='Album: {0}'}" Height="82" HorizontalAlignment="Left" Margin="13,53,0,0" Name="label2" VerticalAlignment="Top" FontSize="15" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Width="219" />
             </Grid>
         </GroupBox>
-        <Button Content="Close" Height="23" HorizontalAlignment="Right" Margin="0,0,22,6" Name="CloseBtn" VerticalAlignment="Bottom" Width="75" Click="Close_Click" IsDefault="True" />
-        <GroupBox Header="Lyrics" Height="418" Margin="304,12,22,0" Name="groupBox2" VerticalAlignment="Top" FontSize="24">
+        <Button Content="Close" Height="23" HorizontalAlignment="Right" Margin="0,0,32,6" Name="CloseBtn" VerticalAlignment="Bottom" Width="75" Click="Close_Click" IsDefault="True" />
+        <GroupBox Header="Lyrics" Height="418" Margin="304,12,32,0" Name="groupBox2" VerticalAlignment="Top" FontSize="24">
             <Grid>
                 <ScrollViewer Height="350">
                     <TextBlock Text="{Binding Lyrics, Mode=OneTime}" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" TextAlignment="Center" FontSize="17"/>
                 </ScrollViewer>
             </Grid>
         </GroupBox>
+        <StackPanel Height="379" Margin="0,45,0,0" Name="stackPanel1" VerticalAlignment="Top" HorizontalAlignment="Right" Width="32">
+            <Button Height="35" Width="35" Name="PrintBtn"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 0 0 0">
+                <Rectangle Width="15" Height="15" Margin="0 0 0 0">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_paper}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Button.ToolTip>
+                    <ToolTip Content="Opens a dialog to print the lyrics."/>
+                </Button.ToolTip>
+            </Button>
+            <Button Height="35" Width="35" Name="SaveBtn"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 0 0 0">
+                <Rectangle Width="15" Height="15" Margin="0 0 0 0">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_save}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Button.ToolTip>
+                    <ToolTip Content="Opens a dialog to save the lyrics."/>
+                </Button.ToolTip>
+            </Button>
+        </StackPanel>
         <Button Content="Buy Album" Height="23" HorizontalAlignment="Left" Margin="304,0,0,6" Name="buyAlbumbtn" VerticalAlignment="Bottom" Width="75" Click="buyAlbumbtn_Click" />
     </Grid>
 </metro:MetroWindow>
