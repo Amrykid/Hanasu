@@ -188,9 +188,9 @@
                             <RowDefinition Height="410*"/>
                         </Grid.RowDefinitions>
                         <Border Grid.Row="0" BorderThickness=".5" BorderBrush="{StaticResource AccentColorBrush}">
-                            <Grid>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Height="45" Width="45" Name="AddRawSongToLikedBtn" Click="AddRawSongToLikedBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10" Visibility="Hidden">
+                            <Grid Background="Transparent">
+                                <StackPanel Orientation="Horizontal" Background="Transparent" >
+                                    <Button Height="45" Width="45" Name="AddRawSongToLikedBtn" Click="AddRawSongToLikedBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10" IsEnabled="False">
                                         <Rectangle Width="25" Height="25" Margin="0 0 0 0">
                                             <Rectangle.Fill>
                                                 <VisualBrush Stretch="Fill"
@@ -302,7 +302,7 @@
                                     <TextBlock Name="SongDataLbl" TextWrapping="Wrap" Width="250" Height="30" FontSize="17" Padding="5" Margin="0 -5 0 0" Foreground="{StaticResource AccentColorBrush}" FontWeight="Bold" ToolTip="{Binding ElementName=SongDataLbl, Path=Text, UpdateSourceTrigger=PropertyChanged}">
                                     </TextBlock>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                                        <Button Height="35" Width="35" Name="AddRawSongToLikedBtn2" Click="AddRawSongToLikedBtn_Click"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 0 0 0" Visibility="{Binding ElementName=AddRawSongToLikedBtn, Path=Visibility, UpdateSourceTrigger=PropertyChanged}">
+                                        <Button Height="35" Width="35" Name="AddRawSongToLikedBtn2" Click="AddRawSongToLikedBtn_Click"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 0 0 0" IsEnabled="{Binding ElementName=AddRawSongToLikedBtn, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}">
                                             <Rectangle Width="15" Height="15" Margin="0 0 0 0">
                                                 <Rectangle.Fill>
                                                     <VisualBrush Stretch="Fill"

@@ -14,14 +14,14 @@ namespace Hanasu.Services.Song.Album_Info_Data_Source
             try
             {
                 var url = "http://www.yesasia.com/us/search-music/" + string.Join("-", (song.Artist.ToLower() + " " + song.TrackTitle.ToLower()).Split(' ')).Replace("-", ">>>") + "/0-0-0-bpt.48_bt.48_q." + string.Join("+", (song.Artist.ToLower() + " " + song.TrackTitle.ToLower()).Split(' ')).Replace("-", ">>>") + "-en/list.html";
-                var html = HtmlDecoder.GetHTML(url);
+                var html = HtmlTextUtility.GetHTML(url);
                 //<span class="cover"><img alt="BoA Vol. 6 - Hurricane Venus" width="72" src="http://i.yai.bz/Assets/68/344/s_p0013234468.jpg"></span>
 
                 var sec = Regex.Match(html, "<dd class=\"description\">.+?</dd>", RegexOptions.Compiled | RegexOptions.Singleline);
                 var m = Regex.Match(sec.Value, "<span class=\"cover\">.+?</span>", RegexOptions.Compiled | RegexOptions.Singleline);
                 var urlm = Regex.Match(m.Value, "src=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled);
                 var imgurl = urlm.Value.Substring(5).Trim('\"');
-                var albumtxt = Regex.Replace(Regex.Replace(Hanasu.Core.HtmlDecoder.Decode(Regex.Match(m.Value, "alt=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value.Substring(5).Trim('\"')),
+                var albumtxt = Regex.Replace(Regex.Replace(Hanasu.Core.HtmlTextUtility.Decode(Regex.Match(m.Value, "alt=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value.Substring(5).Trim('\"')),
                     @"\((Korea|Japan|Hong Kong|Taiwan)\WVersion\)", "", RegexOptions.Compiled | RegexOptions.Singleline),
                     @"\((Normal|Special)\WEdition\)", "", RegexOptions.Compiled | RegexOptions.Singleline);
 

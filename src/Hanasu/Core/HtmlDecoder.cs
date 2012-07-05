@@ -5,12 +5,29 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.IO;
+using System.Collections;
 
 namespace Hanasu.Core
 {
-    //Old code I wrote years ago. Dont mind it.
-    public class HtmlDecoder
+    public class HtmlTextUtility
     {
+        private static Hashtable HtmlDict = null;
+        static HtmlTextUtility()
+        {
+            HtmlDict = new Hashtable();
+            HtmlDict.Add("&nbsp", " ");
+            HtmlDict.Add("&quot;", "\"");
+            HtmlDict.Add("&lt;", "<");
+            HtmlDict.Add("&gt;", ">");
+            HtmlDict.Add("&#039;", "'");
+            HtmlDict.Add("&rsquo;", "’");
+            HtmlDict.Add("&amp;", "&");
+            HtmlDict.Add("&iuml;", "ï");
+            HtmlDict.Add("&eacute;", "é");
+            HtmlDict.Add("&Eacute;", "É");
+            HtmlDict.Add("&Ccedil;", "Ç");
+            HtmlDict.Add("&ccedil;", "ç");
+        }
         public static string GetHTML(string url)
         {
             string result = null;
@@ -22,7 +39,25 @@ namespace Hanasu.Core
         }
         public static string Decode(string html)
         {
-            return html.Replace("&nbsp", " ").Replace("&quot;", "\"").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&#039;", "'").Replace("&rsquo;", "’").Replace("&amp;", "&").Replace("&iuml;", "ï");
+            var res = html;
+            foreach (string k in HtmlDict.Keys)
+            {
+                res = res.Replace(k, (string)HtmlDict[k]);
+            }
+            return res;
+        }
+        public static string Encode(string html)
+        {
+            var res = html;
+            foreach (string k in HtmlDict.Keys)
+            {
+                res = res.Replace((string)HtmlDict[k], k);
+            }
+            return res;
+        }
+        public static string UrlEncode(string text)
+        {
+            return text.Replace(" ", "%20");
         }
     }
 }

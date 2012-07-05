@@ -396,6 +396,7 @@ namespace Hanasu
 
         private bool unableToConnectNotificationShown = false;
         private string lastMediaTxt = null; //prevents the below event from constantly queueing the same song title.
+        private string lastSongTxt = null;
         private SongData currentSong;
         internal Hashtable currentStationAttributes { get; set; }
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
@@ -408,14 +409,14 @@ namespace Hanasu
                 {
                     var name = player.currentMedia.name;
 
-                    if (
-                        (name.Contains(" - ") && name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1 && !System.Text.RegularExpressions.Regex.IsMatch(name, @"^(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$", System.Text.RegularExpressions.RegexOptions.Compiled))
-                        || Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name)) //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
+                    if ((Hanasu.Services.Song.SongService.IsSongTitle(name, currentStation)))
                     {
+                        #region Handle Song Title
                         MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
-                        AddRawSongToLikedBtn.Visibility = System.Windows.Visibility.Visible;
+                        AddRawSongToLikedBtn.IsEnabled = true;
 
                         lastMediaTxt = name;
+                        lastSongTxt = name;
 
                         SongDataLbl.Text = name;
 
@@ -477,7 +478,7 @@ namespace Hanasu
                             }
                             else
                             {
-                                AddRawSongToLikedBtn.Visibility = System.Windows.Visibility.Hidden;
+                                AddRawSongToLikedBtn.IsEnabled = false;
 
                                 SongData dat = new SongData();
                                 try
@@ -513,6 +514,7 @@ namespace Hanasu
 
                             }
                         }
+                        #endregion
                     }
                     else
                     {
@@ -552,8 +554,17 @@ namespace Hanasu
                         else if (currentStation.StationType == StationType.TV)
                             SongDataLbl.Text = currentStation.Name;
 
+                        AddRawSongToLikedBtn.IsEnabled = false;
+
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
                             name, 4000, false, Services.Notifications.NotificationType.Information);
+                    }
+                }
+                else
+                {
+                    if (lastMediaTxt.ToLower().Contains(currentStation.Name.ToLower()) && lastSongTxt != lastMediaTxt)
+                    {
+                        lastMediaTxt = null;
                     }
                 }
             }
@@ -598,6 +609,8 @@ namespace Hanasu
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
 
+                    AddRawSongToLikedBtn.IsEnabled = true;
+
                     if (this.TaskbarItemInfo != null)
                         this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
 
@@ -638,7 +651,7 @@ namespace Hanasu
                 case WMPLib.WMPPlayState.wmppsStopped: NowPlayingGrid.Visibility = System.Windows.Visibility.Hidden;
                     playBtn.IsEnabled = true;
                     pauseBtn.IsEnabled = false;
-                    AddRawSongToLikedBtn.Visibility = System.Windows.Visibility.Hidden;
+                    AddRawSongToLikedBtn.IsEnabled = false;
 
                     bufferTimer.Stop();
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
@@ -763,6 +776,8 @@ namespace Hanasu
                 player.network.bufferingTime = 2000; // 2 seconds
                 SongDataLbl.Text = "Not Available";
             }
+
+            lastMediaTxt = null;
 
             currentStationAttributes.Clear();
 
@@ -919,7 +934,7 @@ namespace Hanasu
             SongIsLiked = true;
 
             LikeBtnInfo.IsEnabled = false;
-            AddRawSongToLikedBtn.Visibility = System.Windows.Visibility.Collapsed;
+            AddRawSongToLikedBtn.IsEnabled = false;
 
         }
         public class SongLikedEventInfo : StationEventInfo
@@ -1163,7 +1178,7 @@ namespace Hanasu
                         //make sure the song hasn't change since opening this dialog.
 
                         LikeBtnInfo.IsEnabled = false;
-                        AddRawSongToLikedBtn.Visibility = Visibility.Hidden;
+                        AddRawSongToLikedBtn.IsEnabled = false;
                     }
 
                     Hanasu.Services.Events.EventService.RaiseEvent(Services.Events.EventType.Song_Liked,
@@ -1176,7 +1191,7 @@ namespace Hanasu
             }
             else
             {
-                AddRawSongToLikedBtn.Visibility = System.Windows.Visibility.Collapsed;
+                AddRawSongToLikedBtn.IsEnabled = false;
             }
         }
 

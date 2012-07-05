@@ -15,8 +15,8 @@ namespace Hanasu.Services.Song.Lyric_Data_Sources
             Hanasu.Services.Logging.LogService.Instance.WriteLog(this, "Attempting to find lyrics for artist: " + artist + " - track: " + track);
 
             var url = String.Format(LyricFormatUrl,
-                        artist,
-                        track);
+                        HtmlTextUtility.UrlEncode(artist),
+                        HtmlTextUtility.UrlEncode(track));
 
             using (WebClient wc = new WebClient())
             {
@@ -41,7 +41,7 @@ namespace Hanasu.Services.Song.Lyric_Data_Sources
 
                     lyricdata = Regex.Replace(lyricdata, "<.+?>", "", RegexOptions.Compiled);
 
-                    lyrics = HtmlDecoder.Decode(lyricdata);
+                    lyrics = HtmlTextUtility.Decode(lyricdata);
 
                     if (lyrics == null)
                     {

@@ -130,6 +130,24 @@ namespace Hanasu.Services.Song
         public const string NearFrontFeatureRegex = @"\W(ft|FT|feat|FEAT)\.(\W)?.+?\-";
         public const string NearEndFeatureRegex = @"\W(ft|FT|feat|FEAT)\..+?(\n|$)";
 
+        public static bool IsSongTitle(string name, Station currentStation)
+        {
+            //cheap way to check if its a song title. not perfect and doesn't work 100% of the time.
+
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("IsSongTitle: " + name + " |||| " + currentStation.Name);
+#endif
+
+                if (name.Contains(" - "))
+                {
+                    return name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1;
+                }
+                else if (System.Text.RegularExpressions.Regex.IsMatch(name.ToLower(), @"(^)?(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?($|\W)?", System.Text.RegularExpressions.RegexOptions.Compiled))
+                    return false;
+                else
+                    return Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name);
+        }
+
         public static IAlbumInfoDataSource DataSource { get; set; }
     }
 }
