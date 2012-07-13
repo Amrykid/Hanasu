@@ -47,6 +47,8 @@ namespace Hanasu
 
                 Hanasu.Services.LikedSongs.LikedSongService.Initialize();
 
+                Hanasu.Services.Schedule.ScheduleService.Initialize();
+
                 HandleMediaKeyHooks();
 
                 Hanasu.Services.Events.EventService.AttachHandler(Services.Events.EventType.Theme_Changed,
@@ -216,10 +218,11 @@ namespace Hanasu
 
             this.tabControl1.SelectedIndex = 1;
 
-            ((App)App.Current).SplashScreen.Close(); //close the splash screen.
+
 
 #if !DEBUG
             tabItem3.Visibility = System.Windows.Visibility.Hidden;
+            ((App)App.Current).SplashScreen.Close(); //close the splash screen.
 #endif
         }
 
@@ -932,6 +935,8 @@ namespace Hanasu
         private bool isMuted = false;
         private void VolumeMuteBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!IsWMPInitialized) return;
+
             if (player.settings.mute)
             {
                 this.VolumeMuteBtnVisualBrush.Visual = (Visual)this.Resources["appbar_sound_3"];
@@ -1235,6 +1240,25 @@ namespace Hanasu
             var x = thisWindow.ActualWidth / 2 - (MediaControlPanel.ActualWidth / 2);
             NowPlayingGrid.Width = x;
             SongDataLbl.Width = x - 30;
+        }
+
+        private void StationsListViewViewScheduleMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (StationsListView.SelectedItem != null)
+            {
+                var station = (Station)StationsListView.SelectedItem;
+                ShowStationScheduleIfAny(station);
+            }
+        }
+
+        private void ShowStationScheduleIfAny(Station station)
+        {
+            if (Hanasu.Services.Schedule.ScheduleService.Instance.StationHasSchedule(station))
+            {
+                Window w = new Window();
+                w.Content = Hanasu.Services.Schedule.ScheduleService.Instance.GetSuitableViewingControl(station);
+                w.Show();
+            }
         }
     }
 }

@@ -40,6 +40,7 @@ namespace Hanasu.Services.Events
         public static void DetachHandler(EventReference eref)
         {
             EventHandlers.Remove(eref);
+            eref.HandlerMethod = null;
         }
 
         public static void RaiseEventAsync(EventType type, EventInfo data)

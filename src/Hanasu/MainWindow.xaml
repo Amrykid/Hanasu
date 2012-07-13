@@ -167,12 +167,12 @@
                                             <ListView.ContextMenu>
                                                 <ContextMenu>
                                                     <MenuItem Header="View Homepage" Name="StationsListViewViewHomepageMenuItem" Click="StationsListViewViewHomepageMenuItem_Click"/>
+                                                    <MenuItem Header="View Schedule" Name="StationsListViewViewScheduleMenuItem" Click="StationsListViewViewScheduleMenuItem_Click"/>
                                                 </ContextMenu>
                                             </ListView.ContextMenu>
                                         </ListView>
                                         <!--</TreeViewItem>
                                         </TreeView>-->
-
                                     </Grid>
 
                                 </ac:AdornedControl>

@@ -37,10 +37,12 @@ namespace Hanasu
                 }
                 else
                 {
+#if !DEBUG
                     //Start the splash screen.
                     SplashScreen = new Windows.SplashScreen();
                     SplashScreen.Show();
                     SplashScreen.Focus();
+#endif
                 }
             }
             else
