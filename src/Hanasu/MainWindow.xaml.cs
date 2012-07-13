@@ -115,20 +115,20 @@ namespace Hanasu
                                     else
                                         player.Ctlcontrols.play();
 
-                                    break;
+                                    return new IntPtr(1);
                                 }
                             case System.Windows.Forms.Keys.MediaNextTrack:
                                 {
                                     NextStation();
-                                    break;
+                                    return new IntPtr(1);
                                 }
                             case System.Windows.Forms.Keys.MediaPreviousTrack:
                                 {
                                     PreviousStation();
-                                    break;
+                                    return new IntPtr(1);
                                 }
                             case System.Windows.Forms.Keys.MediaStop: player.Ctlcontrols.stop();
-                                break;
+                                return new IntPtr(1);
 
                         }
                     }
