@@ -20,5 +20,8 @@ namespace Hanasu.Services.Stations
 
         public Uri LocalStationFile { get; set; }
         public bool Cacheable { get; set; }
+
+        public Uri ScheduleUrl { get; set; }
+        public StationScheduleType ScheduleType { get; set; }
     }
 }

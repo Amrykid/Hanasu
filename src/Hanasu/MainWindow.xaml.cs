@@ -181,19 +181,13 @@ namespace Hanasu
 
             this.KeyUp -= MainWindow_KeyUp;
 
-            player.PlayStateChange -= player_PlayStateChange;
-            player.MediaChange -= player_MediaChange;
-            player.MediaError -= player_MediaError;
-            player.ScriptCommand -= player_ScriptCommand;
-            player.MarkerHit -= player_MarkerHit;
-            player.EndOfStream -= player_EndOfStream;
-            player.CurrentMediaItemAvailable -= player_CurrentMediaItemAvailable;
+            if (IsWMPInitialized)
+            {
+                ShutdownWMPClose();
+            }
 
             bufferTimer.Elapsed -= bufferTimer_Elapsed;
             bufferTimer.Dispose();
-
-            player.close();
-            player.Dispose();
 
             this.Loaded -= MainWindow_Loaded;
             this.Unloaded -= MainWindow_Unloaded;
@@ -202,6 +196,38 @@ namespace Hanasu
         private AxWMPLib.AxWindowsMediaPlayer player = null;
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //InitializeWMPPControl();
+
+
+            VolumeSlider.Value = Hanasu.Services.Settings.SettingsService.Instance.LastSetVolume;
+
+            HandleWindowsTaskbarstuff();
+
+            bufferTimer = new Timer();
+            bufferTimer.Elapsed += bufferTimer_Elapsed;
+
+            bufferTimer.Interval = 1000;
+
+            currentStationAttributes = new Hashtable();
+
+            attemptToConnectTimer = new Timer();
+            attemptToConnectTimer.Elapsed += new ElapsedEventHandler(attemptToConnectTimer_Elapsed);
+            attemptToConnectTimer.Interval = 20000; // 20 seconds
+
+            this.tabControl1.SelectedIndex = 1;
+
+            ((App)App.Current).SplashScreen.Close(); //close the splash screen.
+
+#if !DEBUG
+            tabItem3.Visibility = System.Windows.Visibility.Hidden;
+#endif
+        }
+
+        public bool IsWMPInitialized = false;
+        private void InitializeWMPPControl()
+        {
+            if (IsWMPInitialized) return;
+
             //configure the wmp control
             windowsFormsHost1.Child = new Hanasu.Core.AxWMP();
             player = ((Hanasu.Core.AxWMP)windowsFormsHost1.Child).axWindowsMediaPlayer1;
@@ -228,29 +254,24 @@ namespace Hanasu
 
             player.EndOfStream += player_EndOfStream;
 
+            IsWMPInitialized = true;
+        }
+        private void ShutdownWMPClose()
+        {
+            if (!IsWMPInitialized) return;
 
-            VolumeSlider.Value = Hanasu.Services.Settings.SettingsService.Instance.LastSetVolume;
+            player.PlayStateChange -= player_PlayStateChange;
+            player.MediaChange -= player_MediaChange;
+            player.MediaError -= player_MediaError;
+            player.ScriptCommand -= player_ScriptCommand;
+            player.MarkerHit -= player_MarkerHit;
+            player.EndOfStream -= player_EndOfStream;
+            player.CurrentMediaItemAvailable -= player_CurrentMediaItemAvailable;
 
-            HandleWindowsTaskbarstuff();
+            player.close();
+            player.Dispose();
 
-            bufferTimer = new Timer();
-            bufferTimer.Elapsed += bufferTimer_Elapsed;
-
-            bufferTimer.Interval = 1000;
-
-            currentStationAttributes = new Hashtable();
-
-            attemptToConnectTimer = new Timer();
-            attemptToConnectTimer.Elapsed += new ElapsedEventHandler(attemptToConnectTimer_Elapsed);
-            attemptToConnectTimer.Interval = 20000; // 20 seconds
-
-            this.tabControl1.SelectedIndex = 1;
-
-            ((App)App.Current).SplashScreen.Close(); //close the splash screen.
-
-#if !DEBUG
-            tabItem3.Visibility = System.Windows.Visibility.Hidden;
-#endif
+            windowsFormsHost1.Child = null;
         }
 
         void attemptToConnectTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -696,6 +717,9 @@ namespace Hanasu
 
         private void StationsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (!IsWMPInitialized)
+                InitializeWMPPControl();
+
             //get the selected station and play it
 
             var station = (Station)StationsListView.SelectedItem;
@@ -816,14 +840,16 @@ namespace Hanasu
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            player.settings.volume = (int)VolumeSlider.Value;
+            if (IsWMPInitialized)
+                player.settings.volume = (int)VolumeSlider.Value;
 
-            Hanasu.Services.Settings.SettingsService.Instance.LastSetVolume = player.settings.volume;
+            Hanasu.Services.Settings.SettingsService.Instance.LastSetVolume = (int)VolumeSlider.Value;
         }
 
         private void playBtn_Click(object sender, RoutedEventArgs e)
         {
-            player.Ctlcontrols.play();
+            if (IsWMPInitialized)
+                player.Ctlcontrols.play();
         }
 
         private void pauseBtn_Click(object sender, RoutedEventArgs e)

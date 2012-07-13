@@ -145,6 +145,7 @@
     <Compile Include="Services\Stations\RadioFormat.cs" />
     <Compile Include="Services\Stations\Station.cs" />
     <Compile Include="Services\Stations\StationLanguage.cs" />
+    <Compile Include="Services\Stations\StationScheduleType.cs" />
     <Compile Include="Services\Stations\StationsService.cs" />
     <Compile Include="Services\Stations\StationsServiceStatus.cs" />
     <Compile Include="Services\Stations\StationType.cs" />
@@ -361,7 +362,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" />
+      <UserProperties BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
