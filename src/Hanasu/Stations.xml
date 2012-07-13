@@ -9,6 +9,7 @@
     <Language>English</Language>
     <Cacheable>True</Cacheable>
     <ExplicitExtension>.m3u</ExplicitExtension>
+    <Schedule type="page">http://www.animenfo.com/radio/schedule.php</Schedule>
   </Station>
   <Station>
     <Name>Gensokyo Radio</Name>
@@ -64,6 +65,7 @@
     <City>N/A</City>
     <Language>English</Language>
     <Cacheable>True</Cacheable>
+    <Schedule type="image">http://www.xamfm.com/images/stories/schedules/schedule_xamfm_02-05-2011.png</Schedule>
   </Station>
   <Station>
     <Name>XAMFM2</Name>
@@ -73,6 +75,7 @@
     <City>N/A</City>
     <Language>English</Language>
     <Cacheable>True</Cacheable>
+    <Schedule type="image">http://www.xamfm.com/images/stories/schedules/schedule_xamfm2_02-05-2011.png</Schedule>
   </Station>
   <Station>
     <Name>Vocaloid.FM</Name>
@@ -120,7 +123,7 @@
     <City>N/A</City>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
-    <Schedule>https://www.google.com/calendar/ical/mellowb%40jpopsuki.eu/public/basic.ics</Schedule>
+    <Schedule type="ics">https://www.google.com/calendar/ical/mellowb%40jpopsuki.eu/public/basic.ics</Schedule>
   </Station>
   <Station>
     <Name>Big B Radio</Name>
