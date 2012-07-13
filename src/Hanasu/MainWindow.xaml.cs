@@ -19,6 +19,7 @@ using System.IO;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Windows.Shell;
+using System.Collections.Generic;
 
 namespace Hanasu
 {
@@ -399,6 +400,7 @@ namespace Hanasu
         private string lastSongTxt = null;
         private SongData currentSong;
         internal Hashtable currentStationAttributes { get; set; }
+        private List<string> songMessages = new List<string>();
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
         {
             try
@@ -423,6 +425,8 @@ namespace Hanasu
                         SongIsLiked = false;
 
                         LikeBtnInfo.IsEnabled = true;
+
+                        songMessages.Clear();
 
 
                         //song changed. maybe a couple of seconds late.
@@ -556,8 +560,12 @@ namespace Hanasu
 
                         AddRawSongToLikedBtn.IsEnabled = false;
 
-                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
-                            name, 4000, false, Services.Notifications.NotificationType.Information);
+                        if (songMessages.Contains(name) == false)
+                        {
+                            Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
+                                name, 4000, false, Services.Notifications.NotificationType.Information);
+                            songMessages.Add(name);
+                        }
                     }
                 }
                 else
@@ -770,6 +778,7 @@ namespace Hanasu
             {
                 player.network.bufferingTime = 10000; // 10 seconds ahead
                 SongDataLbl.Text = station.Name;
+
             }
             else
             {

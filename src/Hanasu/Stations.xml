@@ -120,6 +120,7 @@
     <City>N/A</City>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Schedule>https://www.google.com/calendar/ical/mellowb%40jpopsuki.eu/public/basic.ics</Schedule>
   </Station>
   <Station>
     <Name>Big B Radio</Name>
