@@ -123,7 +123,7 @@
                                             </Grid>
                                         </Border>
                                         <!-- Width="{Binding ElementName=thisWindow, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntCalcConverter1}, ConverterParameter=-;%7}" -->
-                                        <ListView Grid.Row="1" Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="StationsListView_TargetUpdated" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" IsEnabled="False">
+                                        <ListView Grid.Row="1" Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="StationsListView_TargetUpdated" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" SelectionChanged="StationsListView_SelectionChanged" IsEnabled="False">
                                             <ListView.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
@@ -166,8 +166,8 @@
                                             </ListView.View>
                                             <ListView.ContextMenu>
                                                 <ContextMenu>
-                                                    <MenuItem Header="View Homepage" Name="StationsListViewViewHomepageMenuItem" Click="StationsListViewViewHomepageMenuItem_Click"/>
-                                                    <MenuItem Header="View Schedule" Name="StationsListViewViewScheduleMenuItem" Click="StationsListViewViewScheduleMenuItem_Click"/>
+                                                    <MenuItem Header="View Homepage" Name="StationsListViewViewHomepageMenuItem" IsEnabled="False" Click="StationsListViewViewHomepageMenuItem_Click"/>
+                                                    <MenuItem Header="View Schedule" Name="StationsListViewViewScheduleMenuItem" IsEnabled="False" Click="StationsListViewViewScheduleMenuItem_Click"/>
                                                 </ContextMenu>
                                             </ListView.ContextMenu>
                                         </ListView>

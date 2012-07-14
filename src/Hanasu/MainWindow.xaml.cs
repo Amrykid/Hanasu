@@ -1260,5 +1260,28 @@ namespace Hanasu
                 w.Show();
             }
         }
+
+        private void StationsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (StationsListView.SelectedItem == null)
+            {
+                StationsListViewViewHomepageMenuItem.IsEnabled = false;
+                StationsListViewViewScheduleMenuItem.IsEnabled = false;
+            }
+            else
+            {
+                var station = (Station)StationsListView.SelectedItem;
+
+                if (station.Homepage == null)
+                    StationsListViewViewHomepageMenuItem.IsEnabled = false;
+                else
+                    StationsListViewViewHomepageMenuItem.IsEnabled = true;
+
+                if (station.ScheduleUrl == null)
+                    StationsListViewViewScheduleMenuItem.IsEnabled = false;
+                else
+                    StationsListViewViewScheduleMenuItem.IsEnabled = true;
+            }
+        }
     }
 }
