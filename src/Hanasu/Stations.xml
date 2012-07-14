@@ -178,8 +178,9 @@
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>False</Cacheable>
+    <Schedule type="page">http://radio.keiichi.net/index2.php?target=php/programs.php</Schedule>
   </Station>
-  <Station>
+  <!--<Station>
     <Name>Odoroku TV</Name>
     <DataSource><![CDATA[http://www.odoroku.tv/cgi-bin/mov/live.cgi?no=1&bps=512]]></DataSource>
     <Homepage>http://www.odoroku.tv/index.html</Homepage>
@@ -188,7 +189,7 @@
     <ExplicitExtension>.asx</ExplicitExtension>
     <StationType>TV</StationType>
     <Language>Japanese</Language>
-  </Station>
+  </Station>-->
   <Station>
     <Name>Seebit TV</Name>
     <DataSource><![CDATA[mms://see.broadcast-neo.tv/neo_s]]></DataSource>
@@ -265,6 +266,7 @@
     <StationType>Radio</StationType>
     <Language>Korean</Language>
     <Cacheable>True</Cacheable>
+    <Schedule type="page">http://www.soulnb.com/timetable</Schedule>
   </Station>
   <Station>
     <Name>J-Jams Radio</Name>
@@ -331,6 +333,7 @@
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Schedule type="page">http://www.babelentertainment.com/babelradio.html</Schedule>
   </Station>
   <Station>
     <Name>Radio MIHAMA</Name>
@@ -375,6 +378,7 @@
     <StationType>Radio</StationType>
     <Language>Spanish</Language>
     <Cacheable>True</Cacheable>
+    <Schedule type="page">http://www.anime-obsesion.net/horarios/</Schedule>
   </Station>
   <Station>
     <Name>Anime Layer Radio</Name>
