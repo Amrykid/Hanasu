@@ -14,7 +14,7 @@ namespace Hanasu.Services.Song.Album_Info_Data_Source
             try
             {
                 var url = "http://www.yesasia.com/us/search-music/" + string.Join("-", (song.Artist.ToLower() + " " + song.TrackTitle.ToLower()).Split(' ')).Replace("-", ">>>") + "/0-0-0-bpt.48_bt.48_q." + string.Join("+", (song.Artist.ToLower() + " " + song.TrackTitle.ToLower()).Split(' ')).Replace("-", ">>>") + "-en/list.html";
-                var html = HtmlTextUtility.GetHTML(url);
+                var html = HtmlTextUtility.GetHtmlFromUrl(url);
                 //<span class="cover"><img alt="BoA Vol. 6 - Hurricane Venus" width="72" src="http://i.yai.bz/Assets/68/344/s_p0013234468.jpg"></span>
 
                 var sec = Regex.Match(html, "<dd class=\"description\">.+?</dd>", RegexOptions.Compiled | RegexOptions.Singleline);

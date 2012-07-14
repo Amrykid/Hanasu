@@ -28,7 +28,7 @@ namespace Hanasu.Core
             HtmlDict.Add("&Ccedil;", "Ç");
             HtmlDict.Add("&ccedil;", "ç");
         }
-        public static string GetHTML(string url)
+        public static string GetHtmlFromUrl(string url)
         {
             string result = null;
             using (var wc = new WebClient())
@@ -36,6 +36,10 @@ namespace Hanasu.Core
                 result = wc.DownloadString(url);
             }
             return result;
+        }
+        public static string GetHtmlFromUrl(Uri uri)
+        {
+            return GetHtmlFromUrl(uri.ToString());
         }
         public static string Decode(string html)
         {

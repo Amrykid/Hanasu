@@ -8,9 +8,9 @@ namespace Hanasu.Services.Schedule.Parsers
 {
     public class ICSParser
     {
-        public static object LoadFromUrl(Uri url)
+        public static ICSCalendar LoadFromUrl(Uri url)
         {
-            object res = null;
+            ICSCalendar res; 
 
             using (WebClient wc = new WebClient())
             {
@@ -21,7 +21,7 @@ namespace Hanasu.Services.Schedule.Parsers
 
             return res;
         }
-        public static object Parse(string data)
+        public static ICSCalendar Parse(string data)
         {
             var cal = new ICSCalendar();
 

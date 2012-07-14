@@ -99,10 +99,11 @@
     <Compile Include="Core\Converters\IntCalcConverter.cs" />
     <Compile Include="Core\Converters\StringUriConverter.cs" />
     <Compile Include="Core\Converters\VisualStationTypeConverter.cs" />
-    <Compile Include="Core\HtmlDecoder.cs" />
+    <Compile Include="Core\HtmlTextUtility.cs" />
     <Compile Include="Core\NetworkUtil.cs" />
     <Compile Include="Core\ObservableQueue.cs" />
     <Compile Include="Core\UriToBitmapImageConverter.cs" />
+    <Compile Include="Core\WebBrowserUtilities.cs" />
     <Compile Include="Core\XElementExtensions.cs" />
     <Compile Include="Data\ID3\ID3Data.cs" />
     <Compile Include="Data\ID3\ID3Parser.cs" />
@@ -364,7 +365,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
