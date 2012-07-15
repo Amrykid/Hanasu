@@ -4,6 +4,7 @@
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:stations="clr-namespace:Hanasu.Services.Stations"
         xmlns:liked="clr-namespace:Hanasu.Services.LikedSongs"
+        xmlns:friends="clr-namespace:Hanasu.Services.Friends"
         xmlns:ac="clr-namespace:AdornedControl"
         xmlns:core="clr-namespace:Hanasu.Core"
         xmlns:log="clr-namespace:Hanasu.Services.Logging"
@@ -256,6 +257,72 @@
                             <ListView.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Deleted Selected Item(s)" Name="DeleteSelectedLikeItemsMenuItem" Click="DeleteSelectedLikeItemsMenuItem_Click"/>
+                                </ContextMenu>
+                            </ListView.ContextMenu>
+                        </ListView>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Friends" Name="FriendsTab">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="45"/>
+                            <RowDefinition Height="410*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" BorderThickness=".5" BorderBrush="{StaticResource AccentColorBrush}">
+                            <Grid Background="Transparent">
+                                <StackPanel Orientation="Horizontal" Background="Transparent">
+                                    <Button Height="45" Width="45" Name="AddFriendToFriendsListBtn" Click="AddFriendToFriendsListBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10">
+                                        <Rectangle Width="25" Height="25" Margin="0 0 0 0">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_add}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <Button.ToolTip>
+                                            <ToolTip Content="Adds a friend to the friends list by using a wizard."/>
+                                        </Button.ToolTip>
+                                    </Button>
+                                </StackPanel>
+                                <TextBox FontSize="16" Margin="0 0 5 0" HorizontalAlignment="Right" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Liked..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="LikedSongsSearchBox_TextChanged" Width="200"/>
+                            </Grid>
+                        </Border>
+                        <ListView Grid.Row="1" Foreground="Black" Name="FriendsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static friends:FriendsService.Instance}, Path=Friends, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
+                                    </VirtualizingStackPanel>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="*" Width="85">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid Height="80">
+                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="UserName" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding UserName, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Status" Width="300">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding Status, UpdateSourceTrigger=LostFocus}" FontSize="17" Foreground="Black"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Deleted Selected Item(s)" Name="DeleteSelectedFriendItemsMenuItem"/>
                                 </ContextMenu>
                             </ListView.ContextMenu>
                         </ListView>

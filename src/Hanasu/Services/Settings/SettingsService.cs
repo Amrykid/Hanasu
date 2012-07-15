@@ -119,6 +119,8 @@ namespace Hanasu.Services.Settings
             doc.Add(settings);
 
             doc.Save(SettingsFilepath);
+
+            System.Windows.Application.Current.Exit -= Current_Exit;
         }
         public string SettingsFilepath { get; private set; }
 

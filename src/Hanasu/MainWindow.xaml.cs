@@ -49,6 +49,8 @@ namespace Hanasu
 
                 Hanasu.Services.Schedule.ScheduleService.Initialize();
 
+                Hanasu.Services.Friends.FriendsService.Initialize();
+
                 HandleMediaKeyHooks();
 
                 Hanasu.Services.Events.EventService.AttachHandler(Services.Events.EventType.Theme_Changed,
@@ -1282,6 +1284,23 @@ namespace Hanasu
                 else
                     StationsListViewViewScheduleMenuItem.IsEnabled = true;
             }
+        }
+
+        private void AddFriendToFriendsListBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var afd = new AddFriendWindow();
+            afd.Owner = this;
+
+            if ((bool)afd.ShowDialog())
+            {
+                Hanasu.Services.Friends.FriendsService.Instance.AddFriend(
+                    afd.TextBoxUserName.Text,
+                    afd.IPBox.Text,
+                    int.Parse(
+                        afd.TextBoxKey.Text));
+            }
+
+            afd.Close();
         }
     }
 }

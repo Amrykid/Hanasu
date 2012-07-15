@@ -8,6 +8,7 @@ using Hanasu.Core;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Hanasu.Services.Events;
+using System.Runtime.Serialization;
 
 namespace Hanasu.Services.LikedSongs
 {
@@ -35,14 +36,21 @@ namespace Hanasu.Services.LikedSongs
 
             if (System.IO.File.Exists(Instance.LikedSongDBFile))
             {
-                using (var fs = new FileStream(Instance.LikedSongDBFile, FileMode.OpenOrCreate))
+                try
                 {
-                    BinaryFormatter bf = new BinaryFormatter();
-                    Instance.LikedSongs = (ObservableCollection<SongData>)bf.Deserialize(fs);
-                    fs.Close();
-                }
+                    using (var fs = new FileStream(Instance.LikedSongDBFile, FileMode.OpenOrCreate))
+                    {
+                        IFormatter bf = new BinaryFormatter();
+                        Instance.LikedSongs = (ObservableCollection<SongData>)bf.Deserialize(fs);
+                        fs.Close();
+                    }
 
-                Instance.OnPropertyChanged("LikedSongs");
+                    Instance.OnPropertyChanged("LikedSongs");
+                }
+                catch (Exception)
+                {
+                    Instance.LikedSongs = new ObservableCollection<SongData>();
+                }
             }
             else
             {
@@ -61,12 +69,13 @@ namespace Hanasu.Services.LikedSongs
 
         static void Current_Exit(object sender, System.Windows.ExitEventArgs e)
         {
-            using (var fs = new FileStream(Instance.LikedSongDBFile, FileMode.OpenOrCreate))
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(fs, Instance.LikedSongs);
-                fs.Close();
-            }
+            if (Instance.LikedSongs.Count > 0)
+                using (var fs = new FileStream(Instance.LikedSongDBFile, FileMode.OpenOrCreate))
+                {
+                    IFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Instance.LikedSongs);
+                    fs.Close();
+                }
         }
         private static void HandleSongLiked(EventInfo e)
         {
