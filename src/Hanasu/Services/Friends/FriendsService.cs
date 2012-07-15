@@ -10,6 +10,11 @@ using System.Runtime.Serialization;
 using System.Windows.Data;
 using Hanasu.Windows;
 using System.Windows;
+using System.Net.Sockets;
+using System.Threading;
+using System.Net;
+using Hanasu.Services.Events;
+using System.Xml.Linq;
 
 namespace Hanasu.Services.Friends
 {
@@ -32,22 +37,109 @@ namespace Hanasu.Services.Friends
 
             System.Windows.Application.Current.Exit += Current_Exit;
 
+            Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Settings_Created, HandleSettingsCreated);
+            Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Settings_Loaded, HandleSettingsLoaded);
+            Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Settings_Saving, HandleSettingsSaving);
+
             LoadFriends();
 
+            GlobalSocket = new UdpClient(FriendConnection.Port, AddressFamily.InterNetwork);
+
+            ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+            {
+                HandleConnection();
+            }));
+
             foreach (var con in Instance.Friends)
-                con.SetPresence(true);
+                con.Connection.SetPresence(true);
 
             Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Station_Changed,
                 e =>
                 {
                     var e2 = (Hanasu.MainWindow.StationEventInfo)e;
 
-                    foreach (FriendConnection f in Instance.Friends)
-                        f.SendStatusChange("Now listening to " + e2.CurrentStation.Name);
+                    foreach (FriendView f in Instance.Friends)
+                        f.Connection.SendStatusChange("Now listening to " + e2.CurrentStation.Name);
                 });
 
             IsInitialized = true;
         }
+
+
+        private static void HandleSettingsCreated(EventInfo ei)
+        {
+            Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
+        }
+        private static void HandleSettingsLoaded(EventInfo ei)
+        {
+            Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
+
+            AvatarUrl = sdei.SettingsElement.ContainsElement("AvatarUrl") ? sdei.SettingsElement.Element("AvatarUrl").Value : null;
+        }
+        private static void HandleSettingsSaving(EventInfo ei)
+        {
+            Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
+
+            sdei.SettingsElement.Add(
+                new XElement("AvatarUrl", AvatarUrl));
+        }
+
+        #region Socket/UDP Stuff
+        internal static UdpClient GlobalSocket { get; set; }
+
+        private static bool PollForData()
+        {
+            return Hanasu.Services.Friends.FriendsService.GlobalSocket.Available > 0;
+        }
+        private static void HandleConnection()
+        {
+            try
+            {
+                if (PollForData())
+                {
+                    ReadData();
+                }
+
+                Thread.Sleep(5000);
+
+                HandleConnection();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+        private static void ReadData()
+        {
+            try
+            {
+                IPEndPoint e = null;
+                var data = GlobalSocket.Receive(ref e);
+                var str = System.Text.ASCIIEncoding.ASCII.GetString(data);
+
+                var spl = str.Split(new char[] { ' ' }, 3);
+
+                var sentKey = int.Parse(spl[1]);
+
+                var person = Instance.Friends.First(f => f.Connection.IPAddress == e.Address.ToString());
+
+                if (person != null)
+                {
+                    if (sentKey == person.Connection.Key)
+                    {
+                        Hanasu.Services.Friends.FriendsService.Instance.HandleReceievedData(person.Connection, spl[0], spl[2].Substring(1));
+                    }
+                    else
+                        return;
+                }
+
+            }
+            catch (Exception)
+            {
+            }
+
+        }
+        #endregion
 
         private static void LoadFriends()
         {
@@ -58,23 +150,29 @@ namespace Hanasu.Services.Friends
                     using (var fs = new FileStream(Instance.FriendsDBFile, FileMode.OpenOrCreate))
                     {
                         IFormatter bf = new BinaryFormatter();
-                        Instance.Friends = (ObservableCollection<FriendConnection>)bf.Deserialize(fs);
+
+                        var friends = (ObservableCollection<FriendConnection>)bf.Deserialize(fs);
+                        Instance.Friends = new ObservableCollection<FriendView>();
+
+                        foreach (FriendConnection fc in friends)
+                            Instance.Friends.Add(new FriendView(fc));
+
                         fs.Close();
                     }
 
-                    foreach (FriendConnection f in Instance.Friends)
-                        f.Initiate(f.IPAddress);
+                    foreach (FriendView f in Instance.Friends)
+                        f.Connection.Initiate(f.Connection.IPAddress);
 
                     Instance.OnPropertyChanged("Friends");
                 }
                 catch (Exception)
                 {
-                    Instance.Friends = new ObservableCollection<FriendConnection>();
+                    Instance.Friends = new ObservableCollection<FriendView>();
                 }
             }
             else
             {
-                Instance.Friends = new ObservableCollection<FriendConnection>();
+                Instance.Friends = new ObservableCollection<FriendView>();
             }
         }
 
@@ -85,23 +183,28 @@ namespace Hanasu.Services.Friends
             if (Instance.Friends.Count > 0)
             {
                 foreach (var con in Instance.Friends)
-                    con.SetPresence(false);
+                    con.Connection.SetPresence(false);
 
                 using (var fs = new FileStream(Instance.FriendsDBFile, FileMode.OpenOrCreate))
                 {
+                    var x = new ObservableCollection<FriendConnection>();
+                    foreach (var fv in Instance.Friends)
+                        x.Add(fv.Connection);
+
                     IFormatter bf = new BinaryFormatter();
-                    bf.Serialize(fs, Instance.Friends);
+                    bf.Serialize(fs, x);
                     fs.Close();
                 }
             }
         }
 
+        public static string AvatarUrl { get; set; }
 
         public static bool IsInitialized { get; private set; }
         public static FriendsService Instance { get; private set; }
 
         public string FriendsDBFile { get; private set; }
-        public ObservableCollection<FriendConnection> Friends { get; set; }
+        public ObservableCollection<FriendView> Friends { get; set; }
         private List<FriendChatWindow> ChatWindows = new List<FriendChatWindow>();
 
         internal void HandleReceievedData(FriendConnection friendConnection, string type, string p)
@@ -110,7 +213,9 @@ namespace Hanasu.Services.Friends
             {
                 case FriendConnection.STATUS_CHANGED:
                     {
-                        friendConnection.Status = p;
+
+                        var view = GetFriendViewFromConnection(friendConnection);
+                        view.Status = p;
                         friendConnection.IsOnline = true;
 
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(friendConnection.UserName + "'s Status",
@@ -133,7 +238,19 @@ namespace Hanasu.Services.Friends
                                     window.HandleMessage(p);
 
                                     if (window.IsVisible == false)
+                                    {
                                         window.Show();
+
+                                        try
+                                        {
+                                            var file = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.System)).Parent.FullName + "\\Media\\notify.wav";
+                                            var s = new System.Media.SoundPlayer(file);
+                                            s.PlaySync();
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
+                                    }
 
                                     window.Focus();
                                 }
@@ -146,6 +263,7 @@ namespace Hanasu.Services.Friends
                                     ChatWindows.Add(window);
                                 }
                             }));
+
                         break;
                     }
                 case FriendConnection.PRESENCE_ONLINE:
@@ -165,6 +283,9 @@ namespace Hanasu.Services.Friends
                             Notifications.NotificationsService.AddNotification("Friend Offline",
                                 friendConnection.UserName + " is now offline!", 3000, true);
 
+                            var view = GetFriendViewFromConnection(friendConnection);
+                            view.Status = "Offline";
+
                             friendConnection.IsOnline = false;
                         }
                         break;
@@ -172,6 +293,14 @@ namespace Hanasu.Services.Friends
             }
         }
 
+        public FriendView GetFriendViewFromConnection(FriendConnection conn)
+        {
+            return Instance.Friends.First(t => t.Connection == conn);
+        }
+        public FriendChatWindow GetChatWindow(FriendView friendView)
+        {
+            return GetChatWindow(friendView.Connection);
+        }
         public FriendChatWindow GetChatWindow(FriendConnection friendConnection)
         {
             if (ChatWindows.Any(f => ((FriendConnection)f.DataContext).UserName == friendConnection.UserName))
@@ -191,9 +320,10 @@ namespace Hanasu.Services.Friends
         public void AddFriend(string username, string ip, int key)
         {
             var f = new FriendConnection(username, ip, key);
-            Friends.Add(f);
+            Friends.Add(new FriendView(f));
             Instance.OnPropertyChanged("Friends");
         }
+
     }
     public delegate void EmptyDelegate();
 }

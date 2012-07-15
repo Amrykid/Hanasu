@@ -41,7 +41,7 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
-                        <GroupBox Width="200" Header="UserName:" BorderThickness="0" FontSize="17">
+                        <GroupBox Width="200" Header="User Name:" BorderThickness="0" FontSize="17">
                             <TextBox Name="TextBoxUserName" FontSize="15"/>
                         </GroupBox>
                         <Separator/>

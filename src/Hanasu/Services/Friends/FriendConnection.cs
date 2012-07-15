@@ -27,26 +27,25 @@ namespace Hanasu.Services.Friends
 
         public void Initiate(string IP)
         {
-            Socket = new UdpClient(Port, AddressFamily.InterNetwork);
-            //Socket.ExclusiveAddressUse = false;
+            // Socket = new UdpClient();
             EndPoint = new IPEndPoint(System.Net.IPAddress.Parse(IP), 46318);
-            Socket.Connect(EndPoint);
-            IsConnected = false;
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
-            {
-                HandleConnection();
-            }));
+            //Socket.Connect(EndPoint);
+
+            IsConnected = true;
+
         }
+
         public string UserName { get; private set; }
-        private IPEndPoint EndPoint = null;
+        internal IPEndPoint EndPoint = null;
         public int Key { get; private set; }
         public string IPAddress { get; private set; }
 
         public bool IsConnected { get; private set; }
 
-        [NonSerialized]
-        private UdpClient Socket = null;
+        public string AvatarUrl { get; set; }
+
+        //private UdpClient Socket = null;
 
         [NonSerialized]
         private string _status = null;
@@ -57,55 +56,10 @@ namespace Hanasu.Services.Friends
         }
         public static readonly System.Windows.DependencyProperty StatusProperty = System.Windows.DependencyProperty.Register("Status", typeof(string), typeof(FriendConnection));
 
-        private bool PollForData()
-        {
-            return Socket.Available > 0;
-        }
-        private void HandleConnection()
-        {
-            try
-            {
-                if (PollForData())
-                {
-                    ReadData();
-                }
-
-                Thread.Sleep(5000);
-
-                HandleConnection();
-            }
-            catch (Exception)
-            {
-                IsConnected = false;
-                return;
-            }
-        }
-        private void ReadData()
-        {
-            try
-            {
-                var data = Socket.Receive(ref EndPoint);
-                var str = System.Text.ASCIIEncoding.ASCII.GetString(data);
-
-                var spl = str.Split(new char[] { ' ' }, 3);
-
-                var sentKey = int.Parse(spl[1]);
-                if (sentKey == Key)
-                {
-                    Hanasu.Services.Friends.FriendsService.Instance.HandleReceievedData(this, spl[0], spl[2].Substring(1));
-                }
-                else
-                    return;
-
-            }
-            catch (Exception)
-            {
-            }
-        }
         private void SendRaw(string msg)
         {
             var data = System.Text.ASCIIEncoding.ASCII.GetBytes(msg);
-            Socket.Send(data, data.Length);
+            Hanasu.Services.Friends.FriendsService.GlobalSocket.Send(data, data.Length, EndPoint);
         }
         public void SendData(string data, string type = "NOTIF")
         {

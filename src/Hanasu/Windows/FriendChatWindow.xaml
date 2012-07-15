@@ -4,11 +4,11 @@
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:conv="clr-namespace:Hanasu.Core.Converters"
         xmlns:core="clr-namespace:Hanasu.Core"
-        WindowStyle="SingleBorderWindow" ResizeMode="CanMinimize" Topmost="True" ShowInTaskbar="True" ShowMaxRestoreButton="False" ShowMinButton="True" WindowStartupLocation="CenterOwner"
+        WindowStyle="SingleBorderWindow" ResizeMode="CanMinimize" Topmost="False" ShowInTaskbar="True" ShowMaxRestoreButton="False" ShowMinButton="True" WindowStartupLocation="CenterOwner"
         Height="337" Width="449">
-    <Window.Title>
+    <metro:MetroWindow.Title>
         <Binding Path="UserName" StringFormat="Chatting with {0}"/>
-    </Window.Title>
+    </metro:MetroWindow.Title>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -40,7 +40,7 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="60" Height="60" Margin="10 0 0 0">
+                        <Image Width="60" Height="60" Margin="10 0 0 0" Source="{Binding Path=AvatarUrl, Converter={StaticResource UrlToBitmapConv}, UpdateSourceTrigger=PropertyChanged}">
 
                         </Image>
                         <StackPanel>

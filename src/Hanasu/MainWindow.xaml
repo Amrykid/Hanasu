@@ -282,6 +282,17 @@
                                             <ToolTip Content="Adds a friend to the friends list by using a wizard."/>
                                         </Button.ToolTip>
                                     </Button>
+                                    <Button Height="45" Width="45" Name="SetAvatarUrlBtn" Click="SetAvatarUrlBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10">
+                                        <Rectangle Width="25" Height="25" Margin="0 0 0 0">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_user}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <Button.ToolTip>
+                                            <ToolTip Content="Sets your displayed avatar."/>
+                                        </Button.ToolTip>
+                                    </Button>
                                 </StackPanel>
                                 <TextBox FontSize="16" Margin="0 0 5 0" HorizontalAlignment="Right" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Friends..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="LikedSongsSearchBox_TextChanged" Width="200"/>
                             </Grid>
@@ -299,7 +310,7 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid Height="80">
-                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" />
+                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" Source="{Binding Path=AvatarUrl, Converter={StaticResource UrlToBitmapConv}, UpdateSourceTrigger=PropertyChanged}" />
                                                 </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -314,7 +325,7 @@
                                     <GridViewColumn Header="Status" Width="300">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Label Content="{Binding Status, UpdateSourceTrigger=Default}" FontSize="17" Foreground="Black"/>
+                                                <Label Content="{Binding Status, UpdateSourceTrigger=PropertyChanged}" FontSize="17" Foreground="Black"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>

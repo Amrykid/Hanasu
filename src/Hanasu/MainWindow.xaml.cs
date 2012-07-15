@@ -82,6 +82,8 @@ namespace Hanasu
         {
             e.Handled = true;
 
+            if (e.Exception.Message.Contains("Collection was modified")) return;
+
             ErrorWindow ew = new ErrorWindow();
             ew.DataContext = e.Exception;
 
@@ -1312,13 +1314,18 @@ namespace Hanasu
         {
             if (FriendsListView.SelectedItem != null)
             {
-                var friend = (FriendConnection)FriendsListView.SelectedItem;
+                var friend = (FriendView)FriendsListView.SelectedItem;
                 var win = Hanasu.Services.Friends.FriendsService.Instance.GetChatWindow(friend);
                 win.Show();
             }
         }
 
         private void DeleteSelectedFriendItemsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SetAvatarUrlBtn_Click(object sender, RoutedEventArgs e)
         {
 
         }
