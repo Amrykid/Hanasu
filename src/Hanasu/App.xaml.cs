@@ -37,6 +37,7 @@ namespace Hanasu
                 }
                 else
                 {
+                    App.Current.ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose;
 #if !DEBUG
                     //Start the splash screen.
                     SplashScreen = new Windows.SplashScreen();

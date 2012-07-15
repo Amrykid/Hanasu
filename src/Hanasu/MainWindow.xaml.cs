@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Windows.Shell;
 using System.Collections.Generic;
+using Hanasu.Services.Friends;
 
 namespace Hanasu
 {
@@ -83,6 +84,10 @@ namespace Hanasu
 
             ErrorWindow ew = new ErrorWindow();
             ew.DataContext = e.Exception;
+
+#if DEBUG
+            Debugger.Break();
+#endif
 
             try
             {
@@ -1301,6 +1306,21 @@ namespace Hanasu
             }
 
             afd.Close();
+        }
+
+        private void SendMessageFriendSelectedMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (FriendsListView.SelectedItem != null)
+            {
+                var friend = (FriendConnection)FriendsListView.SelectedItem;
+                var win = Hanasu.Services.Friends.FriendsService.Instance.GetChatWindow(friend);
+                win.Show();
+            }
+        }
+
+        private void DeleteSelectedFriendItemsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

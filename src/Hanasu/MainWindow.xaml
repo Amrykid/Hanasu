@@ -283,7 +283,7 @@
                                         </Button.ToolTip>
                                     </Button>
                                 </StackPanel>
-                                <TextBox FontSize="16" Margin="0 0 5 0" HorizontalAlignment="Right" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Liked..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="LikedSongsSearchBox_TextChanged" Width="200"/>
+                                <TextBox FontSize="16" Margin="0 0 5 0" HorizontalAlignment="Right" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Friends..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="LikedSongsSearchBox_TextChanged" Width="200"/>
                             </Grid>
                         </Border>
                         <ListView Grid.Row="1" Foreground="Black" Name="FriendsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static friends:FriendsService.Instance}, Path=Friends, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
@@ -314,7 +314,7 @@
                                     <GridViewColumn Header="Status" Width="300">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Label Content="{Binding Status, UpdateSourceTrigger=LostFocus}" FontSize="17" Foreground="Black"/>
+                                                <Label Content="{Binding Status, UpdateSourceTrigger=Default}" FontSize="17" Foreground="Black"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -322,7 +322,8 @@
                             </ListView.View>
                             <ListView.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Deleted Selected Item(s)" Name="DeleteSelectedFriendItemsMenuItem"/>
+                                    <MenuItem Header="Send Message" Name="SendMessageFriendSelectedMenuItem" Click="SendMessageFriendSelectedMenuItem_Click"/>
+                                    <MenuItem Header="Deleted Selected Item(s)" Name="DeleteSelectedFriendItemsMenuItem" Click="DeleteSelectedFriendItemsMenuItem_Click"/>
                                 </ContextMenu>
                             </ListView.ContextMenu>
                         </ListView>
