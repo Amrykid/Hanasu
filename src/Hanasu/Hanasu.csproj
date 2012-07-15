@@ -164,6 +164,9 @@
     <Compile Include="Windows\AddFriendWindow.xaml.cs">
       <DependentUpon>AddFriendWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SetAvatarUrlWindow.xaml.cs">
+      <DependentUpon>SetAvatarUrlWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FriendChatWindow.xaml.cs">
       <DependentUpon>FriendChatWindow.xaml</DependentUpon>
     </Compile>
@@ -209,6 +212,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AddFriendWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\SetAvatarUrlWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -219,7 +219,7 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid Height="80">
-                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" Source="{Binding Path=AlbumCoverUri,Converter={StaticResource UrlToBitmapConv},Mode=OneTime}" />
+                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" Source="{Binding Path=AlbumCoverUri,Converter={StaticResource UrlToBitmapConv},IsAsync=True,Mode=OneTime}" />
                                                 </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -310,7 +310,7 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid Height="80">
-                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" Source="{Binding Path=AvatarUrl, Converter={StaticResource UrlToBitmapConv}, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" Source="{Binding Path=AvatarUrl, Converter={StaticResource UrlToBitmapConv},IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
                                                 </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>

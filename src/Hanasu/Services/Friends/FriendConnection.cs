@@ -17,6 +17,7 @@ namespace Hanasu.Services.Friends
         public const string CHAT_MESSAGE = "CHAT_MESSAGE";
         public const string PRESENCE_ONLINE = "PRESENCE_ONLINE";
         public const string PRESENCE_OFFLINE = "PRESENCE_OFFLINE";
+        public const string AVATAR_SET = "AVATAR_SET";
         internal FriendConnection(string userName, string IP, int KEY)
         {
             UserName = userName;
@@ -80,6 +81,10 @@ namespace Hanasu.Services.Friends
                 SendData("ONLINE", PRESENCE_ONLINE);
             else
                 SendData("OFFLINE", PRESENCE_OFFLINE);
+        }
+        public void SetAvatar(string avatarurl)
+        {
+            SendData(avatarurl, AVATAR_SET);
         }
 
         [NonSerialized]

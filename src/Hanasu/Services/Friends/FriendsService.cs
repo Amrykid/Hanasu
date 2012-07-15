@@ -50,9 +50,7 @@ namespace Hanasu.Services.Friends
                 HandleConnection();
             }));
 
-            foreach (var con in Instance.Friends)
-                con.Connection.SetPresence(true);
-
+            BroadcastPresence(true);
             Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Station_Changed,
                 e =>
                 {
@@ -65,6 +63,17 @@ namespace Hanasu.Services.Friends
             IsInitialized = true;
         }
 
+        private static void BroadcastPresence(bool isOnline)
+        {
+            foreach (var con in Instance.Friends)
+                con.Connection.SetPresence(isOnline);
+        }
+        private static void BroadcastAvatar(string url)
+        {
+            foreach (var con in Instance.Friends)
+                con.Connection.SetAvatar(url);
+        }
+
 
         private static void HandleSettingsCreated(EventInfo ei)
         {
@@ -75,6 +84,8 @@ namespace Hanasu.Services.Friends
             Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
 
             AvatarUrl = sdei.SettingsElement.ContainsElement("AvatarUrl") ? sdei.SettingsElement.Element("AvatarUrl").Value : null;
+            BroadcastAvatar(_avatarurl);
+
         }
         private static void HandleSettingsSaving(EventInfo ei)
         {
@@ -182,8 +193,7 @@ namespace Hanasu.Services.Friends
 
             if (Instance.Friends.Count > 0)
             {
-                foreach (var con in Instance.Friends)
-                    con.Connection.SetPresence(false);
+                BroadcastPresence(false);
 
                 using (var fs = new FileStream(Instance.FriendsDBFile, FileMode.OpenOrCreate))
                 {
@@ -198,7 +208,8 @@ namespace Hanasu.Services.Friends
             }
         }
 
-        public static string AvatarUrl { get; set; }
+        private static string _avatarurl = null;
+        public static string AvatarUrl { get { return _avatarurl; } set { _avatarurl = value; BroadcastAvatar(_avatarurl); } }
 
         public static bool IsInitialized { get; private set; }
         public static FriendsService Instance { get; private set; }
@@ -288,6 +299,12 @@ namespace Hanasu.Services.Friends
 
                             friendConnection.IsOnline = false;
                         }
+                        break;
+                    }
+                case FriendConnection.AVATAR_SET:
+                    {
+                        var view = GetFriendViewFromConnection(friendConnection);
+                        view.AvatarUrl = p;
                         break;
                     }
             }

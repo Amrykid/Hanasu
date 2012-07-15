@@ -35,6 +35,8 @@ namespace Hanasu
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
+                if (App.Current == null) return;
+
                 Hanasu.Services.Events.EventService.Initialize();
                 Hanasu.Services.Facebook.FacebookService.Initialize();
 
@@ -1327,7 +1329,10 @@ namespace Hanasu
 
         private void SetAvatarUrlBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            SetAvatarUrlWindow win = new SetAvatarUrlWindow();
+            win.Owner = this;
+            win.ShowDialog();
+            win.Close();
         }
     }
 }

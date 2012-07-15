@@ -12,6 +12,7 @@ namespace Hanasu.Services.Friends
         internal FriendView(FriendConnection connection)
         {
             Connection = connection;
+            OnPropertyChanged("AvatarUrl");
         }
 
         private string _status = null;
