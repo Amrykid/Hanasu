@@ -334,7 +334,6 @@
                             </ListView.View>
                             <ListView.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="View Liked Songs" Name="ViewLikedSongsMenuItem" Click="ViewLikedSongsMenuItem_Click"/>
                                     <MenuItem Header="Send Message" Name="SendMessageFriendSelectedMenuItem" Click="SendMessageFriendSelectedMenuItem_Click"/>
                                     <MenuItem Header="Deleted Selected Item(s)" Name="DeleteSelectedFriendItemsMenuItem" Click="DeleteSelectedFriendItemsMenuItem_Click"/>
                                 </ContextMenu>

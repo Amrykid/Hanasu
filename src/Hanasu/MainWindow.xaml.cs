@@ -254,6 +254,8 @@ namespace Hanasu
             player.enableContextMenu = false;
             player.settings.autoStart = false;
 
+            player.settings.volume = (int)VolumeSlider.Value;
+
             player.stretchToFit = true;
 
             player.MediaError += player_MediaError;
