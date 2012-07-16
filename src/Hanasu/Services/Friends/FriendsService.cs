@@ -226,7 +226,8 @@ namespace Hanasu.Services.Friends
 
             if (Instance.Friends.Count > 0)
             {
-                BroadcastPresence(false);
+                if (isRunning)
+                    BroadcastPresence(false);
 
                 using (var fs = new FileStream(Instance.FriendsDBFile, FileMode.OpenOrCreate))
                 {
@@ -239,6 +240,8 @@ namespace Hanasu.Services.Friends
                     fs.Close();
                 }
             }
+
+            isRunning = false;
         }
 
         private static string _avatarurl = null;
