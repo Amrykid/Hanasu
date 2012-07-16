@@ -59,7 +59,7 @@ namespace Hanasu.Services.Friends
 
         private void SendRaw(string msg)
         {
-            var data = System.Text.ASCIIEncoding.ASCII.GetBytes(msg);
+            var data = System.Text.UnicodeEncoding.Unicode.GetBytes(msg);
             Hanasu.Services.Friends.FriendsService.GlobalSocket.Send(data, data.Length, EndPoint);
         }
         public void SendData(string data, string type = "NOTIF")

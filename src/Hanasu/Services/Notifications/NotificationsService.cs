@@ -112,6 +112,7 @@ namespace Hanasu.Services.Notifications
                                     {
                                         nw = new NotificationsWindow();
 
+                                        nw.ShowActivated = false;
                                         nw.DataContext = msg;
 
                                         nw.Show();

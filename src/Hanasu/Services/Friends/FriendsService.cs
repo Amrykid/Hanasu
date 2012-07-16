@@ -41,6 +41,11 @@ namespace Hanasu.Services.Friends
             Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Settings_Loaded, HandleSettingsLoaded);
             Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Settings_Saving, HandleSettingsSaving);
 
+            /*if (UPnP.NAT.Discover())
+            {
+                Hanasu.Services.Notifications.NotificationsService.AddNotification("Network Info", "Your external ip is " + UPnP.NAT.GetExternalIP(), 7000, true);
+            }*/
+
             LoadFriends();
 
             InitializeSocket();
@@ -156,7 +161,7 @@ namespace Hanasu.Services.Friends
             {
                 IPEndPoint e = null;
                 var data = GlobalSocket.Receive(ref e);
-                var str = System.Text.ASCIIEncoding.ASCII.GetString(data);
+                var str = System.Text.UnicodeEncoding.Unicode.GetString(data);
 
                 var spl = str.Split(new char[] { ' ' }, 3);
 
@@ -262,7 +267,7 @@ namespace Hanasu.Services.Friends
                     {
 
                         var view = GetFriendViewFromConnection(friendConnection);
-                        view.Status = " Online - " + p;
+                        view.Status = "Online - " + p;
                         friendConnection.IsOnline = true;
 
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(friendConnection.UserName + "'s Status",

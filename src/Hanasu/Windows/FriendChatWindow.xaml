@@ -51,7 +51,7 @@
                 </Grid>
                 <Grid Grid.Row="1" >
                     <Border BorderThickness="1" BorderBrush="{StaticResource AccentColorBrush}">
-                        <TextBox Name="ConversationBox" Height="155" IsReadOnly="True" IsReadOnlyCaretVisible="False" ScrollViewer.VerticalScrollBarVisibility="Auto" Focusable="False"></TextBox>
+                        <TextBox Name="ConversationBox" Height="155" IsReadOnly="True" IsReadOnlyCaretVisible="False" ScrollViewer.VerticalScrollBarVisibility="Auto" Focusable="False" TextWrapping="Wrap"></TextBox>
                     </Border>
                 </Grid>
                 <TextBox Grid.Row="2" Name="textBox1" Foreground="{StaticResource AccentColorBrush}" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Type your message here." metro:TextboxHelper.IsMonitoring="True"/>
