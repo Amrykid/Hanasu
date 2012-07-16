@@ -1396,5 +1396,27 @@ namespace Hanasu
         }
 
         private bool likedSongsInitialLoad = false;
+
+        private void FriendsSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Get the default view from the listview
+            ICollectionView view = CollectionViewSource.GetDefaultView(FriendsListView.ItemsSource);
+
+            view.Filter = null;
+            view.Filter = new Predicate<object>(t =>
+            {
+                var item = (FriendView)t;
+                if (item.UserName == null) return false;
+
+                string textFilter = FriendsSearchTextBox.Text;
+
+                if (textFilter.Trim().Length == 0) return true; // the filter is empty - pass all items
+
+                // apply the filter
+                if (item.UserName.ToLower().Contains(textFilter.ToLower()) || item.Status.ToLower().Contains(textFilter.ToLower())) return true;
+                return false;
+
+            });
+        }
     }
 }
