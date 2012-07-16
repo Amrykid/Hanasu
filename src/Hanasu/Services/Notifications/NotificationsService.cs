@@ -9,6 +9,7 @@ using System.Media;
 using Hanasu.Services.Notifications;
 using Hanasu.Core;
 using Hanasu.Services.Logging;
+using System.Collections.Concurrent;
 
 namespace Hanasu.Services.Notifications
 {
@@ -16,13 +17,13 @@ namespace Hanasu.Services.Notifications
     {
         static NotificationsService()
         {
-            Notifications = new ObservableQueue<NotificationInfo>();
+            Notifications = new ConcurrentQueue<NotificationInfo>();
 
             LogService.Instance.WriteLog(typeof(NotificationsService),
     "Notifications Service initialized.");
         }
 
-        public static ObservableQueue<NotificationInfo> Notifications { get; private set; }
+        public static ConcurrentQueue<NotificationInfo> Notifications { get; private set; }
         public static bool QueueRunning { get; private set; }
 
         public static void ClearNotificationQueue()
@@ -33,12 +34,15 @@ namespace Hanasu.Services.Notifications
 
                 while (!Notifications.IsEmpty)
                 {
-                    var d = Notifications.Peek();
+                    NotificationInfo d = null;
+                    if (Notifications.TryPeek(out d))
+                    {
 
-                    if (d.IsUrgent)
-                        tmp.Enqueue(d);
+                        if (d.IsUrgent)
+                            tmp.Enqueue(d);
 
-                    Notifications.Dequeue();
+                        Notifications.TryDequeue(out d);
+                    }
                 }
 
                 foreach (NotificationInfo ni in tmp)
@@ -102,9 +106,9 @@ namespace Hanasu.Services.Notifications
                         try
                         {
                             NotificationsWindow nw = null;
-                            var msg = Notifications.Dequeue();
+                            NotificationInfo msg = null;
 
-                            if (msg != null)
+                            if (Notifications.TryDequeue(out msg))
                             {
                                 Application.Current.Dispatcher.Invoke(new EmptyDelegate(
                                     () =>

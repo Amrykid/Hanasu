@@ -234,6 +234,7 @@ namespace Hanasu
 #if !DEBUG
             tabItem3.Visibility = System.Windows.Visibility.Hidden;
             ((App)App.Current).SplashScreen.Close(); //close the splash screen.
+            App.Current.ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose;
 #endif
         }
 
