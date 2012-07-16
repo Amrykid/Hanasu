@@ -48,7 +48,7 @@
                         <GroupBox Width="200" Header="Song Name:" BorderThickness="0" FontSize="17">
                             <TextBox Name="TextBoxTrack" Text="{Binding TrackTitle,Mode=TwoWay}" FontSize="15"/>
                         </GroupBox>
-                        <Button Content="AutoFill" Height="25" VerticalAlignment="Bottom" Name="AutoFillBtn" Click="AutoFillBtn_Click"/>
+                        <Button Content="AutoFill" Height="25" VerticalAlignment="Center" Margin="0 15 0 0" Name="AutoFillBtn" Click="AutoFillBtn_Click"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="2">
