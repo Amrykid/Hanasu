@@ -1059,14 +1059,23 @@ namespace Hanasu
         {
             if (LikedSongsListView.SelectedItems != null)
             {
-                //this is to prevent the 'collecton was modified' exception.
-                ArrayList items = new ArrayList();
 
-                foreach (var i in LikedSongsListView.SelectedItems)
-                    items.Add(i);
+                ConfirmDeleteWindow cdw = new ConfirmDeleteWindow("TrackTitle");
+                cdw.Owner = this;
+                cdw.DataContext = LikedSongsListView.SelectedItems;
 
-                foreach (var song in items)
-                    Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs.Remove((SongData)song);
+
+                if ((bool)cdw.ShowDialog())
+                {
+                    //this is to prevent the 'collecton was modified' exception.
+                    ArrayList items = new ArrayList();
+
+                    foreach (var i in LikedSongsListView.SelectedItems)
+                        items.Add(i);
+
+                    foreach (var song in items)
+                        Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs.Remove((SongData)song);
+                }
             }
         }
 
@@ -1324,7 +1333,21 @@ namespace Hanasu
 
         private void DeleteSelectedFriendItemsMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            if (FriendsListView.SelectedItems != null)
+            {
+                ConfirmDeleteWindow cdw = new ConfirmDeleteWindow("UserName");
+                cdw.Owner = this;
+                cdw.DataContext = FriendsListView.SelectedItems;
 
+
+                if ((bool)cdw.ShowDialog())
+                {
+                    foreach (FriendView item in FriendsListView.SelectedItems)
+                    {
+                        Hanasu.Services.Friends.FriendsService.Instance.DeleteFriend(item);
+                    }
+                }
+            }
         }
 
         private void SetAvatarUrlBtn_Click(object sender, RoutedEventArgs e)
@@ -1339,6 +1362,8 @@ namespace Hanasu
         {
             if (tabControl1.SelectedItem == LikedTab && likedSongsInitialLoad == false)
             {
+                //Delayed loading of the Liked Songs tab.
+
                 LikedSongsListView.IsEnabled = false;
 
                 System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>

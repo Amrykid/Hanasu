@@ -6,7 +6,7 @@ using Hanasu.Core;
 
 namespace Hanasu.Services.Friends
 {
-    public class FriendView: BaseINPC
+    public class FriendView : DependencyBaseINPC
     {
         public FriendConnection Connection { get; private set; }
         internal FriendView(FriendConnection connection)

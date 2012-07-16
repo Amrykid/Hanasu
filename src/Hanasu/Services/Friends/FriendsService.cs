@@ -380,6 +380,13 @@ namespace Hanasu.Services.Friends
             Friends.Add(new FriendView(f));
             Instance.OnPropertyChanged("Friends");
         }
+        public void DeleteFriend(FriendView fv)
+        {
+            Instance.Friends.Remove(fv);
+
+
+            BindingOperations.ClearAllBindings((DependencyObject)fv);
+        }
 
     }
     public delegate void EmptyDelegate();
