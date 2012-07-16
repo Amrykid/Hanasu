@@ -58,7 +58,7 @@
                 <Label FontSize="15" Margin="0 -7 0 0" HorizontalAlignment="Center">Buffering.....</Label>
                 <metro:MetroProgressBar Width="200" Height="17" Margin="0 -3 0 0" Name="BufferPB" Foreground="{StaticResource AccentColorBrush}" BorderBrush="DarkGray" BorderThickness="1" />
             </StackPanel>
-            <TabControl Name="tabControl1" Panel.ZIndex="50">
+            <TabControl Name="tabControl1" Panel.ZIndex="50" SelectionChanged="tabControl1_SelectionChanged">
                 <TabItem Header="Now Playing" Name="tabItem1">
                     <Grid Background="Black">
                         <WindowsFormsHost Name="windowsFormsHost1" Background="Black">
@@ -206,7 +206,8 @@
                                 <TextBox FontSize="16" Margin="0 0 5 0" HorizontalAlignment="Right" Name="LikedSongsSearchBox" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Liked..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="LikedSongsSearchBox_TextChanged" Width="200"/>
                             </Grid>
                         </Border>
-                        <ListView Grid.Row="1" Foreground="Black" Name="LikedSongsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static liked:LikedSongService.Instance}, Path=LikedSongs, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
+                        <ListView Grid.Row="1" Foreground="Black" Name="LikedSongsListView" Background="Transparent"  MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
+                            <!--ItemsSource="{Binding Source={x:Static liked:LikedSongService.Instance}, Path=LikedSongs, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}"-->
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">

@@ -1334,5 +1334,40 @@ namespace Hanasu
             win.ShowDialog();
             win.Close();
         }
+
+        private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tabControl1.SelectedItem == LikedTab && likedSongsInitialLoad == false)
+            {
+                LikedSongsListView.IsEnabled = false;
+
+                System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>
+                {
+                    System.Threading.Thread.Sleep(550);
+
+
+                    Dispatcher.Invoke(new EmptyDelegate(() =>
+                    {
+                        //var be = BindingOperations.GetBindingExpression(LikedSongsListView, ListView.ItemsSourceProperty);
+
+                        //be.UpdateTarget();
+
+                        var b = new Binding();
+                        b.Source = Hanasu.Services.LikedSongs.LikedSongService.Instance;
+                        b.Path = new PropertyPath("LikedSongs");
+                        b.IsAsync = true;
+                        b.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+
+                        BindingOperations.SetBinding(LikedSongsListView, ListView.ItemsSourceProperty, b);
+
+                        LikedSongsListView.IsEnabled = true;
+
+                        likedSongsInitialLoad = true;
+                    }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                }));
+            }
+        }
+
+        private bool likedSongsInitialLoad = false;
     }
 }

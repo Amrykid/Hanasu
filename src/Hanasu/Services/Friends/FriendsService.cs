@@ -51,13 +51,13 @@ namespace Hanasu.Services.Friends
             }));
 
             BroadcastPresence(true);
+            //BroadcastStatus("Online - Idle");
             Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Station_Changed,
                 e =>
                 {
                     var e2 = (Hanasu.MainWindow.StationEventInfo)e;
 
-                    foreach (FriendView f in Instance.Friends)
-                        f.Connection.SendStatusChange("Now listening to " + e2.CurrentStation.Name);
+                    BroadcastStatus("Now listening to " + e2.CurrentStation.Name);
                 });
 
             IsInitialized = true;
@@ -72,6 +72,11 @@ namespace Hanasu.Services.Friends
         {
             foreach (var con in Instance.Friends)
                 con.Connection.SetAvatar(url);
+        }
+        private static void BroadcastStatus(string status)
+        {
+            foreach (FriendView f in Instance.Friends)
+                f.Connection.SendStatusChange(status);
         }
 
 
@@ -166,7 +171,10 @@ namespace Hanasu.Services.Friends
                         Instance.Friends = new ObservableCollection<FriendView>();
 
                         foreach (FriendConnection fc in friends)
-                            Instance.Friends.Add(new FriendView(fc));
+                            Instance.Friends.Add(new FriendView(fc)
+                                {
+                                    Status = "Offline"
+                                });
 
                         fs.Close();
                     }
