@@ -50,7 +50,7 @@ namespace Hanasu.Windows
         public string LastMessageReceived { get; set; }
         void FriendChatWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            conn = (FriendConnection)this.DataContext;
+            conn = ((FriendView)this.DataContext).Connection;
         }
 
         void AddRawSongToLikedWindow_Unloaded(object sender, RoutedEventArgs e)

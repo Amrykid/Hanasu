@@ -298,7 +298,7 @@
                                 <TextBox FontSize="16" Margin="0 0 5 0" HorizontalAlignment="Right" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Friends..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" Name="FriendsSearchTextBox" TextChanged="FriendsSearchTextBox_TextChanged"  Width="200"/>
                             </Grid>
                         </Border>
-                        <ListView Grid.Row="1" Foreground="Black" Name="FriendsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static friends:FriendsService.Instance}, Path=Friends, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
+                        <ListView Grid.Row="1" Foreground="Black" Name="FriendsListView" MouseDoubleClick="FriendsListView_MouseDoubleClick" Background="Transparent"  ItemsSource="{Binding Source={x:Static friends:FriendsService.Instance}, Path=Friends, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
@@ -334,6 +334,7 @@
                             </ListView.View>
                             <ListView.ContextMenu>
                                 <ContextMenu>
+                                    <MenuItem Header="View Liked Songs" Name="ViewLikedSongsMenuItem" Click="ViewLikedSongsMenuItem_Click"/>
                                     <MenuItem Header="Send Message" Name="SendMessageFriendSelectedMenuItem" Click="SendMessageFriendSelectedMenuItem_Click"/>
                                     <MenuItem Header="Deleted Selected Item(s)" Name="DeleteSelectedFriendItemsMenuItem" Click="DeleteSelectedFriendItemsMenuItem_Click"/>
                                 </ContextMenu>

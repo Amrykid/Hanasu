@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Net;
 using Hanasu.Core;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace Hanasu.Services.Friends
 {
@@ -86,6 +88,25 @@ namespace Hanasu.Services.Friends
         {
             SendData(avatarurl, AVATAR_SET);
         }
+        /*public void SendObject(string type, object obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(ms, obj);
+
+                var data = System.Text.UnicodeEncoding.Unicode.GetBytes(
+                    String.Format("{0} {1} :", type, Key.ToString()));
+
+                var objbits = ms.ToArray();
+
+                byte[] rv = new byte[data.Length + objbits.Length];
+                System.Buffer.BlockCopy(data, 0, rv, 0, data.Length);
+                System.Buffer.BlockCopy(objbits, 0, rv, data.Length, objbits.Length);
+
+                Hanasu.Services.Friends.FriendsService.GlobalSocket.Send(rv, rv.Length, EndPoint);
+            }
+        }*/
 
         [NonSerialized]
         public bool IsOnline = false;

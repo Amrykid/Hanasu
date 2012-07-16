@@ -12,6 +12,7 @@ namespace Hanasu.Services.Events
         Settings_Loaded = 3,
         Settings_Saving = 4,
         Settings_Created = 5,
-        Theme_Changed = 6
+        Theme_Changed = 6,
+        Friend_Data_Received = 7
     }
 }

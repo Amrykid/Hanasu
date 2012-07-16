@@ -15,6 +15,8 @@ using System.Threading;
 using System.Net;
 using Hanasu.Services.Events;
 using System.Xml.Linq;
+using Hanasu.Services.Song;
+using System.Threading.Tasks;
 
 namespace Hanasu.Services.Friends
 {
@@ -283,9 +285,9 @@ namespace Hanasu.Services.Friends
                             {
                                 friendConnection.IsOnline = true;
 
-                                if (ChatWindows.Any(f => ((FriendConnection)f.DataContext).UserName == friendConnection.UserName))
+                                if (ChatWindows.Any(f => ((FriendConnection)((FriendView)f.DataContext).Connection).UserName == friendConnection.UserName))
                                 {
-                                    var window = ChatWindows.Find(f => ((FriendConnection)f.DataContext).UserName == friendConnection.UserName);
+                                    var window = ChatWindows.Find(f => ((FriendConnection)((FriendView)f.DataContext).Connection).UserName == friendConnection.UserName);
 
                                     window.HandleMessage(p);
 
@@ -309,7 +311,7 @@ namespace Hanasu.Services.Friends
                                 else
                                 {
                                     var window = new FriendChatWindow();
-                                    window.DataContext = friendConnection;
+                                    window.DataContext = GetFriendViewFromConnection(friendConnection);
                                     window.Show();
                                     window.HandleMessage(p);
                                     ChatWindows.Add(window);
@@ -352,7 +354,24 @@ namespace Hanasu.Services.Friends
                         view.AvatarUrl = p;
                         break;
                     }
+                default:
+                    {
+                        Hanasu.Services.Events.EventService.RaiseEvent(EventType.Friend_Data_Received, new FriendDataReceivedEventInfo()
+                        {
+                            Connection = friendConnection,
+                            Data = p,
+                            Type = type
+                        });
+                        break;
+                    }
             }
+        }
+
+        public class FriendDataReceivedEventInfo : EventInfo
+        {
+            public FriendConnection Connection { get; set; }
+            public string Data { get; set; }
+            public string Type { get; set; }
         }
 
         public FriendView GetFriendViewFromConnection(FriendConnection conn)
@@ -361,22 +380,22 @@ namespace Hanasu.Services.Friends
         }
         public FriendChatWindow GetChatWindow(FriendView friendView)
         {
-            return GetChatWindow(friendView.Connection);
-        }
-        public FriendChatWindow GetChatWindow(FriendConnection friendConnection)
-        {
-            if (ChatWindows.Any(f => ((FriendConnection)f.DataContext).UserName == friendConnection.UserName))
+            if (ChatWindows.Any(f => ((FriendConnection)((FriendView)f.DataContext).Connection).UserName == friendView.Connection.UserName))
             {
-                var window = ChatWindows.Find(f => ((FriendConnection)f.DataContext).UserName == friendConnection.UserName);
+                var window = ChatWindows.Find(f => ((FriendConnection)((FriendView)f.DataContext).Connection).UserName == friendView.Connection.UserName);
                 return window;
             }
             else
             {
                 var window = new FriendChatWindow();
-                window.DataContext = friendConnection;
+                window.DataContext = friendView;
                 ChatWindows.Add(window);
                 return window;
             }
+        }
+        public FriendChatWindow GetChatWindow(FriendConnection friendConnection)
+        {
+            return GetChatWindow(GetFriendViewFromConnection(friendConnection));
         }
 
         public void AddFriend(string username, string ip, int key)

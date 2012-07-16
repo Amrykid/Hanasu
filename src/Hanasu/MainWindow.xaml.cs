@@ -1424,5 +1424,14 @@ namespace Hanasu
 
             });
         }
+
+        private void ViewLikedSongsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void FriendsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SendMessageFriendSelectedMenuItem_Click(sender, null);
+        }
     }
 }
