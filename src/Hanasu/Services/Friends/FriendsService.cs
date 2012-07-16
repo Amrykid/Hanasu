@@ -43,38 +43,60 @@ namespace Hanasu.Services.Friends
 
             LoadFriends();
 
-            GlobalSocket = new UdpClient(FriendConnection.Port, AddressFamily.InterNetwork);
-
-            ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
-            {
-                HandleConnection();
-            }));
-
-            BroadcastPresence(true);
-            //BroadcastStatus("Online - Idle");
-            Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Station_Changed,
-                e =>
-                {
-                    var e2 = (Hanasu.MainWindow.StationEventInfo)e;
-
-                    BroadcastStatus("Now listening to " + e2.CurrentStation.Name);
-                });
+            InitializeSocket();
 
             IsInitialized = true;
         }
 
+        private static void InitializeSocket()
+        {
+            try
+            {
+                GlobalSocket = new UdpClient(FriendConnection.Port, AddressFamily.InterNetwork);
+                isRunning = true;
+
+                ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+                {
+                    HandleConnection();
+                }));
+
+                BroadcastPresence(true);
+                //BroadcastStatus("Online - Idle");
+                Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Station_Changed,
+                    e =>
+                    {
+                        var e2 = (Hanasu.MainWindow.StationEventInfo)e;
+
+                        BroadcastStatus("Now listening to " + e2.CurrentStation.Name);
+                    });
+            }
+            catch (SocketException)
+            {
+                isRunning = false;
+
+                Hanasu.Services.Notifications.NotificationsService.AddNotification("Friends Service",
+                    "Unable to start Friends service. Is there another instance of Hanasu running?", 5000, true, Notifications.NotificationType.Error);
+            }
+        }
+
         private static void BroadcastPresence(bool isOnline)
         {
+            if (!isRunning) return;
+
             foreach (var con in Instance.Friends)
                 con.Connection.SetPresence(isOnline);
         }
         private static void BroadcastAvatar(string url)
         {
+            if (!isRunning) return;
+
             foreach (var con in Instance.Friends)
                 con.Connection.SetAvatar(url);
         }
         private static void BroadcastStatus(string status)
         {
+            if (!isRunning) return;
+
             foreach (FriendView f in Instance.Friends)
                 f.Connection.SendStatusChange(status);
         }
@@ -103,26 +125,29 @@ namespace Hanasu.Services.Friends
         #region Socket/UDP Stuff
         internal static UdpClient GlobalSocket { get; set; }
 
+        private static bool isRunning = false;
         private static bool PollForData()
         {
             return Hanasu.Services.Friends.FriendsService.GlobalSocket.Available > 0;
         }
         private static void HandleConnection()
         {
-            try
+            while (isRunning)
             {
-                if (PollForData())
+                try
                 {
-                    ReadData();
+                    while (PollForData())
+                    {
+                        ReadData();
+                    }
+                    Thread.Sleep(5000);
+                }
+                catch (Exception)
+                {
+                    isRunning = false;
+                    return;
                 }
 
-                Thread.Sleep(5000);
-
-                HandleConnection();
-            }
-            catch (Exception)
-            {
-                return;
             }
         }
         private static void ReadData()
