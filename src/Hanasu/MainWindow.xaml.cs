@@ -461,7 +461,7 @@ namespace Hanasu
 
                         SongIsLiked = false;
 
-                        LikeBtnInfo.IsEnabled = true;
+                        //LikeBtnInfo.IsEnabled = true;
 
                         songMessages.Clear();
 
@@ -581,21 +581,27 @@ namespace Hanasu
                             {
                                 SongDataLbl.Text = (string)currentStationAttributes["WM/AlbumTitle"];
                                 lastMediaTxt = (string)currentStationAttributes["WM/AlbumTitle"];
+
+                                if (!Hanasu.Services.Song.SongService.IsSongTitle(lastMediaTxt, currentStation))
+                                    AddRawSongToLikedBtn.IsEnabled = false;
                             }
                             else if (currentStationAttributes.ContainsKey("Title"))
                             {
                                 SongDataLbl.Text = (string)currentStationAttributes["Title"];
                                 lastMediaTxt = (string)currentStationAttributes["Title"];
+
+                                if (!Hanasu.Services.Song.SongService.IsSongTitle(lastMediaTxt, currentStation))
+                                    AddRawSongToLikedBtn.IsEnabled = false;
                             }
                             else
                             {
                                 SongDataLbl.Text = "Not Available";
                                 lastMediaTxt = "Not Available";
+                                AddRawSongToLikedBtn.IsEnabled = false;
                             }
                         else if (currentStation.StationType == StationType.TV)
                             SongDataLbl.Text = currentStation.Name;
 
-                        AddRawSongToLikedBtn.IsEnabled = false;
 
                         if (songMessages.Contains(name) == false)
                         {

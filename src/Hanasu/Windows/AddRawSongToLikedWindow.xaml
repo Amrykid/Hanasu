@@ -37,7 +37,7 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Label FontSize="17" Margin="0 -5 0 0">Raw Song Data:</Label>
-                    <TextBlock Height="35" VerticalAlignment="Bottom" IsEnabled="False" Text="{Binding OriginallyBroadcastSongData, Mode=OneTime}" Margin="10 0 10 0" Foreground="{StaticResource AccentColorBrush}" FontSize="15"></TextBlock>
+                    <TextBlock Height="35" VerticalAlignment="Bottom" IsEnabled="False" Text="{Binding OriginallyBroadcastSongData, Mode=OneTime}" Margin="10 0 10 0" Foreground="{StaticResource AccentColorBrush}" Name="RawSongBox" FontSize="15"></TextBlock>
                 </Grid>
                 <Grid Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
@@ -48,6 +48,7 @@
                         <GroupBox Width="200" Header="Song Name:" BorderThickness="0" FontSize="17">
                             <TextBox Name="TextBoxTrack" Text="{Binding TrackTitle,Mode=TwoWay}" FontSize="15"/>
                         </GroupBox>
+                        <Button Content="AutoFill" Height="25" VerticalAlignment="Bottom" Name="AutoFillBtn" Click="AutoFillBtn_Click"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="2">

@@ -28,6 +28,7 @@ namespace Hanasu.Windows
 
         void AddRawSongToLikedWindow_Unloaded(object sender, RoutedEventArgs e)
         {
+            AutoFillBtn.Click -= AutoFillBtn_Click;
             this.Unloaded -= AddRawSongToLikedWindow_Unloaded;
             OkayBtn.Click -= OkayBtn_Click;
 
@@ -43,6 +44,18 @@ namespace Hanasu.Windows
             }
 
             DialogResult = true;
+        }
+
+        private void AutoFillBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var str = RawSongBox.Text;
+
+            var clean = Hanasu.Services.Song.SongService.CleanSongDataStr(str);
+
+            var bits = clean.Split(new string[] { " - " }, StringSplitOptions.None);
+
+            TextBoxArtist.Text = bits[0];
+            TextBoxTrack.Text = bits[1];
         }
     }
 }

@@ -100,7 +100,7 @@ namespace Hanasu.Services.Song
 
             throw new Exception("Song data doesn't exist");
         }
-        private static string CleanSongDataStr(string songdata)
+        public static string CleanSongDataStr(string songdata)
         {
             if (songdata.Contains("~") && songdata.Contains(" - ") && songdata.IndexOf(" - ") < songdata.IndexOf("~"))
                 songdata = songdata.Substring(0, songdata.IndexOf("~"));

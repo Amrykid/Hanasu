@@ -66,22 +66,19 @@ namespace Hanasu.Services.Notifications
             if (duration == 0)
                 throw new ArgumentOutOfRangeException("duration");
 
-            lock (Notifications)
-            {
-                Notifications.Enqueue(
-                    new NotificationInfo()
-                    {
-                        Title = title,
-                        Message = message,
-                        Duration = duration,
-                        IsUrgent = isUrgent,
-                        Type = type,
-                        OnClickCallback = onClickCallback
-                    });
+            Notifications.Enqueue(
+                new NotificationInfo()
+                {
+                    Title = title,
+                    Message = message,
+                    Duration = duration,
+                    IsUrgent = isUrgent,
+                    Type = type,
+                    OnClickCallback = onClickCallback
+                });
 
-                LogService.Instance.WriteLog(typeof(NotificationsService),
-    "Notification added.");
-            }
+            LogService.Instance.WriteLog(typeof(NotificationsService),
+"Notification added.");
 
             HandleQueue();
         }
