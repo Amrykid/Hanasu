@@ -69,13 +69,23 @@ namespace Hanasu.Windows
                 return;
 
             conn.SendChatMessage(textBox1.Text);
-            ConversationBox.Text += "<" + "You" + ">: " + textBox1.Text + Environment.NewLine;
+
+            if (textBox1.Text.StartsWith("/me ") && textBox1.Text.Length >= 4)
+                ConversationBox.Text += "* " + "You" + " " + textBox1.Text.Substring(4) + Environment.NewLine;
+            else
+                ConversationBox.Text += "<" + "You" + ">: " + textBox1.Text + Environment.NewLine;  
+
+
             ConversationBox.ScrollToEnd();
             textBox1.Clear();
         }
         public void HandleMessage(string msg)
         {
-            ConversationBox.Text += "<" + conn.UserName + ">: " + msg + Environment.NewLine;
+            if (msg.StartsWith("/me "))
+                ConversationBox.Text += "* " + conn.UserName + " " + msg.Substring(4) + Environment.NewLine;
+            else
+                ConversationBox.Text += "<" + conn.UserName + ">: " + msg + Environment.NewLine;
+
             ConversationBox.ScrollToEnd();
             LastMessageReceived = msg;
         }
