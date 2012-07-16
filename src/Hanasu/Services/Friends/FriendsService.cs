@@ -226,7 +226,7 @@ namespace Hanasu.Services.Friends
                     {
 
                         var view = GetFriendViewFromConnection(friendConnection);
-                        view.Status = p;
+                        view.Status = " Online - " + p;
                         friendConnection.IsOnline = true;
 
                         Hanasu.Services.Notifications.NotificationsService.AddNotification(friendConnection.UserName + "'s Status",
@@ -283,6 +283,10 @@ namespace Hanasu.Services.Friends
                         {
                             Notifications.NotificationsService.AddNotification("Friend Online",
                                 friendConnection.UserName + " is now online!", 3000, true);
+
+                            var view = GetFriendViewFromConnection(friendConnection);
+                            view.Status = "Online - Idle";
+
                             friendConnection.IsOnline = true;
                         }
                         break;

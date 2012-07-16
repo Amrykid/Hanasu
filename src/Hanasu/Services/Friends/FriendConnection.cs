@@ -49,7 +49,7 @@ namespace Hanasu.Services.Friends
         //private UdpClient Socket = null;
 
         [NonSerialized]
-        private string _status = null;
+        private string _status = "Offline";
         public string Status
         {
             get { return _status; }

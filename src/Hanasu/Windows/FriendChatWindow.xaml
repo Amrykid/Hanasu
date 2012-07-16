@@ -44,8 +44,8 @@
 
                         </Image>
                         <StackPanel>
-                            <Label Content="{Binding UserName}" FontSize="16"/>
-                            <Label Content="{Binding Status}"/>
+                            <Label Content="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
+                            <Label Content="{Binding Status,UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
