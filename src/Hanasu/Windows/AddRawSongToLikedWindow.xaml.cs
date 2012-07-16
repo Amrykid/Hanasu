@@ -48,14 +48,20 @@ namespace Hanasu.Windows
 
         private void AutoFillBtn_Click(object sender, RoutedEventArgs e)
         {
-            var str = RawSongBox.Text;
+            try
+            {
+                var str = RawSongBox.Text;
 
-            var clean = Hanasu.Services.Song.SongService.CleanSongDataStr(str);
+                var clean = Hanasu.Services.Song.SongService.CleanSongDataStr(str);
 
-            var bits = clean.Split(new string[] { " - " }, StringSplitOptions.None);
+                var bits = clean.Split(new string[] { " - " }, StringSplitOptions.None);
 
-            TextBoxArtist.Text = bits[0];
-            TextBoxTrack.Text = bits[1];
+                TextBoxArtist.Text = bits[0];
+                TextBoxTrack.Text = bits[1];
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
