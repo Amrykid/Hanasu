@@ -29,6 +29,12 @@ namespace Hanasu.Windows
             this.Loaded += FriendChatWindow_Loaded;
             this.Closing += FriendChatWindow_Closing;
 
+            Hanasu.Services.Events.EventService.AttachHandler(Services.Events.EventType.Theme_Changed,
+                    e =>
+                    {
+                        Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
+                    });
+
         }
 
         void FriendChatWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
