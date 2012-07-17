@@ -66,7 +66,14 @@ namespace Hanasu.Services.Friends
                             }
                             catch (Exception)
                             {
-                                Socket.Close();
+                                try
+                                {
+                                    Socket.Close();
+                                }
+                                catch (NullReferenceException)
+                                {
+                                    return;
+                                }
                             }
 
                             IsConnected = false;

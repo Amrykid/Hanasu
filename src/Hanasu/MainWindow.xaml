@@ -268,6 +268,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="45"/>
                             <RowDefinition Height="410*"/>
+                            <RowDefinition Height="45"/>
                         </Grid.RowDefinitions>
                         <Border Grid.Row="0" BorderThickness=".5" BorderBrush="{StaticResource AccentColorBrush}">
                             <Grid Background="Transparent">
@@ -340,10 +341,29 @@
                                 </ContextMenu>
                             </ListView.ContextMenu>
                         </ListView>
+                        <Border Grid.Row="2" BorderThickness=".5" BorderBrush="{StaticResource AccentColorBrush}">
+                            <Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding Source={x:Static friends:FriendsService.Instance}, Path=ExternalIP, Mode=OneTime, IsAsync=True}" ContentStringFormat="External IP: {0}" FontSize="19" VerticalAlignment="Center" Margin="0 5 0 0"/>
+                                    <Button Height="45" Width="45" Name="CopyExternalIPBtn" Click="CopyExternalIPBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10">
+                                        <Rectangle Width="25" Height="25" Margin="0 0 0 0">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_clipboard_edit}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <Button.ToolTip>
+                                            <ToolTip Content="Copies your external ip address to the clipboard."/>
+                                        </Button.ToolTip>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Log" Name="tabItem3">
-                    <ListView Foreground="Black" Name="LogListView" ItemsSource="{Binding Source={x:Static log:LogService.Instance}, Path=Messages, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="LogListView_TargetUpdated" IsEnabled="False">
+                    <ListView Foreground="Black" Name="LogListView" TargetUpdated="LogListView_TargetUpdated" IsEnabled="False">
+                        <!--ItemsSource="{Binding Source={x:Static log:LogService.Instance}, Path=Messages, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}"-->
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="*" Width="42">

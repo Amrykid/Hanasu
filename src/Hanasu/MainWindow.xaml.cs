@@ -1484,5 +1484,10 @@ namespace Hanasu
         {
             SendMessageFriendSelectedMenuItem_Click(sender, null);
         }
+
+        private void CopyExternalIPBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(Hanasu.Services.Friends.FriendsService.Instance.ExternalIP.Replace("\n", ""));
+        }
     }
 }

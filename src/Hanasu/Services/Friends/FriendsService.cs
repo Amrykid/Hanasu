@@ -291,6 +291,8 @@ namespace Hanasu.Services.Friends
         private static string _avatarurl = null;
         public static string AvatarUrl { get { return _avatarurl; } set { _avatarurl = value; BroadcastAvatar(_avatarurl, false); } }
 
+        public string ExternalIP { get { return HtmlTextUtility.GetHtmlFromUrl("http://ifconfig.me/ip"); } }
+
         public static bool IsInitialized { get; private set; }
         public static FriendsService Instance { get; private set; }
 
