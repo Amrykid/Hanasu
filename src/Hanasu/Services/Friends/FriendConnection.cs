@@ -72,6 +72,7 @@ namespace Hanasu.Services.Friends
                                 }
                                 catch (NullReferenceException)
                                 {
+                                    IsConnected = false;
                                     return;
                                 }
                             }
@@ -223,10 +224,13 @@ namespace Hanasu.Services.Friends
             if (IsUDP)
                 Hanasu.Services.Friends.FriendsService.GlobalSocket.Send(data, data.Length, EndPoint);
             else
-                if (IsConnected)
+            {
+                GetIsSocketConnected();
+                if (IsConnected && Socket != null)
                     Socket.GetStream().Write(data, 0, data.Length);
                 else
                     throw new Exception("Not connected!");
+            }
         }
         public void SendData(string data, string type = "NOTIF")
         {

@@ -117,6 +117,8 @@ namespace Hanasu.Services.Friends
         {
             if (!isRunning) return;
 
+            if (string.IsNullOrEmpty(url)) return;
+
             if (onlyUDP)
             {
                 foreach (var con in Instance.Friends.Where(e => e.Connection.IsUDP == true))
@@ -132,6 +134,8 @@ namespace Hanasu.Services.Friends
         private static void BroadcastStatus(string status, bool onlyUDP = true)
         {
             if (!isRunning) return;
+
+            if (string.IsNullOrEmpty(status)) return;
 
             if (onlyUDP)
             {
@@ -155,7 +159,7 @@ namespace Hanasu.Services.Friends
             Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
 
             AvatarUrl = sdei.SettingsElement.ContainsElement("AvatarUrl") ? sdei.SettingsElement.Element("AvatarUrl").Value : null;
-            BroadcastAvatar(_avatarurl);
+            //BroadcastAvatar(_avatarurl);
 
         }
         private static void HandleSettingsSaving(EventInfo ei)
@@ -289,7 +293,8 @@ namespace Hanasu.Services.Friends
         }
 
         private static string _avatarurl = null;
-        public static string AvatarUrl { get { return _avatarurl; } set { _avatarurl = value; BroadcastAvatar(_avatarurl, false); } }
+        public static string AvatarUrl { get { return _avatarurl; } set { _avatarurl = value;
+            BroadcastAvatar(_avatarurl, false); } }
 
         public string ExternalIP { get { return HtmlTextUtility.GetHtmlFromUrl("http://ifconfig.me/ip"); } }
 

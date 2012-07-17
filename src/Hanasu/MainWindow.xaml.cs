@@ -1483,7 +1483,13 @@ namespace Hanasu
 
         private void CopyExternalIPBtn_Click(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(Hanasu.Services.Friends.FriendsService.Instance.ExternalIP.Replace("\n", ""));
+            try
+            {
+                Clipboard.SetText(Hanasu.Services.Friends.FriendsService.Instance.ExternalIP.Replace("\n", ""));
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
