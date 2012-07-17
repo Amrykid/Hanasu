@@ -37,7 +37,8 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Label FontSize="17" Margin="0 -5 0 0">IP Address (for example: 192.168.1.254):</Label>
-                    <TextBox Height="35" VerticalAlignment="Bottom" Name="IPBox" Margin="10 0 10 0" Foreground="{StaticResource AccentColorBrush}" BorderThickness="2" FontSize="15"></TextBox>
+                    <TextBox Height="35" VerticalAlignment="Bottom" Name="IPBox" Margin="10 0 10 0" Foreground="{StaticResource AccentColorBrush}" BorderThickness="2" FontSize="15">
+                    </TextBox>
                 </Grid>
                 <Grid Grid.Row="1">
                     <StackPanel Orientation="Horizontal">

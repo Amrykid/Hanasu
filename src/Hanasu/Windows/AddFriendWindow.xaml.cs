@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls;
+using System.Text.RegularExpressions;
 
 namespace Hanasu.Windows
 {
@@ -45,10 +46,25 @@ namespace Hanasu.Windows
             else if (int.TryParse(TextBoxKey.Text, out x) == false)
             {
                 MessageBox.Show("A key must be a number!");
+
+                TextBoxKey.Focus();
+                TextBoxKey.SelectAll();
+
+                return;
+            }
+            else if (!Regex.IsMatch(IPBox.Text, ValidIpAddressRegex ,RegexOptions.Compiled | RegexOptions.Singleline))
+            {
+                MessageBox.Show("Invalid ip address!");
+
+                IPBox.Focus();
+                IPBox.SelectAll();
+
                 return;
             }
 
             DialogResult = true;
         }
+
+        private const string ValidIpAddressRegex = @"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"; //http://stackoverflow.com/questions/106179/regular-expression-to-match-hostname-or-ip-address
     }
 }

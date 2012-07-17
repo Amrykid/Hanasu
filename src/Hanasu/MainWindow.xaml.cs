@@ -21,6 +21,7 @@ using Microsoft.Win32;
 using System.Windows.Shell;
 using System.Collections.Generic;
 using Hanasu.Services.Friends;
+using Hanasu.Services.Events;
 
 namespace Hanasu
 {
@@ -681,6 +682,12 @@ namespace Hanasu
 
                     player_parseAttributes();
 
+                    Hanasu.Services.Events.EventService.RaiseEventAsync(Services.Events.EventType.Station_Changed
+                            , new StationEventInfo()
+                            {
+                                CurrentStation = currentStation
+                            });
+
                     if (IsWindows7OrHigher())
                     {
                         if (HanasuJumpList.JumpItems.Find(t => ((JumpTask)t).Title == currentStation.Name) == null)
@@ -713,6 +720,9 @@ namespace Hanasu
 
                     VolumeSlider.IsEnabled = false;
                     VolumeMuteBtn.IsEnabled = false;
+
+                    Hanasu.Services.Events.EventService.RaiseEvent(Services.Events.EventType.Station_Player_Idle,
+                        EventInfo.Empty);
 
                     if (Hanasu.Services.Stations.StationsService.Instance.Status != StationsServiceStatus.Polling)
                         HideStationsAdorner();
@@ -844,11 +854,11 @@ namespace Hanasu
 
             currentStation = station;
 
-            Hanasu.Services.Events.EventService.RaiseEventAsync(Services.Events.EventType.Station_Changed
-                , new StationEventInfo()
-                {
-                    CurrentStation = currentStation
-                });
+            //Hanasu.Services.Events.EventService.RaiseEventAsync(Services.Events.EventType.Station_Changed
+            //    , new StationEventInfo()
+            //    {
+            //        CurrentStation = currentStation
+            //    });
 
             if (station.StationType == StationType.TV)
                 tabControl1.SelectedIndex = 0;
@@ -1406,8 +1416,42 @@ namespace Hanasu
                     }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
                 }));
             }
+            else if (tabControl1.SelectedItem == FriendsTab && friendsInitialLoad == false)
+            {
+                //ItemsSource="{Binding Source={x:Static friends:FriendsService.Instance}, Path=Friends, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}"
+
+                //Delayed loading of the Friends tab.
+
+                FriendsListView.IsEnabled = false;
+
+                System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>
+                {
+                    System.Threading.Thread.Sleep(550);
+
+
+                    Dispatcher.Invoke(new EmptyDelegate(() =>
+                    {
+                        //var be = BindingOperations.GetBindingExpression(LikedSongsListView, ListView.ItemsSourceProperty);
+
+                        //be.UpdateTarget();
+
+                        var b = new Binding();
+                        b.Source = Hanasu.Services.Friends.FriendsService.Instance;
+                        b.Path = new PropertyPath("Friends");
+                        b.IsAsync = true;
+                        b.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+
+                        BindingOperations.SetBinding(FriendsListView, ListView.ItemsSourceProperty, b);
+
+                        FriendsListView.IsEnabled = true;
+
+                        friendsInitialLoad = true;
+                    }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                }));
+            }
         }
 
+        private bool friendsInitialLoad = false;
         private bool likedSongsInitialLoad = false;
 
         private void FriendsSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)

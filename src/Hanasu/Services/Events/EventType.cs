@@ -7,6 +7,7 @@ namespace Hanasu.Services.Events
 {
     public enum EventType
     {
+        Station_Player_Idle = 0,
         Station_Changed = 1,
         Song_Liked = 2,
         Settings_Loaded = 3,

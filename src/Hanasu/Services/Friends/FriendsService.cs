@@ -69,12 +69,24 @@ namespace Hanasu.Services.Friends
 
                 BroadcastPresence(true);
                 //BroadcastStatus("Online - Idle");
+                Hanasu.Services.Events.EventService.AttachHandler(EventType.Station_Player_Idle,
+                    e =>
+                    {
+                        BroadcastStatus("Idle", false);
+                    });
                 Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Station_Changed,
                     e =>
                     {
                         var e2 = (Hanasu.MainWindow.StationEventInfo)e;
 
-                        BroadcastStatus("Now listening to " + e2.CurrentStation.Name, false);
+                        switch (e2.CurrentStation.StationType)
+                        {
+                            case Stations.StationType.Radio: BroadcastStatus("Listening to " + e2.CurrentStation.Name, false);
+                                break;
+                            case Stations.StationType.TV: BroadcastStatus("Watching " + e2.CurrentStation.Name, false);
+                                break;
+                        }
+
                     });
             }
             catch (SocketException)
@@ -297,11 +309,12 @@ namespace Hanasu.Services.Friends
                         view.Status = "Online - " + p;
                         friendConnection.IsOnline = true;
 
-                        Hanasu.Services.Notifications.NotificationsService.AddNotification(friendConnection.UserName + "'s Status",
-                            p,
-                            3000,
-                            true,
-                            Notifications.NotificationType.Now_Playing);
+                        if (p.ToLower() != "idle")
+                            Hanasu.Services.Notifications.NotificationsService.AddNotification(friendConnection.UserName + "'s Status",
+                                p,
+                                3000,
+                                true,
+                                Notifications.NotificationType.Now_Playing);
                     }
                     break;
                 case FriendConnection.CHAT_MESSAGE:
