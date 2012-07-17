@@ -37,50 +37,12 @@ namespace Hanasu.Services.Friends
 
             //Socket.Connect(EndPoint);
 
-
+            IsConnected = false;
 
             if (!IsUDP)
             {
                 if (IsTCPHost)
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
-                        {
-                            TcpListener tl = new TcpListener(System.Net.IPAddress.Any, Port);
-                        a: try
-                            {
-                                tl.Start();
-                                while (true)
-                                {
-                                    if (tl.Pending())
-                                    {
-                                        Socket = tl.AcceptTcpClient();
-
-                                        IsConnected = true;
-                                        TCP_ConnectionIsOnline();
-                                        break;
-                                    }
-                                    Thread.Sleep(1000);
-                                }
-                                tl.Stop();
-
-                                HandleTcpConnection();
-                            }
-                            catch (Exception)
-                            {
-                                try
-                                {
-                                    Socket.Close();
-                                }
-                                catch (NullReferenceException)
-                                {
-                                    IsConnected = false;
-                                    return;
-                                }
-                            }
-
-                            IsConnected = false;
-                            TCP_ConnectionIsOffline();
-                            goto a;
-                        }));
+                    Hanasu.Services.Friends.FriendsService.InitializeSocketTCP();
                 else
                     ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
                         {
@@ -125,7 +87,7 @@ namespace Hanasu.Services.Friends
 
 
         #region For TCP based connections only
-        private void HandleTcpConnection()
+        internal void HandleTcpConnection()
         {
             while (GetIsSocketConnected())
             {
@@ -205,7 +167,7 @@ namespace Hanasu.Services.Friends
 
         //private UdpClient Socket = null;
         [NonSerialized]
-        private TcpClient Socket = null;
+        internal volatile TcpClient Socket = null;
 
 
         [NonSerialized]
@@ -222,7 +184,7 @@ namespace Hanasu.Services.Friends
             var data = System.Text.UnicodeEncoding.Unicode.GetBytes(msg);
 
             if (IsUDP)
-                Hanasu.Services.Friends.FriendsService.GlobalSocket.Send(data, data.Length, EndPoint);
+                Hanasu.Services.Friends.FriendsService.GlobalSocketUDP.Send(data, data.Length, EndPoint);
             else
             {
                 GetIsSocketConnected();

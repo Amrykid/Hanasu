@@ -59,13 +59,8 @@ namespace Hanasu.Services.Friends
         {
             try
             {
-                GlobalSocket = new UdpClient(FriendConnection.Port, AddressFamily.InterNetwork);
-                isRunning = true;
-
-                ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
-                {
-                    HandleConnection();
-                }));
+                InitializeSocketUDP();
+                InitializeSocketTCP();
 
                 BroadcastPresence(true);
                 //BroadcastStatus("Online - Idle");
@@ -91,16 +86,17 @@ namespace Hanasu.Services.Friends
             }
             catch (SocketException)
             {
-                isRunning = false;
+                isRunningUDP = false;
 
                 Hanasu.Services.Notifications.NotificationsService.AddNotification("Friends Service",
                     "Unable to start Friends service. Is there another instance of Hanasu running?", 5000, true, Notifications.NotificationType.Error);
             }
         }
 
+
         private static void BroadcastPresence(bool isOnline, bool onlyUDP = true)
         {
-            if (!isRunning) return;
+            if (!isRunningUDP) return;
 
             if (onlyUDP)
             {
@@ -115,7 +111,7 @@ namespace Hanasu.Services.Friends
         }
         private static void BroadcastAvatar(string url, bool onlyUDP = true)
         {
-            if (!isRunning) return;
+            if (!isRunningUDP) return;
 
             if (string.IsNullOrEmpty(url)) return;
 
@@ -133,7 +129,7 @@ namespace Hanasu.Services.Friends
         }
         private static void BroadcastStatus(string status, bool onlyUDP = true)
         {
-            if (!isRunning) return;
+            if (!isRunningUDP) return;
 
             if (string.IsNullOrEmpty(status)) return;
 
@@ -170,40 +166,50 @@ namespace Hanasu.Services.Friends
                 new XElement("AvatarUrl", AvatarUrl));
         }
 
-        #region Socket/UDP Stuff
-        internal static UdpClient GlobalSocket { get; set; }
+        #region Socket
+        #region UDP
+        private static void InitializeSocketUDP()
+        {
+            GlobalSocketUDP = new UdpClient(FriendConnection.Port, AddressFamily.InterNetwork);
+            isRunningUDP = true;
 
-        private static bool isRunning = false;
-        private static bool PollForData()
-        {
-            return Hanasu.Services.Friends.FriendsService.GlobalSocket.Available > 0;
+            ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+            {
+                HandleConnectionUDP();
+            }));
         }
-        private static void HandleConnection()
+        internal static UdpClient GlobalSocketUDP { get; set; }
+        private static bool isRunningUDP = false;
+        private static bool PollForDataUDP()
         {
-            while (isRunning)
+            return Hanasu.Services.Friends.FriendsService.GlobalSocketUDP.Available > 0;
+        }
+        private static void HandleConnectionUDP()
+        {
+            while (isRunningUDP)
             {
                 try
                 {
-                    while (PollForData())
+                    while (PollForDataUDP())
                     {
-                        ReadData();
+                        ReadDataUDP();
                     }
                     Thread.Sleep(5000);
                 }
                 catch (Exception)
                 {
-                    isRunning = false;
+                    isRunningUDP = false;
                     return;
                 }
 
             }
         }
-        private static void ReadData()
+        private static void ReadDataUDP()
         {
             try
             {
                 IPEndPoint e = null;
-                var data = GlobalSocket.Receive(ref e);
+                var data = GlobalSocketUDP.Receive(ref e);
                 var str = System.Text.UnicodeEncoding.Unicode.GetString(data);
 
                 var spl = str.Split(new char[] { ' ' }, 3);
@@ -227,6 +233,67 @@ namespace Hanasu.Services.Friends
             {
             }
 
+        }
+        #endregion
+
+        private static bool isRunningTCP = false;
+        internal static TcpListener GlobalTCPListener { get; set; }
+        internal static void InitializeSocketTCP()
+        {
+            if (isRunningTCP == true) return;
+
+            if (GlobalTCPListener != null) return;
+
+            GlobalTCPListener = new TcpListener(IPAddress.Any, FriendConnection.Port);
+
+            ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+            {
+
+                try
+                {
+
+                    GlobalTCPListener.Start();
+
+                    isRunningTCP = true;
+
+                }
+                catch (Exception)
+                {
+                    isRunningTCP = false;
+                    //Unable to listen.
+                }
+
+                while (isRunningTCP)
+                {
+                    if (GlobalTCPListener.Pending())
+                    {
+                        isRunningTCP = true;
+
+                        var socket = GlobalTCPListener.AcceptTcpClient();
+
+                        var y = socket.Client.RemoteEndPoint;
+
+                        var ystr = y.ToString().Substring(0, y.ToString().IndexOf(":"));
+
+                        try
+                        {
+                            var f = Instance.Friends.Where(z => z.Connection.IsUDP == false).First(x =>
+                                x.Connection.IPAddress == ystr);
+                            f.Connection.Socket = socket;
+
+                            ThreadPool.QueueUserWorkItem(new WaitCallback(ts =>
+                            {
+                                f.Connection.HandleTcpConnection();
+                            }));
+                        }
+                        catch (Exception)
+                        {
+                            socket.Close();
+                        }
+                    }
+                    Thread.Sleep(2000);
+                }
+            }));
         }
         #endregion
 
@@ -274,7 +341,7 @@ namespace Hanasu.Services.Friends
 
             if (Instance.Friends.Count > 0)
             {
-                if (isRunning)
+                if (isRunningUDP)
                     BroadcastPresence(false, false);
 
                 using (var fs = new FileStream(Instance.FriendsDBFile, FileMode.OpenOrCreate))
@@ -289,12 +356,19 @@ namespace Hanasu.Services.Friends
                 }
             }
 
-            isRunning = false;
+            isRunningUDP = false;
         }
 
         private static string _avatarurl = null;
-        public static string AvatarUrl { get { return _avatarurl; } set { _avatarurl = value;
-            BroadcastAvatar(_avatarurl, false); } }
+        public static string AvatarUrl
+        {
+            get { return _avatarurl; }
+            set
+            {
+                _avatarurl = value;
+                BroadcastAvatar(_avatarurl, false);
+            }
+        }
 
         public string ExternalIP { get { return HtmlTextUtility.GetHtmlFromUrl("http://ifconfig.me/ip"); } }
 
