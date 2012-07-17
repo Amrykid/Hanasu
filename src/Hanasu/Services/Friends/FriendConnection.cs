@@ -20,12 +20,14 @@ namespace Hanasu.Services.Friends
         public const string PRESENCE_ONLINE = "PRESENCE_ONLINE";
         public const string PRESENCE_OFFLINE = "PRESENCE_OFFLINE";
         public const string AVATAR_SET = "AVATAR_SET";
-        internal FriendConnection(string userName, string IP, int KEY)
+        internal FriendConnection(string userName, string IP, int KEY, bool UseUDP = true, bool IfTCPIsHost = false)
         {
             UserName = userName;
             IPAddress = IP;
             Key = KEY;
             Initiate(IP);
+            IsUDP = UseUDP;
+            IsTCPHost = IfTCPIsHost;
         }
 
         public void Initiate(string IP)
@@ -35,9 +37,151 @@ namespace Hanasu.Services.Friends
 
             //Socket.Connect(EndPoint);
 
-            IsConnected = true;
+
+
+            if (!IsUDP)
+            {
+                if (IsTCPHost)
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+                        {
+                            TcpListener tl = new TcpListener(System.Net.IPAddress.Any, Port);
+                        a: try
+                            {
+                                tl.Start();
+                                while (true)
+                                {
+                                    if (tl.Pending())
+                                    {
+                                        Socket = tl.AcceptTcpClient();
+
+                                        IsConnected = true;
+                                        TCP_ConnectionIsOnline();
+                                        break;
+                                    }
+                                    Thread.Sleep(1000);
+                                }
+                                tl.Stop();
+
+                                HandleTcpConnection();
+                            }
+                            catch (Exception)
+                            {
+                                Socket.Close();
+                            }
+
+                            IsConnected = false;
+                            TCP_ConnectionIsOffline();
+                            goto a;
+                        }));
+                else
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+                        {
+                        a: try
+                            {
+                                Socket = new TcpClient();
+                                Socket.Connect(EndPoint);
+
+                                IsConnected = true;
+                                TCP_ConnectionIsOnline();
+                                HandleTcpConnection();
+                                Socket.Close();
+                                Thread.Sleep(5000);
+                            }
+                            catch (Exception)
+                            {
+                                IsConnected = false;
+                                TCP_ConnectionIsOffline();
+                                Socket.Close();
+                            }
+                            Thread.Sleep(5000);
+                            goto a;
+                        }));
+            }
+            else
+                IsConnected = true;
 
         }
+
+        private void TCP_ConnectionIsOnline()
+        {
+            SetPresence(true);
+            Hanasu.Services.Friends.FriendsService.Instance.GetFriendViewFromConnection(this).Status = "Online";
+            IsConnected = true;
+        }
+        private void TCP_ConnectionIsOffline()
+        {
+            //SetPresence(false);
+            Hanasu.Services.Friends.FriendsService.Instance.GetFriendViewFromConnection(this).Status = "Offline";
+            IsConnected = false;
+        }
+
+
+        #region For TCP based connections only
+        private void HandleTcpConnection()
+        {
+            while (GetIsSocketConnected())
+            {
+                while (_IsDataAvailableTCP)
+                {
+                    ReadTCPData();
+                }
+
+                Thread.Sleep(2000);
+            }
+        }
+        private void ReadTCPData()
+        {
+            byte[] bits = new byte[512];
+            Socket.GetStream().Read(bits, 0, bits.Length);
+
+            var data = System.Text.UnicodeEncoding.Unicode.GetString(bits);
+
+            var spl = data.Split(new char[] { ' ' }, 3);
+
+            var sentKey = int.Parse(spl[1]);
+
+            if (sentKey == Key)
+            {
+                Hanasu.Services.Friends.FriendsService.Instance.HandleReceievedData(this, spl[0], spl[2].Substring(1).Replace("\0", ""));
+            }
+            else
+                return;
+        }
+        private bool GetIsSocketConnected()
+        {
+            if (Socket == null || Socket.Client == null)
+                return false;
+            else
+            {
+                bool socketStatus = Socket.Client.Poll(50,
+                    SelectMode.SelectRead); //http://social.msdn.microsoft.com/Forums/en-US/netfxnetcom/thread/f4c3d019-aecd-4fc6-9dea-680f04faa900/
+
+                switch (socketStatus)
+                {
+                    case true:
+                        if (Socket.Client.Available == 0) //Checks if the socket is disconnected.
+                        {
+                            _IsDataAvailableTCP = false;
+                            IsConnected = false;
+                            return false;
+                        }
+                        else
+                        {
+                            _IsDataAvailableTCP = true;
+                            IsConnected = true;
+                            return true;
+                        }
+                    case false:
+                        _IsDataAvailableTCP = false;
+                        IsConnected = true;
+                        return true;
+                }
+                return false;
+            }
+        }
+        [NonSerialized]
+        private bool _IsDataAvailableTCP = false;
+        #endregion
 
         public string UserName { get; private set; }
         internal IPEndPoint EndPoint = null;
@@ -46,9 +190,15 @@ namespace Hanasu.Services.Friends
 
         public bool IsConnected { get; private set; }
 
+        public bool IsUDP { get; set; }
+        public bool IsTCPHost { get; set; }
+
         public string AvatarUrl { get; set; }
 
         //private UdpClient Socket = null;
+        [NonSerialized]
+        private TcpClient Socket = null;
+
 
         [NonSerialized]
         private string _status = "Offline";
@@ -62,7 +212,14 @@ namespace Hanasu.Services.Friends
         private void SendRaw(string msg)
         {
             var data = System.Text.UnicodeEncoding.Unicode.GetBytes(msg);
-            Hanasu.Services.Friends.FriendsService.GlobalSocket.Send(data, data.Length, EndPoint);
+
+            if (IsUDP)
+                Hanasu.Services.Friends.FriendsService.GlobalSocket.Send(data, data.Length, EndPoint);
+            else
+                if (IsConnected)
+                    Socket.GetStream().Write(data, 0, data.Length);
+                else
+                    throw new Exception("Not connected!");
         }
         public void SendData(string data, string type = "NOTIF")
         {

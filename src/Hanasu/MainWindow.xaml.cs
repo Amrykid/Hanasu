@@ -1325,7 +1325,7 @@ namespace Hanasu
                     afd.TextBoxUserName.Text,
                     afd.IPBox.Text,
                     int.Parse(
-                        afd.TextBoxKey.Text));
+                        afd.TextBoxKey.Text), (bool)afd.UDPRadioBtn.IsChecked, (bool)afd.TCPHostRadioBtn.IsChecked);
             }
 
             afd.Close();
@@ -1352,7 +1352,12 @@ namespace Hanasu
 
                 if ((bool)cdw.ShowDialog())
                 {
+                    ArrayList x = new ArrayList();
                     foreach (FriendView item in FriendsListView.SelectedItems)
+                    {
+                        x.Add(item);
+                    }
+                    foreach (FriendView item in x)
                     {
                         Hanasu.Services.Friends.FriendsService.Instance.DeleteFriend(item);
                     }

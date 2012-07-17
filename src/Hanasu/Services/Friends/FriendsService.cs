@@ -74,7 +74,7 @@ namespace Hanasu.Services.Friends
                     {
                         var e2 = (Hanasu.MainWindow.StationEventInfo)e;
 
-                        BroadcastStatus("Now listening to " + e2.CurrentStation.Name);
+                        BroadcastStatus("Now listening to " + e2.CurrentStation.Name, false);
                     });
             }
             catch (SocketException)
@@ -86,26 +86,51 @@ namespace Hanasu.Services.Friends
             }
         }
 
-        private static void BroadcastPresence(bool isOnline)
+        private static void BroadcastPresence(bool isOnline, bool onlyUDP = true)
         {
             if (!isRunning) return;
 
-            foreach (var con in Instance.Friends)
-                con.Connection.SetPresence(isOnline);
+            if (onlyUDP)
+            {
+                foreach (var con in Instance.Friends.Where(e => e.Connection.IsUDP == true))
+                    if (con.Connection.IsConnected)
+                        con.Connection.SetPresence(isOnline);
+            }
+            else
+                foreach (var con in Instance.Friends)
+                    if (con.Connection.IsConnected)
+                        con.Connection.SetPresence(isOnline);
         }
-        private static void BroadcastAvatar(string url)
+        private static void BroadcastAvatar(string url, bool onlyUDP = true)
         {
             if (!isRunning) return;
 
-            foreach (var con in Instance.Friends)
-                con.Connection.SetAvatar(url);
+            if (onlyUDP)
+            {
+                foreach (var con in Instance.Friends.Where(e => e.Connection.IsUDP == true))
+                    if (con.Connection.IsConnected)
+                        con.Connection.SetAvatar(url);
+            }
+            else
+                foreach (var con in Instance.Friends)
+                    if (con.Connection.IsConnected)
+                        con.Connection.SetAvatar(url);
+
         }
-        private static void BroadcastStatus(string status)
+        private static void BroadcastStatus(string status, bool onlyUDP = true)
         {
             if (!isRunning) return;
 
-            foreach (FriendView f in Instance.Friends)
-                f.Connection.SendStatusChange(status);
+            if (onlyUDP)
+            {
+                foreach (var con in Instance.Friends.Where(e => e.Connection.IsUDP == true))
+                    if (con.Connection.IsConnected)
+                        con.Connection.SendStatusChange(status);
+            }
+            else
+                foreach (var con in Instance.Friends)
+                    if (con.Connection.IsConnected)
+                        con.Connection.SendStatusChange(status);
         }
 
 
@@ -234,7 +259,7 @@ namespace Hanasu.Services.Friends
             if (Instance.Friends.Count > 0)
             {
                 if (isRunning)
-                    BroadcastPresence(false);
+                    BroadcastPresence(false, false);
 
                 using (var fs = new FileStream(Instance.FriendsDBFile, FileMode.OpenOrCreate))
                 {
@@ -252,7 +277,7 @@ namespace Hanasu.Services.Friends
         }
 
         private static string _avatarurl = null;
-        public static string AvatarUrl { get { return _avatarurl; } set { _avatarurl = value; BroadcastAvatar(_avatarurl); } }
+        public static string AvatarUrl { get { return _avatarurl; } set { _avatarurl = value; BroadcastAvatar(_avatarurl, false); } }
 
         public static bool IsInitialized { get; private set; }
         public static FriendsService Instance { get; private set; }
@@ -398,9 +423,10 @@ namespace Hanasu.Services.Friends
             return GetChatWindow(GetFriendViewFromConnection(friendConnection));
         }
 
-        public void AddFriend(string username, string ip, int key)
+        public void AddFriend(string username, string ip, int key, bool UseUDP = true, bool IfTcpIsHost = false)
         {
-            var f = new FriendConnection(username, ip, key);
+            var f = new FriendConnection(username, ip, key, UseUDP, IfTcpIsHost);
+            f.Initiate(ip);
             Friends.Add(new FriendView(f));
             Instance.OnPropertyChanged("Friends");
         }
