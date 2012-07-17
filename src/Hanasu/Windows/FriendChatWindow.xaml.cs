@@ -65,6 +65,9 @@ namespace Hanasu.Windows
 
         private void SendBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!conn.IsOnline)
+                MessageBox.Show("Not connected!");
+
             if (string.IsNullOrEmpty(textBox1.Text))
                 return;
 
