@@ -20,6 +20,9 @@ namespace Hanasu.Services.Friends
         public const string PRESENCE_ONLINE = "PRESENCE_ONLINE";
         public const string PRESENCE_OFFLINE = "PRESENCE_OFFLINE";
         public const string AVATAR_SET = "AVATAR_SET";
+
+        [NonSerialized]
+        private static readonly System.Text.Encoding ChoosenEncoding = System.Text.UnicodeEncoding.Unicode;
         internal FriendConnection(string userName, string IP, int KEY, bool UseUDP = true, bool IfTCPIsHost = false)
         {
             UserName = userName;
@@ -132,11 +135,11 @@ namespace Hanasu.Services.Friends
         private void ReadTCPData()
         {
             byte[] bits = new byte[512];
-            Socket.GetStream().Read(bits, 0, bits.Length);
+            TCPStream.Read(bits, 0, bits.Length);
 
-            var data = System.Text.UnicodeEncoding.Unicode.GetString(bits);
+            var data = ChoosenEncoding.GetString(bits);
 
-            if (string.IsNullOrEmpty(data.Replace("\0", ""))) return;
+            if (string.IsNullOrEmpty(data.Replace("\0", ""))) return; //null data
 
             var spl = data.Split(new char[] { ' ' }, 3);
 
@@ -217,7 +220,7 @@ namespace Hanasu.Services.Friends
 
         private void SendRaw(string msg)
         {
-            var data = System.Text.UnicodeEncoding.Unicode.GetBytes(msg);
+            var data = ChoosenEncoding.GetBytes(msg);
 
             if (IsUDP)
                 Hanasu.Services.Friends.FriendsService.GlobalSocketUDP.Send(data, data.Length, EndPoint);
