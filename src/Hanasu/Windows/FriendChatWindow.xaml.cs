@@ -65,6 +65,8 @@ namespace Hanasu.Windows
 
         private void SendBtn_Click(object sender, RoutedEventArgs e)
         {
+            this.DataContext = Hanasu.Services.Friends.FriendsService.Instance.Friends.First(t => t.UserName == ((FriendView)this.DataContext).UserName);
+            conn = ((FriendView)this.DataContext).Connection;
             if (!conn.IsConnected)
                 MessageBox.Show("Not connected!");
             else

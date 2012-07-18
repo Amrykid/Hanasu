@@ -160,30 +160,44 @@ namespace Hanasu.Services.Friends
                 _IsDataAvailableTCP = false;
                 return false;
             }
+            else if (Socket.Connected == false)
+            {
+                IsConnected = false;
+                _IsDataAvailableTCP = false;
+                return false;
+            }
             else
             {
-                bool socketStatus = Socket.Client.Poll(50,
-                    SelectMode.SelectRead); //http://social.msdn.microsoft.com/Forums/en-US/netfxnetcom/thread/f4c3d019-aecd-4fc6-9dea-680f04faa900/
-
-                switch (socketStatus)
+                try
                 {
-                    case true:
-                        if (Socket.Client.Available == 0) //Checks if the socket is disconnected.
-                        {
+                    bool socketStatus = Socket.Client.Poll(50,
+                        SelectMode.SelectRead); //http://social.msdn.microsoft.com/Forums/en-US/netfxnetcom/thread/f4c3d019-aecd-4fc6-9dea-680f04faa900/
+
+                    switch (socketStatus)
+                    {
+                        case true:
+                            if (Socket.Client.Available == 0 && Socket.Connected != true) //Checks if the socket is disconnected.
+                            {
+                                _IsDataAvailableTCP = false;
+                                IsConnected = false;
+                                return false;
+                            }
+                            else
+                            {
+                                _IsDataAvailableTCP = true;
+                                IsConnected = true;
+                                return true;
+                            }
+                        case false:
                             _IsDataAvailableTCP = false;
-                            IsConnected = false;
-                            return false;
-                        }
-                        else
-                        {
-                            _IsDataAvailableTCP = true;
                             IsConnected = true;
                             return true;
-                        }
-                    case false:
-                        _IsDataAvailableTCP = false;
-                        IsConnected = true;
-                        return true;
+                    }
+                }
+                catch (ObjectDisposedException)
+                {
+                    _IsDataAvailableTCP = false;
+                    IsConnected = false;
                 }
                 return false;
             }
@@ -228,7 +242,7 @@ namespace Hanasu.Services.Friends
             {
                 GetIsSocketConnected();
                 if (IsConnected && Socket != null)
-                    Socket.GetStream().Write(data, 0, data.Length);
+                    TCPStream.Write(data, 0, data.Length);
                 else
                     throw new Exception("Not connected!");
             }

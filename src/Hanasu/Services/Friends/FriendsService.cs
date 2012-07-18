@@ -346,19 +346,24 @@ namespace Hanasu.Services.Friends
                 if (isRunningUDP)
                     BroadcastPresence(false, false);
 
-                using (var fs = new FileStream(Instance.FriendsDBFile, FileMode.OpenOrCreate))
-                {
-                    var x = new ObservableCollection<FriendConnection>();
-                    foreach (var fv in Instance.Friends)
-                        x.Add(fv.Connection);
-
-                    IFormatter bf = new BinaryFormatter();
-                    bf.Serialize(fs, x);
-                    fs.Close();
-                }
+                SaveFriends();
             }
 
             isRunningUDP = false;
+        }
+
+        private static void SaveFriends()
+        {
+            using (var fs = new FileStream(Instance.FriendsDBFile, FileMode.OpenOrCreate))
+            {
+                var x = new ObservableCollection<FriendConnection>();
+                foreach (var fv in Instance.Friends)
+                    x.Add(fv.Connection);
+
+                IFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, x);
+                fs.Close();
+            }
         }
 
         private static string _avatarurl = null;
@@ -525,6 +530,8 @@ namespace Hanasu.Services.Friends
             f.Initiate(ip);
             Friends.Add(new FriendView(f));
             Instance.OnPropertyChanged("Friends");
+
+            SaveFriends();
         }
         public void DeleteFriend(FriendView fv)
         {
@@ -533,7 +540,21 @@ namespace Hanasu.Services.Friends
             if (!fv.Connection.IsUDP && fv.Connection.IsTCPHost == false)
                 fv.Connection.Socket.Close();
 
+            if (ChatWindows.Any(t => t.DataContext == fv.Connection))
+            {
+                var win = GetChatWindow(fv);
+                win.Close();
+                ChatWindows.Remove(win);
+            }
+
             BindingOperations.ClearAllBindings((DependencyObject)fv);
+        }
+        public void DeleteFriends(IEnumerable<FriendView> friends)
+        {
+            foreach (var f in friends)
+                DeleteFriend(f);
+
+            SaveFriends();
         }
 
     }
