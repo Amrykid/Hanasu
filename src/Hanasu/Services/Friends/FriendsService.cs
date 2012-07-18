@@ -528,6 +528,8 @@ namespace Hanasu.Services.Friends
         {
             Instance.Friends.Remove(fv);
 
+            if (!fv.Connection.IsUDP && fv.Connection.IsTCPHost == false)
+                fv.Connection.Socket.Close();
 
             BindingOperations.ClearAllBindings((DependencyObject)fv);
         }

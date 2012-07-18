@@ -44,32 +44,37 @@ namespace Hanasu.Services.Friends
                 if (IsTCPHost)
                     Hanasu.Services.Friends.FriendsService.InitializeSocketTCP();
                 else
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
-                        {
-                        a: try
-                            {
-                                Socket = new TcpClient();
-                                Socket.Connect(EndPoint);
-
-                                IsConnected = true;
-                                TCP_ConnectionIsOnline();
-                                HandleTcpConnection();
-                                Socket.Close();
-                                Thread.Sleep(5000);
-                            }
-                            catch (Exception)
-                            {
-                                IsConnected = false;
-                                TCP_ConnectionIsOffline();
-                                Socket.Close();
-                            }
-                            Thread.Sleep(5000);
-                            goto a;
-                        }));
+                    InitializeSocketTCPClient();
             }
             else
                 IsConnected = true;
 
+        }
+
+        internal void InitializeSocketTCPClient()
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+            {
+            a: try
+                {
+                    Socket = new TcpClient();
+                    Socket.Connect(EndPoint);
+
+                    IsConnected = true;
+                    TCP_ConnectionIsOnline();
+                    HandleTcpConnection();
+                    Socket.Close();
+                    Thread.Sleep(5000);
+                }
+                catch (Exception)
+                {
+                    IsConnected = false;
+                    TCP_ConnectionIsOffline();
+                    Socket.Close();
+                }
+                Thread.Sleep(5000);
+                goto a;
+            }));
         }
 
         private void TCP_ConnectionIsOnline()
@@ -81,7 +86,11 @@ namespace Hanasu.Services.Friends
         private void TCP_ConnectionIsOffline()
         {
             //SetPresence(false);
-            Hanasu.Services.Friends.FriendsService.Instance.GetFriendViewFromConnection(this).Status = "Offline";
+            try
+            {
+                Hanasu.Services.Friends.FriendsService.Instance.GetFriendViewFromConnection(this).Status = "Offline";
+            }
+            catch (Exception) { }
             IsConnected = false;
         }
 
