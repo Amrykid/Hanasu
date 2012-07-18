@@ -557,6 +557,11 @@ namespace Hanasu.Services.Friends
             SaveFriends();
         }
 
+
+        internal bool ContainsFriendByName(string p)
+        {
+            return Instance.Friends.Any(t => t.UserName.ToLower() == p.ToLower());
+        }
     }
     public delegate void EmptyDelegate();
 }

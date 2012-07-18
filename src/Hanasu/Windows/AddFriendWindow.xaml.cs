@@ -38,7 +38,7 @@ namespace Hanasu.Windows
         private void OkayBtn_Click(object sender, RoutedEventArgs e)
         {
             int x = 0;
-            if (String.IsNullOrEmpty(TextBoxUserName.Text) || String.IsNullOrEmpty(TextBoxKey.Text) || String.IsNullOrEmpty(IPBox.Text))
+            if (String.IsNullOrEmpty(TextBoxUserName.Text) || String.IsNullOrEmpty(TextBoxKey.Text) || String.IsNullOrEmpty(IPBox.Text) || String.IsNullOrWhiteSpace(TextBoxUserName.Text) || String.IsNullOrWhiteSpace(TextBoxKey.Text) || String.IsNullOrWhiteSpace(IPBox.Text))
             {
                 MessageBox.Show("UserName/Key/IP cannot be empty!");
                 return;
@@ -61,6 +61,18 @@ namespace Hanasu.Windows
 
                 return;
             }
+            else if (Hanasu.Services.Friends.FriendsService.Instance.ContainsFriendByName(TextBoxUserName.Text))
+            {
+                MessageBox.Show("A friend by this name already exist!");
+
+                TextBoxUserName.Focus();
+                TextBoxUserName.SelectAll();
+
+                return;
+            }
+
+            TextBoxUserName.Text = TextBoxUserName.Text.Trim();
+            IPBox.Text = IPBox.Text.Trim();
 
             DialogResult = true;
         }
