@@ -65,28 +65,31 @@ namespace Hanasu.Windows
 
         private void SendBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (!conn.IsOnline)
+            if (!conn.IsConnected)
                 MessageBox.Show("Not connected!");
-
-            if (string.IsNullOrEmpty(textBox1.Text))
-                return;
-
-            try
+            else
             {
-                conn.SendChatMessage(textBox1.Text);
 
-                if (textBox1.Text.StartsWith("/me ") && textBox1.Text.Length >= 4)
-                    ConversationBox.Text += "* " + "You" + " " + textBox1.Text.Substring(4) + Environment.NewLine;
-                else
-                    ConversationBox.Text += "<" + "You" + ">: " + textBox1.Text + Environment.NewLine;
+                if (string.IsNullOrEmpty(textBox1.Text))
+                    return;
+
+                try
+                {
+                    conn.SendChatMessage(textBox1.Text);
+
+                    if (textBox1.Text.StartsWith("/me ") && textBox1.Text.Length >= 4)
+                        ConversationBox.Text += "* " + "You" + " " + textBox1.Text.Substring(4) + Environment.NewLine;
+                    else
+                        ConversationBox.Text += "<" + "You" + ">: " + textBox1.Text + Environment.NewLine;
 
 
-                ConversationBox.ScrollToEnd();
-                textBox1.Clear();
-            }
-            catch (Exception)
-            {
-                Hanasu.Services.Notifications.NotificationsService.AddNotification("Chat Error", "Unable to send message. Peer must be disconnected.");
+                    ConversationBox.ScrollToEnd();
+                    textBox1.Clear();
+                }
+                catch (Exception)
+                {
+                    Hanasu.Services.Notifications.NotificationsService.AddNotification("Chat Error", "Unable to send message. Peer must be disconnected.");
+                }
             }
         }
         public void HandleMessage(string msg)

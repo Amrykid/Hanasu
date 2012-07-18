@@ -60,30 +60,34 @@ namespace Hanasu.Services.Friends
                     Socket = new TcpClient();
                     Socket.Connect(EndPoint);
 
+                    TCPStream = Socket.GetStream();
+
                     IsConnected = true;
                     TCP_ConnectionIsOnline();
                     HandleTcpConnection();
-                    Socket.Close();
-                    Thread.Sleep(5000);
                 }
                 catch (Exception)
                 {
-                    IsConnected = false;
-                    TCP_ConnectionIsOffline();
-                    Socket.Close();
+
+
                 }
+                IsConnected = false;
+
+                TCP_ConnectionIsOffline();
+
+                Socket.Close();
                 Thread.Sleep(5000);
                 goto a;
             }));
         }
 
-        private void TCP_ConnectionIsOnline()
+        internal void TCP_ConnectionIsOnline()
         {
             SetPresence(true);
             Hanasu.Services.Friends.FriendsService.Instance.GetFriendViewFromConnection(this).Status = "Online";
             IsConnected = true;
         }
-        private void TCP_ConnectionIsOffline()
+        internal void TCP_ConnectionIsOffline()
         {
             //SetPresence(false);
             try
@@ -96,13 +100,30 @@ namespace Hanasu.Services.Friends
 
 
         #region For TCP based connections only
+        [NonSerialized]
+        internal NetworkStream TCPStream = null;
+
         internal void HandleTcpConnection()
         {
             while (GetIsSocketConnected())
             {
                 while (_IsDataAvailableTCP)
                 {
-                    ReadTCPData();
+                    try
+                    {
+                        ReadTCPData();
+                    }
+                    catch (Exception)
+                    {
+                        GetIsSocketConnected();
+                        if (IsConnected == true)
+                        {
+                            Thread.Sleep(2000);
+                            continue;
+                        }
+                        else
+                            return;
+                    }
                 }
 
                 Thread.Sleep(2000);
@@ -114,6 +135,8 @@ namespace Hanasu.Services.Friends
             Socket.GetStream().Read(bits, 0, bits.Length);
 
             var data = System.Text.UnicodeEncoding.Unicode.GetString(bits);
+
+            if (string.IsNullOrEmpty(data.Replace("\0", ""))) return;
 
             var spl = data.Split(new char[] { ' ' }, 3);
 
@@ -129,7 +152,11 @@ namespace Hanasu.Services.Friends
         private bool GetIsSocketConnected()
         {
             if (Socket == null || Socket.Client == null)
+            {
+                IsConnected = false;
+                _IsDataAvailableTCP = false;
                 return false;
+            }
             else
             {
                 bool socketStatus = Socket.Client.Poll(50,

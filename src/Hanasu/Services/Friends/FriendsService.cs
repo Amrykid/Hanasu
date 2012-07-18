@@ -280,6 +280,8 @@ namespace Hanasu.Services.Friends
                             var f = Instance.Friends.Where(z => z.Connection.IsUDP == false).First(x =>
                                 x.Connection.IPAddress == ystr);
                             f.Connection.Socket = socket;
+                            f.Connection.TCPStream = socket.GetStream();
+                            f.Connection.TCP_ConnectionIsOnline();
 
                             ThreadPool.QueueUserWorkItem(new WaitCallback(ts =>
                             {
