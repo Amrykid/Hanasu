@@ -45,7 +45,7 @@
                         </Image>
                         <StackPanel>
                             <Label Content="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" FontSize="19"/>
-                            <Label Content="{Binding Status, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Foreground="{StaticResource AccentColorBrush}" Margin="0 -5 0 0"/>
+                            <Label Content="{Binding Status, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" TargetUpdated="Label_TargetUpdated" FontSize="16" Foreground="{StaticResource AccentColorBrush}" Margin="0 -5 0 0"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

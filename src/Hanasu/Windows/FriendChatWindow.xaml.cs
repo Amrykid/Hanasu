@@ -104,5 +104,13 @@ namespace Hanasu.Windows
             ConversationBox.ScrollToEnd();
             LastMessageReceived = msg;
         }
+
+        private void Label_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            var fv = (FriendView)this.DataContext;
+            if (fv.Connection == null) return;
+
+            textBox1.IsEnabled = !fv.Status.StartsWith("Offline");
+        }
     }
 }
