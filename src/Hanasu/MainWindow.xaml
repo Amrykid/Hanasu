@@ -127,10 +127,15 @@
                                         <ListView Grid.Row="1" Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="StationsListView_TargetUpdated" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" SelectionChanged="StationsListView_SelectionChanged" IsEnabled="False">
                                             <ListView.ItemsPanel>
                                                 <ItemsPanelTemplate>
-                                                    <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
+                                                    <VirtualizingStackPanel IsItemsHost="True" VirtualizationMode="Recycling" IsVirtualizing="True">
                                                     </VirtualizingStackPanel>
                                                 </ItemsPanelTemplate>
                                             </ListView.ItemsPanel>
+                                            <ListView.CacheMode>
+                                                <BitmapCache EnableClearType="True" 
+                                                     RenderAtScale="1" 
+                                                     SnapsToDevicePixels="True"  />
+                                            </ListView.CacheMode>
                                             <ListView.View>
                                                 <GridView>
                                                     <GridViewColumn Header="*" Width="42">
@@ -210,17 +215,22 @@
                             <!--ItemsSource="{Binding Source={x:Static liked:LikedSongService.Instance}, Path=LikedSongs, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}"-->
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
+                                    <VirtualizingStackPanel IsItemsHost="True" VirtualizationMode="Recycling" IsVirtualizing="True">
                                     </VirtualizingStackPanel>
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
+                            <ListView.CacheMode>
+                                <BitmapCache EnableClearType="True" 
+                                                     RenderAtScale="1" 
+                                                     SnapsToDevicePixels="True"  />
+                            </ListView.CacheMode>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="*" Width="85">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid Height="80">
-                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" Source="{Binding Path=AlbumCoverUri,Converter={StaticResource UrlToBitmapConv},IsAsync=True,Mode=OneTime}" />
+                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" Source="{Binding Path=AlbumCoverUri,Converter={StaticResource UrlToBitmapConv},ConverterParameter='80',IsAsync=True,Mode=OneTime}" />
                                                 </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -303,10 +313,15 @@
                             <!--ItemsSource="{Binding Source={x:Static friends:FriendsService.Instance}, Path=Friends, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}"-->
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel IsItemsHost="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="True">
+                                    <VirtualizingStackPanel IsItemsHost="True" VirtualizationMode="Recycling" IsVirtualizing="True">
                                     </VirtualizingStackPanel>
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
+                            <ListView.CacheMode>
+                                <BitmapCache EnableClearType="True" 
+                                                     RenderAtScale="1" 
+                                                     SnapsToDevicePixels="True"  />
+                            </ListView.CacheMode>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="*" Width="85">

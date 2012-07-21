@@ -47,10 +47,24 @@ namespace Hanasu.Core
 
                     if (parameter != null)
                     {
-                        int[] info = (int[])parameter;
+                        if (parameter is int[])
+                        {
+                            int[] info = (int[])parameter;
 
-                        image.DecodePixelHeight = info[0];
-                        image.DecodePixelWidth = info[1];
+                            image.DecodePixelHeight = info[0];
+                            image.DecodePixelWidth = info[1];
+                        }
+                        else if (parameter is int)
+                        {
+                            image.DecodePixelWidth = (int)parameter;
+                        }
+                        else if (parameter is string)
+                        {
+                            int outint = 0;
+                            
+                            if (int.TryParse((string)parameter, out outint))
+                                image.DecodePixelWidth = (int)outint;
+                        }
                     }
 
                     image.EndInit();
@@ -66,6 +80,8 @@ namespace Hanasu.Core
                                 bool running = true;
                                 while (running)
                                 {
+                                    if (Application.Current == null) return;
+
                                     Application.Current.Dispatcher.Invoke(new EmptyDelegate(() =>
                                         {
                                             running = image.IsDownloading;
@@ -73,6 +89,8 @@ namespace Hanasu.Core
                                         }));
                                     Thread.Sleep(50);
                                 }
+
+                                if (Application.Current == null) return;
 
                                 Application.Current.Dispatcher.Invoke(new EmptyDelegate(() =>
                                 {
