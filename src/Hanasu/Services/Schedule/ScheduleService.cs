@@ -35,9 +35,9 @@ namespace Hanasu.Services.Schedule
             {
                 case StationScheduleType.ics:
                     {
-                        /*var r = Hanasu.Services.Schedule.Parsers.ICSParser.LoadFromUrl(station.ScheduleUrl);
+                        //var r = Hanasu.Services.Schedule.Parsers.ICSParser.LoadFromUrl(station.ScheduleUrl);
 
-                        var c = new Calendar();
+                        /*var c = new Calendar();
                         c.SelectionMode = CalendarSelectionMode.MultipleRange;
                         foreach (var e in r.Events)
                             c.BlackoutDates.Add(new CalendarDateRange(e.DateStart, e.DateEnd));

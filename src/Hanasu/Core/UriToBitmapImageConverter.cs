@@ -13,9 +13,14 @@ namespace Hanasu.Core
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
     using System.Globalization;
+    using System.Collections;
+    using System.Threading;
+    using System.Windows;
+    using Hanasu.Services.Friends;
 
     public class UriToBitmapImageConverter : IValueConverter // from http://blog.davidsandor.com/post/2010/05/12/How-To-WPF-Databind-a-URL-URI-to-an-Image-control.aspx
     {
+        private static Hashtable ImageCache = new Hashtable();
         public object Convert(object value, Type targetType, object parameter,
              CultureInfo culture)
         {
@@ -27,10 +32,18 @@ namespace Hanasu.Core
                     image.BeginInit();
                     image.CacheOption = BitmapCacheOption.Default;
                     image.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+
+                    Uri url = null;
+
                     if (value is Uri)
-                        image.UriSource = (Uri)value;
+                        url = (Uri)value;
                     else
-                        image.UriSource = new Uri((string)value, UriKind.Absolute);
+                        url = new Uri((string)value, UriKind.Absolute);
+
+                    if (ImageCache.ContainsKey(url))
+                        return (BitmapImage)ImageCache[url];
+                    else
+                        image.UriSource = url;
 
                     if (parameter != null)
                     {
@@ -42,7 +55,30 @@ namespace Hanasu.Core
 
                     image.EndInit();
 
-                    //while (image.IsDownloading) ;
+                    if (!ImageCache.ContainsKey(url))
+                        ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+                            {
+                                if (!ImageCache.ContainsKey(url))
+                                    ImageCache.Add(url, null);
+                                else
+                                    return;
+
+                                bool running = true;
+                                while (running)
+                                {
+                                    Application.Current.Dispatcher.Invoke(new EmptyDelegate(() =>
+                                        {
+                                            running = image.IsDownloading;
+
+                                        }));
+                                    Thread.Sleep(50);
+                                }
+
+                                Application.Current.Dispatcher.Invoke(new EmptyDelegate(() =>
+                                {
+                                    ImageCache[url] = image.GetAsFrozen();
+                                }));
+                            }));
                 }
                 catch
                 {
