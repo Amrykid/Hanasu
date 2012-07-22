@@ -50,8 +50,6 @@ namespace Hanasu.Services.Friends
 
             LoadFriends();
 
-            InitializeSocket();
-
             IsInitialized = true;
         }
 
@@ -155,6 +153,9 @@ namespace Hanasu.Services.Friends
             Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
 
             AvatarUrl = sdei.SettingsElement.ContainsElement("AvatarUrl") ? sdei.SettingsElement.Element("AvatarUrl").Value : null;
+            FriendsServiceEnabled = sdei.SettingsElement.ContainsElement("FriendsServiceEnabled") ? bool.Parse(sdei.SettingsElement.Element("FriendsServiceEnabled").Value) : false;
+
+            InitializeSocket();
             //BroadcastAvatar(_avatarurl);
 
         }
@@ -163,8 +164,11 @@ namespace Hanasu.Services.Friends
             Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
 
             sdei.SettingsElement.Add(
+                new XElement("FriendsServiceEnabled", FriendsServiceEnabled.ToString()));
+            sdei.SettingsElement.Add(
                 new XElement("AvatarUrl", AvatarUrl));
         }
+        public static bool FriendsServiceEnabled { get; set; }
 
         #region Socket
         #region UDP
