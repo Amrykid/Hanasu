@@ -5,7 +5,7 @@
         xmlns:conv="clr-namespace:Hanasu.Core.Converters"
         xmlns:core="clr-namespace:Hanasu.Core"
         WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False" WindowStartupLocation="CenterOwner"
-        Title="Add Song" Height="387" Width="494" SizeToContent="Height">
+        Title="Add/Edit Song" Height="387" Width="494" SizeToContent="Height">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -42,11 +42,11 @@
                 <Grid Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
                         <GroupBox Width="200" Header="Artist:" BorderThickness="0" FontSize="17">
-                            <TextBox Name="TextBoxArtist" Text="{Binding Artist,Mode=TwoWay}" FontSize="15"/>
+                            <TextBox Name="TextBoxArtist" Text="{Binding Artist,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
                         </GroupBox>
                         <Separator/>
                         <GroupBox Width="200" Header="Song Name:" BorderThickness="0" FontSize="17">
-                            <TextBox Name="TextBoxTrack" Text="{Binding TrackTitle,Mode=TwoWay}" FontSize="15"/>
+                            <TextBox Name="TextBoxTrack" Text="{Binding TrackTitle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
                         </GroupBox>
                         <Button Content="AutoFill" Height="25" VerticalAlignment="Center" Margin="0 15 0 0" Name="AutoFillBtn" Click="AutoFillBtn_Click"/>
                     </StackPanel>
@@ -57,7 +57,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0 -3 0 0">
                                     <Label Height="40">Album Name:</Label>
-                                    <TextBox Name="AlbumTextBox" Height="20" Width="100" FontSize="15"></TextBox>
+                                    <TextBox Name="AlbumTextBox" Height="20" Width="100" FontSize="15" Text="{Binding Album,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                 </StackPanel>
                                 <StackPanel Margin="5 0 0 0">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

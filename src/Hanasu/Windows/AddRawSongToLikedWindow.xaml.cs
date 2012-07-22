@@ -11,6 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls;
+using Hanasu.Services.Song;
+using System.Threading;
+using Hanasu.Services.Friends;
 
 namespace Hanasu.Windows
 {
@@ -56,8 +59,26 @@ namespace Hanasu.Windows
 
                 var bits = clean.Split(new string[] { " - " }, StringSplitOptions.None);
 
-                TextBoxArtist.Text = bits[0];
-                TextBoxTrack.Text = bits[1];
+                var a = ((SongData)this.DataContext);
+
+                a.Artist = bits[0];
+                a.TrackTitle = bits[1];
+
+                var dialog = AsyncTaskDialog.GetNewTaskDialog(this, "Fetching additional information",
+                    "Please wait. Attempting to grab album information.");
+                dialog.Show();
+
+                ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+                    {
+
+                        Hanasu.Services.Song.SongService.DataSource.GetAlbumInfo(ref a);
+
+                        Dispatcher.Invoke(new EmptyDelegate(() =>
+                            {
+                                this.DataContext = a;
+                                dialog.Close();
+                            }));
+                    }));
             }
             catch (Exception)
             {

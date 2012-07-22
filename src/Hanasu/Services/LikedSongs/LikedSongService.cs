@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Hanasu.Services.Events;
 using System.Runtime.Serialization;
+using System.Windows.Data;
 
 namespace Hanasu.Services.LikedSongs
 {
@@ -81,9 +82,17 @@ namespace Hanasu.Services.LikedSongs
         {
             MainWindow.SongLikedEventInfo sl = (MainWindow.SongLikedEventInfo)e;
 
+            if (sl.CurrentSong.TrackTitle == null || sl.CurrentSong.Artist == null) return;
+
             Instance.LikedSongs.Add(sl.CurrentSong);
 
             Instance.OnPropertyChanged("LikedSongs");
+
+            MainWindow mw = (MainWindow)App.Current.MainWindow;
+
+            var be = BindingOperations.GetBindingExpression(mw.LikedSongsListView, System.Windows.Controls.ListView.ItemsSourceProperty);
+
+            //be.UpdateTarget();
         }
         public static LikedSongService Instance { get; private set; }
 
