@@ -231,11 +231,10 @@ namespace Hanasu
             this.tabControl1.SelectedIndex = 1;
 
 
-
+            App.Current.MainWindow = this;
 #if !DEBUG
             tabItem3.Visibility = System.Windows.Visibility.Hidden;
             ((App)App.Current).SplashScreen.Close(); //close the splash screen.
-            App.Current.MainWindow = this;
             App.Current.ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose;
 #endif
         }
