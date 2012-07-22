@@ -10,6 +10,8 @@ using System.IO;
 using Hanasu.Services.Events;
 using System.Runtime.Serialization;
 using System.Windows.Data;
+using System.Net;
+using Hanasu.Windows;
 
 namespace Hanasu.Services.LikedSongs
 {
@@ -43,10 +45,15 @@ namespace Hanasu.Services.LikedSongs
                     {
                         IFormatter bf = new BinaryFormatter();
                         Instance.LikedSongs = (ObservableCollection<SongData>)bf.Deserialize(fs);
+                        CheckIfAlbumArtIsCached();
                         fs.Close();
                     }
 
+
                     Instance.OnPropertyChanged("LikedSongs");
+
+
+
                 }
                 catch (Exception)
                 {
@@ -61,6 +68,53 @@ namespace Hanasu.Services.LikedSongs
             Instance.InitializeInternal();
 
         }
+
+        private static void CheckIfAlbumArtIsCached()
+        {
+            var items = Instance.LikedSongs.Where(s => s.AlbumCoverData == null && s.AlbumCoverUri != null).ToArray();
+            if (items != null && items.Length != 0)
+            {
+                var dialog = AsyncTaskDialog.GetNewTaskDialog(null,
+                    "Updating Liked Songs Library.",
+                    "Caching Album Art...");
+
+                System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>
+                    {
+                        try
+                        {
+                            foreach (var s in items)
+                                if (s.AlbumCoverUri != null)
+                                {
+                                    SongData moo = s;
+                                    using (WebClient wc = new WebClient())
+                                    {
+                                        moo.AlbumCoverData = wc.DownloadData(s.AlbumCoverUri);
+                                    }
+
+                                    var ind = Instance.LikedSongs.FastIndexOf(s);
+
+                                    App.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                                    {
+                                        Instance.LikedSongs[ind] = moo;
+                                    }));
+
+
+                                }
+                        }
+                        catch (Exception)
+                        {
+                        }
+
+                        SaveLikedSongsDB();
+                        App.Current.Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                            {
+                                dialog.Close();
+                            }));
+                    }));
+                //dialog.Owner = App.Current.MainWindow;
+                dialog.Show();
+            }
+        }
         private void InitializeInternal()
         {
             Hanasu.Services.Events.EventService.AttachHandler(Events.EventType.Song_Liked, HandleSongLiked);
@@ -71,12 +125,29 @@ namespace Hanasu.Services.LikedSongs
         static void Current_Exit(object sender, System.Windows.ExitEventArgs e)
         {
             if (Instance.LikedSongs.Count > 0)
-                using (var fs = new FileStream(Instance.LikedSongDBFile, FileMode.OpenOrCreate))
-                {
-                    IFormatter bf = new BinaryFormatter();
-                    bf.Serialize(fs, Instance.LikedSongs);
-                    fs.Close();
-                }
+            {
+                //nulls out every song's album data
+                //var x = Instance.LikedSongs.ToArray();
+                //Instance.LikedSongs.Clear();
+                //foreach (var y in x)
+                //{
+                //    var item = y;
+                //    item.AlbumCoverData = null;
+                //    Instance.LikedSongs.Add(item);
+                //}
+
+                SaveLikedSongsDB();
+            }
+        }
+
+        private static void SaveLikedSongsDB()
+        {
+            using (var fs = new FileStream(Instance.LikedSongDBFile, FileMode.OpenOrCreate))
+            {
+                IFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, Instance.LikedSongs);
+                fs.Close();
+            }
         }
         private static void HandleSongLiked(EventInfo e)
         {
@@ -88,9 +159,9 @@ namespace Hanasu.Services.LikedSongs
 
             Instance.OnPropertyChanged("LikedSongs");
 
-            MainWindow mw = (MainWindow)App.Current.MainWindow;
+            // MainWindow mw = (MainWindow)App.Current.MainWindow;
 
-            var be = BindingOperations.GetBindingExpression(mw.LikedSongsListView, System.Windows.Controls.ListView.ItemsSourceProperty);
+            // var be = BindingOperations.GetBindingExpression(mw.LikedSongsListView, System.Windows.Controls.ListView.ItemsSourceProperty);
 
             //be.UpdateTarget();
         }

@@ -58,7 +58,14 @@ namespace Hanasu.Services.Events
         {
             data.EventType = type;
 
-            foreach (EventReference eref in EventHandlers.Where(rf => rf.EventType == type))
+           IList<EventReference> events = null;
+
+            lock (EventHandlers)
+            {
+                events = EventHandlers.Where(rf => rf.EventType == type).ToArray();
+            }
+
+            foreach (EventReference eref in events)
                     eref.HandlerMethod.Invoke(data);
         }
     }

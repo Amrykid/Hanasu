@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Hanasu.Core;
 using System.Text.RegularExpressions;
+using System.Net;
 
 namespace Hanasu.Services.Song.Album_Info_Data_Source
 {
@@ -38,12 +39,21 @@ namespace Hanasu.Services.Song.Album_Info_Data_Source
                     song.Artist = artist;
                 }
 
-                if (song.Artist.ToLower() != artist.ToLower() || !song.Artist.ToLower().Contains(artist.ToLower())) return false;
+                if (!artist.ToLower().StartsWith(song.Artist.ToLower())) return false;
 
                 song.AlbumCoverUri = new Uri(imgurl);
+
+                if (song.AlbumCoverUri != null)
+                {
+                    using (WebClient wc = new WebClient())
+                    {
+                        song.AlbumCoverData = wc.DownloadData(song.AlbumCoverUri);
+                    }
+                }
+
                 song.Album = song.Album == null ? albumtxt : song.Album; // If an album is already there, leave it. otherwise, grab the one we get from YesAsia.
 
-                var buylink = "http://www.yesasia.com" + Regex.Match(Regex.Match(sec.Value, "<a class=\"title\" href=\".+?\">",RegexOptions.Singleline | RegexOptions.Compiled).Value, "href=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value.Substring(5).Trim('\"');
+                var buylink = "http://www.yesasia.com" + Regex.Match(Regex.Match(sec.Value, "<a class=\"title\" href=\".+?\">", RegexOptions.Singleline | RegexOptions.Compiled).Value, "href=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value.Substring(5).Trim('\"');
                 song.BuyUri = new Uri(buylink);
 
                 return true;

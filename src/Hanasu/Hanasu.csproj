@@ -95,15 +95,17 @@
       <DependentUpon>AxWMP.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\BaseINPC.cs" />
+    <Compile Include="Core\Converters\ByteArrayToImageConverter.cs" />
     <Compile Include="Core\Converters\EnumToIntConverter.cs" />
     <Compile Include="Core\Converters\IntCalcConverter.cs" />
     <Compile Include="Core\Converters\StringUriConverter.cs" />
     <Compile Include="Core\Converters\VisualStationTypeConverter.cs" />
     <Compile Include="Core\HtmlTextUtility.cs" />
     <Compile Include="Core\NetworkUtil.cs" />
+    <Compile Include="Core\ObservableCollectionExt.cs" />
     <Compile Include="Core\ObservableQueue.cs" />
     <Compile Include="Core\UPnP.cs" />
-    <Compile Include="Core\UriToBitmapImageConverter.cs" />
+    <Compile Include="Core\Converters\UriToBitmapImageConverter.cs" />
     <Compile Include="Core\WebBrowserUtilities.cs" />
     <Compile Include="Core\XElementExtensions.cs" />
     <Compile Include="Data\ID3\ID3Data.cs" />
@@ -159,8 +161,8 @@
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddRawSongToLikedWindow.xaml.cs">
-      <DependentUpon>AddRawSongToLikedWindow.xaml</DependentUpon>
+    <Compile Include="Windows\AddEditRawSongWindow.xaml.cs">
+      <DependentUpon>AddEditRawSongWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\AddFriendWindow.xaml.cs">
       <DependentUpon>AddFriendWindow.xaml</DependentUpon>
@@ -214,7 +216,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\AddRawSongToLikedWindow.xaml">
+    <Page Include="Windows\AddEditRawSongWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

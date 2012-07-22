@@ -18,11 +18,11 @@ using Hanasu.Services.Friends;
 namespace Hanasu.Windows
 {
     /// <summary>
-    /// Interaction logic for AddRawSongToLikedWindow.xaml
+    /// Interaction logic for AddEditRawSongWindow.xaml
     /// </summary>
-    public partial class AddRawSongToLikedWindow : MetroWindow
+    public partial class AddEditRawSongWindow : MetroWindow
     {
-        public AddRawSongToLikedWindow()
+        public AddEditRawSongWindow()
         {
             InitializeComponent();
             Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
@@ -53,25 +53,31 @@ namespace Hanasu.Windows
         {
             try
             {
-                var str = RawSongBox.Text;
-
-                var clean = Hanasu.Services.Song.SongService.CleanSongDataStr(str);
-
-                var bits = clean.Split(new string[] { " - " }, StringSplitOptions.None);
-
                 var a = ((SongData)this.DataContext);
 
-                a.Artist = bits[0];
-                a.TrackTitle = bits[1];
+                if (!string.IsNullOrEmpty(RawSongBox.Text))
+                {
+
+                    var str = RawSongBox.Text;
+
+                    var clean = Hanasu.Services.Song.SongService.CleanSongDataStr(str);
+
+                    var bits = clean.Split(new string[] { " - " }, StringSplitOptions.None);
+
+                    a.Artist = bits[0];
+                    a.TrackTitle = bits[1];
+
+                    this.DataContext = a;
+                }
 
                 var dialog = AsyncTaskDialog.GetNewTaskDialog(this, "Fetching additional information",
                     "Please wait. Attempting to grab album information.");
-                dialog.Show();
 
                 ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
                     {
 
-                        Hanasu.Services.Song.SongService.DataSource.GetAlbumInfo(ref a);
+                        if (a.TrackTitle != null && a.Artist != null)
+                            Hanasu.Services.Song.SongService.DataSource.GetAlbumInfo(ref a);
 
                         Dispatcher.Invoke(new EmptyDelegate(() =>
                             {
@@ -79,6 +85,7 @@ namespace Hanasu.Windows
                                 dialog.Close();
                             }));
                     }));
+                dialog.ShowDialog();
             }
             catch (Exception)
             {

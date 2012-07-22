@@ -7,6 +7,7 @@
         xmlns:friends="clr-namespace:Hanasu.Services.Friends"
         xmlns:ac="clr-namespace:AdornedControl"
         xmlns:core="clr-namespace:Hanasu.Core"
+        xmlns:conv="clr-namespace:Hanasu.Core.Converters"
         xmlns:log="clr-namespace:Hanasu.Services.Logging"
         Title="Hanasu" MinHeight="410" MinWidth="755" xmlns:my="clr-namespace:Hanasu.Core.Converters" Icon="pack://application:,,,/Hanasu;component/Resources/vector_icon.png" x:Name="thisWindow" SizeChanged="thisWindow_SizeChanged">
     <Window.Resources>
@@ -26,6 +27,7 @@
             <my:EnumToIntConverter x:Key="EnumToIntConverter1" />
             <my:IntCalcConverter x:Key="IntCalcConverter1" />
             <core:UriToBitmapImageConverter x:Key="UrlToBitmapConv" />
+            <conv:ByteArrayToImageConverter x:Key="ByteToBitmapConv" />
         </ResourceDictionary>
     </Window.Resources>
     <metro:MetroWindow.WindowCommands>
@@ -230,7 +232,14 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid Height="80">
-                                                    <Image Width="80" Height="80" Margin="0 -5 0 0" Source="{Binding Path=AlbumCoverUri,Converter={StaticResource UrlToBitmapConv},ConverterParameter='80',IsAsync=True,Mode=OneTime}" />
+                                                    <Image Width="80" Height="80" Margin="0 -5 0 0">
+                                                        <Image.Source>
+                                                            <PriorityBinding>
+                                                                <Binding Path="AlbumCoverData" Converter="{StaticResource ByteToBitmapConv}" IsAsync="True" UpdateSourceTrigger='Default'/>
+                                                                <Binding Path="AlbumCoverUri" Converter="{StaticResource UrlToBitmapConv}" IsAsync="True" Mode="OneTime" UpdateSourceTrigger="PropertyChanged"/>
+                                                            </PriorityBinding>
+                                                        </Image.Source>
+                                                    </Image>
                                                 </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -267,6 +276,7 @@
                             </ListView.View>
                             <ListView.ContextMenu>
                                 <ContextMenu>
+                                    <MenuItem Header="Edit Song Info" Name="EditSongInfoLikedItemsMenuItem" Click="EditSongInfoLikedItemsMenuItem_Click"/>
                                     <MenuItem Header="Deleted Selected Item(s)" Name="DeleteSelectedLikeItemsMenuItem" Click="DeleteSelectedLikeItemsMenuItem_Click"/>
                                 </ContextMenu>
                             </ListView.ContextMenu>

@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using Hanasu.Services.Song.Album_Info_Data_Source;
 using System.Collections;
 using Hanasu.Services.Stations;
+using System.Net;
 
 namespace Hanasu.Services.Song
 {
@@ -116,10 +117,10 @@ namespace Hanasu.Services.Song
 
             if (tmpSplt.Length == 2)
             {
-                if (Regex.IsMatch(songdata, NearEndFeatureRegex, RegexOptions.Compiled))
-                    songdata = Regex.Replace(songdata, NearEndFeatureRegex, "", RegexOptions.Compiled);
-                else if (Regex.IsMatch(songdata, NearFrontFeatureRegex, RegexOptions.Compiled))
+                if (Regex.IsMatch(songdata, NearFrontFeatureRegex, RegexOptions.Compiled))
                     songdata = Regex.Replace(songdata, NearFrontFeatureRegex, " -", RegexOptions.Compiled);
+                else if (Regex.IsMatch(songdata, NearEndFeatureRegex, RegexOptions.Compiled))
+                    songdata = Regex.Replace(songdata, NearEndFeatureRegex, "", RegexOptions.Compiled);
             }
             else if (tmpSplt.Length > 2)
             {
@@ -127,8 +128,8 @@ namespace Hanasu.Services.Song
 
             return songdata;
         }
-        public const string NearFrontFeatureRegex = @"\W(ft|FT|feat|FEAT)\.(\W)?.+?\-";
-        public const string NearEndFeatureRegex = @"\W(ft|FT|feat|FEAT)\..+?(\n|$)";
+        public const string NearFrontFeatureRegex = @"\W(ft|FT|feat|FEAT|Feat)\.(\W)?.+?\-";
+        public const string NearEndFeatureRegex = @"\W(ft|FT|feat|FEAT|Feat)\..+?(\n|$)";
 
         public static bool IsSongTitle(string name, Station currentStation)
         {

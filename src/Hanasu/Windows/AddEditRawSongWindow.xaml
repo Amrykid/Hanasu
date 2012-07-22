@@ -1,4 +1,4 @@
-﻿<metro:MetroWindow x:Class="Hanasu.Windows.AddRawSongToLikedWindow"
+﻿<metro:MetroWindow x:Class="Hanasu.Windows.AddEditRawSongWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"

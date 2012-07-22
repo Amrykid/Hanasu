@@ -1239,7 +1239,7 @@ namespace Hanasu
                 dat.OriginallyPlayedStation = currentStation;
                 dat.OriginallyBroadcastSongData = SongDataLbl.Text;
 
-                AddRawSongToLikedWindow ars = new AddRawSongToLikedWindow();
+                AddEditRawSongWindow ars = new AddEditRawSongWindow();
                 ars.Owner = this;
                 ars.DataContext = dat;
 
@@ -1486,6 +1486,24 @@ namespace Hanasu
             }
             catch (Exception)
             {
+            }
+        }
+
+        private void EditSongInfoLikedItemsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (LikedSongsListView.SelectedItem != null)
+            {
+                SongData dat = (SongData)LikedSongsListView.SelectedItem;
+
+                var dialog = new AddEditRawSongWindow();
+                dialog.DataContext = dat;
+                dialog.Owner = this;
+
+                if ((bool)dialog.ShowDialog())
+                {
+                    SongData dat2 = (SongData)dialog.DataContext;
+                    Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs[Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs.IndexOf(dat)] = dat2;
+                }
             }
         }
     }
