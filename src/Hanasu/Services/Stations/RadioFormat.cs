@@ -9,12 +9,14 @@ namespace Hanasu.Services.Stations
     [Serializable]
     public enum RadioFormat
     {
-        Classical = 0,
-        JPop = 1,
-        Mix = 2,
-        Vocaloid = 3,
-        Info = 4,
-        JRock = 5,
-        Anime = 6
+        Unknown = 0,
+        Classical = 1,
+        JPop = 2,
+        Mix = 3,
+        Vocaloid = 4,
+        Info = 5,
+        JRock = 6,
+        Anime = 7,
+        Other = 8
     }
 }
