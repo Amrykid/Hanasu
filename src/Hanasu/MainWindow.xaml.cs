@@ -1652,5 +1652,44 @@ namespace Hanasu
                 }
             }
         }
+
+        private void CatalogTabBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CatalogTabBtn.IsEnabled) return;
+
+            var binding = new Binding();
+            binding.Source = Hanasu.Services.Stations.StationsService.Instance;
+            binding.Path = new PropertyPath("Stations");
+            binding.Mode = BindingMode.OneWay;
+            binding.IsAsync = true;
+            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            binding.NotifyOnTargetUpdated = true;
+
+            BindingOperations.SetBinding(StationsListView,ListView.ItemsSourceProperty,binding);
+
+            //ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}"
+
+            CustomTabBtn.IsEnabled = true;
+            CatalogTabBtn.IsEnabled = false;
+        }
+
+        private void CustomTabBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CustomTabBtn.IsEnabled) return;
+
+
+            var binding = new Binding();
+            binding.Source = Hanasu.Services.Stations.StationsService.Instance;
+            binding.Path = new PropertyPath("CustomStations");
+            binding.Mode = BindingMode.OneWay;
+            binding.IsAsync = true;
+            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            binding.NotifyOnTargetUpdated = true;
+
+            BindingOperations.SetBinding(StationsListView, ListView.ItemsSourceProperty, binding);
+
+            CatalogTabBtn.IsEnabled = true;
+            CustomTabBtn.IsEnabled = false;
+        }
     }
 }

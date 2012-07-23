@@ -36,6 +36,7 @@ namespace Hanasu.Services.Stations
                 "Stations Service initialized.");
 
             Stations = new ObservableCollection<Station>();
+            CustomStations = new ObservableCollection<Station>();
             timer = new Timer();
 
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Hanasu\\"))
@@ -50,6 +51,8 @@ namespace Hanasu.Services.Stations
             System.Threading.Tasks.Task.Factory.StartNew(() =>
                 LoadStationsFromRepo()).ContinueWith((tk) => tk.Dispose());
 
+            LoadCustomStations();
+
             if (Hanasu.Services.Settings.SettingsService.Instance.UpdateStationsLive)
             {
                 timer.Elapsed += timer_Elapsed;
@@ -60,7 +63,55 @@ namespace Hanasu.Services.Stations
             }
         }
 
+        private void LoadCustomStations()
+        {
+            System.Windows.Application.Current.Exit += Current_Exit;
+
+            if (File.Exists(CustomStationsFile))
+            {
+                RadioFormat dummie = 0;
+                dynamic stats = null;
+
+                var doc = XDocument.Load(CustomStationsFile);
+                stats = from x in doc.Element("Stations").Elements("Station")
+                        select ParseStation(ref dummie, x);
+
+                foreach (var item in stats)
+                    CustomStations.Add(item);
+
+                OnPropertyChanged("CustomStations");
+            }
+        }
+
+        void Current_Exit(object sender, System.Windows.ExitEventArgs e)
+        {
+            System.Windows.Application.Current.Exit -= Current_Exit;
+
+            SaveCustomStations();
+        }
+        void SaveCustomStations()
+        {
+            XElement stations = new XElement("Stations",
+                from x in CustomStations
+                select new XElement("Station",
+                    new XElement("Name", x.Name),
+                    new XElement("DataSource", x.DataSource),
+                    new XElement("Homepage", x.Homepage),
+                    new XElement("Format", Enum.GetName(typeof(RadioFormat), x.Format)),
+                    new XElement("City", x.City),
+                    new XElement("Language", Enum.GetName(typeof(StationLanguage), x.Language)),
+                    new XElement("Cacheable", x.Cacheable.ToString()),
+                    new XElement("ExplitcitExtension", x.ExplicitExtension == null ? "" : x.ExplicitExtension),
+                    new XElement("Schedule", x.ScheduleUrl == null ? "" : x.ScheduleUrl.ToString(), new XAttribute("type", Enum.GetName(typeof(StationScheduleType), x.ScheduleType))),
+                    new XElement("Logo", x.Logo == null ? "" : x.Logo.ToString())));
+
+            var doc = new XDocument(new XDeclaration("1.0", "Unicode", "yes"), stations);
+            doc.Save(CustomStationsFile);
+
+        }
+
         public static string StationsCacheDir { get; private set; }
+        public string CustomStationsFile { get { return StationsCacheDir + "CustomStations.xml"; } }
         public string StationsCachedFile { get { return StationsCacheDir + "Stations.xml"; } }
         public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"; } }
 
@@ -268,6 +319,7 @@ namespace Hanasu.Services.Stations
         private delegate void EmptyParameterizedDelegate2(object obj, object obj2);
 
         public ObservableCollection<Station> Stations { get; private set; }
+        public ObservableCollection<Station> CustomStations { get; private set; }
 
         public StationsServiceStatus Status { get; private set; }
 
