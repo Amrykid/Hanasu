@@ -143,7 +143,7 @@
                                                 <Border Grid.Row="0" BorderThickness=".5" BorderBrush="{StaticResource AccentColorBrush}">
                                                     <Grid>
                                                         <StackPanel Orientation="Horizontal">
-                                                            <Button Height="45" Width="45" Name="StationsListViewRefreshBtn" Click="StationsListViewRefreshBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10" IsEnabled="{Binding ElementName=CatalogTabBtn,Path=IsEnabled,UpdateSourceTrigger=PropertyChanged}">
+                                                            <Button Height="45" Width="45" Name="StationsListViewRefreshBtn" Click="StationsListViewRefreshBtn_Click" Style="{DynamicResource MetroCircleButtonStyle}" Padding="10" IsEnabled="{Binding ElementName=CustomTabBtn,Path=IsEnabled,UpdateSourceTrigger=PropertyChanged}">
                                                                 <Rectangle Width="25" Height="25" Margin="0 0 0 0">
                                                                     <Rectangle.Fill>
                                                                         <VisualBrush Stretch="Fill"
