@@ -213,7 +213,8 @@ namespace Hanasu.Services.Stations
                 Language = x.ContainsElement("Language") ? (StationLanguage)Enum.Parse(typeof(StationLanguage), x.Element("Language").Value) : StationLanguage.English,
                 Cacheable = x.ContainsElement("Cacheable") ? bool.Parse(x.Element("Cacheable").Value) : false,
                 ScheduleType = x.ContainsElement("Schedule") ? (StationScheduleType)Enum.Parse(typeof(StationScheduleType),x.Element("Schedule").Attribute("type").Value) : StationScheduleType.none,
-                ScheduleUrl = x.ContainsElement("Schedule") ? new Uri(x.Element("Schedule").Value) : null
+                ScheduleUrl = x.ContainsElement("Schedule") ? new Uri(x.Element("Schedule").Value) : null,
+                Logo = x.ContainsElement("Logo") ? new Uri(x.Element("Logo").Value) : null
             };
         }
 

@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:Hanasu.Services.Settings"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:fb="clr-namespace:Hanasu.Services.Facebook"
+        xmlns:friends="clr-namespace:Hanasu.Services.Friends"
         Title="Settings" Height="364" Width="493" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner" DataContext="{x:Static local:SettingsService.Instance}">
     <Window.Resources>
         <ResourceDictionary>
@@ -42,16 +43,31 @@
                             <Grid>
                                 <GroupBox Header="Theme" FontSize="20" BorderThickness="0" Padding="10" Height="90" VerticalAlignment="Top">
                                     <Grid>
-                                        <ComboBox Name="ThemesComboBox" IsEditable="False" ItemsSource="{Binding Source={StaticResource dataFromSettingsThemesEnum}}" SelectedValue="{Binding Theme, Mode=OneTime}" Height="30" Width="80" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                        <ComboBox Name="ThemesComboBox" IsEditable="False" ItemsSource="{Binding Source={StaticResource dataFromSettingsThemesEnum}}" SelectedValue="{Binding Theme, Mode=OneTime}" Height="30" Width="110" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                                     </Grid>
 
                                 </GroupBox>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Sharing">
-                            <Grid>
-                                <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="fbpostSwitch" VerticalAlignment="Top" Width="237" Header="Post Liked songs to Facebook" FontSize="15" IsEnabled="{Binding ElementName='fetchSongDataSwitch',Path=IsChecked}"  IsChecked="{Binding Source={x:Static fb:FacebookService.Instance},Path=UseFacebook,Mode=OneTime}" IsEnabledChanged="fbpostSwitch_IsEnabledChanged"/>
-                                <Button Height="20" Width="66" Margin="8,0,0,8" VerticalAlignment="Bottom" HorizontalAlignment="Left" Name="ReauthFBBtn" Click="ReauthFBBtn_Click">Reauth FB</Button>
+                        <TabItem Header="Services">
+                            <Grid Height="209">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50*"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="0">
+                                    <StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                        <GroupBox Header="Friends" FontSize="20" BorderThickness="0" Padding="10" VerticalAlignment="Top">
+                                            <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="friendsEnabledSwitch" VerticalAlignment="Top" Width="237" Header="Enable Friends services" FontSize="15"  IsChecked="{Binding Source={x:Static friends:FriendsService.Instance},Path=FriendsServiceEnabled,Mode=OneTime}" IsEnabledChanged="friendsEnabledSwitch_IsEnabledChanged"/>
+                                        </GroupBox>
+                                        <GroupBox Header="Sharing" FontSize="20" BorderThickness="0" Padding="10" VerticalAlignment="Top">
+                                            <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="fbpostSwitch" VerticalAlignment="Top" Width="237" Header="Post Liked songs to Facebook" FontSize="15" IsEnabled="{Binding ElementName='fetchSongDataSwitch',Path=IsChecked}"  IsChecked="{Binding Source={x:Static fb:FacebookService.Instance},Path=UseFacebook,Mode=OneTime}" IsEnabledChanged="fbpostSwitch_IsEnabledChanged"/>
+                                        </GroupBox>
+                                    </StackPanel>
+                                </ScrollViewer>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <Button Height="20" Width="66" Margin="8,0,0,8" VerticalAlignment="Bottom" HorizontalAlignment="Left" Name="ReauthFBBtn" Click="ReauthFBBtn_Click">Reauth FB</Button>
+                                </StackPanel>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Misc">

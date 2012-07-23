@@ -23,5 +23,7 @@ namespace Hanasu.Services.Stations
 
         public Uri ScheduleUrl { get; set; }
         public StationScheduleType ScheduleType { get; set; }
+
+        public Uri Logo { get; set; }
     }
 }

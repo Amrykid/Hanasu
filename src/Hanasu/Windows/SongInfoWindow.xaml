@@ -4,7 +4,10 @@
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:core="clr-namespace:Hanasu.Core"
         WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False" WindowStartupLocation="CenterOwner"
-        Height="506" Width="665" Name="thisWindow" Title="Song Data" Loaded="thisWindow_Loaded">
+        Height="506" Width="665" Name="thisWindow" Loaded="thisWindow_Loaded">
+    <metro:MetroWindow.Title>
+        <Binding Path="TrackTitle" StringFormat="{}{0} - Song Data"/>
+    </metro:MetroWindow.Title>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

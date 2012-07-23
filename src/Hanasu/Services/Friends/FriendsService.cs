@@ -154,9 +154,9 @@ namespace Hanasu.Services.Friends
             Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
 
             AvatarUrl = sdei.SettingsElement.ContainsElement("AvatarUrl") ? sdei.SettingsElement.Element("AvatarUrl").Value : null;
-            FriendsServiceEnabled = sdei.SettingsElement.ContainsElement("FriendsServiceEnabled") ? bool.Parse(sdei.SettingsElement.Element("FriendsServiceEnabled").Value) : false;
+            Instance.FriendsServiceEnabled = sdei.SettingsElement.ContainsElement("FriendsServiceEnabled") ? bool.Parse(sdei.SettingsElement.Element("FriendsServiceEnabled").Value) : false;
 
-            if (FriendsServiceEnabled)
+            if (Instance.FriendsServiceEnabled)
                 InitializeSocket();
             //BroadcastAvatar(_avatarurl);
 
@@ -166,11 +166,11 @@ namespace Hanasu.Services.Friends
             Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo sdei = (Hanasu.Services.Settings.SettingsService.SettingsDataEventInfo)ei;
 
             sdei.SettingsElement.Add(
-                new XElement("FriendsServiceEnabled", FriendsServiceEnabled.ToString()));
+                new XElement("FriendsServiceEnabled", Instance.FriendsServiceEnabled.ToString()));
             sdei.SettingsElement.Add(
                 new XElement("AvatarUrl", AvatarUrl));
         }
-        public static bool FriendsServiceEnabled { get; set; }
+        public bool FriendsServiceEnabled { get; set; }
 
         #region Socket
         #region UDP
@@ -328,7 +328,7 @@ namespace Hanasu.Services.Friends
                     }
 
                     foreach (FriendView f in Instance.Friends)
-                        if (FriendsServiceEnabled)
+                        if (Instance.FriendsServiceEnabled)
                             f.Connection.Initiate(f.Connection.IPAddress);
 
                     Instance.OnPropertyChanged("Friends");

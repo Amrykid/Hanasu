@@ -256,12 +256,6 @@ namespace Hanasu
 
             player.settings.volume = (int)VolumeSlider.Value;
 
-            player.stretchToFit = true;
-
-            player.MediaError += player_MediaError;
-
-            player.PlayStateChange += player_PlayStateChange;
-
             player.MediaChange += player_MediaChange;
 
             player.ScriptCommand += player_ScriptCommand;
@@ -289,7 +283,7 @@ namespace Hanasu
             player.close();
             player.Dispose();
 
-            windowsFormsHost1.Child = null;
+            ((Hanasu.Core.AxWMP)windowsFormsHost1.Child).Dispose();
         }
 
         void attemptToConnectTimer_Elapsed(object sender, ElapsedEventArgs e)

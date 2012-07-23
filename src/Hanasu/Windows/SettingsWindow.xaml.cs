@@ -63,6 +63,8 @@ namespace Hanasu.Windows
 
             SettingsService.Instance.Theme = (SettingsThemes)ThemesComboBox.SelectedItem;
 
+            Hanasu.Services.Friends.FriendsService.Instance.FriendsServiceEnabled = (bool)friendsEnabledSwitch.IsChecked;
+
             //checks if auth is needed.
 
             if (Hanasu.Services.Facebook.FacebookService.FacebookEnabled && Hanasu.Services.Facebook.FacebookService.Instance.NeedsToAuth)
@@ -113,6 +115,11 @@ namespace Hanasu.Windows
                 });
 
             UpdateCatalogBtn.IsEnabled = false;
+        }
+
+        private void friendsEnabledSwitch_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
         }
 
     }
