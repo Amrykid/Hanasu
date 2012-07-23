@@ -47,6 +47,8 @@ namespace Hanasu.Windows
 
             this.CancelBtn.Click -= new System.Windows.RoutedEventHandler(this.CancelBtn_Click);
             this.Unloaded -= SettingsWindow_Unloaded;
+
+            BindingOperations.ClearAllBindings(this);
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
@@ -64,6 +66,8 @@ namespace Hanasu.Windows
             SettingsService.Instance.Theme = (SettingsThemes)ThemesComboBox.SelectedItem;
 
             Hanasu.Services.Friends.FriendsService.Instance.FriendsServiceEnabled = (bool)friendsEnabledSwitch.IsChecked;
+
+            SettingsService.Instance.DisplayBackgroundTheme = (bool)displayThemeBackgroundSwitch.IsChecked;
 
             //checks if auth is needed.
 
@@ -116,11 +120,5 @@ namespace Hanasu.Windows
 
             UpdateCatalogBtn.IsEnabled = false;
         }
-
-        private void friendsEnabledSwitch_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
     }
 }

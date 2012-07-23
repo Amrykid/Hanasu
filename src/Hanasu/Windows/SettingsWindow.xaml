@@ -4,6 +4,7 @@
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Hanasu.Services.Settings"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:conv="clr-namespace:Hanasu.Core.Converters"
         xmlns:fb="clr-namespace:Hanasu.Services.Facebook"
         xmlns:friends="clr-namespace:Hanasu.Services.Friends"
         Title="Settings" Height="364" Width="493" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner" DataContext="{x:Static local:SettingsService.Instance}">
@@ -26,6 +27,7 @@
                     <x:Type TypeName="local:SettingsThemes"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibConv"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -41,9 +43,26 @@
                         </TabItem>
                         <TabItem Header="UI">
                             <Grid>
-                                <GroupBox Header="Theme" FontSize="20" BorderThickness="0" Padding="10" Height="90" VerticalAlignment="Top">
+                                <GroupBox Header="Theme" FontSize="20" BorderThickness="0" Padding="10" Height="200" VerticalAlignment="Top">
                                     <Grid>
-                                        <ComboBox Name="ThemesComboBox" IsEditable="False" ItemsSource="{Binding Source={StaticResource dataFromSettingsThemesEnum}}" SelectedValue="{Binding Theme, Mode=OneTime}" Height="30" Width="110" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                        <StackPanel>
+                                            <ComboBox Name="ThemesComboBox" IsEditable="False" ItemsSource="{Binding Source={StaticResource dataFromSettingsThemesEnum}}" SelectedValue="{Binding Theme, Mode=OneTime}" Height="30" Width="110" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" x:Name="displayThemeBackgroundSwitch" VerticalAlignment="Top" Width="225" Header="Enable Theme Background" FontSize="15"  IsChecked="{Binding DisplayBackgroundTheme,Mode=OneTime}"/>
+                                                <Grid Margin="15 0 0 0" ToolTip="This option will make Hanasu use more ram memory and may slow down your pc if you don't have very much ram." Visibility="{Binding ElementName=displayThemeBackgroundSwitch,Path=IsChecked,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibConv}}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Rectangle Width="25" Height="25">
+                                                            <Rectangle.Fill>
+                                                                <VisualBrush Stretch="Fill"
+                            					Visual="{StaticResource appbar_warning}" />
+                                                            </Rectangle.Fill>
+                                                        </Rectangle>
+                                                        <TextBlock FontSize="15" Text="This option will make Hanasu use more ram memory." Margin="5 0 0 0"  TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Width="150"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </StackPanel>
+                                        </StackPanel>
+
                                     </Grid>
 
                                 </GroupBox>
@@ -58,7 +77,7 @@
                                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="0">
                                     <StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto">
                                         <GroupBox Header="Friends" FontSize="20" BorderThickness="0" Padding="10" VerticalAlignment="Top">
-                                            <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="friendsEnabledSwitch" VerticalAlignment="Top" Width="237" Header="Enable Friends services" FontSize="15"  IsChecked="{Binding Source={x:Static friends:FriendsService.Instance},Path=FriendsServiceEnabled,Mode=OneTime}" IsEnabledChanged="friendsEnabledSwitch_IsEnabledChanged"/>
+                                            <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="friendsEnabledSwitch" VerticalAlignment="Top" Width="237" Header="Enable Friends services" FontSize="15"  IsChecked="{Binding Source={x:Static friends:FriendsService.Instance},Path=FriendsServiceEnabled,Mode=OneTime}"/>
                                         </GroupBox>
                                         <GroupBox Header="Sharing" FontSize="20" BorderThickness="0" Padding="10" VerticalAlignment="Top">
                                             <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="fbpostSwitch" VerticalAlignment="Top" Width="237" Header="Post Liked songs to Facebook" FontSize="15" IsEnabled="{Binding ElementName='fetchSongDataSwitch',Path=IsChecked}"  IsChecked="{Binding Source={x:Static fb:FacebookService.Instance},Path=UseFacebook,Mode=OneTime}" IsEnabledChanged="fbpostSwitch_IsEnabledChanged"/>

@@ -95,6 +95,7 @@
       <DependentUpon>AxWMP.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\BaseINPC.cs" />
+    <Compile Include="Core\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Core\Converters\ByteArrayToImageConverter.cs" />
     <Compile Include="Core\Converters\UriToBitmapImageConverter.cs" />
     <Compile Include="Core\Converters\EnumToIntConverter.cs" />
