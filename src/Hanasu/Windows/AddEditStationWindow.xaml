@@ -4,6 +4,8 @@
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:conv="clr-namespace:Hanasu.Core.Converters"
         xmlns:core="clr-namespace:Hanasu.Core"
+        xmlns:stations="clr-namespace:Hanasu.Services.Stations"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False" WindowStartupLocation="CenterOwner"
         Title="Add/Edit Station" Height="387" Width="494" SizeToContent="Height">
     <Window.Resources>
@@ -21,6 +23,18 @@
             </ResourceDictionary.MergedDictionaries>
             <core:UriToBitmapImageCachedConverter x:Key="UrlToBitmapConv" />
             <conv:StringUriConverter x:Key="UrlStringConv"/>
+            <ObjectDataProvider x:Key="dataFromRadioFormatEnum"
+       MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="stations:RadioFormat"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider x:Key="dataFromStationLanguageEnum"
+       MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="stations:StationLanguage"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -47,7 +61,26 @@
                 </Grid>
                 <Grid Grid.Row="2">
                     <Expander Header="Optional Data" FontSize="17" IsExpanded="False">
-                        <Grid/>
+                        <Grid>
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                <StackPanel>
+                                    <GroupBox Header="Homepage:" BorderThickness="0" FontSize="17" Margin="10 0 10 0" Width="300" HorizontalAlignment="Left">
+                                        <TextBox Name="TextBoxHomePage" Text="{Binding Homepage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource UrlStringConv}}" FontSize="15"/>
+                                    </GroupBox>
+                                    <StackPanel Orientation="Horizontal">
+                                        <GroupBox Header="Format:" BorderThickness="0" FontSize="17" Margin="10 0 10 0">
+                                            <ComboBox Width="120" Name="ComboBoxFormal" ItemsSource="{Binding Source={StaticResource dataFromRadioFormatEnum}}" SelectedItem="{Binding Format,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontSize="15"/>
+                                        </GroupBox>
+                                        <GroupBox Header="Language:" BorderThickness="0" FontSize="17" Margin="10 0 10 0">
+                                            <ComboBox Width="120" Name="ComboBoxLanguage" ItemsSource="{Binding Source={StaticResource dataFromStationLanguageEnum}}" SelectedItem="{Binding Language,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontSize="15"/>
+                                        </GroupBox>
+                                    </StackPanel>
+                                    <GroupBox Header="Extension Extension (advanced users):" BorderThickness="0" FontSize="17" Margin="10 0 10 0" Width="300" HorizontalAlignment="Left">
+                                        <TextBox Name="TextBoxExtension" Text="{Binding ExplicitExtension,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
+                                    </GroupBox>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
                     </Expander>
                 </Grid>
             </Grid>
