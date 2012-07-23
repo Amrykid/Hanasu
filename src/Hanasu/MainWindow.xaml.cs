@@ -1140,15 +1140,14 @@ namespace Hanasu
 
                 switch (header.Column.Header.ToString())
                 {
-                    case "Song": property = "TrackTitle";
+                    case "UserName": property = "UserName";
                         break;
-                    case "Artist": property = "Artist";
-                        break;
-                    case "Album": property = "Album";
+                    case "Status": property = "Status";
                         break;
                 }
             }
 
+            if (view == null) return;
 
             if (view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == property)
                 if (view.SortDescriptions[0].Direction == ListSortDirection.Descending)
