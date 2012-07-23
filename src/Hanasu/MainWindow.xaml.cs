@@ -1501,6 +1501,7 @@ namespace Hanasu
                 //Delayed loading of the Liked Songs tab.
 
                 LikedSongsListView.IsEnabled = false;
+                LikedSongsSearchBox.IsEnabled = false;
 
                 System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>
                 {
@@ -1522,6 +1523,7 @@ namespace Hanasu
                         BindingOperations.SetBinding(LikedSongsListView, ListView.ItemsSourceProperty, b);
 
                         LikedSongsListView.IsEnabled = true;
+                        LikedSongsSearchBox.IsEnabled = true;
 
                         likedSongsInitialLoad = true;
                     }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
@@ -1534,6 +1536,7 @@ namespace Hanasu
                 //Delayed loading of the Friends tab.
 
                 FriendsListView.IsEnabled = false;
+                FriendsSearchTextBox.IsEnabled = false;
 
                 System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>
                 {
@@ -1546,15 +1549,22 @@ namespace Hanasu
 
                         //be.UpdateTarget();
 
-                        var b = new Binding();
-                        b.Source = Hanasu.Services.Friends.FriendsService.Instance;
-                        b.Path = new PropertyPath("Friends");
-                        b.IsAsync = true;
-                        b.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                        try
+                        {
+                            var b = new Binding();
+                            b.Source = Hanasu.Services.Friends.FriendsService.Instance;
+                            b.Path = new PropertyPath("Friends");
+                            b.IsAsync = true;
+                            b.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 
-                        BindingOperations.SetBinding(FriendsListView, ListView.ItemsSourceProperty, b);
+                            BindingOperations.SetBinding(FriendsListView, ListView.ItemsSourceProperty, b);
+                        }
+                        catch (Exception)
+                        {
+                        }
 
                         FriendsListView.IsEnabled = true;
+                        FriendsSearchTextBox.IsEnabled = true;
 
                         friendsInitialLoad = true;
                     }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
