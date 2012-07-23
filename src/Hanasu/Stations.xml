@@ -393,4 +393,15 @@
     <Language>Russian</Language>
     <Cacheable>True</Cacheable>
   </Station>
+  <Station>
+    <Name>Hotmix Radio Japan</Name>
+    <DataSource><![CDATA[http://streaming.hotmix-radio.net/hotmixradio-japan-128.mp3]]></DataSource>
+    <Homepage>http://www.hotmixradio.fr/japan</Homepage>
+    <Format>Mix</Format>
+    <City>France</City>
+    <ExplicitExtension></ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>French</Language>
+    <Cacheable>False</Cacheable>
+  </Station>
 </Stations>
