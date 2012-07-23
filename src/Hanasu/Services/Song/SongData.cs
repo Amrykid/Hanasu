@@ -22,7 +22,10 @@ namespace Hanasu.Services.Song
 
         public override int GetHashCode()
         {
-            return TrackTitle.GetHashCode() ^ Artist.GetHashCode();
+            if (TrackTitle != null && Artist != null)
+                return TrackTitle.GetHashCode() ^ Artist.GetHashCode();
+            else
+                return base.GetHashCode();
         }
     }
 }
