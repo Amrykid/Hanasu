@@ -18,12 +18,19 @@ namespace Hanasu.Core.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            string str = (string)value;
+            try
+            {
+                string str = (string)value;
 
-            if (string.IsNullOrEmpty(str))
+                if (string.IsNullOrEmpty(str))
+                    return null;
+                else
+                    return new Uri(str);
+            }
+            catch (Exception)
+            {
                 return null;
-            else
-                return new Uri(str);
+            }
         }
     }
 }

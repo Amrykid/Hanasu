@@ -1669,6 +1669,7 @@ namespace Hanasu
 
             //ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}"
 
+            StationsListViewDeletecustomStationsMenuItem.IsEnabled = false;
             CustomTabBtn.IsEnabled = true;
             CatalogTabBtn.IsEnabled = false;
         }
@@ -1688,8 +1689,43 @@ namespace Hanasu
 
             BindingOperations.SetBinding(StationsListView, ListView.ItemsSourceProperty, binding);
 
+            StationsListViewDeletecustomStationsMenuItem.IsEnabled = true;
             CatalogTabBtn.IsEnabled = true;
             CustomTabBtn.IsEnabled = false;
+        }
+
+        private void StationsListViewCustomStationsAddBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AddEditStationWindow aesw = new AddEditStationWindow();
+
+            var station = new Station();
+
+            aesw.DataContext = station;
+
+            aesw.Owner = this;
+
+            if ((bool)aesw.ShowDialog())
+            {
+                station = (Station)aesw.DataContext;
+
+                Hanasu.Services.Stations.StationsService.Instance.CustomStations.Add(station);
+            }
+        }
+
+        private void StationsListViewDeletecustomStationsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (CustomTabBtn.IsEnabled) return;
+
+            if (StationsListView.SelectedItems.Count > 0)
+            {
+
+                ConfirmDeleteWindow cdw = new ConfirmDeleteWindow("Name");
+                cdw.DataContext = StationsListView.SelectedItems;
+
+                if ((bool)cdw.ShowDialog())
+                {
+                }
+            }
         }
     }
 }

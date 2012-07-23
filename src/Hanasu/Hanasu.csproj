@@ -175,6 +175,9 @@
     <Compile Include="Windows\ConfirmDeleteWindow.xaml.cs">
       <DependentUpon>ConfirmDeleteWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\AddEditStationWindow.xaml.cs">
+      <DependentUpon>AddEditStationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SetAvatarUrlWindow.xaml.cs">
       <DependentUpon>SetAvatarUrlWindow.xaml</DependentUpon>
     </Compile>
@@ -231,6 +234,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ConfirmDeleteWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AddEditStationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
