@@ -210,7 +210,7 @@ namespace Hanasu.Services.Stations
                 City = x.Element("City").Value,
                 ExplicitExtension = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : null,
                 StationType = x.ContainsElement("StationType") ? (StationType)Enum.Parse(typeof(StationType), x.Element("StationType").Value) : StationType.Radio,
-                Language = x.ContainsElement("Language") ? (StationLanguage)Enum.Parse(typeof(StationLanguage), x.Element("Language").Value) : StationLanguage.English,
+                Language = x.ContainsElement("Language") ? (StationLanguage)Enum.Parse(typeof(StationLanguage), x.Element("Language").Value) : StationLanguage.Unknown,
                 Cacheable = x.ContainsElement("Cacheable") ? bool.Parse(x.Element("Cacheable").Value) : false,
                 ScheduleType = x.ContainsElement("Schedule") ? (StationScheduleType)Enum.Parse(typeof(StationScheduleType),x.Element("Schedule").Attribute("type").Value) : StationScheduleType.none,
                 ScheduleUrl = x.ContainsElement("Schedule") ? new Uri(x.Element("Schedule").Value) : null,
