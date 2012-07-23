@@ -266,6 +266,8 @@ namespace Hanasu
 
             player.EndOfStream += player_EndOfStream;
 
+            player.PlayStateChange += player_PlayStateChange;
+
             IsWMPInitialized = true;
         }
         private void ShutdownWMPClose()
