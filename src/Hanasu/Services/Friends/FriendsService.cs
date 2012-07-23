@@ -156,7 +156,8 @@ namespace Hanasu.Services.Friends
             AvatarUrl = sdei.SettingsElement.ContainsElement("AvatarUrl") ? sdei.SettingsElement.Element("AvatarUrl").Value : null;
             FriendsServiceEnabled = sdei.SettingsElement.ContainsElement("FriendsServiceEnabled") ? bool.Parse(sdei.SettingsElement.Element("FriendsServiceEnabled").Value) : false;
 
-            InitializeSocket();
+            if (FriendsServiceEnabled)
+                InitializeSocket();
             //BroadcastAvatar(_avatarurl);
 
         }
@@ -327,7 +328,8 @@ namespace Hanasu.Services.Friends
                     }
 
                     foreach (FriendView f in Instance.Friends)
-                        f.Connection.Initiate(f.Connection.IPAddress);
+                        if (FriendsServiceEnabled)
+                            f.Connection.Initiate(f.Connection.IPAddress);
 
                     Instance.OnPropertyChanged("Friends");
                 }
@@ -407,7 +409,7 @@ namespace Hanasu.Services.Friends
                                 p,
                                 3000,
                                 true,
-                                Notifications.NotificationType.Now_Playing,null,
+                                Notifications.NotificationType.Now_Playing, null,
                                 null);
                     }
                     break;
@@ -459,7 +461,7 @@ namespace Hanasu.Services.Friends
                             var view = GetFriendViewFromConnection(friendConnection);
 
                             Notifications.NotificationsService.AddNotification("Friend Online",
-                                friendConnection.UserName + " is now online!", 3000, true,Notifications.NotificationType.Information,null,
+                                friendConnection.UserName + " is now online!", 3000, true, Notifications.NotificationType.Information, null,
                                 null);
 
                             view.Status = "Online - Idle";
@@ -535,7 +537,10 @@ namespace Hanasu.Services.Friends
         public void AddFriend(string username, string ip, int key, bool UseUDP = true, bool IfTcpIsHost = false)
         {
             var f = new FriendConnection(username, ip, key, UseUDP, IfTcpIsHost);
-            f.Initiate(ip);
+
+            if (FriendsServiceEnabled)
+                f.Initiate(ip);
+
             Friends.Add(new FriendView(f));
             Instance.OnPropertyChanged("Friends");
 
