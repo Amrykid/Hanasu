@@ -95,6 +95,11 @@ namespace Hanasu.Services.Notifications
                 this.ForceCursor = true;
             }
 
+            if (info.ImageDataSource == null)
+                ImageBoxColumn.Width = new GridLength(25, GridUnitType.Star);
+            else
+                ImageBoxColumn.Width = new GridLength(100, GridUnitType.Star); ;
+
             this.MouseLeftButtonUp += NotificationsWindow_MouseLeftButtonUp;
 
             tm.Interval = info.Duration;

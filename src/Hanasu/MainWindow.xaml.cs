@@ -383,7 +383,7 @@ namespace Hanasu
                 HanasuJumpList.ShowRecentCategory = true;
                 JumpList.SetJumpList(Application.Current, HanasuJumpList);
 
-                UriToBitmapImageConverter uri = new UriToBitmapImageConverter();
+                UriToBitmapImageCachedConverter uri = new UriToBitmapImageCachedConverter();
 
                 AddThumbButton("Play", ButtonPlayClickCommand, playBtn, (ImageSource)uri.Convert("pack://application:,,,/Hanasu;component/Resources/play.png", null, new int[] { 400, 400 }, null), (e, s) => playBtn_Click(null, null));
                 AddThumbButton("Pause/Stop", ButtonPauseClickCommand, pauseBtn, (ImageSource)uri.Convert("pack://application:,,,/Hanasu;component/Resources/pause.png", null, new int[] { 400, 400 }, null), (e, s) => pauseBtn_Click(null, null));
@@ -470,11 +470,31 @@ namespace Hanasu
 
                         //song changed. maybe a couple of seconds late.
 
-                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
-                            name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
+
 
                         if (currentStation.StationType == StationType.Radio)
                         {
+                            if (Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
+                            {
+                                object imgval = null;
+
+                                try
+                                {
+                                    var songdat = Hanasu.Services.LikedSongs.LikedSongService.Instance.GetSongFromString(name);
+                                    imgval = songdat.AlbumCoverData != null ? (object)songdat.AlbumCoverData : (songdat.AlbumCoverUri != null ? songdat.AlbumCoverUri.ToString() : null);
+                                }
+                                catch (Exception) { }
+
+                                Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
+                                    name, 4000, false, Services.Notifications.NotificationType.Now_Playing, null, imgval);
+                            }
+                            else
+                            {
+                                Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
+                                    name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
+                            }
+
+                            #region Handle Radio stuff
                             if (!Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
                             {
                                 if (Hanasu.Services.Settings.SettingsService.Instance.AutomaticallyFetchSongData)
@@ -500,6 +520,9 @@ namespace Hanasu
                                                                return (n != SongDataLbl.Text);
 
                                                            })))
+                                                        return;
+
+                                                    if (Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
                                                         return;
 
                                                     Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
@@ -541,11 +564,18 @@ namespace Hanasu
                                                 /*if (this.WindowState == System.Windows.WindowState.Minimized)
                                                     this.WindowState = System.Windows.WindowState.Normal;*/
 
-                                                tabControl1.SelectedIndex = 2;
+                                                /*tabControl1.SelectedIndex = 2;
 
                                                 LikedSongsListView.SelectedItem = dat;
 
-                                                LikedSongsListView_MouseDoubleClick(LikedSongsListView, null);
+                                                LikedSongsListView_MouseDoubleClick(LikedSongsListView, null); */
+                                                Hanasu.Windows.SongInfoWindow siw = new Windows.SongInfoWindow();
+                                                siw.DataContext = dat;
+
+                                                siw.Owner = this;
+
+                                                siw.ShowDialog();
+                                                siw.Close();
                                             });
                                     }
                                     else
@@ -556,6 +586,12 @@ namespace Hanasu
                                 }
 
                             }
+                            #endregion
+                        }
+                        else
+                        {
+                            Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
+                            name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
                         }
                         #endregion
                     }

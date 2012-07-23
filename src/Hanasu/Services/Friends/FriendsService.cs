@@ -17,6 +17,7 @@ using Hanasu.Services.Events;
 using System.Xml.Linq;
 using Hanasu.Services.Song;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Hanasu.Services.Friends
 {
@@ -406,7 +407,8 @@ namespace Hanasu.Services.Friends
                                 p,
                                 3000,
                                 true,
-                                Notifications.NotificationType.Now_Playing);
+                                Notifications.NotificationType.Now_Playing,null,
+                                null);
                     }
                     break;
                 case FriendConnection.CHAT_MESSAGE:
@@ -454,10 +456,12 @@ namespace Hanasu.Services.Friends
                     {
                         if (!friendConnection.IsOnline)
                         {
-                            Notifications.NotificationsService.AddNotification("Friend Online",
-                                friendConnection.UserName + " is now online!", 3000, true);
-
                             var view = GetFriendViewFromConnection(friendConnection);
+
+                            Notifications.NotificationsService.AddNotification("Friend Online",
+                                friendConnection.UserName + " is now online!", 3000, true,Notifications.NotificationType.Information,null,
+                                null);
+
                             view.Status = "Online - Idle";
 
                             friendConnection.IsOnline = true;

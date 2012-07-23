@@ -10,6 +10,7 @@ using Hanasu.Services.Notifications;
 using Hanasu.Core;
 using Hanasu.Services.Logging;
 using System.Collections.Concurrent;
+using System.Windows.Media;
 
 namespace Hanasu.Services.Notifications
 {
@@ -54,7 +55,7 @@ namespace Hanasu.Services.Notifications
         }
 
 
-        public static void AddNotification(string title, string message = "", int duration = 3000, bool isUrgent = false, NotificationType type = NotificationType.Information, Action<NotificationInfo> onClickCallback = null)
+        public static void AddNotification(string title, string message = "", int duration = 3000, bool isUrgent = false, NotificationType type = NotificationType.Information, Action<NotificationInfo> onClickCallback = null, object displayImage = null)
         {
             if (System.Windows.Application.Current == null)
                 return;
@@ -73,6 +74,7 @@ namespace Hanasu.Services.Notifications
                     Message = message,
                     Duration = duration,
                     IsUrgent = isUrgent,
+                    ImageDataSource = displayImage,
                     Type = type,
                     OnClickCallback = onClickCallback
                 });

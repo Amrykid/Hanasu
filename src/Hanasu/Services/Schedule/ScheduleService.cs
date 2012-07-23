@@ -61,7 +61,7 @@ namespace Hanasu.Services.Schedule
                         i.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
                         i.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                         i.Stretch = System.Windows.Media.Stretch.Uniform;
-                        i.Source = (ImageSource)new Hanasu.Core.UriToBitmapImageConverter().Convert(station.ScheduleUrl, null, null, null);
+                        i.Source = (ImageSource)new Hanasu.Core.UriToBitmapImageCachedConverter().Convert(station.ScheduleUrl, null, null, null);
 
                         return i;
                     }

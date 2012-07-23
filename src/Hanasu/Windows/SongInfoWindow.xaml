@@ -16,7 +16,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
                 <!-- From MahApps.Metro.Resources package-->
             </ResourceDictionary.MergedDictionaries>
-            <core:UriToBitmapImageConverter x:Key="UriToBitmapImageConverter1" />
+            <core:UriToBitmapImageCachedConverter x:Key="UriToBitmapImageConverter1" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid>

@@ -19,7 +19,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <core:UriToBitmapImageConverter x:Key="UrlToBitmapConv" />
+            <core:UriToBitmapImageCachedConverter x:Key="UrlToBitmapConv" />
             <conv:StringUriConverter x:Key="UrlStringConv"/>
         </ResourceDictionary>
     </Window.Resources>

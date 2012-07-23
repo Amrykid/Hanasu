@@ -26,7 +26,7 @@
             <my:VisualStationTypeConverter x:Key="VisualStationTypeConverter1" />
             <my:EnumToIntConverter x:Key="EnumToIntConverter1" />
             <my:IntCalcConverter x:Key="IntCalcConverter1" />
-            <core:UriToBitmapImageConverter x:Key="UrlToBitmapConv" />
+            <core:UriToBitmapImageCachedConverter x:Key="UrlToBitmapConv" />
             <conv:ByteArrayToImageConverter x:Key="ByteToBitmapConv" />
         </ResourceDictionary>
     </Window.Resources>
