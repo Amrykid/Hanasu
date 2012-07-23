@@ -50,6 +50,8 @@ namespace Hanasu.Services.Settings
 
                 LastSetVolume = settings.ContainsElement("LastSetVolume") ? int.Parse(settings.Element("LastSetVolume").Value) : 15;
 
+                DisplayBackgroundTheme = settings.ContainsElement("DisplayBackgroundTheme") ? bool.Parse(settings.Element("DisplayBackgroundTheme").Value) : true;
+
                 _theme = settings.ContainsElement("Theme") ? Enum.IsDefined(typeof(SettingsThemes), settings.Element("Theme").Value) ? (SettingsThemes)Enum.Parse(typeof(SettingsThemes), settings.Element("Theme").Value) : SettingsThemes.Red : SettingsThemes.Red;
 
                 var sinfo = new SettingsDataEventInfo()
@@ -66,6 +68,8 @@ namespace Hanasu.Services.Settings
         {
             //Create the settings xml
 
+            DisplayBackgroundTheme = true;
+
             var doc = new XDocument(
                 new XDeclaration("1.0", "Unicode", "yes"));
 
@@ -73,7 +77,8 @@ namespace Hanasu.Services.Settings
                     new XElement("UpdateStationsLive", "false"),
                     new XElement("AutomaticallyFetchSongData", "false"),
                     new XElement("LastSetVolume", 50),
-                    new XElement("Theme", Enum.GetName(typeof(SettingsThemes),SettingsThemes.Red)));
+                    new XElement("Theme", Enum.GetName(typeof(SettingsThemes),SettingsThemes.Red)),
+                    new XElement("DisplayBackgroundTheme", DisplayBackgroundTheme.ToString()));
 
             //Pass the settings to subscribers so they can update the settings xml as needed.
             var sinfo = new SettingsDataEventInfo()
@@ -104,7 +109,8 @@ namespace Hanasu.Services.Settings
                           new XElement("UpdateStationsLive", UpdateStationsLive.ToString()),
                           new XElement("AutomaticallyFetchSongData", AutomaticallyFetchSongData.ToString()),
                           new XElement("LastSetVolume", LastSetVolume),
-                          new XElement("Theme", Enum.GetName(typeof(SettingsThemes),Theme)));
+                          new XElement("Theme", Enum.GetName(typeof(SettingsThemes),Theme)),
+                          new XElement("DisplayBackgroundTheme",DisplayBackgroundTheme.ToString()));
 
             var sinfo = new SettingsDataEventInfo()
             {
@@ -126,6 +132,8 @@ namespace Hanasu.Services.Settings
 
         public bool AutomaticallyFetchSongData { get; set; }
         public bool UpdateStationsLive { get; set; }
+
+        public bool DisplayBackgroundTheme { get; set; }
 
         public int LastSetVolume { get; set; }
 

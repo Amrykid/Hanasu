@@ -57,10 +57,14 @@ namespace Hanasu
 
                 HandleMediaKeyHooks();
 
+                HandleThemeBackground();
+
                 Hanasu.Services.Events.EventService.AttachHandler(Services.Events.EventType.Theme_Changed,
                     e =>
                     {
                         Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
+
+                        HandleThemeBackground();
                     });
 
                 //Hanasu.Services.Friends.FriendsService.Initialize();
@@ -79,6 +83,22 @@ namespace Hanasu
 
             Hanasu.Services.Settings.SettingsThemeHelper.ApplyThemeAccordingToSettings(this);
 
+        }
+
+        private void HandleThemeBackground()
+        {
+            if (Hanasu.Services.Settings.SettingsService.Instance.DisplayBackgroundTheme)
+            {
+                switch (Hanasu.Services.Settings.SettingsService.Instance.Theme)
+                {
+                    case Services.Settings.SettingsThemes.Blue:
+                        BackgroundImageBrush.ImageSource = (ImageSource)new Hanasu.Core.UriToBitmapImageConverter().Convert(new Uri("pack://application:,,,/Hanasu;component/Resources/hatsune-miku-10639-2560x1600.jpg"), null, null, null);
+                        break;
+                    default:
+                        BackgroundImageBrush.ImageSource = (ImageSource)new Hanasu.Core.UriToBitmapImageConverter().Convert(new Uri("pack://application:,,,/Hanasu;component/Resources/luka.jpg"), null, null, null);
+                        break;
+                }
+            }
         }
 
         void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)

@@ -55,6 +55,9 @@
             <RowDefinition Height="256*" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
+        <Grid.Background>
+            <ImageBrush Opacity=".15" x:Name="BackgroundImageBrush" Stretch="Uniform"/>
+        </Grid.Background>
         <Grid Grid.Row="0">
             <StackPanel HorizontalAlignment="Right" Orientation="Vertical" Width="200" Name="BufferingSP" Visibility="Hidden" Margin="0,6,12,0" VerticalAlignment="Top" Panel.ZIndex="75" Height="40">
                 <Label FontSize="15" Margin="0 -7 0 0" HorizontalAlignment="Center">Buffering.....</Label>
@@ -92,9 +95,7 @@
 
                                     </ac:AdornedControl.AdornerContent>
                                     <Grid>
-                                        <Grid.Background>
-                                            <ImageBrush Opacity=".15"  ImageSource="pack://application:,,,/Hanasu;component/Resources/luka.jpg" Stretch="Uniform"/>
-                                        </Grid.Background>
+                                        
                                         <!--<TreeView Name="StationsTreeview">
                                             <TreeViewItem>
                                                 <TreeViewItem.Header>
