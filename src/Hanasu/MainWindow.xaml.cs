@@ -1096,37 +1096,77 @@ namespace Hanasu
 
             var header = control.TryFindParent<GridViewColumnHeader>();
 
+            if (header.Column == null) return;
+
             ICollectionView view = null;
+            string property = null;
 
             if (sender == StationsListView)
             {
                 view = CollectionViewSource.GetDefaultView(StationsListView.ItemsSource);
 
-                string property = null;
+                
                 switch (header.Column.Header.ToString())
                 {
                     case "Station": property = "Name";
                         break;
+                    case "Format": property = "Format";
+                        break;
+                    default:
+                        if (header.Column.Header.ToString().StartsWith("Station Language"))
+                            property = "Language";
+                        break;
                 }
+            }
+            else if (sender == LikedSongsListView)
+            {
+                view = CollectionViewSource.GetDefaultView(LikedSongsListView.ItemsSource);
 
-                if (view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == property)
-                    if (view.SortDescriptions[0].Direction == ListSortDirection.Descending)
-                    {
-                        var item = new SortDescription(property, ListSortDirection.Ascending);
-                        view.SortDescriptions.RemoveAt(0);
-                        view.SortDescriptions.Add(item);
-                    }
-                    else
-                    {
-                        var item = new SortDescription(property,ListSortDirection.Descending);
-                        view.SortDescriptions.RemoveAt(0);
-                        view.SortDescriptions.Add(item);
-                    }
+
+                switch (header.Column.Header.ToString())
+                {
+                    case "Song": property = "TrackTitle";
+                        break;
+                    case "Artist": property = "Artist";
+                        break;
+                    case "Album": property = "Album";
+                        break;
+                }
+            }
+            else if (sender == FriendsListView)
+            {
+                view = CollectionViewSource.GetDefaultView(FriendsListView.ItemsSource);
+
+
+                switch (header.Column.Header.ToString())
+                {
+                    case "Song": property = "TrackTitle";
+                        break;
+                    case "Artist": property = "Artist";
+                        break;
+                    case "Album": property = "Album";
+                        break;
+                }
+            }
+
+
+            if (view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == property)
+                if (view.SortDescriptions[0].Direction == ListSortDirection.Descending)
+                {
+                    var item = new SortDescription(property, ListSortDirection.Ascending);
+                    view.SortDescriptions.RemoveAt(0);
+                    view.SortDescriptions.Add(item);
+                }
                 else
                 {
-                    view.SortDescriptions.Clear();
-                    view.SortDescriptions.Add(new SortDescription(property, ListSortDirection.Ascending));
+                    var item = new SortDescription(property, ListSortDirection.Descending);
+                    view.SortDescriptions.RemoveAt(0);
+                    view.SortDescriptions.Add(item);
                 }
+            else
+            {
+                view.SortDescriptions.Clear();
+                view.SortDescriptions.Add(new SortDescription(property, ListSortDirection.Ascending));
             }
         }
 
