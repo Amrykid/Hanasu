@@ -1082,7 +1082,52 @@ namespace Hanasu
             UIElement control = (UIElement)e.MouseDevice.DirectlyOver;
 
             if (control.TryFindParent<GridViewColumnHeader>() != null)
+            {
+                //is a header.
                 e.Handled = true;
+
+                HandleSort(sender, e, control);
+            }
+        }
+
+        private void HandleSort(object sender, MouseButtonEventArgs e, UIElement control)
+        {
+            // Get the default view from the listview  
+
+            var header = control.TryFindParent<GridViewColumnHeader>();
+
+            ICollectionView view = null;
+
+            if (sender == StationsListView)
+            {
+                view = CollectionViewSource.GetDefaultView(StationsListView.ItemsSource);
+
+                string property = null;
+                switch (header.Column.Header.ToString())
+                {
+                    case "Station": property = "Name";
+                        break;
+                }
+
+                if (view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == property)
+                    if (view.SortDescriptions[0].Direction == ListSortDirection.Descending)
+                    {
+                        var item = new SortDescription(property, ListSortDirection.Ascending);
+                        view.SortDescriptions.RemoveAt(0);
+                        view.SortDescriptions.Add(item);
+                    }
+                    else
+                    {
+                        var item = new SortDescription(property,ListSortDirection.Descending);
+                        view.SortDescriptions.RemoveAt(0);
+                        view.SortDescriptions.Add(item);
+                    }
+                else
+                {
+                    view.SortDescriptions.Clear();
+                    view.SortDescriptions.Add(new SortDescription(property, ListSortDirection.Ascending));
+                }
+            }
         }
 
         private void aboutBtn_Click(object sender, RoutedEventArgs e)
