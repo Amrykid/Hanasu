@@ -1724,6 +1724,11 @@ namespace Hanasu
 
                 if ((bool)cdw.ShowDialog())
                 {
+                    object[] items = new object[StationsListView.SelectedItems.Count]; 
+                    StationsListView.SelectedItems.CopyTo(items,0);
+
+                    foreach (Station item in items)
+                        Hanasu.Services.Stations.StationsService.Instance.CustomStations.Remove(item);
                 }
             }
         }
