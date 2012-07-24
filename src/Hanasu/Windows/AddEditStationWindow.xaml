@@ -51,31 +51,52 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <GroupBox Header="Station Name:" BorderThickness="0" FontSize="17" Margin="10 0 10 0">
+                        <GroupBox.Foreground>
+                            <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                        </GroupBox.Foreground>
                         <TextBox Name="TextBoxName" Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
                     </GroupBox>
                 </Grid>
                 <Grid Grid.Row="1">
                     <GroupBox Header="Station Url:" BorderThickness="0" FontSize="17" Margin="10 0 10 0">
+                        <GroupBox.Foreground>
+                            <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                        </GroupBox.Foreground>
                         <TextBox Name="TextBoxUrl" Text="{Binding DataSource,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource UrlStringConv}}" FontSize="15"/>
                     </GroupBox>
                 </Grid>
                 <Grid Grid.Row="2">
                     <Expander Header="Optional Data" FontSize="17" IsExpanded="False">
+                        <Expander.Foreground>
+                            <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                        </Expander.Foreground>
                         <Grid>
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                                 <StackPanel>
                                     <GroupBox Header="Homepage:" BorderThickness="0" FontSize="17" Margin="10 0 10 0" Width="300" HorizontalAlignment="Left">
+                                        <GroupBox.Foreground>
+                                            <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                        </GroupBox.Foreground>
                                         <TextBox Name="TextBoxHomePage" Text="{Binding Homepage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource UrlStringConv}}" FontSize="15"/>
                                     </GroupBox>
                                     <StackPanel Orientation="Horizontal">
                                         <GroupBox Header="Format:" BorderThickness="0" FontSize="17" Margin="10 0 10 0">
+                                            <GroupBox.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                            </GroupBox.Foreground>
                                             <ComboBox Width="120" Name="ComboBoxFormal" ItemsSource="{Binding Source={StaticResource dataFromRadioFormatEnum}}" SelectedItem="{Binding Format,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontSize="15"/>
                                         </GroupBox>
                                         <GroupBox Header="Language:" BorderThickness="0" FontSize="17" Margin="10 0 10 0">
+                                            <GroupBox.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                            </GroupBox.Foreground>
                                             <ComboBox Width="120" Name="ComboBoxLanguage" ItemsSource="{Binding Source={StaticResource dataFromStationLanguageEnum}}" SelectedItem="{Binding Language,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontSize="15"/>
                                         </GroupBox>
                                     </StackPanel>
                                     <GroupBox Header="Extension Extension (advanced users):" BorderThickness="0" FontSize="17" Margin="10 0 10 0" Width="300" HorizontalAlignment="Left">
+                                        <GroupBox.Foreground>
+                                            <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                        </GroupBox.Foreground>
                                         <TextBox Name="TextBoxExtension" Text="{Binding ExplicitExtension,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
                                     </GroupBox>
                                 </StackPanel>

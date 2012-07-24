@@ -42,10 +42,16 @@
                 <Grid Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
                         <GroupBox Width="200" Header="Artist:" BorderThickness="0" FontSize="17">
+                            <GroupBox.Foreground>
+                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                            </GroupBox.Foreground>
                             <TextBox Name="TextBoxArtist" Text="{Binding Artist,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
                         </GroupBox>
                         <Separator/>
                         <GroupBox Width="200" Header="Song Name:" BorderThickness="0" FontSize="17">
+                            <GroupBox.Foreground>
+                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                            </GroupBox.Foreground>
                             <TextBox Name="TextBoxTrack" Text="{Binding TrackTitle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
                         </GroupBox>
                         <Button Content="AutoFill" Height="25" VerticalAlignment="Center" Margin="0 15 0 0" Name="AutoFillBtn" Click="AutoFillBtn_Click"/>
@@ -53,7 +59,13 @@
                 </Grid>
                 <Grid Grid.Row="2">
                     <Expander Header="Optional Data" FontSize="17" IsExpanded="False">
+                        <Expander.Foreground>
+                            <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                        </Expander.Foreground>
                         <GroupBox Header="Album:" BorderThickness="0" FontSize="17" Height="170">
+                            <GroupBox.Foreground>
+                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                            </GroupBox.Foreground>
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0 -3 0 0">
                                     <Label Height="40">Album Name:</Label>

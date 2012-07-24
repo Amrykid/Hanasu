@@ -44,6 +44,9 @@
                         <TabItem Header="UI">
                             <Grid>
                                 <GroupBox Header="Theme" FontSize="20" BorderThickness="0" Padding="10" Height="200" VerticalAlignment="Top">
+                                    <GroupBox.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                    </GroupBox.Foreground>
                                     <Grid>
                                         <StackPanel>
                                             <StackPanel Orientation="Horizontal">
@@ -80,9 +83,15 @@
                                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="0">
                                     <StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto">
                                         <GroupBox Header="Friends" FontSize="20" BorderThickness="0" Padding="10" VerticalAlignment="Top">
+                                            <GroupBox.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                            </GroupBox.Foreground>
                                             <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="friendsEnabledSwitch" VerticalAlignment="Top" Width="237" Header="Enable Friends services" FontSize="15"  IsChecked="{Binding Source={x:Static friends:FriendsService.Instance},Path=FriendsServiceEnabled,Mode=OneTime}"/>
                                         </GroupBox>
                                         <GroupBox Header="Sharing" FontSize="20" BorderThickness="0" Padding="10" VerticalAlignment="Top">
+                                            <GroupBox.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                            </GroupBox.Foreground>
                                             <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" Margin="27,6,0,0" x:Name="fbpostSwitch" VerticalAlignment="Top" Width="237" Header="Post Liked songs to Facebook" FontSize="15" IsEnabled="{Binding ElementName='fetchSongDataSwitch',Path=IsChecked}"  IsChecked="{Binding Source={x:Static fb:FacebookService.Instance},Path=UseFacebook,Mode=OneTime}" IsEnabledChanged="fbpostSwitch_IsEnabledChanged"/>
                                         </GroupBox>
                                     </StackPanel>
@@ -95,6 +104,9 @@
                         <TabItem Header="Misc">
                             <Grid>
                                 <GroupBox Header="Data" BorderThickness="0" FontSize="20" Padding="5">
+                                    <GroupBox.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                    </GroupBox.Foreground>
                                     <StackPanel Orientation="Horizontal">
                                         <Button Height="20" Width="78" Margin="8,0,0,8" VerticalAlignment="Top" HorizontalAlignment="Left" Name="ViewCacheBtn" Click="ViewCacheBtn_Click">View Cache</Button>
                                         <Button Height="20" Width="100" Margin="8,0,0,8" VerticalAlignment="Top" HorizontalAlignment="Left" Name="UpdateCatalogBtn" Click="UpdateCatalogBtn_Click">Update Catalog</Button>
