@@ -44,6 +44,15 @@ namespace Hanasu.Windows
                 MessageBox.Show("Station Name/Url cannot be empty!");
                 return;
             }
+            else if (!string.IsNullOrEmpty(TextBoxExtension.Text))
+            {
+                if (!TextBoxExtension.Text.StartsWith("."))
+                {
+                    MessageBox.Show("Extension must begin with a period!");
+                    TextBoxExtension.Focus();
+                    return;
+                }
+            }
 
             DialogResult = true;
         }
