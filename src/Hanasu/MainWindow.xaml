@@ -173,7 +173,10 @@
                                                     </Grid>
                                                 </Border>
                                                 <!-- Width="{Binding ElementName=thisWindow, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntCalcConverter1}, ConverterParameter=-;%7}" -->
-                                                <ListView Grid.Row="1" Foreground="Black" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="StationsListView_TargetUpdated" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" SelectionChanged="StationsListView_SelectionChanged" IsEnabled="False">
+                                                <ListView Grid.Row="1" Name="StationsListView" Background="Transparent"  ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" TargetUpdated="StationsListView_TargetUpdated" MouseDoubleClick="StationsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick" SelectionChanged="StationsListView_SelectionChanged" IsEnabled="False">
+                                                    <ListView.Foreground>
+                                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                    </ListView.Foreground>
                                                     <ListView.ItemsPanel>
                                                         <ItemsPanelTemplate>
                                                             <VirtualizingStackPanel IsItemsHost="True" VirtualizationMode="Recycling" IsVirtualizing="True">
@@ -199,21 +202,33 @@
                                                             <GridViewColumn Header="Station">
                                                                 <GridViewColumn.CellTemplate>
                                                                     <DataTemplate>
-                                                                        <Label Content="{Binding Name, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                                        <Label Content="{Binding Name, Mode=OneTime}" FontSize="17">
+                                                                            <Label.Foreground>
+                                                                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                                            </Label.Foreground>
+                                                                        </Label>
                                                                     </DataTemplate>
                                                                 </GridViewColumn.CellTemplate>
                                                             </GridViewColumn>
                                                             <GridViewColumn Header="Format">
                                                                 <GridViewColumn.CellTemplate>
                                                                     <DataTemplate>
-                                                                        <Label Content="{Binding Format, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                                        <Label Content="{Binding Format, Mode=OneTime}" FontSize="17">
+                                                                            <Label.Foreground>
+                                                                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                                            </Label.Foreground>
+                                                                        </Label>
                                                                     </DataTemplate>
                                                                 </GridViewColumn.CellTemplate>
                                                             </GridViewColumn>
                                                             <GridViewColumn Header="Station Language (not Music Language)" Width="265">
                                                                 <GridViewColumn.CellTemplate>
                                                                     <DataTemplate>
-                                                                        <Label Content="{Binding Language, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                                        <Label Content="{Binding Language, Mode=OneTime}" FontSize="17">
+                                                                            <Label.Foreground>
+                                                                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                                            </Label.Foreground>
+                                                                        </Label>
                                                                     </DataTemplate>
                                                                 </GridViewColumn.CellTemplate>
                                                             </GridViewColumn>
@@ -262,8 +277,11 @@
                                 <TextBox FontSize="16" Margin="0 0 5 0" HorizontalAlignment="Right" Name="LikedSongsSearchBox" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Liked..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" TextChanged="LikedSongsSearchBox_TextChanged" Width="200"/>
                             </Grid>
                         </Border>
-                        <ListView Grid.Row="1" Foreground="Black" Name="LikedSongsListView" Background="Transparent"  MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
+                        <ListView Grid.Row="1" Name="LikedSongsListView" Background="Transparent"  MouseDoubleClick="LikedSongsListView_MouseDoubleClick" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
                             <!--ItemsSource="{Binding Source={x:Static liked:LikedSongService.Instance}, Path=LikedSongs, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}"-->
+                            <ListView.Foreground>
+                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                            </ListView.Foreground>
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <VirtualizingStackPanel IsItemsHost="True" VirtualizationMode="Recycling" IsVirtualizing="True">
@@ -296,28 +314,44 @@
                                     <GridViewColumn Header="Song">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Label Content="{Binding TrackTitle, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                <Label Content="{Binding TrackTitle, Mode=OneTime}" FontSize="17">
+                                                    <Label.Foreground>
+                                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                    </Label.Foreground>
+                                                </Label>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Artist">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Label Content="{Binding Artist, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                <Label Content="{Binding Artist, Mode=OneTime}" FontSize="17">
+                                                    <Label.Foreground>
+                                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                    </Label.Foreground>
+                                                </Label>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Album">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Label Content="{Binding Album,TargetNullValue='N/A', Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                <Label Content="{Binding Album,TargetNullValue='N/A', Mode=OneTime}" FontSize="17">
+                                                    <Label.Foreground>
+                                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                    </Label.Foreground>
+                                                </Label>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Station">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Label Content="{Binding Path=OriginallyPlayedStation.Name, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                <Label Content="{Binding Path=OriginallyPlayedStation.Name, Mode=OneTime}" FontSize="17">
+                                                    <Label.Foreground>
+                                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                    </Label.Foreground>
+                                                </Label>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -368,7 +402,10 @@
                                 <TextBox FontSize="16" Margin="0 0 5 0" HorizontalAlignment="Right" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search Friends..." metro:TextboxHelper.IsMonitoring="True" Height="20" Foreground="{StaticResource AccentColorBrush}" Name="FriendsSearchTextBox" TextChanged="FriendsSearchTextBox_TextChanged"  Width="200"/>
                             </Grid>
                         </Border>
-                        <ListView Grid.Row="1" Foreground="Black" Name="FriendsListView" MouseDoubleClick="FriendsListView_MouseDoubleClick" Background="Transparent" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
+                        <ListView Grid.Row="1" Name="FriendsListView" MouseDoubleClick="FriendsListView_MouseDoubleClick" Background="Transparent" PreviewMouseDoubleClick="StationsListView_PreviewMouseDoubleClick">
+                            <ListView.Foreground>
+                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                            </ListView.Foreground>
                             <!--ItemsSource="{Binding Source={x:Static friends:FriendsService.Instance}, Path=Friends, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged}"-->
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -395,14 +432,22 @@
                                     <GridViewColumn Header="UserName" Width="100">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Label Content="{Binding UserName, Mode=OneTime}" FontSize="17" Foreground="Black"/>
+                                                <Label Content="{Binding UserName, Mode=OneTime}" FontSize="17">
+                                                    <Label.Foreground>
+                                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                    </Label.Foreground>
+                                                </Label>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Status" Width="300">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Label Content="{Binding Status, UpdateSourceTrigger=PropertyChanged}" FontSize="17" Foreground="Black"/>
+                                                <Label Content="{Binding Status, UpdateSourceTrigger=PropertyChanged}" FontSize="17">
+                                                    <Label.Foreground>
+                                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                    </Label.Foreground>
+                                                </Label>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
