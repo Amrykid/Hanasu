@@ -1108,6 +1108,8 @@ namespace Hanasu
                         break;
                     case "Format": property = "Format";
                         break;
+                    case "*": property = "StationType";
+                        break;
                     default:
                         if (header.Column.Header.ToString().StartsWith("Station Language"))
                             property = "Language";
@@ -1160,6 +1162,8 @@ namespace Hanasu
                 }
             else
             {
+                if (property == null) return;
+
                 view.SortDescriptions.Clear();
                 view.SortDescriptions.Add(new SortDescription(property, ListSortDirection.Ascending));
             }
