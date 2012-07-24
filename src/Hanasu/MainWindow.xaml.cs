@@ -695,7 +695,10 @@ namespace Hanasu
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
 
-                    AddRawSongToLikedBtn.IsEnabled = false;
+                    if (lastSongTxt == null)
+                        AddRawSongToLikedBtn.IsEnabled = false;
+                    else
+                        AddRawSongToLikedBtn.IsEnabled = Hanasu.Services.Song.SongService.IsSongTitle(lastSongTxt, currentStation);
 
                     if (this.TaskbarItemInfo != null)
                         this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
@@ -895,6 +898,7 @@ namespace Hanasu
                 SongDataLbl.Text = "Not Available";
             }
 
+            lastSongTxt = null;
             lastMediaTxt = null;
 
             currentStationAttributes.Clear();

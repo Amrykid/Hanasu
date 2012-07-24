@@ -195,9 +195,21 @@ namespace Hanasu.Services.Stations
                 foreach (Station st in stats)
                 {
                     var o = st;
-                    var s = CheckAndDownloadCacheableStation(ref o);
+                    if (o.Cacheable)
+                    {
+                        try
+                        {
+                            var s = CheckAndDownloadCacheableStation(ref o);
 
-                    finalstats.Add(s);
+                            finalstats.Add(s);
+                        }
+                        catch (Exception)
+                        {
+                            finalstats.Add(o);
+                        }
+                    }
+                    else
+                        finalstats.Add(o);
                 }
 
                 System.Windows.Application.Current.Dispatcher.Invoke(new EmptyParameterizedDelegate2((f, g) =>
