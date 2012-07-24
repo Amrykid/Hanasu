@@ -98,7 +98,20 @@ namespace Hanasu.Services.Notifications
             if (info.ImageDataSource == null)
                 ImageBoxColumn.Width = new GridLength(25, GridUnitType.Star);
             else
-                ImageBoxColumn.Width = new GridLength(100, GridUnitType.Star); ;
+                ImageBoxColumn.Width = new GridLength(100, GridUnitType.Star);
+
+            if (Hanasu.Services.Settings.SettingsService.Instance.IsLightTheme)
+            {
+                this.Background = Brushes.White;
+                label1.Foreground = Brushes.Black;
+                textBlock1.Foreground = Brushes.Black;
+            }
+            else
+            {
+                this.Background = Brushes.Black;
+                label1.Foreground = Brushes.White;
+                textBlock1.Foreground = Brushes.White;
+            }
 
             this.MouseLeftButtonUp += NotificationsWindow_MouseLeftButtonUp;
 

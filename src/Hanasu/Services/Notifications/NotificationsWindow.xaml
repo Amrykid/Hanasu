@@ -31,7 +31,7 @@
                 <ColumnDefinition Width="270*"/>
             </Grid.ColumnDefinitions>
             <Image Source="{Binding Image,Mode=OneTime}" Grid.Column="0" Margin="0 -30 0 0" Name="ImageBox" MaxHeight="80"/>
-            <TextBlock Name="textBlock1" Text="{Binding Message,Mode=OneTime}" TextWrapping="Wrap" Foreground="Black" FontSize="16" Grid.Column="1" Margin="0,0,12,28" />
+            <TextBlock Name="textBlock1" Text="{Binding Message,Mode=OneTime}" TextWrapping="Wrap" FontSize="16" Grid.Column="1" Margin="0,0,12,28" />
         </Grid>
     </Grid>
 </Window>
