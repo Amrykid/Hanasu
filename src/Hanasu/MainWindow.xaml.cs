@@ -22,6 +22,7 @@ using System.Windows.Shell;
 using System.Collections.Generic;
 using Hanasu.Services.Friends;
 using Hanasu.Services.Events;
+using System.Net.NetworkInformation;
 
 namespace Hanasu
 {
@@ -797,6 +798,25 @@ namespace Hanasu
                 MessageBox.Show("No internet connection detected!");
                 return;
             }
+
+            if (station.LocalStationFile == null)
+            {
+                try
+                {
+                    if (new Ping().Send(station.DataSource.Host).Status != IPStatus.Success)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch (Exception)
+                {
+
+                    Hanasu.Services.Notifications.NotificationsService.AddNotification("Station is down.",
+                            "The station you are trying to connect to is experiencing network issues. Please try again later.", 5000, true, Services.Notifications.NotificationType.Information);
+                    return;
+                }
+            }
+
 
             if (currentStation.Name != station.Name)
                 Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue(); //Get rid of messages from the last station, if any.
