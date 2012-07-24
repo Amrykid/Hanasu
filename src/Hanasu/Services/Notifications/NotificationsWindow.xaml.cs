@@ -76,6 +76,29 @@ namespace Hanasu.Services.Notifications
         void NotificationsWindow_Loaded(object sender, RoutedEventArgs e)
         {
             var info = ((NotificationInfo)this.DataContext);
+            
+            if (Hanasu.Services.Settings.SettingsService.Instance.IsLightTheme)
+            {
+                this.Background = Brushes.White;
+                label1.Foreground = Brushes.Black;
+                textBlock1.Foreground = Brushes.Black;
+
+                this.Resources.MergedDictionaries.Add(new ResourceDictionary()
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml",UriKind.RelativeOrAbsolute)
+                });
+            }
+            else
+            {
+                this.Background = Brushes.Black;
+                label1.Foreground = Brushes.White;
+                textBlock1.Foreground = Brushes.White;
+
+                this.Resources.MergedDictionaries.Add(new ResourceDictionary()
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml",UriKind.RelativeOrAbsolute)
+                });
+            }
 
             switch (info.Type)
             {
@@ -100,18 +123,7 @@ namespace Hanasu.Services.Notifications
             else
                 ImageBoxColumn.Width = new GridLength(100, GridUnitType.Star);
 
-            if (Hanasu.Services.Settings.SettingsService.Instance.IsLightTheme)
-            {
-                this.Background = Brushes.White;
-                label1.Foreground = Brushes.Black;
-                textBlock1.Foreground = Brushes.Black;
-            }
-            else
-            {
-                this.Background = Brushes.Black;
-                label1.Foreground = Brushes.White;
-                textBlock1.Foreground = Brushes.White;
-            }
+
 
             this.MouseLeftButtonUp += NotificationsWindow_MouseLeftButtonUp;
 
