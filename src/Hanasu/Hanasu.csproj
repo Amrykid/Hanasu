@@ -395,7 +395,7 @@
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\luka.jpg" />
+    <Resource Include="Resources\LightBG\luka.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="vk6gi.ico" />
@@ -413,12 +413,21 @@
     <Resource Include="Resources\pink-hair-anime-girl-listening-to-music_1920x1200.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\hatsune-miku-10639-2560x1600.jpg" />
+    <Resource Include="Resources\LightBG\hatsune-miku-10639-2560x1600.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\LightBG\lily.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\LightBG\MegpoidGumionVocals.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\LightBG\konachan-com-52624-hatsune_miku-kaito-vocaloid.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

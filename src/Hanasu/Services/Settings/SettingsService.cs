@@ -50,6 +50,7 @@ namespace Hanasu.Services.Settings
 
                 LastSetVolume = settings.ContainsElement("LastSetVolume") ? int.Parse(settings.Element("LastSetVolume").Value) : 15;
 
+                IsLightTheme = settings.ContainsElement("IsLightTheme") ? bool.Parse(settings.Element("IsLightTheme").Value) : true;
                 DisplayBackgroundTheme = settings.ContainsElement("DisplayBackgroundTheme") ? bool.Parse(settings.Element("DisplayBackgroundTheme").Value) : true;
 
                 _theme = settings.ContainsElement("Theme") ? Enum.IsDefined(typeof(SettingsThemes), settings.Element("Theme").Value) ? (SettingsThemes)Enum.Parse(typeof(SettingsThemes), settings.Element("Theme").Value) : SettingsThemes.Red : SettingsThemes.Red;
@@ -69,6 +70,7 @@ namespace Hanasu.Services.Settings
             //Create the settings xml
 
             DisplayBackgroundTheme = true;
+            IsLightTheme = true;
 
             var doc = new XDocument(
                 new XDeclaration("1.0", "Unicode", "yes"));
@@ -78,7 +80,8 @@ namespace Hanasu.Services.Settings
                     new XElement("AutomaticallyFetchSongData", "false"),
                     new XElement("LastSetVolume", 50),
                     new XElement("Theme", Enum.GetName(typeof(SettingsThemes),SettingsThemes.Red)),
-                    new XElement("DisplayBackgroundTheme", DisplayBackgroundTheme.ToString()));
+                    new XElement("DisplayBackgroundTheme", DisplayBackgroundTheme.ToString()),
+                    new XElement("IsLightTheme", IsLightTheme.ToString()));
 
             //Pass the settings to subscribers so they can update the settings xml as needed.
             var sinfo = new SettingsDataEventInfo()
@@ -110,7 +113,8 @@ namespace Hanasu.Services.Settings
                           new XElement("AutomaticallyFetchSongData", AutomaticallyFetchSongData.ToString()),
                           new XElement("LastSetVolume", LastSetVolume),
                           new XElement("Theme", Enum.GetName(typeof(SettingsThemes),Theme)),
-                          new XElement("DisplayBackgroundTheme",DisplayBackgroundTheme.ToString()));
+                          new XElement("DisplayBackgroundTheme",DisplayBackgroundTheme.ToString()),
+                          new XElement("IsLightTheme",IsLightTheme.ToString()));
 
             var sinfo = new SettingsDataEventInfo()
             {
@@ -134,6 +138,7 @@ namespace Hanasu.Services.Settings
         public bool UpdateStationsLive { get; set; }
 
         public bool DisplayBackgroundTheme { get; set; }
+        public bool IsLightTheme { get; set; }
 
         public int LastSetVolume { get; set; }
 

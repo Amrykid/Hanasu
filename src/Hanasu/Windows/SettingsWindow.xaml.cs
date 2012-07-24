@@ -67,6 +67,8 @@ namespace Hanasu.Windows
 
             Hanasu.Services.Friends.FriendsService.Instance.FriendsServiceEnabled = (bool)friendsEnabledSwitch.IsChecked;
 
+            SettingsService.Instance.IsLightTheme = (bool)useLightThemeSwitch.IsChecked;
+
             SettingsService.Instance.DisplayBackgroundTheme = (bool)displayThemeBackgroundSwitch.IsChecked;
 
             //checks if auth is needed.

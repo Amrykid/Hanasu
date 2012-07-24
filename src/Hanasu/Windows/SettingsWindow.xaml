@@ -46,7 +46,10 @@
                                 <GroupBox Header="Theme" FontSize="20" BorderThickness="0" Padding="10" Height="200" VerticalAlignment="Top">
                                     <Grid>
                                         <StackPanel>
-                                            <ComboBox Name="ThemesComboBox" IsEditable="False" ItemsSource="{Binding Source={StaticResource dataFromSettingsThemesEnum}}" SelectedValue="{Binding Theme, Mode=OneTime}" Height="30" Width="110" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <ComboBox Name="ThemesComboBox" IsEditable="False" ItemsSource="{Binding Source={StaticResource dataFromSettingsThemesEnum}}" SelectedValue="{Binding Theme, Mode=OneTime}" Height="30" Width="110" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                                <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" x:Name="useLightThemeSwitch" VerticalAlignment="Top" Width="225" Header="Use Light Theme" FontSize="15"  IsChecked="{Binding IsLightTheme,Mode=OneTime}"/>
+                                            </StackPanel>
                                             <StackPanel Orientation="Horizontal">
                                                 <metro:ToggleSwitch Height="59" HorizontalAlignment="Left" x:Name="displayThemeBackgroundSwitch" VerticalAlignment="Top" Width="225" Header="Enable Theme Background" FontSize="15"  IsChecked="{Binding DisplayBackgroundTheme,Mode=OneTime}"/>
                                                 <Grid Margin="15 0 0 0" ToolTip="This option will make Hanasu use more ram memory and may slow down your pc if you don't have very much ram." Visibility="{Binding ElementName=displayThemeBackgroundSwitch,Path=IsChecked,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisibConv}}">
