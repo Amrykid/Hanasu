@@ -138,15 +138,18 @@ namespace Hanasu.Services.Song
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("IsSongTitle: " + name + " |||| " + currentStation.Name);
 #endif
+            bool res = false;
 
                 if (name.Contains(" - "))
                 {
-                    return name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1;
+                    res = name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1;
                 }
                 else if (System.Text.RegularExpressions.Regex.IsMatch(name.ToLower(), @"(^)?(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?($|\W)?", System.Text.RegularExpressions.RegexOptions.Compiled))
-                    return false;
+                    res = false;
                 else
-                    return Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name);
+                    res = Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name);
+
+                return res;
         }
 
         public static IAlbumInfoDataSource DataSource { get; set; }
