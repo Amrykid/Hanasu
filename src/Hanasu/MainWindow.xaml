@@ -236,7 +236,8 @@
                                                     </ListView.View>
                                                     <ListView.ContextMenu>
                                                         <ContextMenu>
-                                                            <MenuItem Header="Delete station(s)" Name="StationsListViewDeletecustomStationsMenuItem" IsEnabled="False" Click="StationsListViewDeletecustomStationsMenuItem_Click"/>
+                                                            <MenuItem Header="Edit station" Name="StationsListViewEditCustomStationsMenuItem" IsEnabled="False" Click="StationsListViewEditCustomStationsMenuItem_Click"/>
+                                                            <MenuItem Header="Delete station(s)" Name="StationsListViewDeleteCustomStationsMenuItem" IsEnabled="False" Click="StationsListViewDeletecustomStationsMenuItem_Click"/>
                                                             <MenuItem Header="View Homepage" Name="StationsListViewViewHomepageMenuItem" IsEnabled="False" Click="StationsListViewViewHomepageMenuItem_Click"/>
                                                             <MenuItem Header="View Schedule" Name="StationsListViewViewScheduleMenuItem" IsEnabled="False" Click="StationsListViewViewScheduleMenuItem_Click"/>
                                                         </ContextMenu>

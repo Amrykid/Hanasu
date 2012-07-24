@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Hanasu")]
-[assembly: AssemblyDescription("Asian Music/Video player.")]
+[assembly: AssemblyDescription("Music/Video player.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Amrykid - https://github.com/Amrykid/Hanasu")]
 [assembly: AssemblyProduct("Hanasu")]
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.811.0")]
-[assembly: AssemblyFileVersion("1.0.811.0")]
+[assembly: AssemblyVersion("1.0.814.0")]
+[assembly: AssemblyFileVersion("1.0.814.0")]

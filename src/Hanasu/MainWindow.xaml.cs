@@ -1657,7 +1657,8 @@ namespace Hanasu
 
             //ItemsSource="{Binding Source={x:Static stations:StationsService.Instance}, Path=Stations, Mode=OneWay, IsAsync=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}"
 
-            StationsListViewDeletecustomStationsMenuItem.IsEnabled = false;
+            StationsListViewDeleteCustomStationsMenuItem.IsEnabled = false;
+            StationsListViewEditCustomStationsMenuItem.IsEnabled = StationsListViewDeleteCustomStationsMenuItem.IsEnabled;
             CustomTabBtn.IsEnabled = true;
             CatalogTabBtn.IsEnabled = false;
         }
@@ -1677,7 +1678,9 @@ namespace Hanasu
 
             BindingOperations.SetBinding(StationsListView, ListView.ItemsSourceProperty, binding);
 
-            StationsListViewDeletecustomStationsMenuItem.IsEnabled = true;
+
+            StationsListViewDeleteCustomStationsMenuItem.IsEnabled = true;
+            StationsListViewEditCustomStationsMenuItem.IsEnabled = StationsListViewDeleteCustomStationsMenuItem.IsEnabled;
             CatalogTabBtn.IsEnabled = true;
             CustomTabBtn.IsEnabled = false;
         }
@@ -1717,6 +1720,25 @@ namespace Hanasu
 
                     foreach (Station item in items)
                         Hanasu.Services.Stations.StationsService.Instance.CustomStations.Remove(item);
+                }
+            }
+        }
+
+        private void StationsListViewEditCustomStationsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (CustomTabBtn.IsEnabled) return;
+
+            if (StationsListView.SelectedItem != null)
+            {
+                var station = (Station)StationsListView.SelectedItem;
+                AddEditStationWindow aesw = new AddEditStationWindow();
+                aesw.DataContext = station;
+                aesw.Owner = this;
+
+                if ((bool)aesw.ShowDialog())
+                {
+                    var newData = (Station)aesw.DataContext;
+                    Hanasu.Services.Stations.StationsService.Instance.CustomStations[Hanasu.Services.Stations.StationsService.Instance.CustomStations.IndexOf(station)] = newData;
                 }
             }
         }
