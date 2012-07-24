@@ -29,11 +29,13 @@ namespace Hanasu
                     //SplashScreen.Close();
 
                     FirstTimeRunWizard ftrw = new FirstTimeRunWizard();
-                    ftrw.ShowDialog();
+                    if (ftrw.ShowDialog() == true)
+                    {
 
-                    //Restart
-                    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
+                        //Restart
+                        System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                        Application.Current.Shutdown();
+                    }
                 }
                 else
                 {

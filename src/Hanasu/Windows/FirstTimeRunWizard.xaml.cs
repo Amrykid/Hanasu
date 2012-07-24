@@ -39,6 +39,7 @@ namespace Hanasu.Windows
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
             Application.Current.Shutdown(1);
         }
 
