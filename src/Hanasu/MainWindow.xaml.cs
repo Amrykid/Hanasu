@@ -694,7 +694,7 @@ namespace Hanasu
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
 
-                    AddRawSongToLikedBtn.IsEnabled = true;
+                    AddRawSongToLikedBtn.IsEnabled = false;
 
                     if (this.TaskbarItemInfo != null)
                         this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
@@ -1238,6 +1238,8 @@ namespace Hanasu
             // Get the default view from the listview
             ICollectionView view = CollectionViewSource.GetDefaultView(LikedSongsListView.ItemsSource);
 
+            if (view == null) return;
+
             view.Filter = null;
             view.Filter = new Predicate<object>(t =>
                 {
@@ -1260,6 +1262,8 @@ namespace Hanasu
         {
             // Get the default view from the listview
             ICollectionView view = CollectionViewSource.GetDefaultView(StationsListView.ItemsSource);
+
+            if (view == null) return;
 
             view.Filter = null;
             view.Filter = new Predicate<object>(t =>
