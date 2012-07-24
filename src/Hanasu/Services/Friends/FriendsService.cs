@@ -34,6 +34,8 @@ namespace Hanasu.Services.Friends
 
             Instance = new FriendsService();
 
+            if (!App.CheckIfSafeStart()) return;
+
             var dir = Hanasu.Services.Stations.StationsService.StationsCacheDir;
 
             Instance.FriendsDBFile = dir.Replace("\\Cache", "") + "Friends.bin";

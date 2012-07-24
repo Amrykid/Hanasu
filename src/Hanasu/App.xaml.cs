@@ -56,5 +56,18 @@ namespace Hanasu
                 Application.Current.Shutdown();
             }
         }
+
+        public static bool CheckIfSafeStart()
+        {
+            if (App.Current != null)
+            {
+                if (App.Current.MainWindow == null)
+                    return false;
+            }
+            else
+                return false;
+
+            return true;
+        }
     }
 }

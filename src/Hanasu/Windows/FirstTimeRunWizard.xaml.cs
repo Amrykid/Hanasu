@@ -96,10 +96,12 @@ namespace Hanasu.Windows
                                     {
                                         StatusLabel.Content = "Pre-downloading station data.... Step 2 of 2.";
                                         StatusPB.Value = 0;
+
+                                        if (!Directory.Exists(Hanasu.Services.Stations.StationsService.StationsCacheDir))
+                                        Directory.CreateDirectory(Hanasu.Services.Stations.StationsService.StationsCacheDir);
                                     }));
 
-                                    if (!Directory.Exists(Hanasu.Services.Stations.StationsService.StationsCacheDir))
-                                        Directory.CreateDirectory(Hanasu.Services.Stations.StationsService.StationsCacheDir);
+                                    
 
                                     RadioFormat dummie = 0;
 

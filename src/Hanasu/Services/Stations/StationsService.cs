@@ -32,12 +32,15 @@ namespace Hanasu.Services.Stations
 
         public StationsService()
         {
+
             LogService.Instance.WriteLog(this,
                 "Stations Service initialized.");
 
             Stations = new ObservableCollection<Station>();
             CustomStations = new ObservableCollection<Station>();
             timer = new Timer();
+
+            if (!App.CheckIfSafeStart()) return;
 
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Hanasu\\"))
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Hanasu\\");
@@ -227,8 +230,15 @@ namespace Hanasu.Services.Stations
                 if (!File.Exists(cachefile))
                     using (WebClient wc = new WebClient())
                     {
-                        wc.DownloadFile(st.DataSource, cachefile);
-                        s.LocalStationFile = new Uri(cachefile);
+                        try
+                        {
+                            wc.DownloadFile(st.DataSource, cachefile);
+                            s.LocalStationFile = new Uri(cachefile);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     }
                 else
                     s.LocalStationFile = new Uri(cachefile);
@@ -269,7 +279,7 @@ namespace Hanasu.Services.Stations
                 StationType = x.ContainsElement("StationType") ? (StationType)Enum.Parse(typeof(StationType), x.Element("StationType").Value) : StationType.Radio,
                 Language = x.ContainsElement("Language") ? (StationLanguage)Enum.Parse(typeof(StationLanguage), x.Element("Language").Value) : StationLanguage.Unknown,
                 Cacheable = x.ContainsElement("Cacheable") ? bool.Parse(x.Element("Cacheable").Value) : false,
-                ScheduleType = x.ContainsElement("Schedule") ? (StationScheduleType)Enum.Parse(typeof(StationScheduleType),x.Element("Schedule").Attribute("type").Value) : StationScheduleType.none,
+                ScheduleType = x.ContainsElement("Schedule") ? (StationScheduleType)Enum.Parse(typeof(StationScheduleType), x.Element("Schedule").Attribute("type").Value) : StationScheduleType.none,
                 ScheduleUrl = x.ContainsElement("Schedule") ? (string.IsNullOrEmpty(x.Element("Schedule").Value) ? null : new Uri(x.Element("Schedule").Value)) : null,
                 Logo = x.ContainsElement("Logo") ? (string.IsNullOrEmpty(x.Element("Logo").Value) ? null : new Uri(x.Element("Logo").Value)) : null
             };
