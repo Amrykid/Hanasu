@@ -50,8 +50,8 @@ namespace Hanasu.Services.Settings
 
                 LastSetVolume = settings.ContainsElement("LastSetVolume") ? int.Parse(settings.Element("LastSetVolume").Value) : 15;
 
-                IsLightTheme = settings.ContainsElement("IsLightTheme") ? bool.Parse(settings.Element("IsLightTheme").Value) : true;
-                DisplayBackgroundTheme = settings.ContainsElement("DisplayBackgroundTheme") ? bool.Parse(settings.Element("DisplayBackgroundTheme").Value) : true;
+                _islighttheme = settings.ContainsElement("IsLightTheme") ? bool.Parse(settings.Element("IsLightTheme").Value) : true;
+                _DisplayBackgroundTheme = settings.ContainsElement("DisplayBackgroundTheme") ? bool.Parse(settings.Element("DisplayBackgroundTheme").Value) : true;
 
                 _theme = settings.ContainsElement("Theme") ? Enum.IsDefined(typeof(SettingsThemes), settings.Element("Theme").Value) ? (SettingsThemes)Enum.Parse(typeof(SettingsThemes), settings.Element("Theme").Value) : SettingsThemes.Red : SettingsThemes.Red;
 
@@ -69,8 +69,8 @@ namespace Hanasu.Services.Settings
         {
             //Create the settings xml
 
-            DisplayBackgroundTheme = true;
-            IsLightTheme = true;
+            _DisplayBackgroundTheme = true;
+            _islighttheme = true;
 
             var doc = new XDocument(
                 new XDeclaration("1.0", "Unicode", "yes"));
@@ -79,7 +79,7 @@ namespace Hanasu.Services.Settings
                     new XElement("UpdateStationsLive", "false"),
                     new XElement("AutomaticallyFetchSongData", "false"),
                     new XElement("LastSetVolume", 50),
-                    new XElement("Theme", Enum.GetName(typeof(SettingsThemes),SettingsThemes.Red)),
+                    new XElement("Theme", Enum.GetName(typeof(SettingsThemes), SettingsThemes.Red)),
                     new XElement("DisplayBackgroundTheme", DisplayBackgroundTheme.ToString()),
                     new XElement("IsLightTheme", IsLightTheme.ToString()));
 
@@ -112,9 +112,9 @@ namespace Hanasu.Services.Settings
                           new XElement("UpdateStationsLive", UpdateStationsLive.ToString()),
                           new XElement("AutomaticallyFetchSongData", AutomaticallyFetchSongData.ToString()),
                           new XElement("LastSetVolume", LastSetVolume),
-                          new XElement("Theme", Enum.GetName(typeof(SettingsThemes),Theme)),
-                          new XElement("DisplayBackgroundTheme",DisplayBackgroundTheme.ToString()),
-                          new XElement("IsLightTheme",IsLightTheme.ToString()));
+                          new XElement("Theme", Enum.GetName(typeof(SettingsThemes), Theme)),
+                          new XElement("DisplayBackgroundTheme", DisplayBackgroundTheme.ToString()),
+                          new XElement("IsLightTheme", IsLightTheme.ToString()));
 
             var sinfo = new SettingsDataEventInfo()
             {
@@ -137,11 +137,12 @@ namespace Hanasu.Services.Settings
         public bool AutomaticallyFetchSongData { get; set; }
         public bool UpdateStationsLive { get; set; }
 
-        public bool DisplayBackgroundTheme { get; set; }
-        public bool IsLightTheme { get; set; }
-
         public int LastSetVolume { get; set; }
 
+        private bool _DisplayBackgroundTheme;
+        public bool DisplayBackgroundTheme { get { return _DisplayBackgroundTheme; } set { _DisplayBackgroundTheme = value; EventService.RaiseEvent(EventType.Theme_Changed, new ThemeChangedEventInfo()); } }
+        private bool _islighttheme;
+        public bool IsLightTheme { get { return _islighttheme; } set { _islighttheme = value; EventService.RaiseEvent(EventType.Theme_Changed, new ThemeChangedEventInfo()); } }
         private SettingsThemes _theme;
         public SettingsThemes Theme { get { return _theme; } set { _theme = value; EventService.RaiseEvent(EventType.Theme_Changed, new ThemeChangedEventInfo()); } }
 
