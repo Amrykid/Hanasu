@@ -174,8 +174,20 @@ namespace Hanasu.Services.Stations
                             Application.Current.Shutdown();
                         }
                     }
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(new EmptyParameterizedDelegate2((f, g) =>
+                    {
+                        foreach (var x in (IEnumerable<Station>)f)
+                            Stations.Add(x);
+
+                        OnPropertyChanged("Stations");
+
+                        if (StationFetchCompleted != null)
+                            StationFetchCompleted((StationsService)g, null);
+                    }), stats, this);
                 }
                 else
+                {
                     if (NetworkUtils.IsConnectedToInternet())
                     {
 
@@ -191,44 +203,48 @@ namespace Hanasu.Services.Stations
                     }
 
 
-                var finalstats = new List<Station>();
-                foreach (Station st in stats)
-                {
-                    var o = st;
-                    if (o.Cacheable)
+                    var finalstats = new List<Station>();
+                    foreach (Station st in stats)
                     {
-                        try
+                        var o = st;
+                        if (o.Cacheable)
                         {
-                            var s = CheckAndDownloadCacheableStation(ref o);
+                            try
+                            {
+                                var s = CheckAndDownloadCacheableStation(ref o);
 
-                            finalstats.Add(s);
+                                finalstats.Add(s);
+                            }
+                            catch (Exception)
+                            {
+                                finalstats.Add(o);
+                            }
                         }
-                        catch (Exception)
-                        {
+                        else
                             finalstats.Add(o);
-                        }
                     }
-                    else
-                        finalstats.Add(o);
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(new EmptyParameterizedDelegate2((f, g) =>
+                        {
+                            if (Stations.Count > 0)
+                                Stations.Clear();
+
+                            foreach (var x in (List<Station>)f)
+                                Stations.Add(x);
+
+                            OnPropertyChanged("Stations");
+
+                            if (StationFetchCompleted != null)
+                                StationFetchCompleted((StationsService)g, null);
+                        }), finalstats, this);
+
                 }
-
-                System.Windows.Application.Current.Dispatcher.Invoke(new EmptyParameterizedDelegate2((f, g) =>
-                    {
-                        foreach (var x in (List<Station>)f)
-                            Stations.Add(x);
-
-                        OnPropertyChanged("Stations");
-
-                        if (StationFetchCompleted != null)
-                            StationFetchCompleted((StationsService)g, null);
-                    }), finalstats, this);
-
-                LogService.Instance.WriteLog(this,
-    "END: Station polling operation.");
 
             }
             catch (Exception) { }
 
+            LogService.Instance.WriteLog(this,
+                "END: Station polling operation.");
             Status = StationsServiceStatus.Idle;
         }
 

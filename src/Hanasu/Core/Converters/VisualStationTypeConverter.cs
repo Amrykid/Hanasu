@@ -12,13 +12,19 @@ using System.Windows.Media.Imaging;
 
 namespace Hanasu.Core.Converters
 {
-    public class VisualStationTypeConverter: IValueConverter
+    public class VisualStationTypeConverter : IValueConverter
     {
         private Lazy<BitmapImage> RadioLazy = new Lazy<BitmapImage>(new Func<BitmapImage>(() =>
             {
                 BitmapImage res = new BitmapImage();
                 res.BeginInit();
-                res.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/play.png", UriKind.Absolute);
+                res.DecodePixelWidth = 40;
+
+                if (Hanasu.Services.Settings.SettingsService.Instance.IsLightTheme)
+                    res.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/play.png", UriKind.Absolute);
+                else
+                    res.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/play_white.png", UriKind.Absolute);
+
                 res.EndInit();
                 return (BitmapImage)res.GetAsFrozen();
             }));
@@ -26,13 +32,19 @@ namespace Hanasu.Core.Converters
         {
             BitmapImage res = new BitmapImage();
             res.BeginInit();
-            res.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/video.png", UriKind.Absolute);
+            res.DecodePixelWidth = 40;
+
+            if (Hanasu.Services.Settings.SettingsService.Instance.IsLightTheme)
+                res.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/video.png", UriKind.Absolute);
+            else
+                res.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/video_white.png", UriKind.Absolute);
+
             res.EndInit();
             return (BitmapImage)res.GetAsFrozen();
         }));
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            StationType s = (StationType)value; 
+            StationType s = (StationType)value;
             try
             {
                 switch (s)

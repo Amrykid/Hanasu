@@ -195,6 +195,13 @@
                                                                     <DataTemplate>
                                                                         <Grid Height="34">
                                                                             <Image Source="{Binding Converter={StaticResource VisualStationTypeConverter1}, Path=StationType, IsAsync=True}" Name="StationsListViewGridItemButton" Width="45" Height="42" Margin="0 -5 0 0"/>
+                                                                            <!--<Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                                                                <Rectangle.Fill>
+                                                                                    <VisualBrush Stretch="Uniform"
+                            					Visual="{Binding Converter={StaticResource VisualStationTypeConverter1}, Path=StationType}" />
+                                                                                </Rectangle.Fill>
+                                                                            </Rectangle>-->
+                                                                            <!--<ContentControl Content="{Binding Converter={StaticResource VisualStationTypeConverter1}, Path=StationType}"/>-->
                                                                         </Grid>
                                                                     </DataTemplate>
                                                                 </GridViewColumn.CellTemplate>
@@ -234,6 +241,15 @@
                                                             </GridViewColumn>
                                                         </GridView>
                                                     </ListView.View>
+                                                    <ListView.ToolTip>
+                                                        <Grid Background="{Binding ElementName=thisWindow,Path=Background,UpdateSourceTrigger=PropertyChanged}" Width="100" Height="150" DataContext="{Binding ElementName=StationsListView,Path=SelectedItem}">
+                                                            <Label Content="{Binding Name}" ContentStringFormat="Station Name: {0}">
+                                                                <Label.Foreground>
+                                                                    <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                                </Label.Foreground>
+                                                            </Label>
+                                                        </Grid>
+                                                    </ListView.ToolTip>
                                                     <ListView.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="Edit station" Name="StationsListViewEditCustomStationsMenuItem" IsEnabled="False" Click="StationsListViewEditCustomStationsMenuItem_Click"/>
@@ -569,26 +585,50 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Name="MediaControlPanel">
-                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Click="revBtn_Click">
-                            <Image Source="pack://application:,,,/Hanasu;component/Resources/rew.png"/>
+                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="revBtn" Click="revBtn_Click" Width="60">
+                            <!--<Image Source="pack://application:,,,/Hanasu;component/Resources/rew.png"/>-->
+                            <Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_rewind}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
                             <Button.ToolTip>
                                 <ToolTip Content="Changes station to the one above the current one."/>
                             </Button.ToolTip>
                         </Button>
-                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="playBtn" Click="playBtn_Click">
-                            <Image Source="pack://application:,,,/Hanasu;component/Resources/play.png"/>
+                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="playBtn" Click="playBtn_Click" Width="60">
+                            <!--<Image Source="pack://application:,,,/Hanasu;component/Resources/play.png"/>-->
+                            <Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_play}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
                             <Button.ToolTip>
                                 <ToolTip Content="Begins streaming the current station."/>
                             </Button.ToolTip>
                         </Button>
-                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="pauseBtn" Click="pauseBtn_Click" IsEnabled="False">
-                            <Image Source="pack://application:,,,/Hanasu;component/Resources/pause.png"/>
+                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="pauseBtn" Click="pauseBtn_Click" IsEnabled="False" Width="60">
+                            <!--<Image Source="pack://application:,,,/Hanasu;component/Resources/pause.png"/>-->
+                            <Rectangle Margin="0 1 0 0" Height="30" Width="30">
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_pause}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
                             <Button.ToolTip>
                                 <ToolTip Content="Pauses/stops the stream."/>
                             </Button.ToolTip>
                         </Button>
-                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Click="ffBtn_Click">
-                            <Image Source="pack://application:,,,/Hanasu;component/Resources/ff.png"/>
+                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Name="ffBtn" Click="ffBtn_Click" Width="60">
+                            <!--<Image Source="pack://application:,,,/Hanasu;component/Resources/ff.png"/>-->
+                            <Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_fastforward}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
                             <Button.ToolTip>
                                 <ToolTip Content="Changes station to the one below the current one."/>
                             </Button.ToolTip>
