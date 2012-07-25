@@ -378,7 +378,7 @@ namespace Hanasu.Services.Stations
             {
                 var url = (string)playerAttributes["SourceURL"];
 
-                if (!url.StartsWith("http") || !url.StartsWith("https")) return false;
+                if (!url.StartsWith("http") && !url.StartsWith("https")) return false;
 
                 var html = Hanasu.Core.HtmlTextUtility.GetHtmlFromUrl2(url);
 
