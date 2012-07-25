@@ -20,7 +20,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Label Content="{Binding Message}" Height="28" Margin="25,9,22,0" Name="label1" VerticalAlignment="Top" FontSize="17" />
-        <metro:ProgressIndicator IsEnabled="True" ProgressColour="{StaticResource AccentColorBrush}" Margin="12,42,12,25" />
+        <Label Content="{Binding Message}" Height="36" Margin="25,5,22,0" Name="label1" VerticalAlignment="Top" FontSize="17" />
+        <metro:ProgressIndicator IsEnabled="True" ProgressColour="{StaticResource AccentColorBrush}" Margin="12,47,12,20" />
     </Grid>
 </metro:MetroWindow>

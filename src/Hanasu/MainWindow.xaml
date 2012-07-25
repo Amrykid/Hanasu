@@ -241,15 +241,6 @@
                                                             </GridViewColumn>
                                                         </GridView>
                                                     </ListView.View>
-                                                    <ListView.ToolTip>
-                                                        <Grid Background="{Binding ElementName=thisWindow,Path=Background,UpdateSourceTrigger=PropertyChanged}" Width="100" Height="150" DataContext="{Binding ElementName=StationsListView,Path=SelectedItem}">
-                                                            <Label Content="{Binding Name}" ContentStringFormat="Station Name: {0}">
-                                                                <Label.Foreground>
-                                                                    <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
-                                                                </Label.Foreground>
-                                                            </Label>
-                                                        </Grid>
-                                                    </ListView.ToolTip>
                                                     <ListView.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="Edit station" Name="StationsListViewEditCustomStationsMenuItem" IsEnabled="False" Click="StationsListViewEditCustomStationsMenuItem_Click"/>
