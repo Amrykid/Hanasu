@@ -553,7 +553,13 @@
                                             </Button.ToolTip>
                                         </Button>
                                         <Button Name="MoreInfoBtn" Visibility="Collapsed" Click="MoreInfoBtn_Click" Height="35" Width="35" Style="{DynamicResource MetroCircleButtonStyle}">
-                                            <Image Source="pack://application:,,,/Hanasu;component/Resources/i_black.png"/>
+                                            <!--<Image Source="pack://application:,,,/Hanasu;component/Resources/i_black.png"/>-->
+                                            <Rectangle Width="15" Height="15" Margin="0 0 0 0">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_information}" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
                                             <Button.ToolTip>
                                                 <ToolTip Content="Shows information on the current song."/>
                                             </Button.ToolTip>
