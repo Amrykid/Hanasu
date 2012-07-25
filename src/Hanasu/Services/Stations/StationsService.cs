@@ -378,6 +378,8 @@ namespace Hanasu.Services.Stations
             {
                 var url = (string)playerAttributes["SourceURL"];
 
+                if (!url.StartsWith("http") || !url.StartsWith("https")) return false;
+
                 var html = Hanasu.Core.HtmlTextUtility.GetHtmlFromUrl2(url);
 
                 return html.Contains("SHOUTcast D.N.A.S. Status</font>");
