@@ -178,6 +178,9 @@
     <Compile Include="Windows\AddEditStationWindow.xaml.cs">
       <DependentUpon>AddEditStationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\StationSongHistoryWindow.xaml.cs">
+      <DependentUpon>StationSongHistoryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SetAvatarUrlWindow.xaml.cs">
       <DependentUpon>SetAvatarUrlWindow.xaml</DependentUpon>
     </Compile>
@@ -238,6 +241,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\AddEditStationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\StationSongHistoryWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -434,7 +441,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

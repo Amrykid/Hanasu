@@ -11,6 +11,8 @@ using System.IO;
 using System.Net;
 using System.Xml;
 using System.Windows;
+using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace Hanasu.Services.Stations
 {
@@ -369,6 +371,50 @@ namespace Hanasu.Services.Stations
 
         public event EventHandler StationFetchStarted;
         public event EventHandler StationFetchCompleted;
+
+        public static bool GetIfShoutcastStation(Hashtable playerAttributes) 
+        {
+            if (playerAttributes.ContainsKey("SourceURL"))
+            {
+                var url = (string)playerAttributes["SourceURL"];
+
+                var html = Hanasu.Core.HtmlTextUtility.GetHtmlFromUrl2(url);
+
+                return html.Contains("SHOUTcast D.N.A.S. Status</font>");
+            }
+
+            return false; 
+        }
+
+        public static Dictionary<string, string> GetShoutcastStationSongHistory(Station station, Hashtable playerAttributes)
+        {
+            var his = new Dictionary<string, string>();
+
+            var url = (string)playerAttributes["SourceURL"] + "played.html";
+
+            var html = Hanasu.Core.HtmlTextUtility.GetHtmlFromUrl2(url);
+
+            var songtable = Regex.Matches(html, "<table.+?>.+?</table>", RegexOptions.Singleline | RegexOptions.Compiled)[1];
+            var entries = Regex.Matches(songtable.Value,
+                "<tr>.+?</tr>",
+                RegexOptions.Singleline | RegexOptions.Compiled);
+
+            for (int i = 1; i < entries.Count; i++)
+            {
+                var entry = entries[i];
+                var bits = Regex.Matches(
+                        Regex.Replace(
+                            entry.Value,"<b>Current Song</b>","",RegexOptions.Compiled | RegexOptions.Singleline),
+                    "<td>.+?(</td>|</tr>)", RegexOptions.Compiled | RegexOptions.Singleline);
+
+                his.Add(
+                    Regex.Replace(bits[0].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim(),
+                    Regex.Replace(bits[1].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim());
+            }
+
+
+            return his;
+        }
     }
 }
 

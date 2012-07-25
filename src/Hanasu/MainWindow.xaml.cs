@@ -717,6 +717,8 @@ namespace Hanasu
 
                     player_parseAttributes();
 
+                    StationHistoryBtn.IsEnabled = Hanasu.Services.Stations.StationsService.GetIfShoutcastStation(currentStationAttributes);
+
                     Hanasu.Services.Events.EventService.RaiseEventAsync(Services.Events.EventType.Station_Changed
                             , new StationEventInfo()
                             {
@@ -747,6 +749,7 @@ namespace Hanasu
                     playBtn.IsEnabled = true;
                     pauseBtn.IsEnabled = false;
                     AddRawSongToLikedBtn.IsEnabled = false;
+                    StationHistoryBtn.IsEnabled = false;
 
                     bufferTimer.Stop();
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
@@ -1765,6 +1768,15 @@ namespace Hanasu
                     Hanasu.Services.Stations.StationsService.Instance.CustomStations[Hanasu.Services.Stations.StationsService.Instance.CustomStations.IndexOf(station)] = newData;
                 }
             }
+        }
+
+        private void StationHistoryBtn_Click(object sender, RoutedEventArgs e)
+        {
+            StationSongHistoryWindow sss = new StationSongHistoryWindow();
+            sss.Owner = this;
+            sss.DataContext = Hanasu.Services.Stations.StationsService.GetShoutcastStationSongHistory(currentStation, currentStationAttributes);
+            sss.ShowDialog();
+            sss.Close();
         }
     }
 }

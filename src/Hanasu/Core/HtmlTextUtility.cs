@@ -41,6 +41,25 @@ namespace Hanasu.Core
         {
             return GetHtmlFromUrl(uri.ToString());
         }
+        public static string GetHtmlFromUrl2(string url)
+        {
+            string result = null;
+            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
+            req.ServicePoint.Expect100Continue = true;
+            req.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11";
+
+            using (HttpWebResponse res = (HttpWebResponse)req.GetResponse())
+            {
+                using (StreamReader sr = new StreamReader(res.GetResponseStream()))
+                {
+                    result = sr.ReadToEnd();
+                    sr.Close();
+                }
+                res.Close();
+            }
+
+            return result;
+        }
         public static string Decode(string html)
         {
             var res = html;
