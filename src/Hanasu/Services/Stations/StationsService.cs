@@ -374,18 +374,25 @@ namespace Hanasu.Services.Stations
 
         public static bool GetIfShoutcastStation(Hashtable playerAttributes) 
         {
-            if (playerAttributes.ContainsKey("SourceURL"))
+            try
             {
-                var url = (string)playerAttributes["SourceURL"];
+                if (playerAttributes.ContainsKey("SourceURL"))
+                {
+                    var url = (string)playerAttributes["SourceURL"];
 
-                if (!url.StartsWith("http") && !url.StartsWith("https")) return false;
+                    if (!url.StartsWith("http") && !url.StartsWith("https")) return false;
 
-                var html = Hanasu.Core.HtmlTextUtility.GetHtmlFromUrl2(url);
+                    var html = Hanasu.Core.HtmlTextUtility.GetHtmlFromUrl2(url);
 
-                return html.Contains("SHOUTcast D.N.A.S. Status</font>");
+                    return html.Contains("SHOUTcast D.N.A.S. Status</font>");
+                }
+            }
+            catch (Exception)
+            {
+                return false;
             }
 
-            return false; 
+            return false;
         }
 
         public static Dictionary<string, string> GetShoutcastStationSongHistory(Station station, Hashtable playerAttributes)

@@ -717,7 +717,18 @@ namespace Hanasu
 
                     player_parseAttributes();
 
-                    StationHistoryBtn.IsEnabled = Hanasu.Services.Stations.StationsService.GetIfShoutcastStation(currentStationAttributes);
+                    var laststation = currentStation;
+                    System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>
+                        {
+                            var b = Hanasu.Services.Stations.StationsService.GetIfShoutcastStation(currentStationAttributes);
+                            if (player.playState == WMPPlayState.wmppsPlaying && currentStation.Name == laststation.Name)
+                            {
+                                Dispatcher.Invoke(new EmptyDelegate(() =>
+                                    {
+                                        StationHistoryBtn.IsEnabled = b;
+                                    }));
+                            }
+                        }));
 
                     Hanasu.Services.Events.EventService.RaiseEventAsync(Services.Events.EventType.Station_Changed
                             , new StationEventInfo()
@@ -750,6 +761,8 @@ namespace Hanasu
                     pauseBtn.IsEnabled = false;
                     AddRawSongToLikedBtn.IsEnabled = false;
                     StationHistoryBtn.IsEnabled = false;
+                    currentSong = new SongData();
+                    currentStation = new Station();
 
                     bufferTimer.Stop();
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
@@ -809,7 +822,8 @@ namespace Hanasu
             {
                 try
                 {
-                    if (new Ping().Send(station.DataSource.Host).Status != IPStatus.Success)
+                    var status = new Ping().Send(station.DataSource.Host).Status;
+                    if (status != IPStatus.Success)
                     {
                         throw new Exception();
                     }

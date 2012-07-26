@@ -439,6 +439,6 @@
     <Format>Anime</Format>
     <City>Burnsville, MN</City>
     <Language>Japanese</Language>
-    <Cacheable>False</Cacheable>
+    <Cacheable>True</Cacheable>
   </Station>
 </Stations>
