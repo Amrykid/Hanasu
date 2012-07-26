@@ -10,6 +10,7 @@
     <Cacheable>True</Cacheable>
     <ExplicitExtension>.m3u</ExplicitExtension>
     <Schedule type="page">http://www.animenfo.com/radio/schedule.php</Schedule>
+    <Logo>http://d1i6vahw24eb07.cloudfront.net/s54119q.png</Logo>
   </Station>
   <Station>
     <Name>Gensokyo Radio</Name>
@@ -367,7 +368,7 @@
     <City>United States</City>
     <ExplicitExtension>.pls</ExplicitExtension>
     <StationType>Radio</StationType>
-    <Language>English</Language>
+    <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
   </Station>
   <Station>
@@ -378,7 +379,7 @@
     <City>United States</City>
     <ExplicitExtension>.pls</ExplicitExtension>
     <StationType>Radio</StationType>
-    <Language>Spanish</Language>
+    <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <Schedule type="page">http://www.anime-obsesion.net/horarios/</Schedule>
   </Station>
@@ -402,6 +403,42 @@
     <ExplicitExtension></ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>French</Language>
+    <Cacheable>False</Cacheable>
+  </Station>
+  <Station>
+    <Name>Cyber ​​Anime Radio 24/7</Name>
+    <DataSource><![CDATA[http://stream.acrobs.net:8000/acrobs.mp3.m3u]]></DataSource>
+    <Homepage>http://acrobs.net/</Homepage>
+    <Format>Anime</Format>
+    <City>Moscow, Russia</City>
+    <Language>Russian</Language>
+    <Cacheable>False</Cacheable>
+  </Station>
+  <Station>
+    <Name>KAWAii Radio</Name>
+    <DataSource><![CDATA[http://listen.radionomy.com/kawaiiradio.m3u]]></DataSource>
+    <Homepage>http://www.kawaiiradio.org/</Homepage>
+    <Format>Anime</Format>
+    <City>Paris, France</City>
+    <Language>French</Language>
+    <Cacheable>False</Cacheable>
+  </Station>
+  <Station>
+    <Name>Anime Academy Radio</Name>
+    <DataSource><![CDATA[http://stream.radiotime.com/listen.stream?streamId=4095170&rti=dihyG20zLx8JURd1F0lTQVsoWUNFXQo9XRVWQkVcJgsVQxAhZltYDFYCcXoQRgNiXQdMDFcVRGkUEQMjSxUNFlUQWHRqGAVEBUMGU1tUZgE%3d%7e%7e%7e]]></DataSource>
+    <Homepage>https://www.facebook.com/pages/Anime-Academy-Radio/173616517763</Homepage>
+    <Format>Anime</Format>
+    <City>Seattle, WA</City>
+    <Language>English</Language>
+    <Cacheable>False</Cacheable>
+  </Station>
+  <Station>
+    <Name>Yggdrasil Radio</Name>
+    <DataSource><![CDATA[http://shirayuki.org:9100/listen.pls?sid=1]]></DataSource>
+    <Homepage>http://yggdrasilradio.net/</Homepage>
+    <Format>Anime</Format>
+    <City>Burnsville, MN</City>
+    <Language>Japanese</Language>
     <Cacheable>False</Cacheable>
   </Station>
 </Stations>
