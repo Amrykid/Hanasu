@@ -818,8 +818,9 @@ namespace Hanasu
                 return;
             }
 
-            if (station.LocalStationFile == null)
+            if (station.LocalStationFile == null && !station.Cacheable)
             {
+
                 try
                 {
                     var status = new Ping().Send(station.DataSource.Host).Status;
@@ -836,6 +837,8 @@ namespace Hanasu
                     return;
                 }
             }
+
+            Hanasu.Services.Stations.StationsService.CheckAndDownloadCacheableStation(ref station);
 
 
             if (currentStation.Name != station.Name)

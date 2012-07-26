@@ -399,7 +399,10 @@ namespace Hanasu.Services.Stations
         {
             var his = new Dictionary<string, string>();
 
-            var url = (string)playerAttributes["SourceURL"] + "played.html";
+            var url = (string)playerAttributes["SourceURL"];
+            if (url.EndsWith("/") == false)
+                url += "/";
+            url += "played.html";
 
             var html = Hanasu.Core.HtmlTextUtility.GetHtmlFromUrl2(url);
 
@@ -416,9 +419,11 @@ namespace Hanasu.Services.Stations
                             entry.Value,"<b>Current Song</b>","",RegexOptions.Compiled | RegexOptions.Singleline),
                     "<td>.+?(</td>|</tr>)", RegexOptions.Compiled | RegexOptions.Singleline);
 
-                his.Add(
-                    Regex.Replace(bits[0].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim(),
-                    Regex.Replace(bits[1].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim());
+                var key = Regex.Replace(bits[0].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim();
+                var val = Regex.Replace(bits[1].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim();
+                if (his.ContainsKey(key) == false)
+                his.Add(key,
+                    val);
             }
 
 
