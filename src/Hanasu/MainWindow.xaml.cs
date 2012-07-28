@@ -730,15 +730,15 @@ namespace Hanasu
 
                 System.Threading.Thread.Sleep(5000);
 
+                var songdata = Hanasu.Services.Stations.StationsService.GetShoutcastStationCurrentSong(currentStation, currentStationAttributes);
+                currentSong = songdata;
+
                 Dispatcher.Invoke(new EmptyDelegate(() =>
                 {
                     if (StationHistoryBtn.IsEnabled) //True if the station was detected as a shoutcast station earlier.
                     {
                         try
                         {
-                            var songdata = Hanasu.Services.Stations.StationsService.GetShoutcastStationCurrentSong(currentStation, currentStationAttributes);
-                            currentSong = songdata;
-
                             lastMediaTxt = songdata.ToSongString();
 
                             SongDataLbl.Text = songdata.ToSongString();
@@ -793,10 +793,13 @@ namespace Hanasu
                     attemptToConnectTimer.Stop();
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
+                    
+                    player_parseAttributes();
 
                     if (!IsWMP12OrHigher() || currentStation.UseAlternateSongTitleFetching)
                     {
                         Station_Wait_And_AlternateFetchSongTitle();
+
                         stationMediaWMP11orLowerTimer.Start();
                     }
 
@@ -819,8 +822,6 @@ namespace Hanasu
                     VolumeMuteBtn.IsEnabled = true;
 
                     HideStationsAdorner(); //Playing, hide the adorner and rename the listview.
-
-                    player_parseAttributes();
 
                     var laststation = currentStation;
                     System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>
