@@ -153,5 +153,18 @@ namespace Hanasu.Services.Song
         }
 
         public static IAlbumInfoDataSource DataSource { get; set; }
+
+        internal static SongData ParseSongData(string songData, Station station)
+        {
+            var a = new SongData();
+
+            songData = CleanSongDataStr(songData);
+            var bits = songData.Split(new string[] { " - " }, 2, StringSplitOptions.None);
+
+            a.Artist = bits[0];
+            a.TrackTitle = bits[1];
+
+            return a;
+        }
     }
 }

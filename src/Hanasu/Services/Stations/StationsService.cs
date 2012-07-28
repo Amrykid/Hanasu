@@ -13,6 +13,7 @@ using System.Xml;
 using System.Windows;
 using System.Collections;
 using System.Text.RegularExpressions;
+using Hanasu.Services.Song;
 
 namespace Hanasu.Services.Stations
 {
@@ -311,7 +312,8 @@ namespace Hanasu.Services.Stations
                 Cacheable = x.ContainsElement("Cacheable") ? bool.Parse(x.Element("Cacheable").Value) : false,
                 ScheduleType = x.ContainsElement("Schedule") ? (StationScheduleType)Enum.Parse(typeof(StationScheduleType), x.Element("Schedule").Attribute("type").Value) : StationScheduleType.none,
                 ScheduleUrl = x.ContainsElement("Schedule") ? (string.IsNullOrEmpty(x.Element("Schedule").Value) ? null : new Uri(x.Element("Schedule").Value)) : null,
-                Logo = x.ContainsElement("Logo") ? (string.IsNullOrEmpty(x.Element("Logo").Value) ? null : new Uri(x.Element("Logo").Value)) : null
+                Logo = x.ContainsElement("Logo") ? (string.IsNullOrEmpty(x.Element("Logo").Value) ? null : new Uri(x.Element("Logo").Value)) : null,
+                UseAlternateSongTitleFetching = x.ContainsElement("UseAlternateSongTitleFetching") ? bool.Parse(x.Element("UseAlternateSongTitleFetching").Value) : false
             };
         }
 
@@ -372,7 +374,7 @@ namespace Hanasu.Services.Stations
         public event EventHandler StationFetchStarted;
         public event EventHandler StationFetchCompleted;
 
-        public static bool GetIfShoutcastStation(Hashtable playerAttributes) 
+        public static bool GetIfShoutcastStation(Hashtable playerAttributes)
         {
             try
             {
@@ -416,18 +418,41 @@ namespace Hanasu.Services.Stations
                 var entry = entries[i];
                 var bits = Regex.Matches(
                         Regex.Replace(
-                            entry.Value,"<b>Current Song</b>","",RegexOptions.Compiled | RegexOptions.Singleline),
+                            entry.Value, "<b>Current Song</b>", "", RegexOptions.Compiled | RegexOptions.Singleline),
                     "<td>.+?(</td>|</tr>)", RegexOptions.Compiled | RegexOptions.Singleline);
 
                 var key = Regex.Replace(bits[0].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim();
                 var val = Regex.Replace(bits[1].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim();
                 if (his.ContainsKey(key) == false)
-                his.Add(key,
-                    val);
+                    his.Add(key,
+                        val);
             }
 
 
             return his;
+        }
+        public static SongData GetShoutcastStationCurrentSong(Station station, Hashtable playerAttributes)
+        {
+            var url = (string)playerAttributes["SourceURL"];
+
+            var html = Hanasu.Core.HtmlTextUtility.GetHtmlFromUrl2(url.ToString());
+            var songtable = Regex.Matches(html, "<table.+?>.+?</table>", RegexOptions.Singleline | RegexOptions.Compiled)[2];
+            var entries = Regex.Matches(songtable.Value,
+                "<tr>.+?</tr>",
+                RegexOptions.Singleline | RegexOptions.Compiled);
+
+            var songEntry = entries[entries.Count - 1];
+            var songData = Regex.Match(songEntry.Value, "<b>.+?</b>", RegexOptions.Singleline | RegexOptions.Compiled).Value;
+            songData = Regex.Replace(songData, "<.+?>", "", RegexOptions.Compiled | RegexOptions.Singleline).Trim();
+            songData = Hanasu.Services.Song.SongService.CleanSongDataStr(songData);
+
+            Uri lyrics = null;
+            if (Hanasu.Services.Song.SongService.IsSongAvailable(songData, station, out lyrics))
+                return Hanasu.Services.Song.SongService.GetSongData(songData, station);
+            else
+                if (Hanasu.Services.Song.SongService.IsSongTitle(songData, station))
+                    return Hanasu.Services.Song.SongService.ParseSongData(songData, station);
+                else throw new Exception();
         }
     }
 }

@@ -25,5 +25,7 @@ namespace Hanasu.Services.Stations
         public StationScheduleType ScheduleType { get; set; }
 
         public Uri Logo { get; set; }
+
+        public bool UseAlternateSongTitleFetching { get; set; }
     }
 }

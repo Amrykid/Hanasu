@@ -240,6 +240,22 @@ namespace Hanasu
 #endif
         }
 
+        #region WMP Stuff
+        public bool IsWMP12OrHigher()
+        {
+            if (IsWMPInitialized)
+            {
+                var x = Version.Parse(player.versionInfo);
+
+                return x.Major >= 12;
+            }
+            else
+            {
+                return Environment.OSVersion.Version.Major > 6 || (Environment.OSVersion.Version.Major > 6 && Environment.OSVersion.Version.Minor >= 1); //Educated guess because Vista (6.0 can only have WMP 11) and 7 (6.1) can have WMP12.
+            }
+
+            return false;
+        }
         public bool IsWMPInitialized = false;
         private void InitializeWMPPControl()
         {
@@ -257,6 +273,7 @@ namespace Hanasu
 
             player.settings.volume = (int)VolumeSlider.Value;
 
+
             player.MediaChange += player_MediaChange;
 
             player.ScriptCommand += player_ScriptCommand;
@@ -269,14 +286,33 @@ namespace Hanasu
 
             player.PlayStateChange += player_PlayStateChange;
 
+
+            stationMediaWMP11orLowerTimer = new Timer();
+            stationMediaWMP11orLowerTimer.Elapsed += new ElapsedEventHandler(stationMediaWMP11orLowerTimer_Elapsed);
+            stationMediaWMP11orLowerTimer.Interval = (1000 * 60) * 3; //3 minutes
+
             IsWMPInitialized = true;
+        }
+
+        void stationMediaWMP11orLowerTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //WMP11 and lower cannot get the song title so we fallback to other methods of getting the song title.
+            //This is also used if a station is set to use alternate title fetching.
+
+            if (currentStation.Name == null) return;
+
+            player_parseAttributes();
+
+            Station_Wait_And_AlternateFetchSongTitle();
         }
         private void ShutdownWMPClose()
         {
             if (!IsWMPInitialized) return;
 
             player.PlayStateChange -= player_PlayStateChange;
+
             player.MediaChange -= player_MediaChange;
+
             player.MediaError -= player_MediaError;
             player.ScriptCommand -= player_ScriptCommand;
             player.MarkerHit -= player_MarkerHit;
@@ -288,6 +324,7 @@ namespace Hanasu
 
             ((Hanasu.Core.AxWMP)windowsFormsHost1.Child).Dispose();
         }
+        #endregion
 
         void attemptToConnectTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -437,227 +474,289 @@ namespace Hanasu
         private SongData currentSong;
         internal Hashtable currentStationAttributes { get; set; }
         private List<string> songMessages = new List<string>();
+        /// <summary>
+        /// For alternate title fetching process (mostly for use with WMP11 and lower. Also used for stations set to use alternate title fetching).
+        /// </summary>
+        private Timer stationMediaWMP11orLowerTimer = null;
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
         {
             try
             {
                 player_parseAttributes();
 
-                if (lastMediaTxt != player.currentMedia.name)
+                if (IsWMP12OrHigher())
                 {
-                    var name = player.currentMedia.name;
-
-                    if ((Hanasu.Services.Song.SongService.IsSongTitle(name, currentStation)))
+                    #region WMP12 Handling
+                    if (lastMediaTxt != player.currentMedia.name)
                     {
-                        #region Handle Song Title
-                        MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
-                        AddRawSongToLikedBtn.IsEnabled = true;
+                        var name = player.currentMedia.name;
 
-                        lastMediaTxt = name;
-                        lastSongTxt = name;
-
-                        SongDataLbl.Text = name;
-
-                        SongIsLiked = false;
-
-                        //LikeBtnInfo.IsEnabled = true;
-
-                        songMessages.Clear();
-
-
-                        //song changed. maybe a couple of seconds late.
-
-
-
-                        if (currentStation.StationType == StationType.Radio)
+                        if ((Hanasu.Services.Song.SongService.IsSongTitle(name, currentStation)))
                         {
-                            if (Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
-                            {
-                                object imgval = null;
+                            #region Handle Song Title
+                            MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
+                            AddRawSongToLikedBtn.IsEnabled = true;
 
-                                try
+                            lastMediaTxt = name;
+                            lastSongTxt = name;
+
+                            SongDataLbl.Text = name;
+
+                            SongIsLiked = false;
+
+                            //LikeBtnInfo.IsEnabled = true;
+
+                            songMessages.Clear();
+
+
+                            //song changed. maybe a couple of seconds late.
+
+
+
+                            if (currentStation.StationType == StationType.Radio)
+                            {
+                                if (Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
                                 {
-                                    var songdat = Hanasu.Services.LikedSongs.LikedSongService.Instance.GetSongFromString(name);
-                                    imgval = songdat.AlbumCoverData != null ? (object)songdat.AlbumCoverData : (songdat.AlbumCoverUri != null ? songdat.AlbumCoverUri.ToString() : null);
+                                    object imgval = null;
+
+                                    try
+                                    {
+                                        var songdat = Hanasu.Services.LikedSongs.LikedSongService.Instance.GetSongFromString(name);
+                                        imgval = songdat.AlbumCoverData != null ? (object)songdat.AlbumCoverData : (songdat.AlbumCoverUri != null ? songdat.AlbumCoverUri.ToString() : null);
+                                    }
+                                    catch (Exception) { }
+
+                                    Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
+                                        name, 4000, false, Services.Notifications.NotificationType.Now_Playing, null, imgval);
                                 }
-                                catch (Exception) { }
+                                else
+                                {
+                                    Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
+                                        name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
+                                }
 
-                                Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
-                                    name, 4000, false, Services.Notifications.NotificationType.Now_Playing, null, imgval);
-                            }
-                            else
-                            {
-                                Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
-                                    name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
-                            }
-
-                            #region Handle Radio stuff
-                            if (!Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
-                            {
-                                if (Hanasu.Services.Settings.SettingsService.Instance.AutomaticallyFetchSongData)
-                                    System.Threading.Tasks.Task.Factory.StartNew(() =>
-                                        {
-                                            var n = name;
-                                            var stat = currentStation;
-
-                                            System.Threading.Thread.Sleep(1000 * 20); //wait 20 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
-
-                                            if (stat.Name != currentStation.Name)
-                                                return;
-
-                                            if (!Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name)) //Song could have been manually liked in the 20 seconds.
+                                #region Handle Radio stuff
+                                if (!Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
+                                {
+                                    if (Hanasu.Services.Settings.SettingsService.Instance.AutomaticallyFetchSongData)
+                                        System.Threading.Tasks.Task.Factory.StartNew(() =>
                                             {
-                                                Uri lyricsUrl = null;
+                                                var n = name;
+                                                var stat = currentStation;
 
-                                                if (Hanasu.Services.Song.SongService.IsSongAvailable(name, currentStation, out lyricsUrl))
+                                                System.Threading.Thread.Sleep(1000 * 20); //wait 20 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
+
+                                                if (stat.Name != currentStation.Name)
+                                                    return;
+
+                                                if (!Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name)) //Song could have been manually liked in the 20 seconds.
                                                 {
-                                                    if ((bool)Dispatcher.Invoke(
-                                                           new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() =>
-                                                           {
-                                                               return (n != SongDataLbl.Text);
+                                                    Uri lyricsUrl = null;
 
-                                                           })))
-                                                        return;
+                                                    if (Hanasu.Services.Song.SongService.IsSongAvailable(name, currentStation, out lyricsUrl))
+                                                    {
+                                                        if ((bool)Dispatcher.Invoke(
+                                                               new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() =>
+                                                               {
+                                                                   return (n != SongDataLbl.Text);
 
-                                                    if (Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
-                                                        return;
+                                                               })))
+                                                            return;
 
-                                                    Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
-                                                    "Lyrics and other data found for this song. Click here to view.", 4000, false, Services.Notifications.NotificationType.Music_Data, (t) => MoreInfoBtn_Click(MoreInfoBtn, null));
+                                                        if (Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
+                                                            return;
 
-                                                    Dispatcher.Invoke(
-                                                        new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
-                                                            {
-                                                                MoreInfoBtn.Visibility = System.Windows.Visibility.Visible;
-                                                                LikeBtnInfo.IsEnabled = true;
+                                                        Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Song info found",
+                                                        "Lyrics and other data found for this song. Click here to view.", 4000, false, Services.Notifications.NotificationType.Music_Data, (t) => MoreInfoBtn_Click(MoreInfoBtn, null));
 
-                                                                currentSong = Hanasu.Services.Song.SongService.GetSongData(name, currentStation);
+                                                        Dispatcher.Invoke(
+                                                            new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                                                                {
+                                                                    MoreInfoBtn.Visibility = System.Windows.Visibility.Visible;
+                                                                    LikeBtnInfo.IsEnabled = true;
 
-                                                                MoreInfoBtn.DataContext = currentSong;
-                                                            }));
+                                                                    currentSong = Hanasu.Services.Song.SongService.GetSongData(name, currentStation);
+
+                                                                    MoreInfoBtn.DataContext = currentSong;
+                                                                }));
+                                                    }
                                                 }
-                                            }
-                                        }).ContinueWith((tk) => tk.Dispose());
+                                            }).ContinueWith((tk) => tk.Dispose());
+                                }
+                                else
+                                {
+                                    AddRawSongToLikedBtn.IsEnabled = false;
+
+                                    SongData dat = new SongData();
+                                    try
+                                    {
+                                        dat = Hanasu.Services.LikedSongs.LikedSongService.Instance.GetSongFromString(name);
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+                                    finally
+                                    {
+                                        if (dat.TrackTitle != null)
+                                        {
+                                            Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Liked Song Detected",
+                                                "To view lyrics/album data, click here.", 4000, false, Services.Notifications.NotificationType.Music_Data, (t) =>
+                                                {
+                                                    /*if (this.WindowState == System.Windows.WindowState.Minimized)
+                                                        this.WindowState = System.Windows.WindowState.Normal;*/
+
+                                                    /*tabControl1.SelectedIndex = 2;
+
+                                                    LikedSongsListView.SelectedItem = dat;
+
+                                                    LikedSongsListView_MouseDoubleClick(LikedSongsListView, null); */
+                                                    Hanasu.Windows.SongInfoWindow siw = new Windows.SongInfoWindow();
+                                                    siw.DataContext = dat;
+
+                                                    siw.Owner = this;
+
+                                                    siw.ShowDialog();
+                                                    siw.Close();
+                                                });
+                                        }
+                                        else
+                                        {
+                                            Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Possible Liked Song Detected",
+                                                "Unable to retrieve information.", 4000, false, Services.Notifications.NotificationType.Music_Data);
+                                        }
+                                    }
+
+                                }
+                                #endregion
                             }
                             else
                             {
-                                AddRawSongToLikedBtn.IsEnabled = false;
-
-                                SongData dat = new SongData();
-                                try
-                                {
-                                    dat = Hanasu.Services.LikedSongs.LikedSongService.Instance.GetSongFromString(name);
-                                }
-                                catch (Exception)
-                                {
-                                }
-                                finally
-                                {
-                                    if (dat.TrackTitle != null)
-                                    {
-                                        Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Liked Song Detected",
-                                            "To view lyrics/album data, click here.", 4000, false, Services.Notifications.NotificationType.Music_Data, (t) =>
-                                            {
-                                                /*if (this.WindowState == System.Windows.WindowState.Minimized)
-                                                    this.WindowState = System.Windows.WindowState.Normal;*/
-
-                                                /*tabControl1.SelectedIndex = 2;
-
-                                                LikedSongsListView.SelectedItem = dat;
-
-                                                LikedSongsListView_MouseDoubleClick(LikedSongsListView, null); */
-                                                Hanasu.Windows.SongInfoWindow siw = new Windows.SongInfoWindow();
-                                                siw.DataContext = dat;
-
-                                                siw.Owner = this;
-
-                                                siw.ShowDialog();
-                                                siw.Close();
-                                            });
-                                    }
-                                    else
-                                    {
-                                        Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Possible Liked Song Detected",
-                                            "Unable to retrieve information.", 4000, false, Services.Notifications.NotificationType.Music_Data);
-                                    }
-                                }
-
+                                Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
+                                name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
                             }
                             #endregion
                         }
                         else
                         {
-                            Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
-                            name, 4000, false, Services.Notifications.NotificationType.Now_Playing);
+                            Dispatcher.Invoke(
+                                                new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
+                                                {
+                                                    MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
+                                                }));
+
+
+                            //since its not a verified song, might as well display it as a radio message instead of 'Now Playing'.
+
+                            currentSong = new SongData();
+
+                            SongIsLiked = false;
+
+                            LikeBtnInfo.IsEnabled = false;
+
+                            lastMediaTxt = name;
+
+                            if (currentStation.StationType == StationType.Radio)
+                                if (currentStationAttributes.ContainsKey("WM/AlbumTitle"))
+                                {
+                                    SongDataLbl.Text = (string)currentStationAttributes["WM/AlbumTitle"];
+                                    lastMediaTxt = (string)currentStationAttributes["WM/AlbumTitle"];
+
+                                    //WMP12_Wait_And_AlternateFetchSongTitle();
+
+                                    if (!Hanasu.Services.Song.SongService.IsSongTitle(lastMediaTxt, currentStation))
+                                        AddRawSongToLikedBtn.IsEnabled = false;
+                                }
+                                else if (currentStationAttributes.ContainsKey("Title"))
+                                {
+                                    SongDataLbl.Text = (string)currentStationAttributes["Title"];
+                                    lastMediaTxt = (string)currentStationAttributes["Title"];
+
+                                    //WMP12_Wait_And_AlternateFetchSongTitle();
+
+                                    if (!Hanasu.Services.Song.SongService.IsSongTitle(lastMediaTxt, currentStation))
+                                        AddRawSongToLikedBtn.IsEnabled = false;
+                                }
+                                else
+                                {
+                                    SongDataLbl.Text = "Not Available";
+                                    lastMediaTxt = "Not Available";
+                                    AddRawSongToLikedBtn.IsEnabled = false;
+                                }
+                            else if (currentStation.StationType == StationType.TV)
+                                SongDataLbl.Text = currentStation.Name;
+
+
+                            if (songMessages.Contains(name) == false)
+                            {
+                                Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
+                                    name, 4000, false, Services.Notifications.NotificationType.Information);
+                                songMessages.Add(name);
+                            }
                         }
-                        #endregion
                     }
                     else
                     {
-                        Dispatcher.Invoke(
-                                            new Hanasu.Services.Notifications.NotificationsService.EmptyDelegate(() =>
-                                            {
-                                                MoreInfoBtn.Visibility = System.Windows.Visibility.Hidden;
-                                            }));
-
-
-                        //since its not a verified song, might as well display it as a radio message instead of 'Now Playing'.
-
-                        currentSong = new SongData();
-
-                        SongIsLiked = false;
-
-                        LikeBtnInfo.IsEnabled = false;
-
-                        lastMediaTxt = name;
-
-                        if (currentStation.StationType == StationType.Radio)
-                            if (currentStationAttributes.ContainsKey("WM/AlbumTitle"))
-                            {
-                                SongDataLbl.Text = (string)currentStationAttributes["WM/AlbumTitle"];
-                                lastMediaTxt = (string)currentStationAttributes["WM/AlbumTitle"];
-
-                                if (!Hanasu.Services.Song.SongService.IsSongTitle(lastMediaTxt, currentStation))
-                                    AddRawSongToLikedBtn.IsEnabled = false;
-                            }
-                            else if (currentStationAttributes.ContainsKey("Title"))
-                            {
-                                SongDataLbl.Text = (string)currentStationAttributes["Title"];
-                                lastMediaTxt = (string)currentStationAttributes["Title"];
-
-                                if (!Hanasu.Services.Song.SongService.IsSongTitle(lastMediaTxt, currentStation))
-                                    AddRawSongToLikedBtn.IsEnabled = false;
-                            }
-                            else
-                            {
-                                SongDataLbl.Text = "Not Available";
-                                lastMediaTxt = "Not Available";
-                                AddRawSongToLikedBtn.IsEnabled = false;
-                            }
-                        else if (currentStation.StationType == StationType.TV)
-                            SongDataLbl.Text = currentStation.Name;
-
-
-                        if (songMessages.Contains(name) == false)
+                        if (lastMediaTxt.ToLower().Contains(currentStation.Name.ToLower()) && lastSongTxt != lastMediaTxt)
                         {
-                            Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
-                                name, 4000, false, Services.Notifications.NotificationType.Information);
-                            songMessages.Add(name);
+                            lastMediaTxt = null;
                         }
                     }
+                    #endregion
                 }
                 else
                 {
-                    if (lastMediaTxt.ToLower().Contains(currentStation.Name.ToLower()) && lastSongTxt != lastMediaTxt)
-                    {
-                        lastMediaTxt = null;
-                    }
+                    //WMP 11 and lower cannot get the song title from streams so display anything we get as radio/tv messages.
+
+                    var name = player.currentMedia.name;
+                    Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
+                                    name, 4000, false, Services.Notifications.NotificationType.Information);
+                    return;
                 }
             }
             catch (Exception)
             {
             }
 
+        }
+
+        private volatile bool Station_Wait_And_AlternateFetchSongTitle_fetching = false;
+        private void Station_Wait_And_AlternateFetchSongTitle()
+        {
+            if (Station_Wait_And_AlternateFetchSongTitle_fetching) return;
+
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>
+            {
+                Station_Wait_And_AlternateFetchSongTitle_fetching = true;
+
+                System.Threading.Thread.Sleep(5000);
+
+                Dispatcher.Invoke(new EmptyDelegate(() =>
+                {
+                    if (StationHistoryBtn.IsEnabled) //True if the station was detected as a shoutcast station earlier.
+                    {
+                        try
+                        {
+                            var songdata = Hanasu.Services.Stations.StationsService.GetShoutcastStationCurrentSong(currentStation, currentStationAttributes);
+                            currentSong = songdata;
+
+                            lastMediaTxt = songdata.ToSongString();
+
+                            SongDataLbl.Text = songdata.ToSongString();
+
+                            Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
+                                        songdata.ToSongString(), 4000, false, Services.Notifications.NotificationType.Now_Playing);
+
+                            AddRawSongToLikedBtn.IsEnabled = false;
+                        }
+                        catch (Exception)
+                        {
+                        }
+
+                    }
+
+                    Station_Wait_And_AlternateFetchSongTitle_fetching = false;
+                }));
+            }));
         }
 
         void player_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
@@ -694,6 +793,12 @@ namespace Hanasu
                     attemptToConnectTimer.Stop();
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
+
+                    if (!IsWMP12OrHigher() || currentStation.UseAlternateSongTitleFetching)
+                    {
+                        Station_Wait_And_AlternateFetchSongTitle();
+                        stationMediaWMP11orLowerTimer.Start();
+                    }
 
                     if (lastSongTxt == null)
                         AddRawSongToLikedBtn.IsEnabled = false;
@@ -762,7 +867,7 @@ namespace Hanasu
                     AddRawSongToLikedBtn.IsEnabled = false;
                     StationHistoryBtn.IsEnabled = false;
                     currentSong = new SongData();
-                    currentStation = new Station();
+
 
                     bufferTimer.Stop();
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
@@ -771,6 +876,14 @@ namespace Hanasu
 
                     VolumeSlider.IsEnabled = false;
                     VolumeMuteBtn.IsEnabled = false;
+
+
+                    if (stationMediaWMP11orLowerTimer != null)
+                    {
+                        stationMediaWMP11orLowerTimer.Stop();
+                    }
+
+                    currentStation = new Station();
 
                     Hanasu.Services.Events.EventService.RaiseEvent(Services.Events.EventType.Station_Player_Idle,
                         EventInfo.Empty);

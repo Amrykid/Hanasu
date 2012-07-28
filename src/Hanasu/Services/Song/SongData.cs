@@ -27,5 +27,10 @@ namespace Hanasu.Services.Song
             else
                 return base.GetHashCode();
         }
+
+        public string ToSongString()
+        {
+            return Artist + " - " + TrackTitle;
+        }
     }
 }
