@@ -49,6 +49,7 @@
     <Language>Spanish</Language>
     <Cacheable>True</Cacheable>
     <ExplicitExtension>.asx</ExplicitExtension>
+    <UseAlternateSongTitleFetching>True</UseAlternateSongTitleFetching>
   </Station>
   <Station>
     <Name>Armitage's Dimension</Name>
@@ -57,6 +58,7 @@
     <Format>Mix</Format>
     <City>Herndon, VA, United States</City>
     <Language>Japanese</Language>
+    <UseAlternateSongTitleFetching>True</UseAlternateSongTitleFetching>
   </Station>
   <Station>
     <Name>XAMFM</Name>
