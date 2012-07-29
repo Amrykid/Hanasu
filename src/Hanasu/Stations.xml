@@ -245,7 +245,7 @@
     <Homepage>http://www.bakaradio.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
-    <ExplicitExtension></ExplicitExtension>
+    <ExplicitExtension>.pls</ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
