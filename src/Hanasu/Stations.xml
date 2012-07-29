@@ -241,7 +241,7 @@
   </Station>
   <Station>
     <Name>Bakagami Radio</Name>
-    <DataSource><![CDATA[http://99.104.192.66:8000/listen.pls]]></DataSource>
+    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=70191]]></DataSource>
     <Homepage>http://www.bakaradio.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
