@@ -912,7 +912,7 @@ namespace Hanasu
                         stationMediaWMP11orLowerTimer.Stop();
                     }
 
-                    currentStation = new Station();
+                    //currentStation = new Station();
 
                     Hanasu.Services.Events.EventService.RaiseEvent(Services.Events.EventType.Station_Player_Idle,
                         EventInfo.Empty);
