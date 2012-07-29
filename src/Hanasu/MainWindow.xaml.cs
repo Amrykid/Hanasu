@@ -484,7 +484,7 @@ namespace Hanasu
             {
                 player_parseAttributes();
 
-                if (IsWMP12OrHigher())
+                if (IsWMP12OrHigher() && currentStation.UseAlternateSongTitleFetching == false)
                 {
                     #region WMP12 Handling
                     if (lastMediaTxt != player.currentMedia.name)
@@ -546,7 +546,7 @@ namespace Hanasu
 
                                                 System.Threading.Thread.Sleep(1000 * 20); //wait 20 seconds. if the user is still listening to the station, pull the lyrics. this creates less stress/http request to the lyrics site.
 
-                                                if (stat.Name != currentStation.Name)
+                                                if (stat != currentStation)
                                                     return;
 
                                                 if (!Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name)) //Song could have been manually liked in the 20 seconds.
@@ -708,8 +708,12 @@ namespace Hanasu
                     //WMP 11 and lower cannot get the song title from streams so display anything we get as radio/tv messages.
 
                     var name = player.currentMedia.name;
-                    Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
-                                    name, 4000, false, Services.Notifications.NotificationType.Information);
+                    if (songMessages.Contains(name) == false)
+                    {
+                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - " + (currentStation.StationType == StationType.Radio ? "Radio Message" : "TV Message"),
+                            name, 4000, false, Services.Notifications.NotificationType.Information);
+                        songMessages.Add(name);
+                    }
                     return;
                 }
             }
@@ -728,34 +732,58 @@ namespace Hanasu
             {
                 Station_Wait_And_AlternateFetchSongTitle_fetching = true;
 
+                var station = currentStation;
+
                 System.Threading.Thread.Sleep(5000);
 
-                var songdata = Hanasu.Services.Stations.StationsService.GetShoutcastStationCurrentSong(currentStation, currentStationAttributes);
-                currentSong = songdata;
+                if (station != currentStation) return;
 
-                Dispatcher.Invoke(new EmptyDelegate(() =>
+                if ((bool)Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() => StationHistoryBtn.IsEnabled))) //True if the station was detected as a shoutcast station earlier.
                 {
-                    if (StationHistoryBtn.IsEnabled) //True if the station was detected as a shoutcast station earlier.
+
+                    try
                     {
-                        try
+                        var songdata = Hanasu.Services.Stations.StationsService.GetShoutcastStationCurrentSong(currentStation, currentStationAttributes);
+                        currentSong = songdata;
+
+                        Dispatcher.Invoke(new EmptyDelegate(() =>
                         {
-                            lastMediaTxt = songdata.ToSongString();
 
-                            SongDataLbl.Text = songdata.ToSongString();
+                            var songStr = songdata.ToSongString();
 
-                            Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
-                                        songdata.ToSongString(), 4000, false, Services.Notifications.NotificationType.Now_Playing);
+                            if (SongDataLbl.Text != songStr)
+                            {
 
-                            AddRawSongToLikedBtn.IsEnabled = false;
-                        }
-                        catch (Exception)
-                        {
-                        }
+                                lastMediaTxt = songStr;
 
+                                SongDataLbl.Text = songdata.ToSongString();
+
+                                Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
+                                            songdata.ToSongString(), 4000, false, Services.Notifications.NotificationType.Now_Playing);
+
+                                AddRawSongToLikedBtn.IsEnabled = true;
+                            }
+
+
+
+                        }));
+                    }
+                    catch (Exception)
+                    {
+                        AddRawSongToLikedBtn.IsEnabled = false;
                     }
 
-                    Station_Wait_And_AlternateFetchSongTitle_fetching = false;
-                }));
+                }
+                else
+                {
+                    Dispatcher.Invoke(new EmptyDelegate(() =>
+                    {
+                        AddRawSongToLikedBtn.IsEnabled = false;
+                    }));
+                }
+
+
+                Station_Wait_And_AlternateFetchSongTitle_fetching = false;
             }));
         }
 
@@ -793,7 +821,7 @@ namespace Hanasu
                     attemptToConnectTimer.Stop();
                     playBtn.IsEnabled = false;
                     pauseBtn.IsEnabled = true;
-                    
+
                     player_parseAttributes();
 
                     if (!IsWMP12OrHigher() || currentStation.UseAlternateSongTitleFetching)
@@ -827,7 +855,7 @@ namespace Hanasu
                     System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(t =>
                         {
                             var b = Hanasu.Services.Stations.StationsService.GetIfShoutcastStation(currentStationAttributes);
-                            if (player.playState == WMPPlayState.wmppsPlaying && currentStation.Name == laststation.Name)
+                            if (player.playState == WMPPlayState.wmppsPlaying && currentStation == laststation)
                             {
                                 Dispatcher.Invoke(new EmptyDelegate(() =>
                                     {
@@ -955,8 +983,8 @@ namespace Hanasu
             Hanasu.Services.Stations.StationsService.CheckAndDownloadCacheableStation(ref station);
 
 
-            if (currentStation.Name != station.Name)
-                Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue(); //Get rid of messages from the last station, if any.
+
+            Hanasu.Services.Notifications.NotificationsService.ClearNotificationQueue(); //Get rid of messages from the last station, if any.
 
             if (player.playState == WMPPlayState.wmppsPlaying)
                 player.close();

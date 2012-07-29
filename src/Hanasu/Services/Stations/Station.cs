@@ -27,5 +27,20 @@ namespace Hanasu.Services.Stations
         public Uri Logo { get; set; }
 
         public bool UseAlternateSongTitleFetching { get; set; }
+
+        public static bool operator ==(Station s1, Station s2)
+        {
+            return s1.Equals(s2);
+
+            //return s1.Cacheable == s2.Cacheable
+            //    && s1.City == s2.City
+            //    && s1.DataSource == s2.DataSource
+            //    && s1.ExplicitExtension == s2
+        }
+
+        public static bool operator !=(Station s1, Station s2)
+        {
+            return !s1.Equals(s2);
+        }
     }
 }
