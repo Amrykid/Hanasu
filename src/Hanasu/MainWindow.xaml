@@ -341,10 +341,21 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Album">
+                                    <GridViewColumn Header="Album" Width="200">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Label Content="{Binding Album,TargetNullValue='N/A', Mode=OneTime}" FontSize="17">
+                                                    <Label.Foreground>
+                                                        <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                                    </Label.Foreground>
+                                                </Label>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Estimated Song Length">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding Path=EstimatedSongLength, Mode=OneWay, UpdateSourceTrigger=LostFocus}" FontSize="17">
                                                     <Label.Foreground>
                                                         <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
                                                     </Label.Foreground>
