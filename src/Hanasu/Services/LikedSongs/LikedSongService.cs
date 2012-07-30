@@ -205,5 +205,10 @@ namespace Hanasu.Services.LikedSongs
                     return res;
             }
         }
+
+        internal bool IsLiked(SongData currentSong)
+        {
+            return Instance.LikedSongs.Any(it => it.TrackTitle == currentSong.TrackTitle && it.Artist == currentSong.Artist);
+        }
     }
 }

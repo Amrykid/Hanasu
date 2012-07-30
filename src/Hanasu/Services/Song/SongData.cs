@@ -9,6 +9,9 @@ namespace Hanasu.Services.Song
     [Serializable]
     public struct SongData
     {
+        [NonSerialized]
+        public DateTime _timeStart;
+
         public string TrackTitle { get; set; }
         public string Artist { get; set; }
         public string Lyrics { get; set; }
@@ -19,6 +22,7 @@ namespace Hanasu.Services.Song
         public Uri BuyUri { get; set; }
         public Station OriginallyPlayedStation { get; set; }
         public string OriginallyBroadcastSongData { get; set; }
+        public TimeSpan EstimatedSongLength { get; set; }
 
         public override int GetHashCode()
         {

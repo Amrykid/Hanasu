@@ -374,6 +374,7 @@ namespace Hanasu.Services.Stations
         public event EventHandler StationFetchStarted;
         public event EventHandler StationFetchCompleted;
 
+        private static List<string> cached_Shoutcasturls = new List<string>();
         public static bool GetIfShoutcastStation(Hashtable playerAttributes)
         {
             try
@@ -382,11 +383,19 @@ namespace Hanasu.Services.Stations
                 {
                     var url = (string)playerAttributes["SourceURL"];
 
+                    if (cached_Shoutcasturls.Contains(url)) return true;
+
                     if (!url.StartsWith("http") && !url.StartsWith("https")) return false;
 
                     var html = Hanasu.Core.HtmlTextUtility.GetHtmlFromUrl2(url);
 
-                    return html.Contains("SHOUTcast D.N.A.S. Status</font>");
+                    var res = html.Contains("SHOUTcast D.N.A.S. Status</font>");
+
+                    if (res)
+                        cached_Shoutcasturls.Add(url);
+
+                    return res;
+
                 }
             }
             catch (Exception)
@@ -430,6 +439,14 @@ namespace Hanasu.Services.Stations
 
 
             return his;
+        }
+        public static DateTime GetShoutcastStationCurrentSongStartTime(Station station, Hashtable playerAttributes)
+        {
+            var things = GetShoutcastStationSongHistory(station, playerAttributes);
+            var lastime = things.Keys.First();
+
+            var time = DateTime.Parse(lastime, null, System.Globalization.DateTimeStyles.AssumeLocal);
+            return time;
         }
         public static SongData GetShoutcastStationCurrentSong(Station station, Hashtable playerAttributes)
         {

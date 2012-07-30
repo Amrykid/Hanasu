@@ -21,6 +21,7 @@ namespace Hanasu.Services.Song
         {
             SongCache = new Hashtable();
             DataSource = new YesAsia();
+            LyricsSource = new Lyric_Data_Sources.LetrasTerraLyricDataSource();
         }
 
         public static bool IsSongAvailable(string songdata, Station station, out Uri lyricsUri)
@@ -38,7 +39,12 @@ namespace Hanasu.Services.Song
                 return true;
             }
 
-            var datasource = new LetrasTerraLyricDataSource();
+            ILyricsDataSource lyricssource = null;
+            if (station.PreferredLyricsSource == null)
+                lyricssource = LyricsSource;
+            else
+                lyricssource = AllLyricsSources.First(t => t.WebsiteName == station.PreferredLyricsSource);
+            
 
             var bits = newsongdata.Split(new string[] { " - " }, StringSplitOptions.None);
 
@@ -48,7 +54,7 @@ namespace Hanasu.Services.Song
             try
             {
 
-                if (datasource.GetLyrics(bits[0].Trim(' ', ' '), bits[1].Trim(' ', ' '), out lyrics, out lyricsUri))
+                if (lyricssource.GetLyrics(bits[0].Trim(' ', ' '), bits[1].Trim(' ', ' '), out lyrics, out lyricsUri))
                 {
                     var song = new SongData();
 
@@ -59,13 +65,16 @@ namespace Hanasu.Services.Song
                     song.OriginallyPlayedStation = station;
                     song.OriginallyBroadcastSongData = songdata;
 
-                    DataSource.GetAlbumInfo(ref song);
+                    if (station.PreferredStoreSource == null)
+                        DataSource.GetAlbumInfo(ref song);
+                    else
+                        AllDataSources.First(t => t.WebsiteName == station.PreferredStoreSource).GetAlbumInfo(ref song);
 
                     SongCache.Add(newsongdata.ToLower(), song);
 
                     return true;
                 }
-                else if (datasource.GetLyrics(bits[1].Trim(' ', ' '), bits[0].Trim(' ', ' '), out lyrics, out lyricsUri))
+                else if (lyricssource.GetLyrics(bits[1].Trim(' ', ' '), bits[0].Trim(' ', ' '), out lyrics, out lyricsUri))
                 {
                     var song = new SongData();
 
@@ -76,7 +85,10 @@ namespace Hanasu.Services.Song
                     song.OriginallyPlayedStation = station;
                     song.OriginallyBroadcastSongData = songdata;
 
-                    DataSource.GetAlbumInfo(ref song);
+                    if (station.PreferredStoreSource == null)
+                        DataSource.GetAlbumInfo(ref song);
+                    else
+                        AllDataSources.First(t => t.WebsiteName == station.PreferredStoreSource).GetAlbumInfo(ref song);
 
                     SongCache.Add(newsongdata.ToLower(), song);
 
@@ -140,19 +152,22 @@ namespace Hanasu.Services.Song
 #endif
             bool res = false;
 
-                if (name.Contains(" - "))
-                {
-                    res = name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1;
-                }
-                else if (System.Text.RegularExpressions.Regex.IsMatch(name.ToLower(), @"(^)?(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?($|\W)?", System.Text.RegularExpressions.RegexOptions.Compiled))
-                    res = false;
-                else
-                    res = Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name);
+            if (name.Contains(" - "))
+            {
+                res = name.ToLower().Contains(currentStation.Name.ToLower()) == false && name.Split(' ').Length > 1;
+            }
+            else if (System.Text.RegularExpressions.Regex.IsMatch(name.ToLower(), @"(^)?(http\://)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?($|\W)?", System.Text.RegularExpressions.RegexOptions.Compiled))
+                res = false;
+            else
+                res = Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name);
 
-                return res;
+            return res;
         }
 
         public static IAlbumInfoDataSource DataSource { get; set; }
+        public static IAlbumInfoDataSource[] AllDataSources { get { return new IAlbumInfoDataSource[] { DataSource, new MSMetaServices() }; } }
+        public static ILyricsDataSource LyricsSource { get; set; }
+        public static ILyricsDataSource[] AllLyricsSources { get { return new ILyricsDataSource[] { LyricsSource }; } }
 
         internal static SongData ParseSongData(string songData, Station station)
         {

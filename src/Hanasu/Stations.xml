@@ -101,6 +101,7 @@
     <Language>English</Language>
     <ExplicitExtension>.asx</ExplicitExtension>
     <Cacheable>True</Cacheable>
+    <UseAlternateSongTitleFetching>True</UseAlternateSongTitleFetching>
   </Station>
   <Station>
     <Name>JPHiP</Name>

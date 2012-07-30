@@ -474,6 +474,7 @@ namespace Hanasu
         private SongData currentSong;
         internal Hashtable currentStationAttributes { get; set; }
         private List<string> songMessages = new List<string>();
+        private Stopwatch songlengthStopWatch = new Stopwatch();
         /// <summary>
         /// For alternate title fetching process (mostly for use with WMP11 and lower. Also used for stations set to use alternate title fetching).
         /// </summary>
@@ -511,7 +512,7 @@ namespace Hanasu
 
                             //song changed. maybe a couple of seconds late.
 
-
+                            StopSongTimeMeasure();
 
                             if (currentStation.StationType == StationType.Radio)
                             {
@@ -523,6 +524,10 @@ namespace Hanasu
                                     {
                                         var songdat = Hanasu.Services.LikedSongs.LikedSongService.Instance.GetSongFromString(name);
                                         imgval = songdat.AlbumCoverData != null ? (object)songdat.AlbumCoverData : (songdat.AlbumCoverUri != null ? songdat.AlbumCoverUri.ToString() : null);
+
+                                        currentSong = songdat;
+
+                                        StartSongTimeMeasure();
                                     }
                                     catch (Exception) { }
 
@@ -621,6 +626,8 @@ namespace Hanasu
                                         }
                                         else
                                         {
+                                            StartSongTimeMeasure();
+
                                             Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Possible Liked Song Detected",
                                                 "Unable to retrieve information.", 4000, false, Services.Notifications.NotificationType.Music_Data);
                                         }
@@ -721,6 +728,65 @@ namespace Hanasu
             {
             }
 
+        }
+
+        private SongData newCurrentSong;
+        private void StopSongTimeMeasure()
+        {
+            try
+            {
+                if (currentSong.TrackTitle != null && Hanasu.Services.LikedSongs.LikedSongService.Instance.IsLiked(currentSong))
+                {
+                    //Grab the estimated song length
+
+                    var time = GetSongStartTime();
+
+                    newCurrentSong.EstimatedSongLength = time - newCurrentSong._timeStart;
+
+                    Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs[Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs.IndexOf(currentSong)] = newCurrentSong;
+
+                    currentSong = new SongData();
+                    newCurrentSong = new SongData();
+                }
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        private void StartSongTimeMeasure()
+        {
+            if (currentSong.TrackTitle != null && Hanasu.Services.LikedSongs.LikedSongService.Instance.IsLiked(currentSong))
+            {
+                if (currentSong.EstimatedSongLength.Minutes == 0 && currentSong._timeStart.Minute == 0)
+                {
+                    try
+                    {
+                        var time = GetSongStartTime();
+
+                        //songlengthStopWatch.Start();
+
+                        newCurrentSong = currentSong;
+                        newCurrentSong.EstimatedSongLength = new TimeSpan();
+                        newCurrentSong._timeStart = time;
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+
+        private DateTime GetSongStartTime()
+        {
+            if ((bool)Dispatcher.Invoke(new Hanasu.Services.Notifications.NotificationsService.EmptyReturnDelegate(() => StationHistoryBtn.IsEnabled))) //True if the station was detected as a shoutcast station earlier.
+            {
+                return Hanasu.Services.Stations.StationsService.GetShoutcastStationCurrentSongStartTime(currentStation, currentStationAttributes);
+            }
+
+            throw new Exception();
         }
 
         private volatile bool Station_Wait_And_AlternateFetchSongTitle_fetching = false;
@@ -897,6 +963,7 @@ namespace Hanasu
                     StationHistoryBtn.IsEnabled = false;
                     currentSong = new SongData();
 
+                    songlengthStopWatch.Stop();
 
                     bufferTimer.Stop();
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;

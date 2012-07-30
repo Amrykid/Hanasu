@@ -28,6 +28,9 @@ namespace Hanasu.Services.Stations
 
         public bool UseAlternateSongTitleFetching { get; set; }
 
+        public string PreferredStoreSource { get; set; }
+        public string PreferredLyricsSource { get; set; }
+
         public static bool operator ==(Station s1, Station s2)
         {
             return s1.Equals(s2);

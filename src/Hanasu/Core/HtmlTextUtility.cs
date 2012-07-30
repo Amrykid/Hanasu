@@ -30,12 +30,19 @@ namespace Hanasu.Core
         }
         public static string GetHtmlFromUrl(string url)
         {
-            string result = null;
-            using (var wc = new WebClient())
+            try
             {
-                result = wc.DownloadString(url);
+                string result = null;
+                using (var wc = new WebClient())
+                {
+                    result = wc.DownloadString(url);
+                }
+                return result;
             }
-            return result;
+            catch (Exception)
+            {
+                return null;
+            }
         }
         public static string GetHtmlFromUrl(Uri uri)
         {
