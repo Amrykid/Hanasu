@@ -291,7 +291,28 @@ namespace Hanasu
             stationMediaWMP11orLowerTimer.Elapsed += new ElapsedEventHandler(stationMediaWMP11orLowerTimer_Elapsed);
             stationMediaWMP11orLowerTimer.Interval = (1000 * 60) * 3; //3 minutes
 
+            songlengthPBTimer = new Timer();
+            songlengthPBTimer.Elapsed += new ElapsedEventHandler(songlengthPBTimer_Elapsed);
+            songlengthPBTimer.Interval = 1000;
+
             IsWMPInitialized = true;
+        }
+
+        void songlengthPBTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (currentSong != null)
+            {
+                Dispatcher.Invoke(new EmptyDelegate(() =>
+                    {
+                        SongLengthBar.Visibility = System.Windows.Visibility.Visible;
+                        SongLengthBar.Maximum = currentSong.EstimatedSongLength.TotalSeconds;
+                        SongLengthBar.Value++;
+
+                        SongLengthLabel.Content = new TimeSpan(0, 0,
+                            (int)SongLengthBar.Value).ToString("mm:ss") + "/" + currentSong.EstimatedSongLength.ToString("mm:ss");
+                    }));
+            }
+
         }
 
         void stationMediaWMP11orLowerTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -474,7 +495,7 @@ namespace Hanasu
         private SongData currentSong;
         internal Hashtable currentStationAttributes { get; set; }
         private List<string> songMessages = new List<string>();
-        private Stopwatch songlengthStopWatch = new Stopwatch();
+        private Timer songlengthPBTimer = new Timer();
         /// <summary>
         /// For alternate title fetching process (mostly for use with WMP11 and lower. Also used for stations set to use alternate title fetching).
         /// </summary>
@@ -510,12 +531,20 @@ namespace Hanasu
                             songMessages.Clear();
 
 
+
+
                             //song changed. maybe a couple of seconds late.
 
                             StopSongTimeMeasure();
 
                             if (currentStation.StationType == StationType.Radio)
                             {
+                                Dispatcher.Invoke(new EmptyDelegate(() =>
+                                                   {
+                                                       songlengthPBTimer.Stop();
+                                                       SongLengthBar.Visibility = System.Windows.Visibility.Collapsed;
+                                                   }));
+
                                 if (Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
                                 {
                                     object imgval = null;
@@ -527,12 +556,33 @@ namespace Hanasu
 
                                         currentSong = songdat;
 
-                                        StartSongTimeMeasure();
+
                                     }
                                     catch (Exception) { }
 
                                     Hanasu.Services.Notifications.NotificationsService.AddNotification(currentStation.Name + " - Now Playing",
                                         name, 4000, false, Services.Notifications.NotificationType.Now_Playing, null, imgval);
+
+                                    if (currentSong != null)
+                                    {
+                                        if (currentSong.EstimatedSongLength == default(TimeSpan))
+                                        {
+                                            StartSongTimeMeasure();
+                                        }
+                                        else
+                                        {
+                                            if (Hanasu.Services.Stations.StationsService.GetIfShoutcastStation(currentStationAttributes))
+                                            {
+                                                var time = Hanasu.Services.Stations.StationsService.GetShoutcastStationCurrentSongStartTime(currentStation, currentStationAttributes);
+                                                Dispatcher.Invoke(new EmptyDelegate(() =>
+                                                    {
+                                                        var diff = DateTime.Now.Second - time.Second;
+                                                        SongLengthBar.Value = diff;
+                                                        songlengthPBTimer.Start();
+                                                    }));
+                                            }
+                                        }
+                                    }
                                 }
                                 else
                                 {
@@ -744,6 +794,7 @@ namespace Hanasu
                     newCurrentSong.EstimatedSongLength = time - newCurrentSong._timeStart;
 
                     Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs[Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs.IndexOf(currentSong)] = newCurrentSong;
+                    Hanasu.Services.LikedSongs.LikedSongService.SaveLikedSongsDB();
 
                     currentSong = new SongData();
                     newCurrentSong = new SongData();
@@ -963,7 +1014,9 @@ namespace Hanasu
                     StationHistoryBtn.IsEnabled = false;
                     currentSong = new SongData();
 
-                    songlengthStopWatch.Stop();
+                    SongLengthBar.Visibility = System.Windows.Visibility.Collapsed;
+
+                    songlengthPBTimer.Stop();
 
                     bufferTimer.Stop();
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
@@ -1381,6 +1434,10 @@ namespace Hanasu
                     case "Artist": property = "Artist";
                         break;
                     case "Album": property = "Album";
+                        break;
+                    default:
+                        if (header.Column.Header.ToString().StartsWith("Estimated"))
+                            property = "EstimatedSongLength";
                         break;
                 }
             }

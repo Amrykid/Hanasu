@@ -36,5 +36,15 @@ namespace Hanasu.Services.Song
         {
             return Artist + " - " + TrackTitle;
         }
+
+        public static bool operator ==(SongData s1, SongData s2)
+        {
+            return s1.Equals(s2);
+        }
+
+        public static bool operator !=(SongData s1, SongData s2)
+        {
+            return !s1.Equals(s2);
+        }
     }
 }

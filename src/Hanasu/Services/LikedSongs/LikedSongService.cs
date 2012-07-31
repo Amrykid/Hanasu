@@ -140,7 +140,7 @@ namespace Hanasu.Services.LikedSongs
             }
         }
 
-        private static void SaveLikedSongsDB()
+        internal static void SaveLikedSongsDB()
         {
             using (var fs = new FileStream(Instance.LikedSongDBFile, FileMode.OpenOrCreate))
             {
