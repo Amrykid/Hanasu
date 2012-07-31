@@ -785,7 +785,7 @@ namespace Hanasu
         {
             try
             {
-                if (currentSong.TrackTitle != null && Hanasu.Services.LikedSongs.LikedSongService.Instance.IsLiked(currentSong))
+                if (currentSong.TrackTitle != null && Hanasu.Services.LikedSongs.LikedSongService.Instance.IsLiked(currentSong) && newCurrentSong._timeStart != default(DateTime))
                 {
                     //Grab the estimated song length
 
