@@ -529,9 +529,9 @@
         <Grid Grid.Row="1" Name="SongLengthGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100*"/>
-                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <metro:MetroProgressBar Name="SongLengthBar" Height="20" Foreground="{StaticResource AccentColorBrush}" BorderBrush="DarkGray" BorderThickness="1" Visibility="Collapsed" Grid.Column="0"/>
+            <metro:MetroProgressBar Name="SongLengthBar" Height="20" Foreground="{StaticResource AccentColorBrush}" BorderBrush="DarkGray" BorderThickness="1" Visibility="Collapsed" Grid.Column="0" Margin="10 0 0 0"/>
             <Label Grid.Column="1" Name="SongLengthLabel" Visibility="{Binding ElementName=SongLengthBar,Path=Visibility,UpdateSourceTrigger=PropertyChanged}"></Label>
         </Grid>
         <Grid Grid.Row="2">
