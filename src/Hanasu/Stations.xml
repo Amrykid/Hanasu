@@ -82,6 +82,7 @@
     <Cacheable>True</Cacheable>
     <Schedule type="image">http://www.xamfm.com/images/stories/schedules/schedule_xamfm2_02-05-2011.png</Schedule>
     <Logo>https://si0.twimg.com/profile_images/1104224483/logo_transbkgr.png</Logo>
+    <Timezone>US Eastern Standard Time</Timezone>
   </Station>
   <Station>
     <Name>Vocaloid.FM</Name>

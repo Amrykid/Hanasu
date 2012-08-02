@@ -70,47 +70,7 @@ namespace Hanasu.Core
                     image.EndInit();
 
                     if (!ImageCache.ContainsKey(url))
-                        ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
-                            {
-                                if (!ImageCache.ContainsKey(url))
-                                    ImageCache.Add(url, null);
-                                else
-                                    return;
-
-                                bool running = true;
-                                int it = 0;
-                                while (running)
-                                {
-                                    if (Application.Current == null) return;
-
-                                    Thread.Sleep(0);
-                                    it += 1;
-
-                                    Application.Current.Dispatcher.BeginInvoke(new EmptyDelegate(() =>
-                                        {
-                                            running = image.IsDownloading;
-
-                                        }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
-
-                                    if (it == 5)
-                                        running = false;
-                                }
-
-                                if (Application.Current == null) return;
-
-                                Application.Current.Dispatcher.Invoke(new EmptyDelegate(() =>
-                                {
-                                    try
-                                    {
-                                        ImageCache[url] = image.GetAsFrozen();
-                                    }
-                                    catch (Exception)
-                                    {
-                                        ImageCache.Remove(url);
-                                    }
-                                }));
-
-                            }));
+                        ImageCache.Add(url, image);
                 }
                 catch
                 {
@@ -128,7 +88,14 @@ namespace Hanasu.Core
                 image.EndInit();
             }
 
-            return image;
+            try
+            {
+                return image.GetAsFrozen();
+            }
+            catch (Exception)
+            {
+                return image;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,
