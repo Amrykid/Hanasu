@@ -31,6 +31,8 @@ namespace Hanasu.Services.Stations
         public string PreferredStoreSource { get; set; }
         public string PreferredLyricsSource { get; set; }
 
+        public TimeZoneInfo TimeZoneInfo { get; set; }
+
         public static bool operator ==(Station s1, Station s2)
         {
             return s1.Equals(s2);

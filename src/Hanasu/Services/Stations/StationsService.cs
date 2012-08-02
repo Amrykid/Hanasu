@@ -313,7 +313,8 @@ namespace Hanasu.Services.Stations
                 ScheduleType = x.ContainsElement("Schedule") ? (StationScheduleType)Enum.Parse(typeof(StationScheduleType), x.Element("Schedule").Attribute("type").Value) : StationScheduleType.none,
                 ScheduleUrl = x.ContainsElement("Schedule") ? (string.IsNullOrEmpty(x.Element("Schedule").Value) ? null : new Uri(x.Element("Schedule").Value)) : null,
                 Logo = x.ContainsElement("Logo") ? (string.IsNullOrEmpty(x.Element("Logo").Value) ? null : new Uri(x.Element("Logo").Value)) : null,
-                UseAlternateSongTitleFetching = x.ContainsElement("UseAlternateSongTitleFetching") ? bool.Parse(x.Element("UseAlternateSongTitleFetching").Value) : false
+                UseAlternateSongTitleFetching = x.ContainsElement("UseAlternateSongTitleFetching") ? bool.Parse(x.Element("UseAlternateSongTitleFetching").Value) : false,
+                TimeZoneInfo = x.ContainsElement("Timezone") ? TimeZoneInfo.FindSystemTimeZoneById(x.Element("Timezone").Value) : null
             };
         }
 

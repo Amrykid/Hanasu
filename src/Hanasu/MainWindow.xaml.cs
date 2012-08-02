@@ -536,15 +536,15 @@ namespace Hanasu
 
                             //song changed. maybe a couple of seconds late.
 
-                            StopSongTimeMeasure();
+                            //StopSongTimeMeasure();
 
                             if (currentStation.StationType == StationType.Radio)
                             {
-                                Dispatcher.Invoke(new EmptyDelegate(() =>
-                                                   {
-                                                       songlengthPBTimer.Stop();
-                                                       SongLengthBar.Visibility = System.Windows.Visibility.Collapsed;
-                                                   }));
+                                //Dispatcher.Invoke(new EmptyDelegate(() =>
+                                //                   {
+                                //                       songlengthPBTimer.Stop();
+                                //                       SongLengthBar.Visibility = System.Windows.Visibility.Collapsed;
+                                //                   }));
 
                                 if (Hanasu.Services.LikedSongs.LikedSongService.Instance.IsSongLikedFromString(name))
                                 {
@@ -573,23 +573,7 @@ namespace Hanasu
                                     {
                                         if (currentSong != null)
                                         {
-                                            if (currentSong.EstimatedSongLength == default(TimeSpan))
-                                            {
-                                                StartSongTimeMeasure();
-                                            }
-                                            else
-                                            {
-                                                if (Hanasu.Services.Stations.StationsService.GetIfShoutcastStation(currentStationAttributes))
-                                                {
-                                                    var time = Hanasu.Services.Stations.StationsService.GetShoutcastStationCurrentSongStartTime(currentStation, currentStationAttributes);
-                                                    Dispatcher.Invoke(new EmptyDelegate(() =>
-                                                    {
-                                                        var diff = DateTime.Now.Second - time.Second;
-                                                        SongLengthBar.Value = 0;
-                                                        songlengthPBTimer.Start();
-                                                    }));
-                                                }
-                                            }
+                                            //StartSongLengthDisplay();
                                         }
                                     }
 
@@ -684,10 +668,15 @@ namespace Hanasu
                                                     siw.ShowDialog();
                                                     siw.Close();
                                                 });
+
+                                            //if (currentSong.EstimatedSongLength == default(TimeSpan))
+                                            //    StartSongTimeMeasure();
+                                            //else
+                                            //    StartSongLengthDisplay();
                                         }
                                         else
                                         {
-                                            StartSongTimeMeasure();
+
 
                                             Hanasu.Services.Notifications.NotificationsService.AddNotification(name.Substring(0, name.Length / 2) + "..." + " - Possible Liked Song Detected",
                                                 "Unable to retrieve information.", 4000, false, Services.Notifications.NotificationType.Music_Data);
@@ -791,58 +780,84 @@ namespace Hanasu
 
         }
 
-        private SongData newCurrentSong;
-        private void StopSongTimeMeasure()
-        {
-            try
-            {
-                if (currentSong.TrackTitle != null && Hanasu.Services.LikedSongs.LikedSongService.Instance.IsLiked(currentSong) && newCurrentSong._timeStart != default(DateTime))
-                {
-                    //Grab the estimated song length
+        //private void StartSongLengthDisplay()
+        //{
+        //    if (currentSong.EstimatedSongLength == default(TimeSpan))
+        //    {
+        //        StartSongTimeMeasure();
+        //    }
+        //    else
+        //    {
+        //        if (Hanasu.Services.Stations.StationsService.GetIfShoutcastStation(currentStationAttributes))
+        //        {
+        //            var time = Hanasu.Services.Stations.StationsService.GetShoutcastStationCurrentSongStartTime(currentStation, currentStationAttributes);
 
-                    var time = GetSongStartTime();
+        //            DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(
+        //                             TimeZoneInfo.ConvertTimeToUtc(time, currentStation.TimeZoneInfo), TimeZoneInfo.Local);
 
-                    newCurrentSong.EstimatedSongLength = time - newCurrentSong._timeStart;
+        //            Dispatcher.Invoke(new EmptyDelegate(() =>
+        //            {
+        //                var faketime = new TimeSpan(0, time.Minute, time.Second);
+        //                var diff = DateTime.Now - localTime;
+        //                SongLengthBar.Value = diff.TotalSeconds;
+        //                songlengthPBTimer.Start();
+        //            }));
+        //        }
+        //    }
+        //}
 
-                    Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs[Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs.IndexOf(currentSong)] = newCurrentSong;
-                    Hanasu.Services.LikedSongs.LikedSongService.SaveLikedSongsDB();
+        //private SongData newCurrentSong;
+        //private void StopSongTimeMeasure()
+        //{
+        //    try
+        //    {
+        //        if (currentSong.TrackTitle != null && Hanasu.Services.LikedSongs.LikedSongService.Instance.IsLiked(currentSong) && newCurrentSong._timeStart != default(DateTime))
+        //        {
+        //            //Grab the estimated song length
 
-                    currentSong = new SongData();
-                    newCurrentSong = new SongData();
-                }
-            }
-            catch (Exception)
-            {
-                return;
-            }
-        }
+        //            var time = GetSongStartTime();
 
-        private void StartSongTimeMeasure()
-        {
-            if (currentSong.TrackTitle != null && Hanasu.Services.LikedSongs.LikedSongService.Instance.IsLiked(currentSong))
-            {
-                if (currentSong.EstimatedSongLength.Minutes == 0 && currentSong._timeStart.Minute == 0)
-                {
-                    try
-                    {
-                        var time = GetSongStartTime();
+        //            newCurrentSong.EstimatedSongLength = time - newCurrentSong._timeStart;
 
-                        //songlengthStopWatch.Start();
+        //            Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs[Hanasu.Services.LikedSongs.LikedSongService.Instance.LikedSongs.IndexOf(currentSong)] = newCurrentSong;
+        //            Hanasu.Services.LikedSongs.LikedSongService.SaveLikedSongsDB();
 
-                        newCurrentSong = currentSong;
-                        newCurrentSong.EstimatedSongLength = new TimeSpan();
-                        newCurrentSong._timeStart = time;
+        //            currentSong = new SongData();
+        //            newCurrentSong = new SongData();
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return;
+        //    }
+        //}
 
-                        Hanasu.Services.Notifications.NotificationsService.AddNotification(currentSong.TrackTitle,
-                            "The duration of this song will be recorded for time estimation.", 3000, true);
-                    }
-                    catch (Exception)
-                    {
-                        return;
-                    }
-                }
-            }
-        }
+        //private void StartSongTimeMeasure()
+        //{
+        //    if (currentSong.TrackTitle != null && Hanasu.Services.LikedSongs.LikedSongService.Instance.IsLiked(currentSong))
+        //    {
+        //        if (currentSong.EstimatedSongLength.Minutes == 0 && currentSong._timeStart.Minute == 0)
+        //        {
+        //            try
+        //            {
+        //                var time = GetSongStartTime();
+
+        //                //songlengthStopWatch.Start();
+
+        //                newCurrentSong = currentSong;
+        //                newCurrentSong.EstimatedSongLength = new TimeSpan();
+        //                newCurrentSong._timeStart = time;
+
+        //                Hanasu.Services.Notifications.NotificationsService.AddNotification(currentSong.TrackTitle,
+        //                    "The duration of this song will be recorded for time estimation.", 3000, true);
+        //            }
+        //            catch (Exception)
+        //            {
+        //                return;
+        //            }
+        //        }
+        //    }
+        //}
 
         private DateTime GetSongStartTime()
         {
@@ -1026,12 +1041,15 @@ namespace Hanasu
                     pauseBtn.IsEnabled = false;
                     AddRawSongToLikedBtn.IsEnabled = false;
                     StationHistoryBtn.IsEnabled = false;
-                    currentSong = new SongData();
 
-                    SongLengthBar.Visibility = System.Windows.Visibility.Collapsed;
+
 
                     if (player.playState == WMPPlayState.wmppsStopped) //if its paused.. keep playing.
+                    {
+                        currentSong = new SongData();
                         songlengthPBTimer.Stop();
+                        SongLengthBar.Visibility = System.Windows.Visibility.Collapsed;
+                    }
 
                     bufferTimer.Stop();
                     BufferingSP.Visibility = System.Windows.Visibility.Hidden;
@@ -1356,7 +1374,7 @@ namespace Hanasu
                 });
             SongIsLiked = true;
 
-            StartSongTimeMeasure();
+            //StartSongTimeMeasure();
 
             LikeBtnInfo.IsEnabled = false;
             AddRawSongToLikedBtn.IsEnabled = false;
@@ -1721,7 +1739,7 @@ namespace Hanasu
                         CurrentStation = currentStation
                     });
 
-                    StartSongTimeMeasure();
+                    //StartSongTimeMeasure();
                 }
             }
             else

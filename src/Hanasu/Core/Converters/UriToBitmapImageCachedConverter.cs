@@ -61,7 +61,7 @@ namespace Hanasu.Core
                         else if (parameter is string)
                         {
                             int outint = 0;
-                            
+
                             if (int.TryParse((string)parameter, out outint))
                                 image.DecodePixelWidth = (int)outint;
                         }
@@ -78,24 +78,38 @@ namespace Hanasu.Core
                                     return;
 
                                 bool running = true;
+                                int it = 0;
                                 while (running)
                                 {
                                     if (Application.Current == null) return;
 
-                                    Application.Current.Dispatcher.Invoke(new EmptyDelegate(() =>
+                                    Thread.Sleep(0);
+                                    it += 1;
+
+                                    Application.Current.Dispatcher.BeginInvoke(new EmptyDelegate(() =>
                                         {
                                             running = image.IsDownloading;
 
-                                        }));
-                                    Thread.Sleep(50);
+                                        }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+
+                                    if (it == 5)
+                                        running = false;
                                 }
 
                                 if (Application.Current == null) return;
 
                                 Application.Current.Dispatcher.Invoke(new EmptyDelegate(() =>
                                 {
-                                    ImageCache[url] = image.GetAsFrozen();
+                                    try
+                                    {
+                                        ImageCache[url] = image.GetAsFrozen();
+                                    }
+                                    catch (Exception)
+                                    {
+                                        ImageCache.Remove(url);
+                                    }
                                 }));
+
                             }));
                 }
                 catch
