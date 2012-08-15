@@ -46,7 +46,7 @@ namespace Hanasu.ViewModel
             MediaPlayCommand = this.CreateCommandFromPropertyChangedAll(
                 (s, e) =>
                     !IsPlaying && SelectedStation != null,
-                    new Action<object>(PlaySelectedStation));
+                    (o) => PlaySelectedStation(SelectedStation));
 
             MediaStopCommand = this.CreateCommandFromBinding("IsPlaying",
                 (s, e) =>
@@ -111,6 +111,8 @@ namespace Hanasu.ViewModel
 
         private void PlaySelectedStation(object o)
         {
+            if (o == null) return;
+
             GlobalHanasuCore.PlayStation((Station)o);
 
             IsPlaying = true;
