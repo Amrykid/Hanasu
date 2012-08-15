@@ -8,6 +8,7 @@
         xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Crystal"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:extras="clr-namespace:Crystal.Command;assembly=Crystal.Extras"
+        xmlns:conv="clr-namespace:Hanasu.Converters"
         Title="Hanasu" Height="556" Width="788" ShowActivated="True">
     <Window.DataContext>
         <local:MainWindowViewModel/>
@@ -22,6 +23,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <conv:IsPlayingToVisibilityConverter x:Key="IsPlayingToVisibilityConv"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -129,7 +131,7 @@
                         </TabItem>
                     </TabControl>
                     <Grid Grid.Row="2">
-                        <Grid Height="200">
+                        <Grid Height="200" Visibility="{Binding IsPlaying,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource IsPlayingToVisibilityConv}}">
                             <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='NowPlayingGridHeader'}" BorderThickness=".5" FontSize="18" BorderBrush="White">
                                 <GroupBox.Foreground>
                                     <SolidColorBrush Color="{StaticResource AccentColor}" />

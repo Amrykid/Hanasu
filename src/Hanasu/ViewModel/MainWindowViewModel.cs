@@ -25,6 +25,8 @@ namespace Hanasu.ViewModel
 
             UIPanelState = FadeablePanelState.UpperFocus;
 
+            IsPlaying = false;
+
             SwitchViewCommand = new CrystalCommand(this,
                 true,
                (o) => UIPanelState = UIPanelState == FadeablePanelState.UpperFocus ? FadeablePanelState.LowerFocus : FadeablePanelState.UpperFocus);
@@ -53,6 +55,12 @@ namespace Hanasu.ViewModel
         {
             get { return (ObservableCollection<Station>)this.GetProperty("CatalogStations"); }
             set { this.SetProperty("CatalogStations", value); }
+        }
+
+        public bool IsPlaying
+        {
+            get { return (bool)this.GetProperty("IsPlaying"); }
+            set { this.SetProperty("IsPlaying", value); }
         }
 
         public CrystalCommand SwitchViewCommand { get; set; }
