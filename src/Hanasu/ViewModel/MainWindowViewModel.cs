@@ -43,6 +43,16 @@ namespace Hanasu.ViewModel
                     SelectedStation != null, 
                 new Action<object>(PlaySelectedStation));
 
+            MediaPlayCommand = this.CreateCommandFromPropertyChangedAll(
+                (s, e) =>
+                    !IsPlaying && SelectedStation != null,
+                    new Action<object>(PlaySelectedStation));
+
+            MediaStopCommand = this.CreateCommandFromBinding("IsPlaying",
+                (s, e) =>
+                    IsPlaying,
+                    new Action<object>(StopSelectedStation));
+
             InitializeViews();
         }
 
@@ -86,12 +96,42 @@ namespace Hanasu.ViewModel
                         CatalogStations = (dynamic)data;
                         break;
                     }
+                case GlobalHanasuCore.StationTitleUpdated:
+                    {
+                        StationTitleFromPlayer = (string)data;
+                        break;
+                    }
+                case GlobalHanasuCore.SongTitleUpdated:
+                    {
+                        SongTitleFromPlayer = (string)data;
+                        break;
+                    }
             }
         }
 
         private void PlaySelectedStation(object o)
         {
             GlobalHanasuCore.PlayStation((Station)o);
+
+            IsPlaying = true;
+        }
+
+        private void StopSelectedStation(object o)
+        {
+            GlobalHanasuCore.StopStation();
+
+            IsPlaying = false;
+        }
+
+        public string StationTitleFromPlayer
+        {
+            get { return (dynamic)this.GetProperty("StationTitleFromPlayer"); }
+            set { this.SetProperty("StationTitleFromPlayer", value); }
+        }
+        public string SongTitleFromPlayer
+        {
+            get { return (dynamic)this.GetProperty("SongTitleFromPlayer"); }
+            set { this.SetProperty("SongTitleFromPlayer", value); }
         }
 
         #region Related to view selection

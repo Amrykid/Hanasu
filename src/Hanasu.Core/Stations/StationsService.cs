@@ -24,7 +24,7 @@ namespace Hanasu.Core.Stations
             CustomStations = new ObservableCollection<Station>();
 
         }
-        public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/1.0/src/Hanasu/Stations.xml"; } }
+        public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"; } }
 
         internal Task LoadStationsFromRepoAsync()
         {

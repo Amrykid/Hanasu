@@ -83,6 +83,8 @@ namespace Hanasu.Core
         public static Station CurrentStation { get; private set; }
 
         public const string StationsUpdated = "StationsUpdated";
+        public const string SongTitleUpdated = "SongTitleUpdated";
+        public const string StationTitleUpdated = "StationTitleUpdated";
 
         public static bool Initialized { get; private set; }
 
@@ -99,9 +101,18 @@ namespace Hanasu.Core
 
         public static void OnSongTitleDetected(IMediaPlayer player, string songdata)
         {
+            PushMessageToGUI(SongTitleUpdated, songdata);
+            return;
         }
         public static void OnStationTitleDetected(IMediaPlayer player, string stationdata)
         {
+            PushMessageToGUI(StationTitleUpdated, stationdata);
+            return;
+        }
+
+        public static void StopStation()
+        {
+            CurrentPlayer.Stop();
         }
     }
 }

@@ -147,8 +147,8 @@
                                             <Image MaxWidth="150" Source="http://www.jpopasia.com/img/album-covers/1/2037-the1stasiatourintoth-3d1u.jpg"/>
                                             <Grid Margin="10 7 0 0">
                                                 <StackPanel>
-                                                    <Label FontSize="18" Content="Touch the sky"/>
-                                                    <Label FontSize="17" Content="Girls' Generation"/>
+                                                    <Label FontSize="18" Content="{Binding SongTitleFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <Label FontSize="17" Content="{Binding StationTitleFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                             </Grid>
                                         </StackPanel>

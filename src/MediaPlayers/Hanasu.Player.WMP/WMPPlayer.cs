@@ -24,8 +24,21 @@ namespace Hanasu.Player.WMP
 
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
         {
+            //Differentating Song titles, station titles and radio messages is basic for now. Will be expanded to be equal to or better than Hanasu 1.0. It also differs based on the player selected.
+
             var name = player.currentMedia.name;
 
+            if (name.StartsWith(GlobalHanasuCore.CurrentStation.Name))
+                GlobalHanasuCore.OnStationTitleDetected(this, name);
+            else
+                if (name.Contains(" - "))
+                {
+                    GlobalHanasuCore.OnSongTitleDetected(this, name);
+                }
+                else
+                {
+                    //Radio message
+                }
             
         }
 
