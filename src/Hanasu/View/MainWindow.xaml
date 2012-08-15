@@ -4,6 +4,7 @@
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Hanasu.ViewModel"
         xmlns:ui="clr-namespace:Hanasu.UI"
+        xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Crystal"
         Title="Hanasu" Height="350" Width="525">
     <Window.DataContext>
         <local:MainWindowViewModel/>
@@ -23,7 +24,7 @@
         <ui:FadeablePanel>
             <ui:FadeablePanel.UpperPanel>
                 <TabControl>
-                    <TabItem Header="Library">
+                    <TabItem Header="{i18n:CrystalLocalizedValueMarkup Key='LibraryTabHeader'}">
                         
                     </TabItem>
                 </TabControl>
