@@ -11,14 +11,21 @@ using System.Windows.Controls;
 using Hanasu.UI;
 using System.Windows.Data;
 using Crystal.Localization;
+using System.Windows;
+using System.IO;
 
 namespace Hanasu.ViewModel
 {
     public class MainWindowViewModel: BaseViewModel
     {
+        public string AppDir = null;
         public MainWindowViewModel()
         {
-            GlobalHanasuCore.Initialize(new Action<string, object>(HandleEvents));
+            AppDir = new FileInfo(Application.ResourceAssembly.Location).DirectoryName;
+
+            GlobalHanasuCore.Initialize(new Action<string, object>(HandleEvents), 
+                AppDir + "\\Plugins\\");
+
             //LocalizationManager.ProbeDirectory
 
             SelectedStation = new Station();

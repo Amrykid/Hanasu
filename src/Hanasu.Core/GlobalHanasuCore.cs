@@ -17,7 +17,12 @@ namespace Hanasu.Core
 
         private static Action<string, object> eventHandler = null;
 
-        public static void Initialize(Action<string, object> _eventHandler)
+        /// <summary>
+        /// Initializes the Hanasu core.
+        /// </summary>
+        /// <param name="_eventHandler">Event handler for sending data to the GUI.</param>
+        /// <param name="pluginDir">The directory used in searching for plugins.</param>
+        public static void Initialize(Action<string, object> _eventHandler, string pluginDir)
         {
             if (Initialized) return;
 
