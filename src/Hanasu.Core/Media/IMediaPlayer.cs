@@ -8,5 +8,8 @@ namespace Hanasu.Core.Media
     public interface IMediaPlayer
     {
         void Initialize();
+        void Play(Uri url);
+        void Stop();
+        bool IsPlaying { get; }
     }
 }

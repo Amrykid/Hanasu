@@ -20,7 +20,12 @@ namespace Hanasu.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if ((Visibility)value == Visibility.Visible)
+                return true;
+            else if ((Visibility)value == Visibility.Collapsed)
+                return false;
+
+            return false;
         }
     }
 }

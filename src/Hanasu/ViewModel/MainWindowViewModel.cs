@@ -91,6 +91,7 @@ namespace Hanasu.ViewModel
 
         private void PlaySelectedStation(object o)
         {
+            GlobalHanasuCore.PlayStation((Station)o);
         }
 
         #region Related to view selection
