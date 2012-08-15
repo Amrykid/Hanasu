@@ -21,11 +21,18 @@ namespace Hanasu.ViewModel
             GlobalHanasuCore.Initialize(new Action<string, object>(HandleEvents));
             //LocalizationManager.ProbeDirectory
 
+            SelectedStation = new Station();
+
             UIPanelState = FadeablePanelState.UpperFocus;
 
             SwitchViewCommand = new CrystalCommand(this,
                 true,
                (o) => UIPanelState = UIPanelState == FadeablePanelState.UpperFocus ? FadeablePanelState.LowerFocus : FadeablePanelState.UpperFocus);
+
+            PlaySelectedStationCommand = this.CreateCommandFromBinding("SelectedStation", 
+                (s, e) => 
+                    SelectedStation != null, 
+                new Action<object>(PlaySelectedStation));
 
             InitializeViews();
         }
@@ -34,6 +41,13 @@ namespace Hanasu.ViewModel
         public CrystalCommand MediaPlayCommand { get; set; }
         public CrystalCommand MediaStopCommand { get; set; }
         public CrystalCommand MediaFastForwardCommand { get; set; }
+        public CrystalCommand PlaySelectedStationCommand { get; set; }
+
+        public Station SelectedStation
+        {
+            get { return (Station)this.GetProperty("SelectedStation"); }
+            set { this.SetProperty("SelectedStation", value); }
+        }
 
         public ObservableCollection<Station> CatalogStations
         {
@@ -58,6 +72,10 @@ namespace Hanasu.ViewModel
                         break;
                     }
             }
+        }
+
+        private void PlaySelectedStation(object o)
+        {
         }
 
         #region Related to view selection

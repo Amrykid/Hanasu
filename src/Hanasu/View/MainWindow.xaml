@@ -3,8 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Hanasu.ViewModel"
+        xmlns:self="clr-namespace:Hanasu"
         xmlns:ui="clr-namespace:Hanasu.UI"
         xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Crystal"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:extras="clr-namespace:Crystal.Command;assembly=Crystal.Extras"
         Title="Hanasu" Height="556" Width="788" ShowActivated="True">
     <Window.DataContext>
         <local:MainWindowViewModel/>
@@ -108,9 +111,14 @@
                                     </TreeView>
                                 </Grid>
                                 <Grid Grid.Column="1">
-                                    <ListView BorderBrush="White" BorderThickness=".3" View="{Binding UpdateSourceTrigger=PropertyChanged, Path=DataContext.CurrentSelectedView, RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}" 
-                                              DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext}">
-
+                                    <ListView Name="StationListView" BorderBrush="White" BorderThickness=".3" View="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.CurrentSelectedView, RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}" 
+                                              DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext}"
+                                              SelectedItem="{Binding Path=DataContext.SelectedStation, RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseDoubleClick">
+                                                <extras:EventToCommand Command="{Binding UpdateSourceTrigger=PropertyChanged, Path=DataContext.PlaySelectedStationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
                                     </ListView>
                                 </Grid>
                             </Grid>
