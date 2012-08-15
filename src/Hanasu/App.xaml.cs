@@ -4,9 +4,6 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
-using System.IO;
-using Hanasu.Windows;
-using Hanasu.Core;
 
 namespace Hanasu
 {
@@ -15,59 +12,5 @@ namespace Hanasu
     /// </summary>
     public partial class App : Application
     {
-        public Hanasu.Windows.SplashScreen SplashScreen { get; set; }
-        public string[] Arguments { get; set; }
-        private void Application_Startup(object sender, StartupEventArgs e)
-        {
-            Arguments = e.Args;
-
-            if (NetworkUtils.IsConnectedToInternet())
-            {
-                var dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Hanasu\\";
-                if (!Directory.Exists(dir))
-                {
-                    //SplashScreen.Close();
-
-                    FirstTimeRunWizard ftrw = new FirstTimeRunWizard();
-                    if (ftrw.ShowDialog() == true)
-                    {
-
-                        //Restart
-                        System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                        Application.Current.Shutdown();
-                    }
-                }
-                else
-                {
-#if DEBUG
-                    App.Current.ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose;
-#endif
-#if !DEBUG
-                    //Start the splash screen.
-                    SplashScreen = new Windows.SplashScreen();
-                    SplashScreen.Show();
-                    SplashScreen.Focus();
-#endif
-                }
-            }
-            else
-            {
-                MessageBox.Show("Hanasu requires an active internet connection! Will now terminate.");
-                Application.Current.Shutdown();
-            }
-        }
-
-        public static bool CheckIfSafeStart()
-        {
-            if (App.Current != null)
-            {
-                if (App.Current.MainWindow == null)
-                    return false;
-            }
-            else
-                return false;
-
-            return true;
-        }
     }
 }

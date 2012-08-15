@@ -1,0 +1,111 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Hanasu.UI"
+    xmlns:conv="clr-namespace:Hanasu.Converters">
+
+
+    <Style TargetType="{x:Type local:FadeablePanel}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:FadeablePanel}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="VisibilityStates">
+                                <VisualState x:Name="LowerPanelFocus">
+                                    <Storyboard Duration="0:0:1">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PART_UpperPanel" Storyboard.TargetProperty="Opacity">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.250" Value="0.9"/>
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.500" Value="0.6"/>
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.750" Value="0.3"/>
+                                            <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.0"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <!--<Int32AnimationUsingKeyFrames Storyboard.TargetName="PART_UpperPanel" Storyboard.TargetProperty="(Panel.ZIndex)">
+                                            <EasingInt32KeyFrame KeyTime="0:0:0" Value="25"/>
+                                            <EasingInt32KeyFrame KeyTime="0:0:0.990" Value="24"/>
+                                            <EasingInt32KeyFrame KeyTime="0:0:1" Value="23"/>
+                                        </Int32AnimationUsingKeyFrames>-->
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="UpperPanelFocus">
+                                    <Storyboard Duration="0:0:1">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PART_UpperPanel" Storyboard.TargetProperty="Opacity">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.9"/>
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.750" Value="0.6"/>
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.500" Value="0.3"/>
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.250" Value="0.0"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <!--<Int32AnimationUsingKeyFrames Storyboard.TargetName="PART_UpperPanel" Storyboard.TargetProperty="(Panel.ZIndex)">
+                                            <EasingInt32KeyFrame KeyTime="0:0:1" Value="25"/>
+                                            <EasingInt32KeyFrame KeyTime="0:0:0.990" Value="24"/>
+                                            <EasingInt32KeyFrame KeyTime="0:0:0" Value="23"/>
+                                        </Int32AnimationUsingKeyFrames>-->
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid>
+                            <ContentControl Content="{TemplateBinding UpperPanel}" Panel.ZIndex="25" Opacity="0.7" Name="PART_UpperPanel"/>
+                            <ContentControl Content="{TemplateBinding LowerPanel}" Panel.ZIndex="24" Name="PART_LowerPanel"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <conv:UriToBitmapImageConverter x:Key="UrlImageConv"/>
+
+    <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource {x:Type ListBox}}" x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type local:ImageHeaderView},ResourceId=ImageHeaderView}">
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="0.5"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel ItemWidth="150" IsItemsHost="True" MinWidth="100" Orientation="Horizontal"
+                                Width="{Binding ActualWidth,RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}">
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Name="bd"
+                Background="{TemplateBinding Background}" Margin="0.2">
+                        <ScrollViewer Margin="{TemplateBinding Padding}">
+                            <ContentControl/>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType='{x:Type ListViewItem}' BasedOn='{StaticResource {x:Type ListBoxItem}}' x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type local:ImageHeaderView},ResourceId=ImageHeaderViewItem}">
+        <Setter Property='Padding' Value='3'/>
+        <Setter Property='Margin' Value='5'/>
+        <Setter Property='HorizontalContentAlignment' Value='Center'/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="2" Color="Black"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Border Background="Black" CornerRadius="4">
+                        <StackPanel>
+                            <Image Margin="3" Source="{Binding ImageUrl, Converter={StaticResource UrlImageConv}}"/>
+                            <Label Content="{Binding Name}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

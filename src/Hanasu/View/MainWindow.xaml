@@ -1,0 +1,38 @@
+﻿<metro:MetroWindow x:Class="Hanasu.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:Hanasu.ViewModel"
+        xmlns:ui="clr-namespace:Hanasu.UI"
+        Title="Hanasu" Height="350" Width="525">
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <ui:FadeablePanel>
+            <ui:FadeablePanel.UpperPanel>
+                <TabControl>
+                    <TabItem Header="Library">
+                        
+                    </TabItem>
+                </TabControl>
+            </ui:FadeablePanel.UpperPanel>
+            <ui:FadeablePanel.LowerPanel>
+                <Grid Name="MediaPlayerGrid">
+                    
+                </Grid>
+            </ui:FadeablePanel.LowerPanel>
+        </ui:FadeablePanel>
+    </Grid>
+</metro:MetroWindow>
