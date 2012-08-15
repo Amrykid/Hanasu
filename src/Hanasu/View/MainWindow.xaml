@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:Hanasu.ViewModel"
         xmlns:ui="clr-namespace:Hanasu.UI"
         xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Crystal"
-        Title="Hanasu" Height="350" Width="525">
+        Title="Hanasu" Height="556" Width="788" ShowActivated="True">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
@@ -17,21 +17,144 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <ui:FadeablePanel>
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="45" Height="45" VerticalAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="100" Opacity=".7" Command="{Binding SwitchViewCommand}">
+            <Rectangle Margin="5 1 0 0" Height="20" Width="20">
+                <Rectangle.Fill>
+                    <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_new_window}" />
+                </Rectangle.Fill>
+            </Rectangle>
+            <Button.ToolTip>
+                <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonSwitchViewTooltip'}"/>
+            </Button.ToolTip>
+        </Button>
+        <ui:FadeablePanel PanelState="{Binding UIPanelState, UpdateSourceTrigger=PropertyChanged}">
             <ui:FadeablePanel.UpperPanel>
-                <TabControl>
-                    <TabItem Header="{i18n:CrystalLocalizedValueMarkup Key='LibraryTabHeader'}">
-                        
-                    </TabItem>
-                </TabControl>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="100*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Border Margin="0 5 0 0" BorderThickness=".5" BorderBrush="White">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Name="MediaControlPanel">
+                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Command="{Binding MediaRewindCommand}">
+                                    <Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_rewind}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonRewindTooltip'}"/>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Command="{Binding MediaPlayCommand}">
+                                    <Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_play}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonPlayTooltip'}"/>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Command="{Binding MediaStopCommand}">
+                                    <Rectangle Margin="0 1 0 0" Height="30" Width="30">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_pause}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonStopTooltip'}"/>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Command="{Binding MediaFastForwardCommand}">
+                                    <Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Uniform"
+                            					Visual="{StaticResource appbar_fastforward}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonFastForwardTooltip'}"/>
+                                    </Button.ToolTip>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    <TabControl Grid.Row="1">
+                        <TabItem Header="{i18n:CrystalLocalizedValueMarkup Key='LibraryTabHeader'}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <TreeView FontSize="17" Name="LibraryTreeView">
+                                        <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='LibraryTabHeader'}">
+                                            <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='HanasuCatalogTreeViewHeader'}" DataContext="{Binding CatalogStations,UpdateSourceTrigger=PropertyChanged}"/>
+                                            <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='CustomStationsTreeViewHeader'}"/>
+                                        </TreeViewItem>
+                                        <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='IceCastTreeViewHeader'}"/>
+                                    </TreeView>
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <ListView BorderBrush="White" BorderThickness=".3" View="{Binding UpdateSourceTrigger=PropertyChanged, Path=DataContext.CurrentSelectedView, RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}" 
+                                              DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext}">
+
+                                    </ListView>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="{i18n:CrystalLocalizedValueMarkup Key='SongsTabHeader'}">
+                            <Grid>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                    <Grid Grid.Row="2">
+                        <Grid Height="200">
+                            <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='NowPlayingGridHeader'}" BorderThickness=".5" FontSize="18" BorderBrush="White">
+                                <GroupBox.Foreground>
+                                    <SolidColorBrush Color="{StaticResource AccentColor}" />
+                                </GroupBox.Foreground>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="100*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <StackPanel Orientation="Horizontal" Margin="10 0 0 0">
+                                            <!--Sample data that I fetched from my previous Hanasu data-->
+                                            <Image MaxWidth="150" Source="http://www.jpopasia.com/img/album-covers/1/2037-the1stasiatourintoth-3d1u.jpg"/>
+                                            <Grid Margin="10 7 0 0">
+                                                <StackPanel>
+                                                    <Label FontSize="18" Content="Touch the sky"/>
+                                                    <Label FontSize="17" Content="Girls' Generation"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Grid Grid.Column="1">
+                                        <!--Empty, reserved space. May use it for a 'similar songs' sectionr or w/e.-->
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </ui:FadeablePanel.UpperPanel>
             <ui:FadeablePanel.LowerPanel>
                 <Grid Name="MediaPlayerGrid">
-                    
+
                 </Grid>
             </ui:FadeablePanel.LowerPanel>
         </ui:FadeablePanel>

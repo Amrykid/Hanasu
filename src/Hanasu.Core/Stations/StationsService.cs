@@ -12,6 +12,7 @@ using System.Xml;
 using System.Collections;
 using System.Text.RegularExpressions;
 using Hanasu.Core.Utilities;
+using System.Threading.Tasks;
 
 namespace Hanasu.Core.Stations
 {
@@ -23,7 +24,13 @@ namespace Hanasu.Core.Stations
             CustomStations = new ObservableCollection<Station>();
 
         }
-        public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"; } }
+        public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/1.0/src/Hanasu/Stations.xml"; } }
+
+        internal Task LoadStationsFromRepoAsync()
+        {
+            return System.Threading.Tasks.Task.Factory.StartNew(() =>
+                LoadStationsFromRepo());
+        }
 
         internal void LoadStationsFromRepo()
         {
@@ -34,7 +41,7 @@ namespace Hanasu.Core.Stations
                             select ParseStation(ref dummie, x);
 
             foreach (var stat in stats)
-                Stations.Add(stats);
+                Stations.Add(stat);
         }
 
         private Station ParseStation(ref RadioFormat dummie, XElement x)
@@ -62,7 +69,7 @@ namespace Hanasu.Core.Stations
 
         private IEnumerable<XElement> StreamStationsXml()
         {
-            using (XmlReader reader = XmlReader.Create("https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"))
+            using (XmlReader reader = XmlReader.Create(StationsUrl))
             {
                 reader.MoveToContent();
                 while (reader.Read())

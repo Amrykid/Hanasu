@@ -11,21 +11,41 @@ namespace Hanasu.Core
         static GlobalHanasuCore()
         {
             if (Initialized == false)
-                Initialize();
+                //Initialize(null);
+                return;
         }
 
-        public static void Initialize()
+        private static Action<string, object> eventHandler = null;
+
+        public static void Initialize(Action<string, object> _eventHandler)
         {
             if (Initialized) return;
 
+            eventHandler = _eventHandler;
+
             StationsService = new Stations.StationsService();
+
+            StationsService.LoadStationsFromRepoAsync().ContinueWith(t =>
+                {
+                    PushMessageToGUI(StationsUpdated, StationsService.Stations);
+                });
+
+
 
             Initialized = true;
         }
 
+        public const string StationsUpdated = "StationsUpdated";
+
         public static bool Initialized { get; private set; }
 
         public static Stations.StationsService StationsService { get; private set; }
+
+        private static void PushMessageToGUI(string eventstr, object data)
+        {
+            if (eventHandler != null)
+                eventHandler(eventstr, data);
+        }
 
         public static void OnSongTitleDetected(IMediaPlayer player, string songdata)
         {
