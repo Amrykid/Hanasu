@@ -113,7 +113,11 @@ namespace Hanasu.ViewModel
         {
             if (o == null) return;
 
-            GlobalHanasuCore.PlayStation((Station)o);
+            var stat = (Station)o;
+
+            if (stat.Name == null) return;
+
+            GlobalHanasuCore.PlayStation(stat);
 
             IsPlaying = true;
         }
