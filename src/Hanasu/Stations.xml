@@ -30,6 +30,7 @@
     <City>Tokyo, Japan</City>
     <Language>Japanese</Language>
     <Cacheable>False</Cacheable>
+    <ExplicitExtension>.m3u</ExplicitExtension>
   </Station>
   <Station>
     <Name>Radio Hikari.pl</Name>
