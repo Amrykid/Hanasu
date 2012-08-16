@@ -8,8 +8,9 @@
         xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Crystal"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:extras="clr-namespace:Crystal.Command;assembly=Crystal.Extras"
+        xmlns:cutils="clr-namespace:Crystal.Utilities;assembly=Crystal"
         xmlns:conv="clr-namespace:Hanasu.Converters"
-        Title="Hanasu" Height="556" Width="788" ShowActivated="True">
+        Title="Hanasu" Height="556" Width="788" ShowActivated="True" cutils:MainWindowSetterHelper.IsMainWindow="True">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
