@@ -11,5 +11,7 @@ namespace Hanasu.Core.Media
         void Play(Uri url);
         void Stop();
         bool IsPlaying { get; }
+        void Shutdown();
+        bool Supports(string extension);
     }
 }
