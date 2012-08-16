@@ -38,17 +38,17 @@ namespace Hanasu.ViewModel
                 true,
                (o) => UIPanelState = UIPanelState == FadeablePanelState.UpperFocus ? FadeablePanelState.LowerFocus : FadeablePanelState.UpperFocus);
 
-            PlaySelectedStationCommand = this.CreateCommandFromBinding("SelectedStation", 
+            PlaySelectedStationCommand = this.CommandManager.CreateCommandFromBinding("SelectedStation", 
                 (s, e) => 
                     SelectedStation != null, 
                 new Action<object>(PlaySelectedStation));
 
-            MediaPlayCommand = this.CreateCommandFromPropertyChangedAll(
+            MediaPlayCommand = this.CommandManager.CreateCommandFromPropertyChangedAll(
                 (s, e) =>
                     !IsPlaying && SelectedStation != null,
                     (o) => PlaySelectedStation(SelectedStation));
 
-            MediaStopCommand = this.CreateCommandFromBinding("IsPlaying",
+            MediaStopCommand = this.CommandManager.CreateCommandFromBinding("IsPlaying",
                 (s, e) =>
                     IsPlaying,
                     new Action<object>(StopSelectedStation));
