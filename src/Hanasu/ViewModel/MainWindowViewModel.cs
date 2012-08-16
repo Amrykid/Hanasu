@@ -13,6 +13,7 @@ using System.Windows.Data;
 using Crystal.Localization;
 using System.Windows;
 using System.IO;
+using Hanasu.Core.Preprocessor;
 
 namespace Hanasu.ViewModel
 {
@@ -23,7 +24,7 @@ namespace Hanasu.ViewModel
         {
             AppDir = new FileInfo(Application.ResourceAssembly.Location).DirectoryName;
 
-            GlobalHanasuCore.Initialize(new Action<string, object>(HandleEvents), 
+            GlobalHanasuCore.Initialize(new Func<string, object, object>(HandleEvents), 
                 AppDir + "\\Plugins\\");
 
             //LocalizationManager.ProbeDirectory
@@ -87,7 +88,7 @@ namespace Hanasu.ViewModel
             set { this.SetProperty("UIPanelState", value); }
         }
 
-        private void HandleEvents(string eventStr, object data)
+        private object HandleEvents(string eventStr, object data)
         {
             switch (eventStr)
             {
@@ -106,7 +107,39 @@ namespace Hanasu.ViewModel
                         SongTitleFromPlayer = (string)data;
                         break;
                     }
+                case GlobalHanasuCore.NowPlayingStatus:
+                    {
+                        IsPlaying = (bool)data;
+                        break;
+                    }
+                case GlobalHanasuCore.NowPlayingReset:
+                    {
+                        StationTitleFromPlayer = null;
+                        SongTitleFromPlayer = null;
+                        break;
+                    }
+                case GlobalHanasuCore.StationConnectionError:
+                    {
+                        break;
+                    }
+                case GlobalHanasuCore.StationMultipleServersFound:
+                    {
+                        //Deal with choosing multiple stations.
+
+                        IMultiStreamEntry[] entries = (dynamic)data;
+
+                        Tuple<bool, IMultiStreamEntry> res = null;
+
+                        if (MessageBox.Show("FIRST?", "CHOOSE FIRST?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            res = new Tuple<bool, IMultiStreamEntry>(true, entries[0]);
+                        else
+                            res = new Tuple<bool, IMultiStreamEntry>(false, null);
+
+                        return res;
+                    }
             }
+
+            return null;
         }
 
         private void PlaySelectedStation(object o)
@@ -118,15 +151,11 @@ namespace Hanasu.ViewModel
             if (stat.Name == null) return;
 
             GlobalHanasuCore.PlayStation(stat);
-
-            IsPlaying = true;
         }
 
         private void StopSelectedStation(object o)
         {
             GlobalHanasuCore.StopStation();
-
-            IsPlaying = false;
         }
 
         public string StationTitleFromPlayer

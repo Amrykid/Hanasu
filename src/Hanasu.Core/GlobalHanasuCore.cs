@@ -7,6 +7,7 @@ using System.IO;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
 using Hanasu.Core.Stations;
+using Hanasu.Core.Preprocessor;
 
 namespace Hanasu.Core
 {
@@ -19,14 +20,14 @@ namespace Hanasu.Core
                 return;
         }
 
-        private static Action<string, object> eventHandler = null;
+        private static Func<string, object,object> eventHandler = null;
 
         /// <summary>
         /// Initializes the Hanasu core.
         /// </summary>
         /// <param name="_eventHandler">Event handler for sending data to the GUI.</param>
         /// <param name="pluginDir">The directory used in searching for plugins.</param>
-        public static void Initialize(Action<string, object> _eventHandler, string pluginDir)
+        public static void Initialize(Func<string, object, object> _eventHandler, string pluginDir)
         {
             if (Initialized) return;
 
@@ -76,8 +77,58 @@ namespace Hanasu.Core
         {
             //deal with finding the direct url here.
 
-            CurrentStation = stat;
-            CurrentPlayer.Play(stat.DataSource);
+            if (CurrentPlayer == null) return; //Somethings wrong
+
+            var url = stat.DataSource;
+
+            if (url.Segments.Last().Contains("."))
+            {
+                var ext = url.Segments.Last();
+                ext = ext.Substring(ext.LastIndexOf("."));
+                if (!CurrentPlayer.Supports(ext))
+                {
+                    //pre-process the url here.
+                    //stolen code from Hanasu 1.0 because it works like it should. :|
+                   var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
+
+                   if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
+                   {
+                       var p = (Preprocessor.MultiStreamPreprocessor)pro;
+
+                       var entries = p.Parse(url);
+
+                       if (entries.Length == 0)
+                       {
+                           return;
+                       }
+                       else if (entries.Length == 1)
+                       {
+                           url = new Uri(entries[0].File);
+                       }
+                       else
+                       {
+                           var result = (Tuple<bool,IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
+
+                           if (result == null) return;
+
+                           if (result.Item1 == false) return;
+                       }
+                   }
+
+                   Preprocessor.PreprocessorService.Process(ref url);
+                }
+            }
+
+            try
+            {
+                CurrentStation = stat;
+                CurrentPlayer.Play(url);
+                PushMessageToGUI(NowPlayingStatus, true);
+            }
+            catch (Exception)
+            {
+                PushMessageToGUI(StationConnectionError, null);
+            }
         }
 
         public static Station CurrentStation { get; private set; }
@@ -85,6 +136,10 @@ namespace Hanasu.Core
         public const string StationsUpdated = "StationsUpdated";
         public const string SongTitleUpdated = "SongTitleUpdated";
         public const string StationTitleUpdated = "StationTitleUpdated";
+        public const string NowPlayingReset = "NowPlayingReset";
+        public const string NowPlayingStatus = "NowPlayingStatus";
+        public const string StationConnectionError = "StationConnectionError";
+        public const string StationMultipleServersFound = "StationMultipleServersFound";
 
         public static bool Initialized { get; private set; }
 
@@ -93,10 +148,12 @@ namespace Hanasu.Core
 
         internal static IMediaPlayer CurrentPlayer { get; private set; }
 
-        private static void PushMessageToGUI(string eventstr, object data)
+        private static object PushMessageToGUI(string eventstr, object data)
         {
             if (eventHandler != null)
-                eventHandler(eventstr, data);
+                return eventHandler(eventstr, data);
+
+            return null;
         }
 
         public static void OnSongTitleDetected(IMediaPlayer player, string songdata)
@@ -113,6 +170,15 @@ namespace Hanasu.Core
         public static void StopStation()
         {
             CurrentPlayer.Stop();
+            PushMessageToGUI(NowPlayingReset, null);
+            PushMessageToGUI(NowPlayingStatus, false);
+        }
+
+        public static void OnStationConnectionTerminated(IMediaPlayer player)
+        {
+            //When the station stops the connection... not the user.
+            PushMessageToGUI(NowPlayingReset, null);
+            PushMessageToGUI(NowPlayingStatus, false);
         }
     }
 }
