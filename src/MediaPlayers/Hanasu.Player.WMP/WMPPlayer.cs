@@ -19,7 +19,13 @@ namespace Hanasu.Player.WMP
             host = new AxWMP();
             player = host.axWindowsMediaPlayer1;
             player.settings.autoStart = false;
-            player.MediaChange += new AxWMPLib._WMPOCXEvents_MediaChangeEventHandler(player_MediaChange);
+            player.MediaChange += player_MediaChange;
+            player.MediaError += player_MediaError;
+        }
+
+        void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
+        {
+            GlobalHanasuCore.OnStationConnectionTerminated(this);
         }
 
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
@@ -58,6 +64,41 @@ namespace Hanasu.Player.WMP
         public bool IsPlaying
         {
             get { return player.playState == WMPLib.WMPPlayState.wmppsPlaying || player.playState == WMPLib.WMPPlayState.wmppsBuffering; }
+        }
+
+
+        public void Shutdown()
+        {
+            if (player != null)
+            {
+                player.MediaChange -= player_MediaChange;
+                player.MediaError -= player_MediaError;
+                //player.close();
+
+                try
+                {
+                    player.Dispose();
+                    host.Dispose();
+
+                    player = null;
+                    host = null;
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+        ~WMPPlayer()
+        {
+            Shutdown();
+        }
+
+
+        public bool Supports(string extension)
+        {
+            var supported = new string[] { ".asx", ".mp3", ".wav" }; //WMP supports M3U but I would like Hanasu to give people the choice to choose a stream.
+
+            return supported.Contains(extension);
         }
     }
 }
