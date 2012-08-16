@@ -41,7 +41,7 @@ namespace Hanasu.Services.Song.Album_Info_Data_Source
 
                 if (!artist.ToLower().StartsWith(song.Artist.ToLower())) return false;
 
-                song.AlbumCoverUri = new Uri(imgurl);
+                song.AlbumCoverUri = new Uri(imgurl.Replace("s_","l_"));
 
                 if (song.AlbumCoverUri != null)
                 {

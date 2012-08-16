@@ -125,7 +125,7 @@ namespace Hanasu.Services.Stations
         public static string StationsCacheDir { get; private set; }
         public string CustomStationsFile { get { return StationsCacheDir + "CustomStations.xml"; } }
         public string StationsCachedFile { get { return StationsCacheDir + "Stations.xml"; } }
-        public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml"; } }
+        public string StationsUrl { get { return "https://raw.github.com/Amrykid/Hanasu/1.0/src/Hanasu/Stations.xml"; } }
 
         internal void LoadStationsFromRepo()
         {
