@@ -45,6 +45,10 @@ namespace Hanasu.UI
     /// </summary>
     public class ImageHeaderView : ViewBase
     {
+        public ImageHeaderView()
+            : base()
+        {
+        }
         protected override object DefaultStyleKey
         {
             get { return new ComponentResourceKey(GetType(), "ImageHeaderView"); }

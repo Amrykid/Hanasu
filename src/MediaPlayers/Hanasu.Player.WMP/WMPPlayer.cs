@@ -9,7 +9,7 @@ using Hanasu.Core;
 namespace Hanasu.Player.WMP
 {
     [Export(typeof(IMediaPlayer))]
-    public class WMPPlayer: IMediaPlayer
+    public class WMPPlayer : IMediaPlayer
     {
         AxWMP host = null;
         AxWMPLib.AxWindowsMediaPlayer player = null;
@@ -45,7 +45,7 @@ namespace Hanasu.Player.WMP
                 {
                     //Radio message
                 }
-            
+
         }
 
 
@@ -99,6 +99,23 @@ namespace Hanasu.Player.WMP
             var supported = new string[] { ".asx", ".mp3", ".wav" }; //WMP supports M3U but I would like Hanasu to give people the choice to choose a stream.
 
             return supported.Contains(extension);
+        }
+
+
+        public int Volume
+        {
+            get
+            {
+                if (player != null)
+                    return player.settings.volume;
+
+                return 0;
+            }
+            set
+            {
+                if (player != null)
+                    player.settings.volume = value;
+            }
         }
     }
 }

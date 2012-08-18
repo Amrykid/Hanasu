@@ -75,7 +75,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border Name="bd"
+                    <Border
                 Background="{TemplateBinding Background}" Margin="0.2">
                         <ScrollViewer Margin="{TemplateBinding Padding}">
                             <ContentControl/>
@@ -90,17 +90,17 @@
         <Setter Property='Padding' Value='3'/>
         <Setter Property='Margin' Value='5'/>
         <Setter Property='HorizontalContentAlignment' Value='Center'/>
-        <Setter Property="Effect">
+        <!--<Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect BlurRadius="2" Color="Black"/>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <Border Background="Black" CornerRadius="4">
                         <StackPanel>
-                            <Image Margin="3" Source="{Binding ImageUrl, Converter={StaticResource UrlImageConv}}"/>
+                            <Image Margin="3" Source="http://www.ufomafia.com/radiographic.jpg"/><!--{Binding Logo, Converter={StaticResource UrlImageConv}, FallbackValue='http://www.ufomafia.com/radiographic.jpg'}"/>-->
                             <Label Content="{Binding Name}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Border>

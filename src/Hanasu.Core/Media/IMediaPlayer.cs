@@ -13,5 +13,7 @@ namespace Hanasu.Core.Media
         bool IsPlaying { get; }
         void Shutdown();
         bool Supports(string extension);
+
+        int Volume { get; set; }
     }
 }

@@ -59,7 +59,7 @@ namespace Hanasu.Core
 
                 var comp = new CompositionContainer(ac);
                 comp.ComposeParts(Plugins);
-
+                
                 if (Plugins.Players.Count() > 0)
                 {
                     CurrentPlayer = Plugins.Players.First();
@@ -179,6 +179,22 @@ namespace Hanasu.Core
             //When the station stops the connection... not the user.
             PushMessageToGUI(NowPlayingReset, null);
             PushMessageToGUI(NowPlayingStatus, false);
+        }
+
+        public static int GetVolume()
+        {
+            if (CurrentPlayer == null)
+                return 0;
+            else
+                return CurrentPlayer.Volume;
+        }
+
+        public static void SetVolume(int vol)
+        {
+            if (vol > 100 || vol < 0) throw new ArgumentOutOfRangeException("vol");
+
+            if (CurrentPlayer != null)
+                CurrentPlayer.Volume = vol;
         }
     }
 }

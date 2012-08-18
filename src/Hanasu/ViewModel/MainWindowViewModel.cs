@@ -17,17 +17,19 @@ using Hanasu.Core.Preprocessor;
 
 namespace Hanasu.ViewModel
 {
-    public class MainWindowViewModel: BaseViewModel
+    public class MainWindowViewModel : BaseViewModel
     {
         public string AppDir = null;
         public MainWindowViewModel()
         {
             AppDir = new FileInfo(Application.ResourceAssembly.Location).DirectoryName;
 
-            GlobalHanasuCore.Initialize(new Func<string, object, object>(HandleEvents), 
+            GlobalHanasuCore.Initialize(new Func<string, object, object>(HandleEvents),
                 AppDir + "\\Plugins\\");
 
             //LocalizationManager.ProbeDirectory
+
+            CurrentVolume = GlobalHanasuCore.GetVolume();
 
             SelectedStation = new Station();
 
@@ -39,9 +41,9 @@ namespace Hanasu.ViewModel
                 true,
                (o) => UIPanelState = UIPanelState == FadeablePanelState.UpperFocus ? FadeablePanelState.LowerFocus : FadeablePanelState.UpperFocus);
 
-            PlaySelectedStationCommand = this.CommandManager.CreateCommandFromBinding("SelectedStation", 
-                (s, e) => 
-                    SelectedStation != null, 
+            PlaySelectedStationCommand = this.CommandManager.CreateCommandFromBinding("SelectedStation",
+                (s, e) =>
+                    SelectedStation != null,
                 new Action<object>(PlaySelectedStation));
 
             MediaPlayCommand = this.CommandManager.CreateCommandFromPropertyChangedAll(
@@ -54,7 +56,37 @@ namespace Hanasu.ViewModel
                     IsPlaying,
                     new Action<object>(StopSelectedStation));
 
+            VolumeHighButtonCommand = new CrystalCommand(this, true, (o) =>
+                {
+                    CurrentVolume = 80;
+                });
+
+            VolumeLowButtonCommand = new CrystalCommand(this, true, (o) =>
+                {
+                    CurrentVolume = 25;
+                });
+
+            VolumeMidButtonCommand = new CrystalCommand(this, true, (o) =>
+                {
+                    CurrentVolume = 50;
+                });
+
             InitializeViews();
+        }
+
+        public CrystalCommand VolumeLowButtonCommand { get; set; }
+        public CrystalCommand VolumeMidButtonCommand { get; set; }
+        public CrystalCommand VolumeHighButtonCommand { get; set; }
+
+        public int CurrentVolume
+        {
+            get { return (int)this.GetProperty("CurrentVolume"); }
+            set
+            {
+                this.SetProperty("CurrentVolume", value);
+
+                GlobalHanasuCore.SetVolume(value);
+            }
         }
 
         public CrystalCommand MediaRewindCommand { get; set; }
@@ -169,11 +201,73 @@ namespace Hanasu.ViewModel
             set { this.SetProperty("SongTitleFromPlayer", value); }
         }
 
+        public object SelectedStationSource
+        {
+            get { return this.GetProperty("SelectedStationSource"); }
+            set { this.SetProperty("SelectedStationSource", value); }
+        }
+
+        public string StationSearchFilter
+        {
+            get { return (string)this.GetProperty("StationSearchFilter"); }
+            set
+            {
+                this.SetProperty("StationSearchFilter", value);
+                HandleStationFilter();
+            }
+        }
+
+        private void HandleStationFilter()
+        {
+            var x = CollectionViewSource.GetDefaultView(CatalogStations);
+
+            if (string.IsNullOrWhiteSpace(StationSearchFilter))
+                x.Filter = null;
+            else
+                x.Filter = new Predicate<object>(t =>
+                    {
+                        if (StationSearchFilter == null) return true;
+
+                        var s = (Station)t;
+                        return s.Name.ToLower().StartsWith(StationSearchFilter.ToLower())
+                            || s.Name.ToLower().Contains(StationSearchFilter.ToLower());
+                    });
+
+            return;
+        }
+
         #region Related to view selection
         public ViewBase CurrentSelectedView
         {
-            get { return (ViewBase)this.GetProperty("CurrentSelectedView");}
-            set { this.SetProperty("CurrentSelectedView",value);}
+            get { return (ViewBase)this.GetProperty("CurrentSelectedView"); }
+            set
+            {
+                this.SetProperty("CurrentSelectedView", value);
+
+                IsOnDefaultGridView = value == GridViewObject;
+            }
+        }
+
+        public bool IsOnDefaultGridView
+        {
+            get { return (bool)this.GetProperty("IsOnDefaultGridView"); }
+            set
+            {
+                this.SetProperty("IsOnDefaultGridView", value);
+
+                SwitchListViewView();
+            }
+
+        }
+
+        private void SwitchListViewView()
+        {
+            ViewBase view = IsOnDefaultGridView == true ? (ViewBase)GridViewObject : (ViewBase)ImageViewObject;
+
+            if (view == CurrentSelectedView)
+                return;
+
+            CurrentSelectedView = view;
         }
 
         public GridView GridViewObject { get; set; }
@@ -188,6 +282,8 @@ namespace Hanasu.ViewModel
             ImageViewObject = new ImageHeaderView();
 
             CurrentSelectedView = GridViewObject;
+
+            IsOnDefaultGridView = true;
         }
         #endregion
     }
