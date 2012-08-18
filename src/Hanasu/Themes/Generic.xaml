@@ -57,12 +57,25 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <conv:UriToBitmapImageConverter x:Key="UrlImageConv"/>
 
-    <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource {x:Type ListBox}}" x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type local:ImageHeaderView},ResourceId=ImageHeaderView}">
+    <Style TargetType="{x:Type ListView}" BasedOn='{StaticResource {x:Type ListBox}}' x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type local:ImageHeaderView},ResourceId=ImageHeaderView}">
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="BorderThickness" Value="0.5"/>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Border Background="Black" CornerRadius="4">
+                        <StackPanel>
+                            <Image Margin="3" Source="http://www.ufomafia.com/radiographic.jpg"/>
+                            <!--{Binding Logo, Converter={StaticResource UrlImageConv}, FallbackValue='http://www.ufomafia.com/radiographic.jpg'}"/>-->
+                            <Label Content="{Binding Name}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -95,17 +108,16 @@
                 <DropShadowEffect BlurRadius="2" Color="Black"/>
             </Setter.Value>
         </Setter>-->
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <Border Background="Black" CornerRadius="4">
-                        <StackPanel>
-                            <Image Margin="3" Source="http://www.ufomafia.com/radiographic.jpg"/><!--{Binding Logo, Converter={StaticResource UrlImageConv}, FallbackValue='http://www.ufomafia.com/radiographic.jpg'}"/>-->
-                            <Label Content="{Binding Name}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="ContentTemplate" Value="{StaticResource ResourceKey='ImageHeaderViewItemTemplate'}"/>
     </Style>
+
+    <DataTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type local:ImageHeaderView},ResourceId=ImageHeaderViewItemTemplate}">
+        <Border Background="Black" CornerRadius="4">
+            <StackPanel>
+                <Image Margin="3" Source="http://www.ufomafia.com/radiographic.jpg"/>
+                <!--{Binding Logo, Converter={StaticResource UrlImageConv}, FallbackValue='http://www.ufomafia.com/radiographic.jpg'}"/>-->
+                <Label Content="{Binding Name}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
 </ResourceDictionary>

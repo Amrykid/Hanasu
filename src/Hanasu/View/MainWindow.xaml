@@ -25,6 +25,20 @@
                 <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:IsPlayingToVisibilityConverter x:Key="IsPlayingToVisibilityConv"/>
+            <Style x:Key="ViewChanger" TargetType="ListView">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=GridRB,Path=IsChecked,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <Setter Property="ListView.View" Value="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.GridViewObject, 
+                                                        RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}">
+                        </Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=GridRB,Path=IsChecked,UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <Setter Property="ListView.View" Value="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.ImageViewObject, 
+                                                        RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}">
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -178,7 +192,7 @@
                                             </Grid.ColumnDefinitions>
                                             <Grid Grid.Column="0">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <RadioButton FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonGridView'}" GroupName="StationListView_SelectedView" IsChecked="{Binding IsOnDefaultGridView, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <RadioButton Name="GridRB" FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonGridView'}" GroupName="StationListView_SelectedView" IsChecked="{Binding IsOnDefaultGridView, UpdateSourceTrigger=PropertyChanged}"/>
                                                     <RadioButton FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonImageView'}" GroupName="StationListView_SelectedView"/>
                                                 </StackPanel>
                                             </Grid>
@@ -189,11 +203,11 @@
                                                      metro:TextboxHelper.Watermark="{i18n:CrystalLocalizedValueMarkup Key='StationsSearchFilterWaterMark'}"/>
                                         </Grid>
                                         <ListView Grid.Row="1" Name="StationListView" BorderBrush="White" BorderThickness=".3" FontSize="16"
-                                                  View="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.CurrentSelectedView, 
-                                                        RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}" 
+                                                  Style="{StaticResource ViewChanger}"
                                               DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext}"
                                               SelectedItem="{Binding Path=DataContext.SelectedStation, RelativeSource={RelativeSource FindAncestor, 
-                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}">
+                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}"><!--View="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.CurrentSelectedView, 
+                                                        RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}"--> 
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="MouseDoubleClick">
                                                     <extras:EventToCommand 

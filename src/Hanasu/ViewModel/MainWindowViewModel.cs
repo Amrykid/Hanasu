@@ -276,8 +276,10 @@ namespace Hanasu.ViewModel
         private void InitializeViews()
         {
             GridViewObject = new GridView();
+            //GridViewObject.ColumnHeaderContainerStyle = new Style(typeof(GridViewColumnHeader));
             GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationNameColumn"), DisplayMemberBinding = new Binding("Name") });
             GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationLanguageColumn"), DisplayMemberBinding = new Binding("Language") });
+            //GridViewObject.ColumnHeaderContainerStyle = (Style)Application.Current.FindResource("GridViewColumnHeaderGripper");
 
             ImageViewObject = new ImageHeaderView();
 
