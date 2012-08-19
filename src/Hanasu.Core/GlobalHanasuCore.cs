@@ -85,7 +85,7 @@ namespace Hanasu.Core
             {
                 var ext = url.Segments.Last();
                 ext = ext.Substring(ext.LastIndexOf("."));
-                if (!CurrentPlayer.Supports(ext))
+                if (!CurrentPlayer.Supports(ext) || stat.ExplicitExtension != null)
                 {
                     //pre-process the url here.
                     //stolen code from Hanasu 1.0 because it works like it should. :|
