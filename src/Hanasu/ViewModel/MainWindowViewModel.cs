@@ -14,6 +14,7 @@ using Crystal.Localization;
 using System.Windows;
 using System.IO;
 using Hanasu.Core.Preprocessor;
+using Hanasu.View;
 
 namespace Hanasu.ViewModel
 {
@@ -23,6 +24,8 @@ namespace Hanasu.ViewModel
         public MainWindowViewModel()
         {
             AppDir = new FileInfo(Application.ResourceAssembly.Location).DirectoryName;
+
+            LocalizationManager.ProbeDirectory(AppDir + "\\I18N");
 
             GlobalHanasuCore.Initialize(new Func<string, object, object>(HandleEvents),
                 AppDir + "\\Plugins\\");
@@ -71,8 +74,29 @@ namespace Hanasu.ViewModel
                     CurrentVolume = 50;
                 });
 
+            this.RegisterForMessages("WindowCommandLanguagesRequested");
+
             InitializeViews();
         }
+
+
+        public override bool ReceiveMessage(object source, Crystal.Messaging.Message message)
+        {
+            switch (message.MessageString)
+            {
+                case "WindowCommandLanguagesRequested":
+                    {
+                        LanguageChooseWindow lcw = new LanguageChooseWindow();
+                        lcw.Owner = Application.Current.MainWindow;
+                        lcw.ShowDialog();
+                        lcw.Close();
+                    }
+                    break;
+            }
+
+            return base.ReceiveMessage(source, message);
+        }
+
 
         public CrystalCommand VolumeLowButtonCommand { get; set; }
         public CrystalCommand VolumeMidButtonCommand { get; set; }

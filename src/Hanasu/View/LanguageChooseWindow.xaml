@@ -1,0 +1,56 @@
+﻿<metro:MetroWindow x:Class="Hanasu.View.LanguageChooseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Hanasu.ViewModel"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Crystal"
+        xmlns:msg="clr-namespace:Crystal.Messaging;assembly=Crystal"
+        xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Crystal"
+        xmlns:ccore="clr-namespace:Crystal.Core;assembly=Crystal"
+        Title="Choose a language" Height="359" Width="320" WindowStartupLocation="CenterOwner" ccore:WindowViewModelHelper.AutoBindingClear="True" Topmost="True" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False">
+    <Window.DataContext>
+        <vm:LanguageChooseViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <ListView ItemsSource="{Binding AvailableLocales}" SelectedItem="{Binding SelectedLocale, UpdateSourceTrigger=PropertyChanged}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Label FontSize="18" Grid.Row="0" Content="{Binding Name}"/>
+                                <Label FontSize="16" Grid.Row="1" Content="{Binding EnglishName}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+            <Grid Grid.Row="1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="Auto">
+                    <Button Content="{i18n:CrystalLocalizedValueMarkup Key='GenericAffirmativeButton'}" msg:ButtonMessageHelper.Message="AffirmativeButtonClicked" IsDefault="True" MinWidth="60"/>
+                    <Button Content="{i18n:CrystalLocalizedValueMarkup Key='GenericNegativeButton'}" msg:ButtonMessageHelper.Message="NegativeButtonClicked" IsCancel="True" MinWidth="60"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</metro:MetroWindow>
