@@ -5,6 +5,9 @@ using System.Text;
 using Hanasu.Core.Media;
 using System.ComponentModel.Composition;
 using Hanasu.Core;
+using WMPLib;
+using System.Collections;
+using System.Windows.Forms.Integration;
 
 namespace Hanasu.Player.WMP
 {
@@ -14,6 +17,12 @@ namespace Hanasu.Player.WMP
         AxWMP host = null;
         AxWMPLib.AxWindowsMediaPlayer player = null;
 
+        private Hashtable currentStationAttributes = new Hashtable();
+
+        private string songName = null;
+
+        private WindowsFormsHost wpfhost = null;
+
         public void Initialize()
         {
             host = new AxWMP();
@@ -21,11 +30,40 @@ namespace Hanasu.Player.WMP
             player.settings.autoStart = false;
             player.MediaChange += player_MediaChange;
             player.MediaError += player_MediaError;
+            player.PlayStateChange += player_PlayStateChange;
+            player.uiMode = "none";
+            player.stretchToFit = true;
+            //player.Dock = System.Windows.Forms.DockStyle.Fill;
+            player.enableContextMenu = false;
+            player.SendToBack();
+            host.SendToBack();
+
+            wpfhost = new WindowsFormsHost()
+            {
+                Child = host,
+            };
+        }
+
+        void player_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
+        {
+            switch ((WMPLib.WMPPlayState)e.newState)
+            {
+                case WMPPlayState.wmppsPlaying:
+                    {
+                        parseAttributes();
+
+                        GlobalHanasuCore.OnStationMediaTypeDetected(this, IsVideo);
+                    }
+                    break;
+            }
+
         }
 
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
         {
             GlobalHanasuCore.OnStationConnectionTerminated(this);
+
+            songName = null;
         }
 
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
@@ -37,9 +75,10 @@ namespace Hanasu.Player.WMP
             if (name.StartsWith(GlobalHanasuCore.CurrentStation.Name))
                 GlobalHanasuCore.OnStationTitleDetected(this, name);
             else
-                if (name.Contains(" - "))
+                if (name.Contains(" - ") && songName != name)
                 {
                     GlobalHanasuCore.OnSongTitleDetected(this, name);
+                    songName = name;
                 }
                 else
                 {
@@ -48,6 +87,17 @@ namespace Hanasu.Player.WMP
 
         }
 
+        private void parseAttributes()
+        {
+            currentStationAttributes.Clear();
+            for (int i = 0; i < player.currentMedia.attributeCount; i++)
+            {
+                var x = player.currentMedia.getAttributeName(i);
+                var y = player.currentMedia.getItemInfo(x);
+
+                currentStationAttributes.Add(x, y);
+            }
+        }
 
         public void Play(Uri url)
         {
@@ -58,6 +108,8 @@ namespace Hanasu.Player.WMP
         public void Stop()
         {
             player.Ctlcontrols.stop();
+
+            songName = null;
         }
 
 
@@ -73,6 +125,7 @@ namespace Hanasu.Player.WMP
             {
                 player.MediaChange -= player_MediaChange;
                 player.MediaError -= player_MediaError;
+                player.PlayStateChange -= player_PlayStateChange;
                 //player.close();
 
                 try
@@ -116,6 +169,39 @@ namespace Hanasu.Player.WMP
                 if (player != null)
                     player.settings.volume = value;
             }
+        }
+
+
+        public bool IsVideo
+        {
+            get
+            {
+                if (currentStationAttributes.ContainsKey("MediaType"))
+                    return currentStationAttributes["MediaType"].ToString().ToLower() == "video" || currentStationAttributes["MediaType"].ToString().ToLower() == "photo";
+
+                return false;
+            }
+        }
+
+        public object GetVideoControl()
+        {
+            return wpfhost;
+        }
+
+        public bool IsWMP12OrHigher()
+        {
+            if (player != null)
+            {
+                var x = Version.Parse(player.versionInfo);
+
+                return x.Major >= 12;
+            }
+            else
+            {
+                return Environment.OSVersion.Version.Major > 6 || (Environment.OSVersion.Version.Major > 6 && Environment.OSVersion.Version.Minor >= 1); //Educated guess because Vista (6.0 can only have WMP 11) and 7 (6.1) can have WMP12.
+            }
+
+            return false;
         }
     }
 }

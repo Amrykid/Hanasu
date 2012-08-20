@@ -15,5 +15,8 @@ namespace Hanasu.Core.Media
         bool Supports(string extension);
 
         int Volume { get; set; }
+
+        bool IsVideo { get; }
+        object GetVideoControl();
     }
 }

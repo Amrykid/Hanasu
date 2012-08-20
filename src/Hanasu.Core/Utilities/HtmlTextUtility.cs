@@ -97,6 +97,7 @@ namespace Hanasu.Core.Utilities
 
             switch (ext.ToLower())
             {
+                case "js":
                 case "htm":
                 case "py":
                 case "aspx":

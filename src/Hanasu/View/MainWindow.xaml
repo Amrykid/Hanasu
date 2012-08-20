@@ -212,8 +212,9 @@
                                                   Style="{StaticResource ViewChanger}"
                                               DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext}"
                                               SelectedItem="{Binding Path=DataContext.SelectedStation, RelativeSource={RelativeSource FindAncestor, 
-                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}"><!--View="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.CurrentSelectedView, 
-                                                        RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}"--> 
+                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}">
+                                            <!--View="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.CurrentSelectedView, 
+                                                        RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}"-->
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="MouseDoubleClick">
                                                     <extras:EventToCommand 
@@ -258,7 +259,7 @@
                                         </StackPanel>
                                     </Grid>
                                     <Grid Grid.Column="1">
-                                        <!--Empty, reserved space. May use it for a 'similar songs' sectionr or w/e.-->
+                                        <!--Empty, reserved space. May use it for a 'similar songs' section or w/e.-->
                                     </Grid>
                                 </Grid>
                             </GroupBox>
@@ -267,9 +268,12 @@
                 </Grid>
             </ui:FadeablePanel.UpperPanel>
             <ui:FadeablePanel.LowerPanel>
-                <Grid Name="MediaPlayerGrid">
-
-
+                <Grid Name="MediaPlayerGrid" Panel.ZIndex="0">
+                    <Grid.Children>
+                        <ContentPresenter Content="{Binding UIBackPanelView, UpdateSourceTrigger=PropertyChanged}" Panel.ZIndex="0">
+                            
+                        </ContentPresenter>
+                    </Grid.Children>
                 </Grid>
             </ui:FadeablePanel.LowerPanel>
         </ui:FadeablePanel>

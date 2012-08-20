@@ -17,7 +17,6 @@ namespace Hanasu.Core
         static GlobalHanasuCore()
         {
             if (Initialized == false)
-                //Initialize(null);
                 return;
         }
 
@@ -143,6 +142,7 @@ namespace Hanasu.Core
         public const string NowPlayingStatus = "NowPlayingStatus";
         public const string StationConnectionError = "StationConnectionError";
         public const string StationMultipleServersFound = "StationMultipleServersFound";
+        public const string MediaTypeDetected = "MediaTypeDetected";
 
         public static bool Initialized { get; private set; }
 
@@ -167,6 +167,12 @@ namespace Hanasu.Core
         public static void OnStationTitleDetected(IMediaPlayer player, string stationdata)
         {
             PushMessageToGUI(StationTitleUpdated, stationdata);
+            return;
+        }
+
+        public static void OnStationMediaTypeDetected(IMediaPlayer player, bool IsVideo)
+        {
+            PushMessageToGUI(MediaTypeDetected, IsVideo);
             return;
         }
 
@@ -198,6 +204,14 @@ namespace Hanasu.Core
 
             if (CurrentPlayer != null)
                 CurrentPlayer.Volume = vol;
+        }
+
+        public static object GetPlayerView()
+        {
+            if (CurrentPlayer != null)
+                return CurrentPlayer.GetVideoControl();
+
+            return null;
         }
     }
 }

@@ -49,8 +49,8 @@
                         </VisualStateManager.VisualStateGroups>
 
                         <Grid>
-                            <ContentControl Content="{TemplateBinding UpperPanel}" Panel.ZIndex="25" Opacity="0.7" Name="PART_UpperPanel"/>
-                            <ContentControl Content="{TemplateBinding LowerPanel}" Panel.ZIndex="24" Name="PART_LowerPanel"/>
+                            <ContentControl Content="{TemplateBinding UpperPanel}" Panel.ZIndex="100" Opacity="0.7" Name="PART_UpperPanel"/>
+                            <ContentControl Content="{TemplateBinding LowerPanel}" Panel.ZIndex="90" Name="PART_LowerPanel"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

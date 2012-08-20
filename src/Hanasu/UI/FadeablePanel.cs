@@ -101,12 +101,14 @@ namespace Hanasu.UI
                         case FadeablePanelState.UpperFocus:
                             PART_LowerPanel.IsEnabled = false;
                             PART_UpperPanel.IsEnabled = true;
-                            PART_UpperPanel.SetValue(Panel.ZIndexProperty, 25);
+                            PART_LowerPanel.IsHitTestVisible = false;
+                            PART_UpperPanel.SetValue(Panel.ZIndexProperty, 100);
                             break;
                         case FadeablePanelState.LowerFocus:
                             PART_UpperPanel.IsEnabled = false;
                             PART_LowerPanel.IsEnabled = true;
-                            PART_UpperPanel.SetValue(Panel.ZIndexProperty, 0);
+                            PART_LowerPanel.IsHitTestVisible = true;
+                            PART_UpperPanel.SetValue(Panel.ZIndexProperty, 50);
                             break;
                     }
                 }));

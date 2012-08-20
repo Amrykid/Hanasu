@@ -5,44 +5,29 @@ using System.Text;
 using Crystal.Core;
 using Crystal.Localization;
 using System.Windows;
+using Crystal.Messaging;
 
 namespace Hanasu.ViewModel
 {
-    public class LanguageChooseViewModel: BaseViewModel
+    public class LanguageChooseViewModel : BaseViewModel
     {
         public LanguageChooseViewModel()
         {
             AvailableLocales = LocalizationManager.AvailableLocales;
             SelectedLocale = LocalizationManager.CurrentLocale;
-
-            RegisterForMessages("AffirmativeButtonClicked");
-            RegisterForMessages("NegativeButtonClicked");
         }
 
-        public override bool ReceiveMessage(object source, Crystal.Messaging.Message message)
+        [MessageHandler("AffirmativeButtonClicked")]
+        public void HandleOkayButton(object data)
         {
-            switch (message.MessageString)
-            {
-                case "AffirmativeButtonClicked":
-                    LocalizationManager.SwitchLocale(SelectedLocale);
-                    CloseWindow();
-                    return true;
-                case "NegativeButtonClicked":
-                    CloseWindow();
-                    return true;
-                default:
-                    return base.ReceiveMessage(source, message);
-            }
+            LocalizationManager.SwitchLocale(SelectedLocale);
+            ViewModelOperations.CloseWindow(this, true);
         }
 
-        private void CloseWindow()
+        [MessageHandler("NegativeButtonClicked")]
+        public void HandleCancelButton(object data)
         {
-            foreach (Window w in Application.Current.Windows)
-                if (w.DataContext == this)
-                {
-                    w.Close();
-                    break;
-                }
+            ViewModelOperations.CloseWindow(this, false);
         }
 
         public IList<LocaleDataFrame> AvailableLocales

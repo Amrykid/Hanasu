@@ -83,6 +83,13 @@ namespace Hanasu.ViewModel
             InitializeViews();
         }
 
+        public object UIBackPanelView
+        {
+            get { return this.GetProperty("UIBackPanelView"); }
+            set { this.SetProperty("UIBackPanelView", value); }
+        }
+
+
         [MessageHandler("WindowCommandLanguagesRequested")]
         public void ShowLanguageSelectionWindow(object data)
         {
@@ -167,10 +174,26 @@ namespace Hanasu.ViewModel
                     {
                         StationTitleFromPlayer = null;
                         SongTitleFromPlayer = null;
+                        UIBackPanelView = null;
                         break;
                     }
                 case GlobalHanasuCore.StationConnectionError:
                     {
+                        //TODO: Show some sort of error dialog.
+
+                        break;
+                    }
+                case GlobalHanasuCore.MediaTypeDetected:
+                    {
+
+                        bool isvideo = (bool)data;
+
+                        if (isvideo)
+                        {
+                            //UIPanelState = FadeablePanelState.LowerFocus;
+                            UIBackPanelView = GlobalHanasuCore.GetPlayerView();
+                        }
+
                         break;
                     }
                 case GlobalHanasuCore.StationMultipleServersFound:
@@ -202,7 +225,6 @@ namespace Hanasu.ViewModel
 
                         if (dResult != true)
                             res = new Tuple<bool, IMultiStreamEntry>(false, null);
-
 
                         return res;
                     }
