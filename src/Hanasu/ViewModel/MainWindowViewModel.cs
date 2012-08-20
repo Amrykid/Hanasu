@@ -15,6 +15,8 @@ using System.Windows;
 using System.IO;
 using Hanasu.Core.Preprocessor;
 using Hanasu.View;
+using Crystal.Messaging;
+using System.Threading;
 
 namespace Hanasu.ViewModel
 {
@@ -25,7 +27,11 @@ namespace Hanasu.ViewModel
         {
             AppDir = new FileInfo(Application.ResourceAssembly.Location).DirectoryName;
 
-            LocalizationManager.ProbeDirectory(AppDir + "\\I18N");
+            try
+            {
+                LocalizationManager.ProbeDirectory(AppDir + "\\I18N");
+            }
+            catch (Exception) { }
 
             GlobalHanasuCore.Initialize(new Func<string, object, object>(HandleEvents),
                 AppDir + "\\Plugins\\");
@@ -74,27 +80,16 @@ namespace Hanasu.ViewModel
                     CurrentVolume = 50;
                 });
 
-            this.RegisterForMessages("WindowCommandLanguagesRequested");
-
             InitializeViews();
         }
 
-
-        public override bool ReceiveMessage(object source, Crystal.Messaging.Message message)
+        [MessageHandler("WindowCommandLanguagesRequested")]
+        public void ShowLanguageSelectionWindow(object data)
         {
-            switch (message.MessageString)
-            {
-                case "WindowCommandLanguagesRequested":
-                    {
-                        LanguageChooseWindow lcw = new LanguageChooseWindow();
-                        lcw.Owner = Application.Current.MainWindow;
-                        lcw.ShowDialog();
-                        lcw.Close();
-                    }
-                    break;
-            }
-
-            return base.ReceiveMessage(source, message);
+            LanguageChooseWindow lcw = new LanguageChooseWindow();
+            lcw.Owner = Application.Current.MainWindow;
+            lcw.ShowDialog();
+            lcw.Close();
         }
 
 
@@ -186,10 +181,28 @@ namespace Hanasu.ViewModel
 
                         Tuple<bool, IMultiStreamEntry> res = null;
 
-                        if (MessageBox.Show("FIRST?", "CHOOSE FIRST?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                            res = new Tuple<bool, IMultiStreamEntry>(true, entries[0]);
-                        else
+                        ChooseStationStreamWindow cssw = new ChooseStationStreamWindow();
+
+                        Messenger.PushMessage(this, "StationStreamWindowStreamsPushed", entries);
+
+                        cssw.Owner = Application.Current.MainWindow;
+
+                        ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+                            {
+                                res = new Tuple<bool, IMultiStreamEntry>(true, (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data);
+                            }));
+
+
+
+                        var dResult = cssw.ShowDialog();
+
+                        Thread.Sleep(1000);
+
+                        cssw.Close();
+
+                        if (dResult != true)
                             res = new Tuple<bool, IMultiStreamEntry>(false, null);
+
 
                         return res;
                     }
@@ -197,7 +210,6 @@ namespace Hanasu.ViewModel
 
             return null;
         }
-
         private void PlaySelectedStation(object o)
         {
             if (o == null) return;

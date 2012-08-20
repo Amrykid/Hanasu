@@ -89,5 +89,23 @@ namespace Hanasu.Core.Utilities
         {
             return text.Replace(" ", "%20");
         }
+
+        public static bool ExtensionIsWebExtension(string ext)
+        {
+            if (ext.StartsWith("."))
+                ext = ext.Substring(1);
+
+            switch (ext.ToLower())
+            {
+                case "htm":
+                case "py":
+                case "aspx":
+                case "asp":
+                case "html":
+                case "php": return true;
+                default:
+                    return false;
+            }
+        }
     }
 }

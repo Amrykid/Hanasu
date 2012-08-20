@@ -8,6 +8,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
 using Hanasu.Core.Stations;
 using Hanasu.Core.Preprocessor;
+using Hanasu.Core.Utilities;
 
 namespace Hanasu.Core
 {
@@ -85,7 +86,9 @@ namespace Hanasu.Core
             {
                 var ext = url.Segments.Last();
                 ext = ext.Substring(ext.LastIndexOf("."));
-                if (!CurrentPlayer.Supports(ext) || stat.ExplicitExtension != null)
+
+
+                if (!CurrentPlayer.Supports(ext) || (HtmlTextUtility.ExtensionIsWebExtension(ext) && stat.ExplicitExtension != null))
                 {
                     //pre-process the url here.
                     //stolen code from Hanasu 1.0 because it works like it should. :|

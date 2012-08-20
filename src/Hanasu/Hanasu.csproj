@@ -93,6 +93,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\ChooseStationStreamWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\LanguageChooseWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,8 +113,12 @@
     <Compile Include="Converters\UriToBitmapImageConverter.cs" />
     <Compile Include="UI\FadeablePanel.cs" />
     <Compile Include="UI\ImageHeaderView.cs" />
+    <Compile Include="ViewModel\ChooseStationStreamViewModel.cs" />
     <Compile Include="ViewModel\LanguageChooseViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="View\ChooseStationStreamWindow.xaml.cs">
+      <DependentUpon>ChooseStationStreamWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LanguageChooseWindow.xaml.cs">
       <DependentUpon>LanguageChooseWindow.xaml</DependentUpon>
     </Compile>
@@ -190,7 +198,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

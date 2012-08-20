@@ -177,7 +177,7 @@
                                     <ColumnDefinition Width="100*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0">
-                                    <TreeView FontSize="17" Name="LibraryTreeView">
+                                    <TreeView FontSize="17" Name="LibraryTreeView" MinWidth="240">
                                         <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='LibraryTabHeader'}">
                                             <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='HanasuCatalogTreeViewHeader'}" DataContext="{Binding CatalogStations,UpdateSourceTrigger=PropertyChanged}"/>
                                             <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='CustomStationsTreeViewHeader'}"/>
@@ -250,9 +250,9 @@
                                             <Grid Margin="10 7 0 0">
                                                 <StackPanel>
                                                     <Label FontSize="18" 
-                                                           Content="{Binding SongTitleFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
+                                                           Content="{Binding SongTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>
                                                     <Label FontSize="17" 
-                                                           Content="{Binding StationTitleFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
+                                                           Content="{Binding StationTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>
                                                 </StackPanel>
                                             </Grid>
                                         </StackPanel>
