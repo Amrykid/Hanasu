@@ -240,7 +240,7 @@ namespace Hanasu.ViewModel
 
             if (stat.Name == null) return;
 
-            GlobalHanasuCore.PlayStation(stat);
+            GlobalHanasuCore.PlayStation(stat); 
         }
 
         private void StopSelectedStation(object o)

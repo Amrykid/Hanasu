@@ -8,6 +8,7 @@ using Hanasu.Core;
 using WMPLib;
 using System.Collections;
 using System.Windows.Forms.Integration;
+using System.Windows.Controls;
 
 namespace Hanasu.Player.WMP
 {
@@ -25,23 +26,7 @@ namespace Hanasu.Player.WMP
 
         public void Initialize()
         {
-            host = new AxWMP();
-            player = host.axWindowsMediaPlayer1;
-            player.settings.autoStart = false;
-            player.MediaChange += player_MediaChange;
-            player.MediaError += player_MediaError;
-            player.PlayStateChange += player_PlayStateChange;
-            player.uiMode = "none";
-            player.stretchToFit = true;
-            //player.Dock = System.Windows.Forms.DockStyle.Fill;
-            player.enableContextMenu = false;
-            player.SendToBack();
-            host.SendToBack();
-
-            wpfhost = new WindowsFormsHost()
-            {
-                Child = host,
-            };
+            return;
         }
 
         void player_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
@@ -99,27 +84,128 @@ namespace Hanasu.Player.WMP
             }
         }
 
-        public void Play(Uri url)
+        private MediaElement mediaElement = null;
+        private MediaType mType;
+        private bool mediaElementPlaying = false;
+
+        public void Play(Uri url, MediaType type = MediaType.Audio)
         {
-            player.URL = url.ToString();
-            player.Ctlcontrols.play();
+            if (type != MediaType.Video)
+            {
+                if (player == null)
+                {
+                    host = new AxWMP();
+                    player = host.axWindowsMediaPlayer1;
+                    player.settings.autoStart = false;
+                    player.MediaChange += player_MediaChange;
+                    player.MediaError += player_MediaError;
+                    player.PlayStateChange += player_PlayStateChange;
+                    player.uiMode = "none";
+                    player.stretchToFit = true;
+                    //player.Dock = System.Windows.Forms.DockStyle.Fill;
+                    player.enableContextMenu = false;
+                    player.SendToBack();
+                    host.SendToBack();
+
+                    wpfhost = new WindowsFormsHost()
+                    {
+                        Child = host,
+                    };
+                }
+
+                player.URL = url.ToString();
+                player.Ctlcontrols.play();
+
+                if (mediaElement != null)
+                {
+                    ShutdownMediaElement();
+                }
+            }
+            else
+            {
+                if (mediaElement == null)
+                {
+                    mediaElement = new MediaElement();
+                    mediaElement.LoadedBehavior = MediaState.Manual;
+                    mediaElement.UnloadedBehavior = MediaState.Manual;
+                    mediaElement.MediaOpened += (mediaElement_MediaOpened);
+                    mediaElement.MediaFailed += (mediaElement_MediaFailed);
+                    mediaElement.MediaEnded += (mediaElement_MediaEnded);
+                }
+
+                mediaElement.Source = url;
+                mediaElement.Play();
+
+                GlobalHanasuCore.OnStationMediaTypeDetected(this, true); //Hack to force Hanasu to grab the video control.
+
+                if (player != null)
+                    ShutdownWMP();
+            }
+
+            mType = type;
+        }
+
+        private void ShutdownMediaElement()
+        {
+            if (mediaElement != null)
+            {
+                mediaElement.MediaOpened -= (mediaElement_MediaOpened);
+                mediaElement.MediaFailed -= (mediaElement_MediaFailed);
+                mediaElement.MediaEnded -= (mediaElement_MediaEnded);
+
+                try
+                {
+                    mediaElement.Close();
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        void mediaElement_MediaEnded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            mediaElementPlaying = false;
+        }
+
+        void mediaElement_MediaFailed(object sender, System.Windows.ExceptionRoutedEventArgs e)
+        {
+            mediaElementPlaying = false;
+        }
+
+        void mediaElement_MediaOpened(object sender, System.Windows.RoutedEventArgs e)
+        {
+            mediaElementPlaying = true;
         }
 
         public void Stop()
         {
-            player.Ctlcontrols.stop();
+            if (mType == MediaType.Video)
+            {
+                mediaElement.Stop();
+            }
+            else
+            {
+                player.Ctlcontrols.stop();
 
-            songName = null;
+                songName = null;
+            }
         }
 
 
         public bool IsPlaying
         {
-            get { return player.playState == WMPLib.WMPPlayState.wmppsPlaying || player.playState == WMPLib.WMPPlayState.wmppsBuffering; }
+            get { return mType == MediaType.Video ? mediaElementPlaying : (player.playState == WMPLib.WMPPlayState.wmppsPlaying || player.playState == WMPLib.WMPPlayState.wmppsBuffering); }
         }
 
 
         public void Shutdown()
+        {
+            ShutdownWMP();
+            ShutdownMediaElement();
+        }
+
+        private void ShutdownWMP()
         {
             if (player != null)
             {
@@ -161,13 +247,25 @@ namespace Hanasu.Player.WMP
             {
                 if (player != null)
                     return player.settings.volume;
+                if (mediaElement != null)
+                    return (int)mediaElement.Volume;
 
                 return 0;
             }
             set
             {
                 if (player != null)
+                {
                     player.settings.volume = value;
+                    return;
+                }
+
+                if (mediaElement != null)
+                {
+                    mediaElement.Volume = value;
+                    return;
+                }
+
             }
         }
 
@@ -176,16 +274,19 @@ namespace Hanasu.Player.WMP
         {
             get
             {
-                if (currentStationAttributes.ContainsKey("MediaType"))
-                    return currentStationAttributes["MediaType"].ToString().ToLower() == "video" || currentStationAttributes["MediaType"].ToString().ToLower() == "photo";
+                if (mType == MediaType.Auto)
+                {
+                    if (currentStationAttributes.ContainsKey("MediaType"))
+                        return currentStationAttributes["MediaType"].ToString().ToLower() == "video" || currentStationAttributes["MediaType"].ToString().ToLower() == "photo";
+                }
 
-                return false;
+                return mType == MediaType.Video;
             }
         }
 
         public object GetVideoControl()
         {
-            return wpfhost;
+            return mediaElement;
         }
 
         public bool IsWMP12OrHigher()

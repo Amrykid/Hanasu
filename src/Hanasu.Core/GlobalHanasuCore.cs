@@ -81,50 +81,55 @@ namespace Hanasu.Core
 
             var url = stat.DataSource;
 
-            if (url.Segments.Last().Contains("."))
+            if (CurrentStation.StationType == StationType.Radio)
             {
-                var ext = url.Segments.Last();
-                ext = ext.Substring(ext.LastIndexOf("."));
 
-
-                if (!CurrentPlayer.Supports(ext) || (HtmlTextUtility.ExtensionIsWebExtension(ext) && stat.ExplicitExtension != null))
+                if (url.Segments.Last().Contains("."))
                 {
-                    //pre-process the url here.
-                    //stolen code from Hanasu 1.0 because it works like it should. :|
-                   var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
+                    var ext = url.Segments.Last();
+                    ext = ext.Substring(ext.LastIndexOf("."));
 
-                   if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
-                   {
-                       var p = (Preprocessor.MultiStreamPreprocessor)pro;
 
-                       var entries = p.Parse(url);
+                    if (!CurrentPlayer.Supports(ext) || (HtmlTextUtility.ExtensionIsWebExtension(ext) && stat.ExplicitExtension != null))
+                    {
+                        //pre-process the url here.
+                        //stolen code from Hanasu 1.0 because it works like it should. :|
+                        var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
 
-                       if (entries.Length == 0)
-                       {
-                           return;
-                       }
-                       else if (entries.Length == 1)
-                       {
-                           url = new Uri(entries[0].File);
-                       }
-                       else
-                       {
-                           var result = (Tuple<bool,IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
+                        if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
+                        {
+                            var p = (Preprocessor.MultiStreamPreprocessor)pro;
 
-                           if (result == null) return;
+                            var entries = p.Parse(url);
 
-                           if (result.Item1 == false) return;
-                       }
-                   }
+                            if (entries.Length == 0)
+                            {
+                                return;
+                            }
+                            else if (entries.Length == 1)
+                            {
+                                url = new Uri(entries[0].File);
+                            }
+                            else
+                            {
+                                var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
 
-                   Preprocessor.PreprocessorService.Process(ref url);
+                                if (result == null) return;
+
+                                if (result.Item1 == false) return;
+                            }
+                        }
+
+                        Preprocessor.PreprocessorService.Process(ref url);
+                    }
                 }
             }
 
             try
             {
                 CurrentStation = stat;
-                CurrentPlayer.Play(url);
+                CurrentPlayer.Play(url, CurrentStation.StationType == StationType.Radio ? MediaType.Audio : MediaType.Video);
+                PushMessageToGUI(NowPlayingReset, null);
                 PushMessageToGUI(NowPlayingStatus, true);
             }
             catch (Exception)

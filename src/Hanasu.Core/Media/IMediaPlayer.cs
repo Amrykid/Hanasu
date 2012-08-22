@@ -8,7 +8,7 @@ namespace Hanasu.Core.Media
     public interface IMediaPlayer
     {
         void Initialize();
-        void Play(Uri url);
+        void Play(Uri url, MediaType type = MediaType.Audio);
         void Stop();
         bool IsPlaying { get; }
         void Shutdown();
