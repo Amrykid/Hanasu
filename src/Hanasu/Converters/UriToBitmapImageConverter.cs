@@ -38,29 +38,29 @@ namespace Hanasu.Converters
                     else
                         url = new Uri((string)value, UriKind.Absolute);
 
+
                     image.UriSource = url;
+                    //if (parameter != null)
+                    //{
+                    //    if (parameter is int[])
+                    //    {
+                    //        int[] info = (int[])parameter;
 
-                    if (parameter != null)
-                    {
-                        if (parameter is int[])
-                        {
-                            int[] info = (int[])parameter;
+                    //        image.DecodePixelHeight = info[0];
+                    //        image.DecodePixelWidth = info[1];
+                    //    }
+                    //    else if (parameter is int)
+                    //    {
+                    //        image.DecodePixelWidth = (int)parameter;
+                    //    }
+                    //    else if (parameter is string)
+                    //    {
+                    //        int outint = 0;
 
-                            image.DecodePixelHeight = info[0];
-                            image.DecodePixelWidth = info[1];
-                        }
-                        else if (parameter is int)
-                        {
-                            image.DecodePixelWidth = (int)parameter;
-                        }
-                        else if (parameter is string)
-                        {
-                            int outint = 0;
-
-                            if (int.TryParse((string)parameter, out outint))
-                                image.DecodePixelWidth = (int)outint;
-                        }
-                    }
+                    //        if (int.TryParse((string)parameter, out outint))
+                    //            image.DecodePixelWidth = (int)outint;
+                    //    }
+                    //}
 
                     image.EndInit();
                 }
@@ -74,10 +74,13 @@ namespace Hanasu.Converters
             }
             else
             {
-                //image = new BitmapImage();
-                //image.BeginInit();
-                //image.UriSource = new Uri("pack://application:,,,/Hanasu;component/Resources/cancel.png", UriKind.Absolute);
-                //image.EndInit();
+                if (parameter != null)
+                {
+                    image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(parameter.ToString(), UriKind.Absolute);
+                    image.EndInit();
+                }
             }
 
             return image;

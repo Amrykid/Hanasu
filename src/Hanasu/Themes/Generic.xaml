@@ -68,8 +68,11 @@
                 <DataTemplate>
                     <Border Background="Black" CornerRadius="4">
                         <StackPanel>
-                            <Image Margin="3" Source="http://www.ufomafia.com/radiographic.jpg"/>
-                            <!--{Binding Logo, Converter={StaticResource UrlImageConv}, FallbackValue='http://www.ufomafia.com/radiographic.jpg'}"/>-->
+                            <Image Margin="3" Height="100">
+                                <Image.Source>
+                                    <Binding Path="Logo" Converter="{StaticResource UrlImageConv}" IsAsync="True" ConverterParameter="http://www.ufomafia.com/radiographic.jpg"/>
+                                </Image.Source>
+                            </Image>
                             <Label Content="{Binding Name}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Border>
@@ -114,8 +117,7 @@
     <DataTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type local:ImageHeaderView},ResourceId=ImageHeaderViewItemTemplate}">
         <Border Background="Black" CornerRadius="4">
             <StackPanel>
-                <Image Margin="3" Source="http://www.ufomafia.com/radiographic.jpg"/>
-                <!--{Binding Logo, Converter={StaticResource UrlImageConv}, FallbackValue='http://www.ufomafia.com/radiographic.jpg'}"/>-->
+                <Image Margin="3" Source="{Binding Logo, Converter={StaticResource UrlImageConv}, FallbackValue='http://www.ufomafia.com/radiographic.jpg'}"/>
                 <Label Content="{Binding Name}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
             </StackPanel>
         </Border>

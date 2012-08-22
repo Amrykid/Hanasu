@@ -79,10 +79,11 @@ namespace Hanasu.ViewModel
                 {
                     CurrentVolume = 50;
                 });
-
-            InitializeViews();
         }
 
+        /// <summary>
+        /// Not sure if this should be in this view model or in the view's code behind
+        /// </summary>
         public object UIBackPanelView
         {
             get { return this.GetProperty("UIBackPanelView"); }
@@ -293,89 +294,5 @@ namespace Hanasu.ViewModel
 
             return;
         }
-
-        #region Related to view selection
-        public ViewBase CurrentSelectedView
-        {
-            get { return (ViewBase)this.GetProperty("CurrentSelectedView"); }
-            set
-            {
-                this.SetProperty("CurrentSelectedView", value);
-
-                IsOnDefaultGridView = value == GridViewObject;
-            }
-        }
-
-        public Style SelectedStyle
-        {
-            get { return (Style)this.GetProperty("SelectedStyle"); }
-            set
-            {
-                this.SetProperty("SelectedStyle", value);
-
-                IsOnDefaultGridView = value == GridViewStyle;
-            }
-        }
-
-        public bool IsOnDefaultGridView
-        {
-            get { return (bool)this.GetProperty("IsOnDefaultGridView"); }
-            set
-            {
-                this.SetProperty("IsOnDefaultGridView", value);
-
-                SwitchListViewView();
-            }
-
-        }
-
-        private void SwitchListViewView()
-        {
-            ViewBase view = IsOnDefaultGridView == true ? (ViewBase)GridViewObject : (ViewBase)ImageViewObject;
-            Style style = IsOnDefaultGridView == true ? GridViewStyle : ImageViewStyle;
-
-            if (view == CurrentSelectedView)
-                return;
-            if (style == SelectedStyle)
-                return;
-
-            SelectedStyle = style;
-            CurrentSelectedView = view;
-        }
-
-        public GridView GridViewObject { get; set; }
-        public ImageHeaderView ImageViewObject { get; set; }
-
-        private void InitializeViews()
-        {
-            GridViewObject = new GridView();
-            //GridViewObject.ColumnHeaderContainerStyle = new Style(typeof(GridViewColumnHeader));
-            GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationNameColumn"), DisplayMemberBinding = new Binding("Name") });
-            GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationLanguageColumn"), DisplayMemberBinding = new Binding("Language") });
-            //GridViewObject.ColumnHeaderContainerStyle = (Style)Application.Current.FindResource("GridViewColumnHeaderGripper");
-
-            ImageViewObject = new ImageHeaderView();
-
-            CurrentSelectedView = GridViewObject;
-
-            GridViewStyle = new Style();
-            GridViewStyle.Setters.Add(new Setter(ListView.ViewProperty, GridViewObject));
-
-            //http://stackoverflow.com/questions/1406982/get-the-style-of-a-control-staticresource-xtype-textblock-in-code-behind
-
-            ImageViewStyle = new Style(typeof(ListView), 
-                (Style)Application.Current.FindResource(typeof(ListBox)));
-            ImageViewStyle.Setters.Add(new Setter(ListView.ViewProperty, ImageViewObject));
-
-            SelectedStyle = GridViewStyle;
-
-            IsOnDefaultGridView = true;
-        }
-
-        public Style ImageViewStyle { 
-            get; 
-            set; }
-        public Style GridViewStyle { get; set; }
-        #endregion
     }
 }

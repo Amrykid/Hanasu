@@ -198,7 +198,8 @@
                                             </Grid.ColumnDefinitions>
                                             <Grid Grid.Column="0">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <RadioButton Name="GridRB" FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonGridView'}" GroupName="StationListView_SelectedView" IsChecked="{Binding IsOnDefaultGridView, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <RadioButton Name="GridRB" FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonGridView'}" GroupName="StationListView_SelectedView" IsChecked="{Binding Path=IsOnDefaultGridView, RelativeSource={RelativeSource FindAncestor, 
+                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}"/>
                                                     <RadioButton FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonImageView'}" GroupName="StationListView_SelectedView"/>
                                                 </StackPanel>
                                             </Grid>
@@ -209,7 +210,7 @@
                                                      metro:TextboxHelper.Watermark="{i18n:CrystalLocalizedValueMarkup Key='StationsSearchFilterWaterMark'}"/>
                                         </Grid>
                                         <ListView Grid.Row="1" Name="StationListView" BorderBrush="White" BorderThickness=".3" FontSize="16"
-                                                  Style="{Binding Path=DataContext.SelectedStyle, RelativeSource={RelativeSource FindAncestor, 
+                                                  Style="{Binding Path=SelectedStyle, RelativeSource={RelativeSource FindAncestor, 
                                                             AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}"
                                               DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext}"
                                               SelectedItem="{Binding Path=DataContext.SelectedStation, RelativeSource={RelativeSource FindAncestor, 
