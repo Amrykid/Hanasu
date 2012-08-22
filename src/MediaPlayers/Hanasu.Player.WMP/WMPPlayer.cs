@@ -195,7 +195,8 @@ namespace Hanasu.Player.WMP
             }
             else
             {
-                player.Ctlcontrols.stop();
+                if (player != null)
+                    player.Ctlcontrols.stop();
 
                 songName = null;
             }

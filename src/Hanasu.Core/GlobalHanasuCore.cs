@@ -81,7 +81,7 @@ namespace Hanasu.Core
 
             var url = stat.DataSource;
 
-            if (CurrentStation.StationType == StationType.Radio)
+            if (stat.StationType == StationType.Radio)
             {
 
                 if (url.Segments.Last().Contains("."))

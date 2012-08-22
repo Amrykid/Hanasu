@@ -175,7 +175,9 @@ namespace Hanasu.ViewModel
                     {
                         StationTitleFromPlayer = null;
                         SongTitleFromPlayer = null;
-                        UIBackPanelView = null;
+
+                        if (GlobalHanasuCore.CurrentStation.StationType == StationType.Radio)
+                            UIBackPanelView = null;
                         break;
                     }
                 case GlobalHanasuCore.StationConnectionError:
@@ -218,12 +220,15 @@ namespace Hanasu.ViewModel
 
                         var dResult = cssw.ShowDialog();
 
-                        Thread.Sleep(1000);
-
-                        cssw.Close();
-
                         if (dResult != true)
                             res = new Tuple<bool, IMultiStreamEntry>(false, null);
+                        else
+                        {
+
+                            Thread.Sleep(500);
+
+                            cssw.Close();
+                        }
 
                         return res;
                     }
@@ -233,11 +238,14 @@ namespace Hanasu.ViewModel
         }
         private void PlaySelectedStation(object o)
         {
+
             if (o == null) return;
 
             var stat = (Station)o;
 
             if (stat.Name == null) return;
+
+            GlobalHanasuCore.StopStation();
 
             GlobalHanasuCore.PlayStation(stat);
 
