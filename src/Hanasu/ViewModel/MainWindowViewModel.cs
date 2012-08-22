@@ -238,7 +238,9 @@ namespace Hanasu.ViewModel
 
             if (stat.Name == null) return;
 
-            GlobalHanasuCore.PlayStation(stat); 
+            GlobalHanasuCore.PlayStation(stat);
+
+            GlobalHanasuCore.SetVolume(CurrentVolume);
         }
 
         private void StopSelectedStation(object o)
@@ -304,6 +306,17 @@ namespace Hanasu.ViewModel
             }
         }
 
+        public Style SelectedStyle
+        {
+            get { return (Style)this.GetProperty("SelectedStyle"); }
+            set
+            {
+                this.SetProperty("SelectedStyle", value);
+
+                IsOnDefaultGridView = value == GridViewStyle;
+            }
+        }
+
         public bool IsOnDefaultGridView
         {
             get { return (bool)this.GetProperty("IsOnDefaultGridView"); }
@@ -319,10 +332,14 @@ namespace Hanasu.ViewModel
         private void SwitchListViewView()
         {
             ViewBase view = IsOnDefaultGridView == true ? (ViewBase)GridViewObject : (ViewBase)ImageViewObject;
+            Style style = IsOnDefaultGridView == true ? GridViewStyle : ImageViewStyle;
 
             if (view == CurrentSelectedView)
                 return;
+            if (style == SelectedStyle)
+                return;
 
+            SelectedStyle = style;
             CurrentSelectedView = view;
         }
 
@@ -341,8 +358,24 @@ namespace Hanasu.ViewModel
 
             CurrentSelectedView = GridViewObject;
 
+            GridViewStyle = new Style();
+            GridViewStyle.Setters.Add(new Setter(ListView.ViewProperty, GridViewObject));
+
+            //http://stackoverflow.com/questions/1406982/get-the-style-of-a-control-staticresource-xtype-textblock-in-code-behind
+
+            ImageViewStyle = new Style(typeof(ListView), 
+                (Style)Application.Current.FindResource(typeof(ListBox)));
+            ImageViewStyle.Setters.Add(new Setter(ListView.ViewProperty, ImageViewObject));
+
+            SelectedStyle = GridViewStyle;
+
             IsOnDefaultGridView = true;
         }
+
+        public Style ImageViewStyle { 
+            get; 
+            set; }
+        public Style GridViewStyle { get; set; }
         #endregion
     }
 }

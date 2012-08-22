@@ -26,7 +26,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:IsPlayingToVisibilityConverter x:Key="IsPlayingToVisibilityConv"/>
-            <Style x:Key="ViewChanger" TargetType="ListView">
+            <!--<Style x:Key="ViewChanger" TargetType="ListView">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding ElementName=GridRB,Path=IsChecked,UpdateSourceTrigger=PropertyChanged}" Value="True">
                         <Setter Property="ListView.View" Value="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.GridViewObject, 
@@ -39,7 +39,7 @@
                         </Setter>
                     </DataTrigger>
                 </Style.Triggers>
-            </Style>
+            </Style>-->
         </ResourceDictionary>
     </Window.Resources>
     <metro:MetroWindow.WindowCommands>
@@ -209,7 +209,8 @@
                                                      metro:TextboxHelper.Watermark="{i18n:CrystalLocalizedValueMarkup Key='StationsSearchFilterWaterMark'}"/>
                                         </Grid>
                                         <ListView Grid.Row="1" Name="StationListView" BorderBrush="White" BorderThickness=".3" FontSize="16"
-                                                  Style="{StaticResource ViewChanger}"
+                                                  Style="{Binding Path=DataContext.SelectedStyle, RelativeSource={RelativeSource FindAncestor, 
+                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}"
                                               DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext}"
                                               SelectedItem="{Binding Path=DataContext.SelectedStation, RelativeSource={RelativeSource FindAncestor, 
                                                             AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}">
