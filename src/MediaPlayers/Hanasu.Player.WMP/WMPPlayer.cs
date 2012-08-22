@@ -131,6 +131,7 @@ namespace Hanasu.Player.WMP
                     mediaElement.MediaOpened += (mediaElement_MediaOpened);
                     mediaElement.MediaFailed += (mediaElement_MediaFailed);
                     mediaElement.MediaEnded += (mediaElement_MediaEnded);
+                    mediaElement.ScriptCommand += (mediaElement_ScriptCommand);
                 }
 
                 mediaElement.Source = url;
@@ -145,6 +146,13 @@ namespace Hanasu.Player.WMP
             mType = type;
         }
 
+        void mediaElement_ScriptCommand(object sender, System.Windows.MediaScriptCommandRoutedEventArgs e)
+        {
+#if DEBUG
+            //System.Windows.MessageBox.Show("ScriptCommand Value: " + e.ParameterValue, "ScriptCommand Type: " + e.ParameterType);
+#endif
+        }
+
         private void ShutdownMediaElement()
         {
             if (mediaElement != null)
@@ -152,6 +160,7 @@ namespace Hanasu.Player.WMP
                 mediaElement.MediaOpened -= (mediaElement_MediaOpened);
                 mediaElement.MediaFailed -= (mediaElement_MediaFailed);
                 mediaElement.MediaEnded -= (mediaElement_MediaEnded);
+                mediaElement.ScriptCommand -= (mediaElement_ScriptCommand);
 
                 try
                 {

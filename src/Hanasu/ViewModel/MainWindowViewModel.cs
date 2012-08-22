@@ -180,12 +180,10 @@ namespace Hanasu.ViewModel
                 case GlobalHanasuCore.StationConnectionError:
                     {
                         //TODO: Show some sort of error dialog.
-
                         break;
                     }
                 case GlobalHanasuCore.MediaTypeDetected:
                     {
-
                         bool isvideo = (bool)data;
 
                         if (isvideo)
