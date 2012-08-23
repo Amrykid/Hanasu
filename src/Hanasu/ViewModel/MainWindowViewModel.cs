@@ -182,6 +182,8 @@ namespace Hanasu.ViewModel
                         StationTitleFromPlayer = null;
                         SongTitleFromPlayer = null;
 
+                        NowPlayingImage = null;
+
                         if (GlobalHanasuCore.CurrentStation.StationType == StationType.Radio)
                             UIBackPanelView = null;
                         break;
@@ -252,6 +254,9 @@ namespace Hanasu.ViewModel
             GlobalHanasuCore.PlayStation(stat);
 
             GlobalHanasuCore.SetVolume(CurrentVolume);
+
+            if (stat.Logo != null)
+                NowPlayingImage = stat.Logo;
         }
 
         private void StopSelectedStation(object o)
@@ -274,6 +279,12 @@ namespace Hanasu.ViewModel
         {
             get { return this.GetProperty("SelectedStationSource"); }
             set { this.SetProperty("SelectedStationSource", value); }
+        }
+
+        public Uri NowPlayingImage
+        {
+            get { return (Uri)this.GetProperty("NowPlayingImage"); }
+            set { this.SetProperty("NowPlayingImage", value); }
         }
 
         public string StationSearchFilter

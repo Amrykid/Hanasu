@@ -26,6 +26,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:IsPlayingToVisibilityConverter x:Key="IsPlayingToVisibilityConv"/>
+            <conv:UriToBitmapImageConverter x:Key="UrlConv"/>
             <!--<Style x:Key="ViewChanger" TargetType="ListView">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding ElementName=GridRB,Path=IsChecked,UpdateSourceTrigger=PropertyChanged}" Value="True">
@@ -249,8 +250,7 @@
                                     <Grid Grid.Column="0">
                                         <StackPanel Orientation="Horizontal" Margin="10 0 0 0">
                                             <!--Sample data that I fetched from my previous Hanasu data-->
-                                            <Image MaxWidth="150" MinWidth="150" Source="http://www.ufomafia.com/radiographic.jpg"
-                                                   />
+                                            <Image MaxWidth="150" MinWidth="150" Source="{Binding UpdateSourceTrigger=PropertyChanged, FallbackValue=http://www.ufomafia.com/radiographic.jpg, Path=NowPlayingImage, Converter={StaticResource ResourceKey='UrlConv'}}" />
                                             <Grid Margin="10 7 0 0">
                                                 <StackPanel>
                                                     <Label FontSize="18" 
