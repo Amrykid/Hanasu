@@ -90,10 +90,12 @@ namespace Hanasu.Core
                     ext = ext.Substring(ext.LastIndexOf("."));
 
 
-                    if ((!CurrentPlayer.Supports(ext) && !HtmlTextUtility.ExtensionIsWebExtension(ext)) || (HtmlTextUtility.ExtensionIsWebExtension(ext) && stat.ExplicitExtension != null))
+                    if ((!CurrentPlayer.Supports(ext) && !CurrentPlayer.Supports(stat.ExplicitExtension) && !HtmlTextUtility.ExtensionIsWebExtension(ext))
+                        || (HtmlTextUtility.ExtensionIsWebExtension(ext) && stat.ExplicitExtension != null && !CurrentPlayer.Supports(stat.ExplicitExtension)))
                     {
                         //pre-process the url here.
                         //stolen code from Hanasu 1.0 because it works like it should. :|
+
                         var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
 
                         if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))

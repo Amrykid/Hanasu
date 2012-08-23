@@ -245,6 +245,8 @@ namespace Hanasu.Player.WMP
 
         public bool Supports(string extension)
         {
+            if (extension == null) return true;
+
             var supported = new string[] { ".asx", ".mp3", ".wav" }; //WMP supports M3U but I would like Hanasu to give people the choice to choose a stream.
 
             return supported.Contains(extension);

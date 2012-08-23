@@ -312,8 +312,6 @@ namespace Hanasu.ViewModel
                         return s.Name.ToLower().StartsWith(StationSearchFilter.ToLower())
                             || s.Name.ToLower().Contains(StationSearchFilter.ToLower());
                     });
-
-            return;
         }
     }
 }
