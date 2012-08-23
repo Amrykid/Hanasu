@@ -9,7 +9,7 @@
         xmlns:ccore="clr-namespace:Crystal.Core;assembly=Crystal"
         Title="Choose a language" Height="359" Width="320" WindowStartupLocation="CenterOwner" 
                    ccore:WindowViewModelHelper.AutoBindingClear="True" Topmost="True" 
-                   ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False">
+                   ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False" ResizeMode="NoResize">
     <Window.DataContext>
         <vm:LanguageChooseViewModel />
     </Window.DataContext>

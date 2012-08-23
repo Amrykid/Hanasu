@@ -11,7 +11,7 @@
         xmlns:cutils="clr-namespace:Crystal.Utilities;assembly=Crystal"
         xmlns:msg="clr-namespace:Crystal.Messaging;assembly=Crystal"
         xmlns:conv="clr-namespace:Hanasu.Converters"
-        Title="Hanasu" Height="556" Width="788" MinWidth="700" ShowActivated="True" cutils:MainWindowSetterHelper.IsMainWindow="True">
+        Title="Hanasu" Height="556" Width="788" MinWidth="700" MinHeight="500" ShowActivated="True" cutils:MainWindowSetterHelper.IsMainWindow="True">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
