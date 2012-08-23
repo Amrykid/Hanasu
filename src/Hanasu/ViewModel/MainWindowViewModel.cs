@@ -17,6 +17,7 @@ using Hanasu.Core.Preprocessor;
 using Hanasu.View;
 using Crystal.Messaging;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Hanasu.ViewModel
 {
@@ -211,10 +212,10 @@ namespace Hanasu.ViewModel
 
                         cssw.Owner = Application.Current.MainWindow;
 
-                        ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
-                            {
-                                res = new Tuple<bool, IMultiStreamEntry>(true, (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data);
-                            }));
+                        Task.Factory.StartNew(() =>
+                        {
+                            res = new Tuple<bool, IMultiStreamEntry>(true, (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data);
+                        }).ContinueWith(t => t.Dispose());
 
                         var dResult = cssw.ShowDialog();
 
@@ -222,8 +223,7 @@ namespace Hanasu.ViewModel
                             res = new Tuple<bool, IMultiStreamEntry>(false, null);
                         else
                         {
-                            Thread.Sleep(500);
-
+                            //Thread.Sleep(50); //May add this back if problems arise.
                             cssw.Close();
                         }
 
