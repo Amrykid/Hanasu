@@ -9,7 +9,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:extras="clr-namespace:Crystal.Command;assembly=Crystal.Extras"
         xmlns:ccore="clr-namespace:Crystal.Core;assembly=Crystal"
-        Title="ChooseStationStreamWindow" Height="370" Width="354" WindowStartupLocation="CenterOwner" 
+        Title="{i18n:CrystalLocalizedValueMarkup Key='ChooseStationStreamWindowTitle'}" Height="370" Width="354" WindowStartupLocation="CenterOwner" 
                    ccore:WindowViewModelHelper.AutoBindingClear="True" Topmost="True" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False" ResizeMode="NoResize">
     <Window.DataContext>
         <vm:ChooseStationStreamViewModel />

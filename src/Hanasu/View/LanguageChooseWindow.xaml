@@ -7,7 +7,7 @@
         xmlns:msg="clr-namespace:Crystal.Messaging;assembly=Crystal"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Crystal"
         xmlns:ccore="clr-namespace:Crystal.Core;assembly=Crystal"
-        Title="Choose a language" Height="359" Width="320" WindowStartupLocation="CenterOwner" 
+        Title="{i18n:CrystalLocalizedValueMarkup Key='LanguageChooseWindowTitle'}" Height="359" Width="320" WindowStartupLocation="CenterOwner" 
                    ccore:WindowViewModelHelper.AutoBindingClear="True" Topmost="True" 
                    ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False" ResizeMode="NoResize">
     <Window.DataContext>
