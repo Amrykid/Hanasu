@@ -21,6 +21,7 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <ExplicitExtension>.pls</ExplicitExtension>
+    <Logo>https://si0.twimg.com/profile_images/2428178695/zbowwrigexldj3lbw363.png</Logo>
   </Station>
   <Station>
     <Name>Nihon Radio</Name>
@@ -31,6 +32,7 @@
     <Language>Japanese</Language>
     <Cacheable>False</Cacheable>
     <ExplicitExtension>.m3u</ExplicitExtension>
+    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-snc7/384761_392046544194525_872098057_n.jpg?dl=1</Logo>
   </Station>
   <Station>
     <Name>Radio Hikari.pl</Name>
@@ -51,6 +53,7 @@
     <Language>Spanish</Language>
     <Cacheable>True</Cacheable>
     <ExplicitExtension>.asx</ExplicitExtension>
+    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-snc6/198519_183827418326561_7681770_n.jpg</Logo>
     <UseAlternateSongTitleFetching>True</UseAlternateSongTitleFetching>
   </Station>
   <Station>
@@ -61,6 +64,7 @@
     <City>Herndon, VA, United States</City>
     <Language>Japanese</Language>
     <UseAlternateSongTitleFetching>True</UseAlternateSongTitleFetching>
+    <Logo>http://www.armitunes.com/images/spotlight.gif</Logo>
   </Station>
   <Station>
     <Name>XAMFM</Name>
@@ -95,6 +99,7 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <ExplicitExtension>.m3u</ExplicitExtension>
+    <Logo>https://si0.twimg.com/profile_images/78003373/vocaloid_fm_20090214.png</Logo>
   </Station>
   <Station>
     <Name>AnimeAMAZE</Name>
