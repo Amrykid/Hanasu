@@ -136,5 +136,18 @@ namespace Hanasu
                 handler(this, new PropertyChangedEventArgs(name));
             }
         }
+
+        private void StationListView_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            UIElement control = (UIElement)e.MouseDevice.DirectlyOver;
+
+            if (control.TryFindParent<GridViewColumnHeader>() != null)
+            {
+                //is a header.
+                e.Handled = true;
+
+                //HandleSort(sender, e, control);
+            }
+        }
     }
 }
