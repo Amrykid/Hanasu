@@ -80,6 +80,9 @@ namespace Hanasu.ViewModel
                 {
                     CurrentVolume = 50;
                 });
+
+            MediaFastForwardCommand = new NullCommand();
+            MediaRewindCommand = new NullCommand();
         }
 
         /// <summary>
