@@ -231,6 +231,7 @@
                         </TabItem>
                         <TabItem Header="{i18n:CrystalLocalizedValueMarkup Key='SongsTabHeader'}">
                             <Grid>
+                                <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18">Coming soon!</Label>
                             </Grid>
                         </TabItem>
                     </TabControl>
@@ -248,7 +249,7 @@
                                     <Grid Grid.Column="0">
                                         <StackPanel Orientation="Horizontal" Margin="10 0 0 0">
                                             <!--Sample data that I fetched from my previous Hanasu data-->
-                                            <Image MaxWidth="150" MinWidth="150"
+                                            <Image MaxWidth="150" MinWidth="150" Source="http://www.ufomafia.com/radiographic.jpg"
                                                    />
                                             <Grid Margin="10 7 0 0">
                                                 <StackPanel>
