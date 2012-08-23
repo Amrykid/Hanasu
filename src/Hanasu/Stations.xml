@@ -267,6 +267,7 @@
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash4/427012_450429691646534_332109301_n.jpg</Logo>
   </Station>
   <Station>
     <Name>SEOULFM!</Name>
@@ -278,6 +279,7 @@
     <StationType>Radio</StationType>
     <Language>Korean</Language>
     <Cacheable>True</Cacheable>
+    <Logo>http://netdna.seoul.fm/wp-content/uploads/2012/07/logo11.png</Logo>
   </Station>
   <Station>
     <Name>SoulNB</Name>
@@ -290,6 +292,7 @@
     <Language>Korean</Language>
     <Cacheable>True</Cacheable>
     <Schedule type="page">http://www.soulnb.com/timetable</Schedule>
+    <Logo>http://www.soulnb.com/skin_board/m_minory1/img/main_bar_logo.gif</Logo>
   </Station>
   <Station>
     <Name>J-Jams Radio</Name>
@@ -312,6 +315,7 @@
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Logo>http://orangeline.org/~o-line/i-mode/radio1.jpg</Logo>
   </Station>
   <Station>
     <Name>Radio FanSite</Name>
@@ -323,6 +327,7 @@
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-snc7/428406_10150930179819526_1604418491_n.jpg</Logo>
   </Station>
   <Station>
     <Name>In-Nae Radio</Name>
@@ -345,6 +350,7 @@
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Logo>http://js3.amanteanime.net/wp-content/themes/Amanteanime/images/logo6.jpg</Logo>
   </Station>
   <Station>
     <Name>BABEL ROCK RADIO</Name>
@@ -357,6 +363,7 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <Schedule type="page">http://www.babelentertainment.com/babelradio.html</Schedule>
+    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash3/575750_492449784104899_86670572_n.jpg</Logo>
   </Station>
   <Station>
     <Name>Radio MIHAMA</Name>
@@ -390,6 +397,7 @@
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-ash3/165674_488036442125_798865_n.jpg</Logo>
   </Station>
   <Station>
     <Name>Radio Anime Obsesión</Name>
@@ -402,6 +410,7 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <Schedule type="page">http://www.anime-obsesion.net/horarios/</Schedule>
+    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash4/424999_390319047690170_1804814540_n.jpg</Logo>
   </Station>
   <Station>
     <Name>Anime Layer Radio</Name>
@@ -424,6 +433,7 @@
     <StationType>Radio</StationType>
     <Language>French</Language>
     <Cacheable>False</Cacheable>
+    <Logo>http://www.hotmixradio.fr/templates/hotmixradio/images/logo-japan.png</Logo>
   </Station>
   <Station>
     <Name>Cyber ​​Anime Radio 24/7</Name>
@@ -442,6 +452,7 @@
     <City>Paris, France</City>
     <Language>French</Language>
     <Cacheable>False</Cacheable>
+    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-snc7/395427_322537651126659_1798406612_n.jpg</Logo>
   </Station>
   <Station>
     <Name>Anime Academy Radio</Name>
@@ -451,6 +462,7 @@
     <City>Seattle, WA</City>
     <Language>English</Language>
     <Cacheable>False</Cacheable>
+    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-snc7/339272_10150455203387764_1409766837_o.jpg</Logo>
   </Station>
   <Station>
     <Name>Yggdrasil Radio</Name>
@@ -460,5 +472,6 @@
     <City>Burnsville, MN</City>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash4/423448_10150597744445938_1518964583_n.jpg</Logo>
   </Station>
 </Stations>
