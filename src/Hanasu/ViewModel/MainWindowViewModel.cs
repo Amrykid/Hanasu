@@ -39,7 +39,9 @@ namespace Hanasu.ViewModel
 
             //LocalizationManager.ProbeDirectory
 
-            CurrentVolume = GlobalHanasuCore.GetVolume();
+            CurrentVolume = 50;
+
+            GlobalHanasuCore.SetVolume(CurrentVolume);
 
             SelectedStation = new Station();
 
