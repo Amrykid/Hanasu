@@ -40,6 +40,7 @@
     <City>N/A</City>
     <Language>Polish</Language>
     <Cacheable>False</Cacheable>
+    <ExplicitExtension>.asx</ExplicitExtension>
   </Station>
   <Station>
     <Name>AnimeID</Name>
@@ -105,6 +106,7 @@
     <ExplicitExtension>.asx</ExplicitExtension>
     <Cacheable>True</Cacheable>
     <UseAlternateSongTitleFetching>True</UseAlternateSongTitleFetching>
+    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash4/396236_10150463408884463_307135821_n.jpg</Logo>
   </Station>
   <Station>
     <Name>JPHiP</Name>
@@ -114,6 +116,7 @@
     <City>N/A</City>
     <Language>Japanese</Language>
     <Cacheable>False</Cacheable>
+    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-ash4/183955_10150109837200101_5682548_n.jpg</Logo>
     <Schedule type="ics">https://www.google.com/calendar/ical/jphip.net_h2ddkfp90b6e6bct9usubrvev8%40group.calendar.google.com/public/basic.ics</Schedule>
   </Station>
   <Station>
@@ -126,6 +129,7 @@
     <ExplicitExtension>.pls</ExplicitExtension>
     <Cacheable>False</Cacheable>
     <Schedule type="page">http://horarios.animenexus.net/</Schedule>
+    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash4/418430_10150566924051780_176803057_n.jpg</Logo>
   </Station>
   <Station>
     <Name>JPopsuki</Name>
@@ -135,6 +139,8 @@
     <City>N/A</City>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <ExplicitExtension>.asx</ExplicitExtension>
+    <Logo>https://si0.twimg.com/profile_images/1036480076/default.png</Logo>
     <Schedule type="ics">https://www.google.com/calendar/ical/mellowb%40jpopsuki.eu/public/basic.ics</Schedule>
     <!--Backup Schedule page: https://www.google.com/calendar/embed?mode=WEEK&height=600&wkst=2&bgcolor=%23ccccff&src=mellowb@jpopsuki.eu&color=%238C500B&ctz=Europe/London&gsessionid=Dg8xWG-57duersDk-8r4_w-->
   </Station>
@@ -146,6 +152,7 @@
     <City>N/A</City>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Logo>https://lh3.googleusercontent.com/-CDiKJbosSZE/T9TB_t6SjJI/AAAAAAAAAGM/tD7xVLfg9lk/s251/Big-B-Radio-logo_400x250px.jpg</Logo>
   </Station>
   <Station>
     <Name>Japan-A-Radio</Name>
@@ -156,6 +163,7 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <Schedule type="page">http://www.japanaradio.com/node/22</Schedule>
+    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash3/31849_441941228312_5299978_n.jpg</Logo>
   </Station>
   <Station>
     <Name>LeekRadio</Name>
@@ -188,6 +196,7 @@
     <Language>Japanese</Language>
     <Cacheable>False</Cacheable>
     <Schedule type="page">http://radio.keiichi.net/index2.php?target=php/programs.php</Schedule>
+    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-ash3/559134_10150751081471061_1464021196_n.jpg</Logo>
   </Station>
   <!--<Station>
     <Name>Odoroku TV</Name>
