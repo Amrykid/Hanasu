@@ -66,9 +66,9 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Border Background="Black" CornerRadius="4">
+                    <Border Background="Black" CornerRadius=".5" x:Name="ItemBorder" Width="120">
                         <StackPanel>
-                            <Image Margin="3" Height="100">
+                            <Image Margin="3" Height="100" HorizontalAlignment="Center">
                                 <Image.Source>
                                     <Binding Path="Logo" Converter="{StaticResource UrlImageConv}" IsAsync="True" ConverterParameter="http://www.ufomafia.com/radiographic.jpg"/>
                                 </Image.Source>
@@ -76,7 +76,23 @@
                             <Label Content="{Binding Name}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Border>
+                    <DataTemplate.Triggers>
+                        <Trigger Property="ListViewItem.IsSelected" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Background" Value="Blue"/>
+                        </Trigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ListViewItem}">
+                <!--<Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </Trigger>
+                </Style.Triggers>-->
+                </Style>
             </Setter.Value>
         </Setter>
         <Setter Property="ItemsPanel">
@@ -111,7 +127,7 @@
                 <DropShadowEffect BlurRadius="2" Color="Black"/>
             </Setter.Value>
         </Setter>-->
-        <Setter Property="ContentTemplate" Value="{StaticResource ResourceKey='ImageHeaderViewItemTemplate'}"/>
+        <!--<Setter Property="ContentTemplate" Value="{StaticResource ResourceKey='ImageHeaderViewItemTemplate'}"/>-->
     </Style>
 
     <DataTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type local:ImageHeaderView},ResourceId=ImageHeaderViewItemTemplate}">
