@@ -216,15 +216,12 @@ namespace Hanasu.ViewModel
                                 res = new Tuple<bool, IMultiStreamEntry>(true, (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data);
                             }));
 
-
-
                         var dResult = cssw.ShowDialog();
 
                         if (dResult != true)
                             res = new Tuple<bool, IMultiStreamEntry>(false, null);
                         else
                         {
-
                             Thread.Sleep(500);
 
                             cssw.Close();

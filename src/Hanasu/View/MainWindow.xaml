@@ -128,7 +128,7 @@
                                         </Rectangle>
                                     </Button>
                                     <StackPanel>
-                                        <Slider IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" Width="100" Margin="0 3 0 0" Value="{Binding CurrentVolume,UpdateSourceTrigger=PropertyChanged}"/>
+                                        <Slider IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" Width="100" Margin="0 3 0 0" Value="{Binding CurrentVolume,UpdateSourceTrigger=PropertyChanged}" AutoToolTipPlacement="BottomRight"/>
                                         <StackPanel Orientation="Horizontal">
                                             <Button Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="0 0 0 0" Command="{Binding VolumeLowButtonCommand}">
                                                 <Rectangle Width="15" Height="15" Margin="0 0 0 0">
@@ -200,7 +200,7 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <RadioButton Name="GridRB" FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonGridView'}" GroupName="StationListView_SelectedView" IsChecked="{Binding Path=IsOnDefaultGridView, RelativeSource={RelativeSource FindAncestor, 
                                                             AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}"/>
-                                                    <RadioButton FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonImageView'}" GroupName="StationListView_SelectedView"/>
+                                                    <RadioButton FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonImageView'}" GroupName="StationListView_SelectedView" Margin="5 0 0 0"/>
                                                 </StackPanel>
                                             </Grid>
                                             <TextBox Grid.Column="1" Text="{Binding StationSearchFilter,UpdateSourceTrigger=PropertyChanged}" 

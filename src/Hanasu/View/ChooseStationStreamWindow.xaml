@@ -6,6 +6,8 @@
         xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Crystal"
         xmlns:msg="clr-namespace:Crystal.Messaging;assembly=Crystal"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Crystal"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:extras="clr-namespace:Crystal.Command;assembly=Crystal.Extras"
         xmlns:ccore="clr-namespace:Crystal.Core;assembly=Crystal"
         Title="ChooseStationStreamWindow" Height="370" Width="354" WindowStartupLocation="CenterOwner" 
                    ccore:WindowViewModelHelper.AutoBindingClear="True" Topmost="True" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False">
@@ -44,6 +46,12 @@
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                            <extras:EventToCommand 
+                                                        Command="{Binding AcceptStreamCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ListView>
             </Grid>
             <Grid Grid.Row="1">
