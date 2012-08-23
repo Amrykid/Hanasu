@@ -199,7 +199,7 @@
                                             <Grid Grid.Column="0">
                                                 <StackPanel Orientation="Horizontal">
                                                     <RadioButton Name="GridRB" FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonGridView'}" GroupName="StationListView_SelectedView" IsChecked="{Binding Path=IsOnDefaultGridView, RelativeSource={RelativeSource FindAncestor, 
-                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}"/>
+                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}" Margin="5 0 0 0"/>
                                                     <RadioButton FontSize="15" Content="{i18n:CrystalLocalizedValueMarkup Key='RadioButtonImageView'}" GroupName="StationListView_SelectedView" Margin="5 0 0 0"/>
                                                 </StackPanel>
                                             </Grid>
@@ -214,7 +214,7 @@
                                                             AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}"
                                               DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext}"
                                               SelectedItem="{Binding Path=DataContext.SelectedStation, RelativeSource={RelativeSource FindAncestor, 
-                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}">
+                                                            AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single">
                                             <!--View="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.CurrentSelectedView, 
                                                         RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}"-->
                                             <i:Interaction.Triggers>
