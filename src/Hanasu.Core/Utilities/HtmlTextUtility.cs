@@ -62,7 +62,7 @@ namespace Hanasu.Core.Utilities
 
             using (HttpWebResponse res = (HttpWebResponse)req.GetResponse())
             {
-                hasRedirected = res.ResponseUri.ToString() != url;
+                hasRedirected = res.ResponseUri.ToString() != url + "/";
 
                 using (StreamReader sr = new StreamReader(res.GetResponseStream()))
                 {
