@@ -7,8 +7,9 @@ namespace Hanasu.Core.ArtistService
 {
     public enum ArtistGender
     {
-        Male = 0,
-        Female = 1,
-        XAMPP = 2
+        Unknown = 0,
+        Male = 1,
+        Female = 2,
+        XAMPP = 3
     }
 }

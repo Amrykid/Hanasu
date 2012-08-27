@@ -7,6 +7,7 @@ using Crystal.Messaging;
 using Hanasu.Core;
 using System.Threading.Tasks;
 using Crystal.Command;
+using Hanasu.Core.ArtistService;
 
 namespace Hanasu.ViewModel
 {
@@ -14,8 +15,9 @@ namespace Hanasu.ViewModel
     {
         public MainWindowNowPlayingViewModel()
         {
-            FindArtistInfoCommand = CommandManager.CreateCommandFromBinding("CurrentArtistFromPlayer", (s, e) => CurrentArtistFromPlayer != null, (o) =>
+            FindArtistInfoCommand = CommandManager.CreateCommandFromPropertyChangedAll((s, e) => CurrentArtistFromPlayer != null && IsFetchingArtistInfo == false, (o) =>
                 {
+                    IsFetchingArtistInfo = true;
                     Task.Factory.StartNew(() => GlobalHanasuCore.GetArtistInfoFromCurrentSong())
                         .ContinueWith(t =>
                             {
@@ -26,15 +28,33 @@ namespace Hanasu.ViewModel
                                 else
                                 {
                                     //found!
+
+                                    CurrentArtistInfo = t.Result;
+
+                                    Dispatcher.Invoke(new EmptyDelegate(() =>
+                                        {
+                                            CurrentArtistInfoPaneIsOpen = true;
+                                        }));
                                 }
+
+                                IsFetchingArtistInfo = false;
 
                                 t.Dispose();
                             });
                 });
 
+            CurrentArtistInfoPaneIsOpen = false;
+
             HasArtist = false;
+
+            IsFetchingArtistInfo = false;
         }
 
+        public bool IsFetchingArtistInfo
+        {
+            get { return (bool)this.GetProperty("IsFetchingArtistInfo"); }
+            set { this.SetProperty("IsFetchingArtistInfo", value); }
+        }
         public CrystalCommand FindArtistInfoCommand { get; set; }
 
         [MessageHandler("StationTitleUpdated")]
@@ -50,6 +70,9 @@ namespace Hanasu.ViewModel
             SongTitleFromPlayer = null;
             CurrentArtistFromPlayer = null;
             CurrentSongFromPlayer = null;
+            CurrentArtistInfo = null;
+
+            CurrentArtistInfoPaneIsOpen = false;
 
             NowPlayingImage = null;
         }
@@ -59,24 +82,27 @@ namespace Hanasu.ViewModel
         {
             SongTitleFromPlayer = (string)data;
 
-            CurrentArtistFromPlayer = GlobalHanasuCore.CurrentSong.Artist;
-            CurrentSongFromPlayer = GlobalHanasuCore.CurrentSong.TrackTitle;
-
-            Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
+            if (GlobalHanasuCore.CurrentSong.Artist != GlobalHanasuCore.CurrentStation.Name)
             {
-                Dispatcher.BeginInvoke(new EmptyDelegate(() =>
-                {
-                    if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
-                        NowPlayingImage = GlobalHanasuCore.CurrentSong.AlbumCoverUri;
-                    else
-                        if (GlobalHanasuCore.CurrentStation.Logo != null)
-                            NowPlayingImage = GlobalHanasuCore.CurrentStation.Logo;
-                        else
-                            NowPlayingImage = DefaultAlbumArtUri;
-                }));
+                CurrentArtistFromPlayer = GlobalHanasuCore.CurrentSong.Artist;
+                CurrentSongFromPlayer = GlobalHanasuCore.CurrentSong.TrackTitle;
 
-                x.Dispose();
-            });
+                Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
+                {
+                    Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                    {
+                        if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
+                            NowPlayingImage = GlobalHanasuCore.CurrentSong.AlbumCoverUri;
+                        else
+                            if (GlobalHanasuCore.CurrentStation.Logo != null)
+                                NowPlayingImage = GlobalHanasuCore.CurrentStation.Logo;
+                            else
+                                NowPlayingImage = DefaultAlbumArtUri;
+                    }));
+
+                    x.Dispose();
+                });
+            }
         }
 
         [MessageHandler("DisplayStationLogo")]
@@ -119,6 +145,17 @@ namespace Hanasu.ViewModel
             set { this.SetProperty("CurrentSongFromPlayer", value); }
         }
 
+        public dynamic CurrentArtistInfo
+        {
+            get { return (dynamic)this.GetProperty("CurrentArtistInfo"); }
+            set { this.SetProperty("CurrentArtistInfo", value); }
+        }
+
+        public bool CurrentArtistInfoPaneIsOpen
+        {
+            get { return (bool)this.GetProperty("CurrentArtistInfoPaneIsOpen"); }
+            set { this.SetProperty("CurrentArtistInfoPaneIsOpen", value); }
+        }
 
         public readonly static Uri DefaultAlbumArtUri = new Uri("http://www.ufomafia.com/radiographic.jpg");
 

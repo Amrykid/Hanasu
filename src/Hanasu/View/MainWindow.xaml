@@ -50,11 +50,20 @@
         </metro:WindowCommands>
     </metro:MetroWindow.WindowCommands>
     <metro:MetroWindow.Flyouts>
-        <metro:Flyout Header="Stream Selection" Position="Right" Name="StreamSelectionFlyout" IsOpen="{Binding NeedsStationStreamSelection, UpdateSourceTrigger=PropertyChanged}">
-            <!--Place holder. May or may not use.-->
-        </metro:Flyout>
-        <metro:Flyout Header="Artist Info" Position="Right" Name="ArtistInfoFlyout">
-            <!--Place holder. May or may not use.-->
+        <!--<metro:Flyout Header="Stream Selection" Position="Right" Name="StreamSelectionFlyout" IsOpen="{Binding NeedsStationStreamSelection, UpdateSourceTrigger=PropertyChanged}">
+            Place holder. May or may not use.
+        </metro:Flyout>-->
+        <metro:Flyout Header="Artist Info" Position="Right" Name="ArtistInfoFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged}" Width="400">
+            <Grid DataContext="{Binding CurrentArtistInfo}">
+                <GroupBox Header="{Binding Name}">
+                    <StackPanel>
+                        <Image Source="{Binding ArtistImageUrl,Converter={StaticResource ResourceKey='UrlConv'}}"/>
+                        <GroupBox Header="Bio">
+                            <TextBlock Text="{Binding Bio}"/>
+                        </GroupBox>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
         </metro:Flyout>
     </metro:MetroWindow.Flyouts>
     <Grid>
@@ -270,7 +279,7 @@
                                         <ColumnDefinition Width="100*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Column="0">
-                                        <StackPanel Orientation="Horizontal" Margin="10 0 0 0">
+                                        <StackPanel Orientation="Horizontal" Margin="10 0 0 0" x:Name="NowPlayingStackPanel">
                                             <StackPanel.DataContext>
                                                 <local:MainWindowNowPlayingViewModel />
                                             </StackPanel.DataContext>
@@ -297,7 +306,7 @@
                                                             </Button.ToolTip>
                                                         </Button>
                                                     </StackPanel>
-                                                    
+
                                                     <Label FontSize="20" Content="{Binding CurrentSongFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
                                                     <!--<Label FontSize="18" 
                                                            Content="{Binding SongTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>-->
@@ -320,7 +329,7 @@
                 <Grid Name="MediaPlayerGrid" Panel.ZIndex="0">
                     <Grid.Children>
                         <ContentPresenter Content="{Binding UIBackPanelView, UpdateSourceTrigger=PropertyChanged}" Panel.ZIndex="0">
-                            
+
                         </ContentPresenter>
                     </Grid.Children>
                 </Grid>
