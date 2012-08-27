@@ -49,10 +49,10 @@
             <Button Content="{i18n:CrystalLocalizedValueMarkup Key='WindowCommandLanguagesButton'}" msg:ButtonMessageHelper.Message="WindowCommandLanguagesRequested" />
         </metro:WindowCommands>
     </metro:MetroWindow.WindowCommands>
-    <metro:MetroWindow.Flyouts>
-        <!--<metro:Flyout Header="Stream Selection" Position="Right" Name="StreamSelectionFlyout" IsOpen="{Binding NeedsStationStreamSelection, UpdateSourceTrigger=PropertyChanged}">
+    <!--<metro:MetroWindow.Flyouts>
+        <metro:Flyout Header="Stream Selection" Position="Right" Name="StreamSelectionFlyout" IsOpen="{Binding NeedsStationStreamSelection, UpdateSourceTrigger=PropertyChanged}">
             Place holder. May or may not use.
-        </metro:Flyout>-->
+        </metro:Flyout>
         <metro:Flyout Header="Artist Info" Position="Right" Name="ArtistInfoFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged}" Width="400">
             <Grid DataContext="{Binding CurrentArtistInfo}">
                 <GroupBox Header="{Binding Name}">
@@ -65,7 +65,7 @@
                 </GroupBox>
             </Grid>
         </metro:Flyout>
-    </metro:MetroWindow.Flyouts>
+    </metro:MetroWindow.Flyouts>-->
     <Grid>
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="45" Height="45" VerticalAlignment="Top" 
                 HorizontalAlignment="Right" Panel.ZIndex="100" Opacity=".7" Command="{Binding SwitchViewCommand}">
