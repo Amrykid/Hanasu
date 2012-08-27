@@ -21,6 +21,7 @@ namespace Hanasu.Player.WMP
         private Hashtable currentStationAttributes = new Hashtable();
 
         private string songName = null;
+        private string stationName = null;
 
         private WindowsFormsHost wpfhost = null;
 
@@ -49,6 +50,7 @@ namespace Hanasu.Player.WMP
             GlobalHanasuCore.OnStationConnectionTerminated(this);
 
             songName = null;
+            stationName = null;
         }
 
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
@@ -57,8 +59,14 @@ namespace Hanasu.Player.WMP
 
             var name = player.currentMedia.name;
 
-            if (name.StartsWith(GlobalHanasuCore.CurrentStation.Name))
+            var smallname = name.ToLower();
+            var smallname2 = GlobalHanasuCore.CurrentStation.Name.ToLower();
+
+            if (smallname.StartsWith(smallname2) && name != stationName)
+            {
                 GlobalHanasuCore.OnStationTitleDetected(this, name);
+                stationName = name;
+            }
             else
                 if (name.Contains(" - ") && songName != name)
                 {

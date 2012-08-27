@@ -102,8 +102,7 @@ namespace Hanasu.Core
                         ext = ext.Substring(ext.LastIndexOf("."));
 
 
-                        if ((!CurrentPlayer.Supports(ext) && !CurrentPlayer.Supports(stat.ExplicitExtension) && !HtmlTextUtility.ExtensionIsWebExtension(ext))
-                            || (HtmlTextUtility.ExtensionIsWebExtension(ext) && stat.ExplicitExtension != null && !CurrentPlayer.Supports(stat.ExplicitExtension)))
+                        if ((!CurrentPlayer.Supports(ext)))
                         {
                             //pre-process the url here.
                             //stolen code from Hanasu 1.0 because it works like it should. :|
