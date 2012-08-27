@@ -139,15 +139,28 @@ namespace Hanasu
 
         private void StationListView_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            UIElement control = (UIElement)e.MouseDevice.DirectlyOver;
-
-            if (control.TryFindParent<GridViewColumnHeader>() != null)
+            if (IsOnDefaultGridView)
             {
-                //is a header.
-                e.Handled = true;
+                UIElement control = (UIElement)e.MouseDevice.DirectlyOver;
 
-                //HandleSort(sender, e, control);
+                if (control.TryFindParent<GridViewColumnHeader>() != null)
+                {
+                    //is a header.
+                    e.Handled = true;
+
+                    //HandleSort(sender, e, control);
+                }
             }
+        }
+
+        private void StationListView_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            StationsListAdorner.IsAdornerVisible = StationListView.Items.Count == 0;
+        }
+
+        private void LibraryTreeView_Expanded(object sender, RoutedEventArgs e)
+        {
+            (e.OriginalSource as TreeViewItem).IsSelected = true;
         }
     }
 }

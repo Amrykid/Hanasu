@@ -67,6 +67,13 @@
     <Compile Include="Preprocessor\Preprocessors\M3U\M3UPreprocessor.cs" />
     <Compile Include="Preprocessor\Preprocessors\PLS\PLSPreprocessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Songs\Album Info Data Source\MSMetaServices.cs" />
+    <Compile Include="Songs\Album Info Data Source\YesAsia.cs" />
+    <Compile Include="Songs\IAlbumInfoDataSource.cs" />
+    <Compile Include="Songs\ILyricsDataSource.cs" />
+    <Compile Include="Songs\Lyric Data Sources\LetrasTerraLyricDataSource.cs" />
+    <Compile Include="Songs\SongData.cs" />
+    <Compile Include="Songs\SongService.cs" />
     <Compile Include="Stations\RadioFormat.cs" />
     <Compile Include="Stations\Station.cs" />
     <Compile Include="Stations\StationLanguage.cs" />
@@ -100,13 +107,11 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Songs\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

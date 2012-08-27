@@ -9,6 +9,7 @@ using System.ComponentModel.Composition;
 using Hanasu.Core.Stations;
 using Hanasu.Core.Preprocessor;
 using Hanasu.Core.Utilities;
+using Hanasu.Core.Songs;
 
 namespace Hanasu.Core
 {
@@ -20,7 +21,7 @@ namespace Hanasu.Core
                 return;
         }
 
-        private static Func<string, object,object> eventHandler = null;
+        private static Func<string, object, object> eventHandler = null;
 
         /// <summary>
         /// Initializes the Hanasu core.
@@ -40,6 +41,7 @@ namespace Hanasu.Core
                     PushMessageToGUI(StationsUpdated, StationsService.Stations);
                 });
 
+            SongService = new Songs.SongService();
 
             Plugins = new PluginImporterInstance();
 
@@ -50,7 +52,7 @@ namespace Hanasu.Core
 
                 var ac = new AggregateCatalog();
 
-                ac.Catalogs.Add(new DirectoryCatalog(pluginDir,"*.dll"));
+                ac.Catalogs.Add(new DirectoryCatalog(pluginDir, "*.dll"));
 
                 foreach (var dir in Directory.EnumerateDirectories(pluginDir))
                 {
@@ -59,7 +61,7 @@ namespace Hanasu.Core
 
                 var comp = new CompositionContainer(ac);
                 comp.ComposeParts(Plugins);
-                
+
                 if (Plugins.Players.Count() > 0)
                 {
                     CurrentPlayer = Plugins.Players.First();
@@ -73,70 +75,75 @@ namespace Hanasu.Core
             Initialized = true;
         }
 
-        public static void PlayStation(Station stat)
+        public static void PlayStation(Nullable<Station> station = null)
         {
             //deal with finding the direct url here.
 
             if (CurrentPlayer == null) return; //Somethings wrong
 
+            Station stat = station.HasValue ? station.Value : CurrentStation;
+
+            if (CurrentStation == null)
+                throw new Exception();
+
             var url = stat.DataSource;
-
-            if (stat.StationType == StationType.Radio)
-            {
-
-                if (url.Segments.Last().Contains("."))
-                {
-                    var ext = url.Segments.Last();
-                    ext = ext.Substring(ext.LastIndexOf("."));
-
-
-                    if ((!CurrentPlayer.Supports(ext) && !CurrentPlayer.Supports(stat.ExplicitExtension) && !HtmlTextUtility.ExtensionIsWebExtension(ext))
-                        || (HtmlTextUtility.ExtensionIsWebExtension(ext) && stat.ExplicitExtension != null && !CurrentPlayer.Supports(stat.ExplicitExtension)))
-                    {
-                        //pre-process the url here.
-                        //stolen code from Hanasu 1.0 because it works like it should. :|
-
-                        var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
-
-                        if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
-                        {
-                            var p = (Preprocessor.MultiStreamPreprocessor)pro;
-
-                            var entries = p.Parse(url);
-
-                            if (entries.Length == 0)
-                            {
-                                return;
-                            }
-                            else if (entries.Length == 1)
-                            {
-                                url = new Uri(entries[0].File);
-                            }
-                            else
-                            {
-                                var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
-
-                                if (result == null) return;
-
-                                if (result.Item1 == false) return;
-                            }
-                        }
-
-                        Preprocessor.PreprocessorService.Process(ref url);
-                    }
-                }
-            }
 
             try
             {
+                if (stat.StationType == StationType.Radio)
+                {
+
+                    if (url.Segments.Last().Contains("."))
+                    {
+                        var ext = url.Segments.Last();
+                        ext = ext.Substring(ext.LastIndexOf("."));
+
+
+                        if ((!CurrentPlayer.Supports(ext) && !CurrentPlayer.Supports(stat.ExplicitExtension) && !HtmlTextUtility.ExtensionIsWebExtension(ext))
+                            || (HtmlTextUtility.ExtensionIsWebExtension(ext) && stat.ExplicitExtension != null && !CurrentPlayer.Supports(stat.ExplicitExtension)))
+                        {
+                            //pre-process the url here.
+                            //stolen code from Hanasu 1.0 because it works like it should. :|
+
+                            var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
+
+                            if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
+                            {
+                                var p = (Preprocessor.MultiStreamPreprocessor)pro;
+
+                                var entries = p.Parse(url);
+
+                                if (entries.Length == 0)
+                                {
+                                    return;
+                                }
+                                else if (entries.Length == 1)
+                                {
+                                    url = new Uri(entries[0].File);
+                                }
+                                else
+                                {
+                                    var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
+
+                                    if (result == null) return;
+
+                                    if (result.Item1 == false) return;
+                                }
+                            }
+
+                            Preprocessor.PreprocessorService.Process(ref url);
+                        }
+                    }
+                }
+
                 CurrentStation = stat;
                 CurrentPlayer.Play(url, CurrentStation.StationType == StationType.Radio ? MediaType.Audio : MediaType.Video);
                 PushMessageToGUI(NowPlayingReset, null);
                 PushMessageToGUI(NowPlayingStatus, true);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                PushMessageToGUI(StationConnectionError, null);
+                PushMessageToGUI(StationConnectionError, ex);
             }
         }
 
@@ -155,8 +162,11 @@ namespace Hanasu.Core
 
         public static PluginImporterInstance Plugins { get; private set; }
         public static Stations.StationsService StationsService { get; private set; }
+        private static SongService SongService { get; set; }
 
         internal static IMediaPlayer CurrentPlayer { get; private set; }
+
+        public static Songs.SongData CurrentSong { get; private set; }
 
         private static object PushMessageToGUI(string eventstr, object data)
         {
@@ -168,6 +178,15 @@ namespace Hanasu.Core
 
         public static void OnSongTitleDetected(IMediaPlayer player, string songdata)
         {
+            if (CurrentSong != null)
+                CurrentSong = SongService.ParseSongData(songdata, CurrentStation);
+            else
+            {
+                var x = SongService.ParseSongData(songdata, CurrentStation);
+
+                if (CurrentSong.Artist == x.Artist && CurrentSong.TrackTitle == x.TrackTitle)
+                    return;
+            }
             PushMessageToGUI(SongTitleUpdated, songdata);
             return;
         }
@@ -188,6 +207,8 @@ namespace Hanasu.Core
             CurrentPlayer.Stop();
             PushMessageToGUI(NowPlayingReset, null);
             PushMessageToGUI(NowPlayingStatus, false);
+
+            CurrentSong = new Songs.SongData();
         }
 
         public static void OnStationConnectionTerminated(IMediaPlayer player)
@@ -195,6 +216,8 @@ namespace Hanasu.Core
             //When the station stops the connection... not the user.
             PushMessageToGUI(NowPlayingReset, null);
             PushMessageToGUI(NowPlayingStatus, false);
+
+            CurrentSong = new Songs.SongData();
         }
 
         public static int GetVolume()
@@ -219,6 +242,18 @@ namespace Hanasu.Core
                 return CurrentPlayer.GetVideoControl();
 
             return null;
+        }
+
+        public static SongData GetExtendedSongInfoFromCurrentSong()
+        {
+            if (CurrentSong.TrackTitle == null)
+                throw new NullReferenceException("CurrentSong is null!");
+
+            var x = CurrentSong;
+            if (SongService.DataSource.GetAlbumInfo(ref x))
+                CurrentSong = x;
+
+            return x;
         }
     }
 }

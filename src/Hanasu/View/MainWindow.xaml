@@ -10,6 +10,7 @@
         xmlns:extras="clr-namespace:Crystal.Command;assembly=Crystal.Extras"
         xmlns:cutils="clr-namespace:Crystal.Utilities;assembly=Crystal"
         xmlns:msg="clr-namespace:Crystal.Messaging;assembly=Crystal"
+        xmlns:ac="clr-namespace:AdornedControl"
         xmlns:conv="clr-namespace:Hanasu.Converters"
         Title="Hanasu" Height="556" Width="788" MinWidth="700" MinHeight="500" ShowActivated="True" cutils:MainWindowSetterHelper.IsMainWindow="True">
     <Window.DataContext>
@@ -178,7 +179,7 @@
                                     <ColumnDefinition Width="100*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0">
-                                    <TreeView FontSize="17" Name="LibraryTreeView" MinWidth="240">
+                                    <TreeView FontSize="17" Name="LibraryTreeView" MinWidth="240" TreeViewItem.Expanded="LibraryTreeView_Expanded">
                                         <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='LibraryTabHeader'}">
                                             <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='HanasuCatalogTreeViewHeader'}" DataContext="{Binding CatalogStations,UpdateSourceTrigger=PropertyChanged}"/>
                                             <TreeViewItem Header="{i18n:CrystalLocalizedValueMarkup Key='CustomStationsTreeViewHeader'}"/>
@@ -210,23 +211,35 @@
                                                      FontSize="16"
                                                      metro:TextboxHelper.Watermark="{i18n:CrystalLocalizedValueMarkup Key='StationsSearchFilterWaterMark'}"/>
                                         </Grid>
-                                        <ListView Grid.Row="1" Name="StationListView" BorderBrush="White" BorderThickness=".3" FontSize="16"
+                                        <ac:AdornedControl x:Name="StationsListAdorner" Grid.Row="1">
+                                            <ac:AdornedControl.AdornerContent>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="60"/>
+                                                        <ColumnDefinition Width="100*"/>
+                                                        <ColumnDefinition Width="250"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='StationAdornerNoItemsShown'}" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="17" Grid.Column="1"/>
+                                                </Grid>
+                                            </ac:AdornedControl.AdornerContent>
+                                            <ListView Name="StationListView" BorderBrush="White" BorderThickness=".3" FontSize="16"
                                                   Style="{Binding Path=SelectedStyle, RelativeSource={RelativeSource FindAncestor, 
                                                             AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}"
-                                              DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext}"
+                                              DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" ItemsSource="{Binding DataContext}"
                                               SelectedItem="{Binding Path=DataContext.SelectedStation, RelativeSource={RelativeSource FindAncestor, 
                                                             AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single"
-                                                  PreviewMouseDoubleClick="StationListView_PreviewMouseDoubleClick">
-                                            <!--View="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.CurrentSelectedView, 
+                                                  PreviewMouseDoubleClick="StationListView_PreviewMouseDoubleClick" TargetUpdated="StationListView_TargetUpdated">
+                                                <!--View="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.CurrentSelectedView, 
                                                         RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}"-->
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseDoubleClick">
-                                                    <extras:EventToCommand 
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                                        <extras:EventToCommand 
                                                         Command="{Binding UpdateSourceTrigger=PropertyChanged, Path=DataContext.PlaySelectedStationCommand, 
                                                         RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </ListView>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </ListView>
+                                        </ac:AdornedControl>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -251,7 +264,7 @@
                                     <Grid Grid.Column="0">
                                         <StackPanel Orientation="Horizontal" Margin="10 0 0 0">
                                             <!--Sample data that I fetched from my previous Hanasu data-->
-                                            <Image MaxWidth="150" MinWidth="150" Source="{Binding UpdateSourceTrigger=PropertyChanged, FallbackValue=http://www.ufomafia.com/radiographic.jpg, Path=NowPlayingImage, Converter={StaticResource ResourceKey='UrlConv'}}" />
+                                            <Image MaxWidth="150" MinWidth="150" Source="{Binding UpdateSourceTrigger=PropertyChanged, FallbackValue='http://www.ufomafia.com/radiographic.jpg', Path=NowPlayingImage, Converter={StaticResource ResourceKey='UrlConv'}}" />
                                             <Grid Margin="10 7 0 0">
                                                 <StackPanel>
                                                     <Label FontSize="18" 

@@ -170,6 +170,22 @@ namespace Hanasu.ViewModel
                 case GlobalHanasuCore.SongTitleUpdated:
                     {
                         SongTitleFromPlayer = (string)data;
+
+                        Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
+                            {
+                                Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                                    {
+                                        if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
+                                            NowPlayingImage = GlobalHanasuCore.CurrentSong.AlbumCoverUri;
+                                        else
+                                            if (GlobalHanasuCore.CurrentStation.Logo != null)
+                                                NowPlayingImage = GlobalHanasuCore.CurrentStation.Logo;
+                                            else
+                                                NowPlayingImage = DefaultAlbumArtUri;
+                                    }));
+
+                                x.Dispose();
+                            });
                         break;
                     }
                 case GlobalHanasuCore.NowPlayingStatus:
@@ -281,6 +297,8 @@ namespace Hanasu.ViewModel
             set { this.SetProperty("SelectedStationSource", value); }
         }
 
+        public readonly static Uri DefaultAlbumArtUri = new Uri("http://www.ufomafia.com/radiographic.jpg");
+
         public Uri NowPlayingImage
         {
             get { return (Uri)this.GetProperty("NowPlayingImage"); }
@@ -296,6 +314,7 @@ namespace Hanasu.ViewModel
                 HandleStationFilter();
             }
         }
+
 
         private void HandleStationFilter()
         {
