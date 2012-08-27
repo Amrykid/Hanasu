@@ -49,6 +49,14 @@
             <Button Content="{i18n:CrystalLocalizedValueMarkup Key='WindowCommandLanguagesButton'}" msg:ButtonMessageHelper.Message="WindowCommandLanguagesRequested" />
         </metro:WindowCommands>
     </metro:MetroWindow.WindowCommands>
+    <metro:MetroWindow.Flyouts>
+        <metro:Flyout Header="Stream Selection" Position="Right" Name="StreamSelectionFlyout" IsOpen="{Binding NeedsStationStreamSelection, UpdateSourceTrigger=PropertyChanged}">
+            <!--Place holder. May or may not use.-->
+        </metro:Flyout>
+        <metro:Flyout Header="Artist Info" Position="Right" Name="ArtistInfoFlyout">
+            <!--Place holder. May or may not use.-->
+        </metro:Flyout>
+    </metro:MetroWindow.Flyouts>
     <Grid>
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="45" Height="45" VerticalAlignment="Top" 
                 HorizontalAlignment="Right" Panel.ZIndex="100" Opacity=".7" Command="{Binding SwitchViewCommand}">
@@ -263,12 +271,36 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Column="0">
                                         <StackPanel Orientation="Horizontal" Margin="10 0 0 0">
+                                            <StackPanel.DataContext>
+                                                <local:MainWindowNowPlayingViewModel />
+                                            </StackPanel.DataContext>
+                                            <StackPanel.Resources>
+                                                <ResourceDictionary>
+                                                    <conv:HasArtistToVisibilityConverter x:Key="ArtistToVisConv"/>
+                                                </ResourceDictionary>
+                                            </StackPanel.Resources>
                                             <!--Sample data that I fetched from my previous Hanasu data-->
                                             <Image MaxWidth="150" MinWidth="150" Source="{Binding UpdateSourceTrigger=PropertyChanged, FallbackValue='http://www.ufomafia.com/radiographic.jpg', Path=NowPlayingImage, Converter={StaticResource ResourceKey='UrlConv'}}" />
                                             <Grid Margin="10 7 0 0">
                                                 <StackPanel>
-                                                    <Label FontSize="18" 
-                                                           Content="{Binding SongTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label FontSize="22" Content="{Binding CurrentArtistFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <Button Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="5 0 0 0" Command="{Binding FindArtistInfoCommand}" Visibility="{Binding HasArtist, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ArtistToVisConv}}">
+                                                            <Rectangle Width="15" Height="15" Margin="0 0 0 0">
+                                                                <Rectangle.Fill>
+                                                                    <VisualBrush Stretch="Fill"
+                            					            Visual="{StaticResource appbar_magnify}" />
+                                                                </Rectangle.Fill>
+                                                            </Rectangle>
+                                                            <Button.ToolTip>
+                                                                <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='FindArtistInfomation'}"/>
+                                                            </Button.ToolTip>
+                                                        </Button>
+                                                    </StackPanel>
+                                                    
+                                                    <Label FontSize="20" Content="{Binding CurrentSongFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <!--<Label FontSize="18" 
+                                                           Content="{Binding SongTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>-->
                                                     <Label FontSize="17" 
                                                            Content="{Binding StationTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>
                                                 </StackPanel>

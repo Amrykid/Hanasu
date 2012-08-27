@@ -10,6 +10,7 @@ using Hanasu.Core.Stations;
 using Hanasu.Core.Preprocessor;
 using Hanasu.Core.Utilities;
 using Hanasu.Core.Songs;
+using Hanasu.Core.ArtistService;
 
 namespace Hanasu.Core
 {
@@ -42,6 +43,8 @@ namespace Hanasu.Core
                 });
 
             SongService = new Songs.SongService();
+
+            ArtistService = new Core.ArtistService.ArtistService();
 
             Plugins = new PluginImporterInstance();
 
@@ -163,6 +166,7 @@ namespace Hanasu.Core
         public static PluginImporterInstance Plugins { get; private set; }
         public static Stations.StationsService StationsService { get; private set; }
         private static SongService SongService { get; set; }
+        private static Hanasu.Core.ArtistService.ArtistService ArtistService { get; set; }
 
         internal static IMediaPlayer CurrentPlayer { get; private set; }
 
@@ -254,6 +258,11 @@ namespace Hanasu.Core
                 CurrentSong = x;
 
             return x;
+        }
+
+        public static ArtistInfo GetArtistInfoFromCurrentSong()
+        {
+            return ArtistService.FindArtist(CurrentSong);
         }
     }
 }

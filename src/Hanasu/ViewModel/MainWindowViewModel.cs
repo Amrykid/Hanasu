@@ -49,6 +49,8 @@ namespace Hanasu.ViewModel
 
             IsPlaying = false;
 
+            NeedsStationStreamSelection = false;
+
             SwitchViewCommand = new CrystalCommand(this,
                 true,
                (o) => UIPanelState = UIPanelState == FadeablePanelState.UpperFocus ? FadeablePanelState.LowerFocus : FadeablePanelState.UpperFocus);
@@ -164,28 +166,12 @@ namespace Hanasu.ViewModel
                     }
                 case GlobalHanasuCore.StationTitleUpdated:
                     {
-                        StationTitleFromPlayer = (string)data;
+                        Messenger.PushMessage(this, "StationTitleUpdated", data);
                         break;
                     }
                 case GlobalHanasuCore.SongTitleUpdated:
                     {
-                        SongTitleFromPlayer = (string)data;
-
-                        Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
-                            {
-                                Dispatcher.BeginInvoke(new EmptyDelegate(() =>
-                                    {
-                                        if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
-                                            NowPlayingImage = GlobalHanasuCore.CurrentSong.AlbumCoverUri;
-                                        else
-                                            if (GlobalHanasuCore.CurrentStation.Logo != null)
-                                                NowPlayingImage = GlobalHanasuCore.CurrentStation.Logo;
-                                            else
-                                                NowPlayingImage = DefaultAlbumArtUri;
-                                    }));
-
-                                x.Dispose();
-                            });
+                        Messenger.PushMessage(this, "SongTitleUpdated", data);
                         break;
                     }
                 case GlobalHanasuCore.NowPlayingStatus:
@@ -195,10 +181,7 @@ namespace Hanasu.ViewModel
                     }
                 case GlobalHanasuCore.NowPlayingReset:
                     {
-                        StationTitleFromPlayer = null;
-                        SongTitleFromPlayer = null;
-
-                        NowPlayingImage = null;
+                        Messenger.PushMessage(this, "NowPlayingReset");
 
                         if (GlobalHanasuCore.CurrentStation.StationType == StationType.Radio)
                             UIBackPanelView = null;
@@ -206,6 +189,7 @@ namespace Hanasu.ViewModel
                     }
                 case GlobalHanasuCore.StationConnectionError:
                     {
+                        //MahApps.Metro.Behaviours.
                         //TODO: Show some sort of error dialog.
                         break;
                     }
@@ -224,6 +208,8 @@ namespace Hanasu.ViewModel
                 case GlobalHanasuCore.StationMultipleServersFound:
                     {
                         //Deal with choosing multiple stations.
+
+                        //NeedsStationStreamSelection = true;
 
                         IMultiStreamEntry[] entries = (dynamic)data;
 
@@ -250,12 +236,21 @@ namespace Hanasu.ViewModel
                             cssw.Close();
                         }
 
+                        //NeedsStationStreamSelection = false;
+
                         return res;
                     }
             }
 
             return null;
         }
+
+        public bool NeedsStationStreamSelection
+        {
+            get { return (bool)this.GetProperty("NeedsStationStreamSelection"); }
+            set { this.SetProperty("NeedsStationStreamSelection", value); }
+        }
+
         private void PlaySelectedStation(object o)
         {
 
@@ -272,7 +267,7 @@ namespace Hanasu.ViewModel
             GlobalHanasuCore.SetVolume(CurrentVolume);
 
             if (stat.Logo != null)
-                NowPlayingImage = stat.Logo;
+                Messenger.PushMessage(this, "DisplayStationLogo", stat.Logo);
         }
 
         private void StopSelectedStation(object o)
@@ -280,29 +275,10 @@ namespace Hanasu.ViewModel
             GlobalHanasuCore.StopStation();
         }
 
-        public string StationTitleFromPlayer
-        {
-            get { return (dynamic)this.GetProperty("StationTitleFromPlayer"); }
-            set { this.SetProperty("StationTitleFromPlayer", value); }
-        }
-        public string SongTitleFromPlayer
-        {
-            get { return (dynamic)this.GetProperty("SongTitleFromPlayer"); }
-            set { this.SetProperty("SongTitleFromPlayer", value); }
-        }
-
         public object SelectedStationSource
         {
             get { return this.GetProperty("SelectedStationSource"); }
             set { this.SetProperty("SelectedStationSource", value); }
-        }
-
-        public readonly static Uri DefaultAlbumArtUri = new Uri("http://www.ufomafia.com/radiographic.jpg");
-
-        public Uri NowPlayingImage
-        {
-            get { return (Uri)this.GetProperty("NowPlayingImage"); }
-            set { this.SetProperty("NowPlayingImage", value); }
         }
 
         public string StationSearchFilter

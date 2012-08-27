@@ -50,6 +50,11 @@ namespace Hanasu.Core.Utilities
         }
         public static string GetHtmlFromUrl2(string url)
         {
+            bool moo;
+            return GetHtmlFromUrl2(url, out moo);
+        }
+        public static string GetHtmlFromUrl2(string url, out bool hasRedirected)
+        {
             string result = null;
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
             req.ServicePoint.Expect100Continue = true;
@@ -57,6 +62,8 @@ namespace Hanasu.Core.Utilities
 
             using (HttpWebResponse res = (HttpWebResponse)req.GetResponse())
             {
+                hasRedirected = res.ResponseUri.ToString() != url;
+
                 using (StreamReader sr = new StreamReader(res.GetResponseStream()))
                 {
                     result = sr.ReadToEnd();
@@ -64,6 +71,8 @@ namespace Hanasu.Core.Utilities
                 }
                 res.Close();
             }
+
+            hasRedirected = false;
 
             return result;
         }
