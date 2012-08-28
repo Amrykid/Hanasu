@@ -51,23 +51,20 @@
             <Button Content="{i18n:CrystalLocalizedValueMarkup Key='WindowCommandLanguagesButton'}" msg:ButtonMessageHelper.Message="WindowCommandLanguagesRequested" />
         </metro:WindowCommands>
     </metro:MetroWindow.WindowCommands>
-    <!--<metro:MetroWindow.Flyouts>
-        <metro:Flyout Header="Stream Selection" Position="Right" Name="StreamSelectionFlyout" IsOpen="{Binding NeedsStationStreamSelection, UpdateSourceTrigger=PropertyChanged}">
-            Place holder. May or may not use.
-        </metro:Flyout>
-        <metro:Flyout Header="Artist Info" Position="Right" Name="ArtistInfoFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged}" Width="400">
+    <metro:MetroWindow.Flyouts>
+        <metro:Flyout Header="Artist Info" Position="Right" Name="ArtistInfoFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Width="400" Visibility="{Binding IsOpen,Converter={StaticResource IsPlayingToVisibilityConv},UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource Self}}">
             <Grid DataContext="{Binding CurrentArtistInfo}">
-                <GroupBox Header="{Binding Name}">
+                <GroupBox Header="{Binding Name}" FontSize="22" BorderThickness="0">
                     <StackPanel>
                         <Image Source="{Binding ArtistImageUrl,Converter={StaticResource ResourceKey='UrlConv'}}"/>
-                        <GroupBox Header="Bio">
-                            <TextBlock Text="{Binding Bio}"/>
+                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ArtistInfoBioHeader'}" BorderThickness="0" FontSize="20" Margin="0 5 0 0">
+                            <TextBlock Text="{Binding Bio}" TextWrapping="Wrap" FontSize="16"/>
                         </GroupBox>
                     </StackPanel>
                 </GroupBox>
             </Grid>
         </metro:Flyout>
-    </metro:MetroWindow.Flyouts>-->
+    </metro:MetroWindow.Flyouts>
     <Grid>
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="45" Height="45" VerticalAlignment="Top" 
                 HorizontalAlignment="Right" Panel.ZIndex="100" Opacity=".7" Command="{Binding SwitchViewCommand}">

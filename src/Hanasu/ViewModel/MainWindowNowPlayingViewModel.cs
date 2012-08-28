@@ -15,7 +15,7 @@ namespace Hanasu.ViewModel
     {
         public MainWindowNowPlayingViewModel()
         {
-            FindArtistInfoCommand = CommandManager.CreateCommandFromPropertyChangedAll((s, e) => CurrentArtistFromPlayer != null && IsFetchingArtistInfo == false, (o) =>
+            FindArtistInfoCommand = CommandManager.CreateCommandFromPropertyChangedAll((s, e) => CurrentArtistFromPlayer != null && IsFetchingArtistInfo == false && CurrentArtistInfoPaneIsOpen == false, (o) =>
                 {
                     IsFetchingArtistInfo = true;
                     Task.Factory.StartNew(() => GlobalHanasuCore.GetArtistInfoFromCurrentSong())
@@ -31,7 +31,7 @@ namespace Hanasu.ViewModel
 
                                     CurrentArtistInfo = t.Result;
 
-                                    Dispatcher.Invoke(new EmptyDelegate(() =>
+                                    Dispatcher.BeginInvoke(new EmptyDelegate(() =>
                                         {
                                             CurrentArtistInfoPaneIsOpen = true;
                                         }));
@@ -43,6 +43,7 @@ namespace Hanasu.ViewModel
                             });
                 });
 
+            CurrentArtistInfoPaneIsOpen = true;
             CurrentArtistInfoPaneIsOpen = false;
 
             HasArtist = false;
