@@ -27,6 +27,10 @@ namespace Hanasu
         {
             InitializeComponent();
 
+#if DEBUG
+            this.Title = "Hanasu v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+#endif
+
             InitializeViews();
         }
 

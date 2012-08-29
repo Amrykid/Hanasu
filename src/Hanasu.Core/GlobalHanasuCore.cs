@@ -107,34 +107,46 @@ namespace Hanasu.Core
                             //pre-process the url here.
                             //stolen code from Hanasu 1.0 because it works like it should. :|
 
-                            var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
+                                var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
 
-                            if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
-                            {
-                                var p = (Preprocessor.MultiStreamPreprocessor)pro;
-
-                                var entries = p.Parse(url);
-
-                                if (entries.Length == 0)
+                                if (pro == null && stat.ExplicitExtension == null)
                                 {
-                                    return;
-                                }
-                                else if (entries.Length == 1)
-                                {
-                                    url = new Uri(entries[0].File);
+                                    //We don't know if its possible to play
                                 }
                                 else
                                 {
-                                    var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
+                                    //We know its possible to play and have a preprocessor for it.
 
-                                    if (result == null) return;
+                                    if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
+                                    {
+                                        var p = (Preprocessor.MultiStreamPreprocessor)pro;
 
-                                    if (result.Item1 == false) return;
+                                        var entries = p.Parse(url);
+
+                                        if (entries.Length == 0)
+                                        {
+                                            return;
+                                        }
+                                        else if (entries.Length == 1)
+                                        {
+                                            url = new Uri(entries[0].File);
+                                        }
+                                        else
+                                        {
+                                            var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
+
+                                            if (result == null) return;
+
+                                            if (result.Item1 == false) return;
+
+                                            url = new Uri(result.Item2.File);
+                                        }
+                                    }
+
+                                    Preprocessor.PreprocessorService.Process(ref url);
                                 }
                             }
-
-                            Preprocessor.PreprocessorService.Process(ref url);
-                        }
+                        
                     }
                 }
 

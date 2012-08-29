@@ -18,6 +18,7 @@ using Hanasu.View;
 using Crystal.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
+using Crystal.Services;
 
 namespace Hanasu.ViewModel
 {
@@ -36,6 +37,8 @@ namespace Hanasu.ViewModel
 
             GlobalHanasuCore.Initialize(new Func<string, object, object>(HandleEvents),
                 AppDir + "\\Plugins\\");
+
+            ServiceManager.ComposeAssemblyFromType(typeof(MainWindowViewModel));
 
             //LocalizationManager.ProbeDirectory
 
@@ -191,6 +194,10 @@ namespace Hanasu.ViewModel
                     {
                         //MahApps.Metro.Behaviours.
                         //TODO: Show some sort of error dialog.
+
+                        Exception ex = (Exception)data;
+
+                        ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Connection Error", "Unable to stream from station:" + Environment.NewLine + ex.Message);
                         break;
                     }
                 case GlobalHanasuCore.MediaTypeDetected:
@@ -221,19 +228,24 @@ namespace Hanasu.ViewModel
 
                         cssw.Owner = Application.Current.MainWindow;
 
+                        res = new Tuple<bool, IMultiStreamEntry>(false, null);
+
                         Task.Factory.StartNew(() =>
                         {
-                            res = new Tuple<bool, IMultiStreamEntry>(true, (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data);
+                            lock (res)
+                            {
+                                var dat = (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data;
+                                res = new Tuple<bool, IMultiStreamEntry>(dat != null, dat);
+                            }
                         }).ContinueWith(t => t.Dispose());
 
                         var dResult = cssw.ShowDialog();
 
-                        if (dResult != true)
+                        if (dResult != true && res.Item2 == null)
                             res = new Tuple<bool, IMultiStreamEntry>(false, null);
                         else
                         {
-                            //Thread.Sleep(50); //May add this back if problems arise.
-                            cssw.Close();
+                            Thread.Sleep(50); //May add this back if problems arise.
                         }
 
                         //NeedsStationStreamSelection = false;
