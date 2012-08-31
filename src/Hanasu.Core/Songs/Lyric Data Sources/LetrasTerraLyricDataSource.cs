@@ -11,8 +11,9 @@ namespace Hanasu.Core.Songs.Lyric_Data_Sources
 {
     class LetrasTerraLyricDataSource : ILyricsDataSource
     {
-        public bool GetLyrics(string artist, string track, out string lyrics, out Uri lyricsUri)
+        public bool GetLyrics(string artist, string track, out object lyrics, out Uri lyricsUri, out bool isSynchronizedLyrics)
         {
+            isSynchronizedLyrics = false;
 
             var url = String.Format(LyricFormatUrl,
                         HtmlTextUtility.UrlEncode(artist),

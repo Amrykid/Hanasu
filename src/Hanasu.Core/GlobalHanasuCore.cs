@@ -11,6 +11,7 @@ using Hanasu.Core.Preprocessor;
 using Hanasu.Core.Utilities;
 using Hanasu.Core.Songs;
 using Hanasu.Core.ArtistService;
+using System.Timers;
 
 namespace Hanasu.Core
 {
@@ -41,6 +42,9 @@ namespace Hanasu.Core
                 {
                     PushMessageToGUI(StationsUpdated, StationsService.Stations);
                 });
+
+            playingTimer = new Timer(1000);
+            playingTimer.Elapsed += new ElapsedEventHandler(playingTimer_Elapsed);
 
             SongService = new Songs.SongService();
 
@@ -77,6 +81,16 @@ namespace Hanasu.Core
 
             Initialized = true;
         }
+
+        static void playingTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (CurrentPlayer != null)
+            {
+                var pos = CurrentPlayer.GetPosition();
+            }
+        }
+
+        private static Timer playingTimer = null;
 
         public static void PlayStation(Nullable<Station> station = null)
         {
@@ -150,8 +164,11 @@ namespace Hanasu.Core
                     }
                 }
 
+                if (playingTimer.Enabled) playingTimer.Stop();
+
                 CurrentStation = stat;
                 CurrentPlayer.Play(url, CurrentStation.StationType == StationType.Radio ? MediaType.Audio : MediaType.Video);
+                playingTimer.Start();
                 PushMessageToGUI(NowPlayingReset, null);
                 PushMessageToGUI(NowPlayingStatus, true);
             }
@@ -171,13 +188,15 @@ namespace Hanasu.Core
         public const string StationConnectionError = "StationConnectionError";
         public const string StationMultipleServersFound = "StationMultipleServersFound";
         public const string MediaTypeDetected = "MediaTypeDetected";
+        public const string PlayerDetectedStationTypeDetected = "PlayerDetectedStationTypeDetected";
+        public const string SongCaughtAtBeginning = "SongCaughtAtBeginning";
 
         public static bool Initialized { get; private set; }
 
         public static PluginImporterInstance Plugins { get; private set; }
-        public static Stations.StationsService StationsService { get; private set; }
-        private static SongService SongService { get; set; }
-        private static Hanasu.Core.ArtistService.ArtistService ArtistService { get; set; }
+        internal static Stations.StationsService StationsService { get; private set; }
+        internal static SongService SongService { get; set; }
+        internal static Hanasu.Core.ArtistService.ArtistService ArtistService { get; set; }
 
         internal static IMediaPlayer CurrentPlayer { get; private set; }
 
@@ -219,11 +238,14 @@ namespace Hanasu.Core
 
         public static void StopStation()
         {
+            if (CurrentPlayer == null) return;
+
             CurrentPlayer.Stop();
             PushMessageToGUI(NowPlayingReset, null);
             PushMessageToGUI(NowPlayingStatus, false);
 
             CurrentSong = new Songs.SongData();
+            playingTimer.Stop();
         }
 
         public static void OnStationConnectionTerminated(IMediaPlayer player)
@@ -233,6 +255,8 @@ namespace Hanasu.Core
             PushMessageToGUI(NowPlayingStatus, false);
 
             CurrentSong = new Songs.SongData();
+
+            playingTimer.Stop();
         }
 
         public static int GetVolume()
@@ -275,5 +299,30 @@ namespace Hanasu.Core
         {
             return ArtistService.FindArtist(CurrentSong);
         }
+
+        public static SongData GetLyricsFromCurrentSong()
+        {
+            if (CurrentSong.TrackTitle == null)
+                throw new NullReferenceException("CurrentSong is null!");
+
+            var x = CurrentSong;
+            if (SongService.GetLyricsFromSong(ref x))
+                CurrentSong = x;
+
+            return x;
+        }
+
+        public static void OnStationTypeDetected(IMediaPlayer player, Tuple<PlayerDetectedStationType,Uri> playerDetectedStationType)
+        {
+            PushMessageToGUI(PlayerDetectedStationTypeDetected, playerDetectedStationType);
+            return;
+        }
+    }
+
+    public enum PlayerDetectedStationType
+    {
+        None = 0,
+        Unknown = 1,
+        Shoutcast = 2
     }
 }

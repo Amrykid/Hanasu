@@ -78,9 +78,11 @@
     <Compile Include="Songs\IAlbumInfoDataSource.cs" />
     <Compile Include="Songs\ILyricsDataSource.cs" />
     <Compile Include="Songs\Lyric Data Sources\LetrasTerraLyricDataSource.cs" />
+    <Compile Include="Songs\Lyric Data Sources\TTPlayerLyricsDataSource.cs" />
     <Compile Include="Songs\SongData.cs" />
     <Compile Include="Songs\SongService.cs" />
     <Compile Include="Stations\RadioFormat.cs" />
+    <Compile Include="Stations\Shoutcast\ShoutcastService.cs" />
     <Compile Include="Stations\Station.cs" />
     <Compile Include="Stations\StationLanguage.cs" />
     <Compile Include="Stations\StationScheduleType.cs" />
@@ -117,7 +119,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

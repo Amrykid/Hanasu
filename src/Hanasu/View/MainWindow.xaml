@@ -52,7 +52,7 @@
         </metro:WindowCommands>
     </metro:MetroWindow.WindowCommands>
     <metro:MetroWindow.Flyouts>
-        <metro:Flyout Header="Artist Info" Position="Right" Name="ArtistInfoFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Width="400" Visibility="{Binding IsOpen,Converter={StaticResource IsPlayingToVisibilityConv},UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource Self}}">
+        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='ArtistInfoHeader'}" Position="Right" Name="ArtistInfoFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Width="400" Visibility="{Binding IsOpen,Converter={StaticResource IsPlayingToVisibilityConv},UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource Self}}">
             <Grid DataContext="{Binding CurrentArtistInfo}">
                 <GroupBox Header="{Binding Name}" FontSize="22" BorderThickness="0">
                     <StackPanel>
@@ -63,6 +63,13 @@
                     </StackPanel>
                 </GroupBox>
             </Grid>
+        </metro:Flyout>
+        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='LyricsFlyoutHeader'}" Position="Right" Name="LyricsFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+            <ListBox SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.DataContext>
+                    <local:MainWindowLyricsFlyoutViewModel/>
+                </ListBox.DataContext>
+            </ListBox>
         </metro:Flyout>
     </metro:MetroWindow.Flyouts>
     <Grid>
@@ -311,6 +318,19 @@
                                                            Content="{Binding SongTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>-->
                                                     <Label FontSize="17" 
                                                            Content="{Binding StationTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Button Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="5 0 0 0" Command="{Binding FindLyricsCommand}" Visibility="{Binding HasArtist, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ArtistToVisConv}}">
+                                                            <Rectangle Width="15" Height="15" Margin="0 0 0 0">
+                                                                <Rectangle.Fill>
+                                                                    <VisualBrush Stretch="Fill"
+                            					            Visual="{StaticResource appbar_music}" />
+                                                                </Rectangle.Fill>
+                                                            </Rectangle>
+                                                            <Button.ToolTip>
+                                                                <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='FindLyrics'}"/>
+                                                            </Button.ToolTip>
+                                                        </Button>
+                                                    </StackPanel>
                                                 </StackPanel>
                                             </Grid>
                                         </StackPanel>

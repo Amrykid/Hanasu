@@ -8,6 +8,7 @@ using Hanasu.Core;
 using System.Threading.Tasks;
 using Crystal.Command;
 using Hanasu.Core.ArtistService;
+using Crystal.Localization;
 
 namespace Hanasu.ViewModel
 {
@@ -43,13 +44,57 @@ namespace Hanasu.ViewModel
                             });
                 });
 
+            FindLyricsCommand = CommandManager.CreateCommandFromBinding("LyricsPaneIsOpen", (s, e) => LyricsPaneIsOpen == false, (o) =>
+                {
+                    Task.Factory.StartNew(() => GlobalHanasuCore.GetLyricsFromCurrentSong())
+                        .ContinueWith(t =>
+                        {
+                            if (t.Exception != null)
+                            {
+                                //not found for some reason
+                            }
+                            else
+                            {
+                                //found!
+
+                                if (GlobalHanasuCore.CurrentSong.Lyrics == null)
+                                {
+                                    Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                                    {
+                                        LyricsPaneIsOpen = false;
+                                    }));
+
+                                    return;
+                                }
+
+                                Messenger.PushMessage(this, "LyricsReceived", GlobalHanasuCore.CurrentSong);
+
+                                Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                                {
+                                    LyricsPaneIsOpen = true;
+                                }));
+                            }
+
+                            t.Dispose();
+                        });
+
+                    LyricsPaneIsOpen = true;
+                });
+
             CurrentArtistInfoPaneIsOpen = true;
             CurrentArtistInfoPaneIsOpen = false;
+
+            LyricsPaneIsOpen = false;
 
             HasArtist = false;
 
             IsFetchingArtistInfo = false;
+
+            CurrentSongWasCaughtAtBeginning = false;
         }
+
+        public CrystalCommand FindLyricsCommand { get; set; }
+
 
         public bool IsFetchingArtistInfo
         {
@@ -64,6 +109,19 @@ namespace Hanasu.ViewModel
             StationTitleFromPlayer = (string)data;
         }
 
+        [MessageHandler("PlayerDetectedStationTypeDetected")]
+        public void HandlePlayerDetectedStationTypeDetected(object data)
+        {
+            Tuple<PlayerDetectedStationType, Uri> dat = (Tuple<PlayerDetectedStationType, Uri>)data;
+            StationType = dat.Item1;
+            DirectStationUrl = dat.Item2;
+        }
+
+        public bool CurrentSongWasCaughtAtBeginning { get; set; }
+
+        public Uri DirectStationUrl { get; set; }
+        public PlayerDetectedStationType StationType { get; set; }
+
         [MessageHandler("NowPlayingReset")]
         public void HandleNowPlayingReset(object data)
         {
@@ -74,8 +132,11 @@ namespace Hanasu.ViewModel
             CurrentArtistInfo = null;
 
             CurrentArtistInfoPaneIsOpen = false;
+            LyricsPaneIsOpen = false;
 
             NowPlayingImage = null;
+
+            CurrentSongWasCaughtAtBeginning = false;
         }
 
         [MessageHandler("SongTitleUpdated")]
@@ -88,8 +149,10 @@ namespace Hanasu.ViewModel
                 CurrentArtistFromPlayer = GlobalHanasuCore.CurrentSong.Artist;
                 CurrentSongFromPlayer = GlobalHanasuCore.CurrentSong.TrackTitle;
 
+
                 Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
                 {
+
                     Dispatcher.BeginInvoke(new EmptyDelegate(() =>
                     {
                         if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
@@ -99,10 +162,40 @@ namespace Hanasu.ViewModel
                                 NowPlayingImage = GlobalHanasuCore.CurrentStation.Logo;
                             else
                                 NowPlayingImage = DefaultAlbumArtUri;
+
+                        if (CurrentArtistFromPlayer == null || CurrentSongFromPlayer == null) return;
+
+                        Hanasu.Services.Notifications.NotificationsService.AddNotification(
+                            LocalizationManager.GetLocalizedValue("NowPlayingGridHeader"), 
+                            CurrentArtistFromPlayer + " - " + CurrentSongFromPlayer, 3000, false, 
+                            Services.Notifications.NotificationType.Now_Playing, null, NowPlayingImage);
                     }));
 
                     x.Dispose();
                 });
+
+
+                if (StationType == PlayerDetectedStationType.Shoutcast)
+                {
+                    Task.Factory.StartNew(() => Hanasu.Core.Stations.Shoutcast.ShoutcastService.GetShoutcastStationCurrentSongStartTime(GlobalHanasuCore.CurrentStation, DirectStationUrl.ToString()))
+                        .ContinueWith(t =>
+                            {
+                                var starttime = t.Result;
+
+                                var diff = DateTime.Now.Subtract(starttime);
+
+                                if (diff.TotalSeconds <= 10)
+                                {
+                                    CurrentSongWasCaughtAtBeginning = true;
+                                }
+                                else
+                                {
+                                    CurrentSongWasCaughtAtBeginning = false;
+                                }
+
+                                t.Dispose();
+                            });
+                }
             }
         }
 
@@ -156,6 +249,12 @@ namespace Hanasu.ViewModel
         {
             get { return (bool)this.GetProperty("CurrentArtistInfoPaneIsOpen"); }
             set { this.SetProperty("CurrentArtistInfoPaneIsOpen", value); }
+        }
+
+        public bool LyricsPaneIsOpen
+        {
+            get { return (bool)this.GetProperty("LyricsPaneIsOpen"); }
+            set { this.SetProperty("LyricsPaneIsOpen", value); }
         }
 
         public readonly static Uri DefaultAlbumArtUri = new Uri("http://www.ufomafia.com/radiographic.jpg");

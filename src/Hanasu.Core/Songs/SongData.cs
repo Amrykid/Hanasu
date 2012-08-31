@@ -14,8 +14,9 @@ namespace Hanasu.Core.Songs
 
         public string TrackTitle { get; set; }
         public string Artist { get; set; }
-        public string Lyrics { get; set; }
+        public object Lyrics { get; set; }
         public Uri LyricsUri { get; set; }
+        public bool LyricsSynchronized { get; set; }
         public string Album { get; set; }
         public Uri AlbumCoverUri { get; set; }
         public byte[] AlbumCoverData { get; set; }

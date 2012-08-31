@@ -212,6 +212,11 @@ namespace Hanasu.ViewModel
 
                         break;
                     }
+                case GlobalHanasuCore.PlayerDetectedStationTypeDetected:
+                    {
+                        Messenger.PushMessage(this, "PlayerDetectedStationTypeDetected", data);
+                        break;
+                    }
                 case GlobalHanasuCore.StationMultipleServersFound:
                     {
                         //Deal with choosing multiple stations.
@@ -231,11 +236,10 @@ namespace Hanasu.ViewModel
                         res = new Tuple<bool, IMultiStreamEntry>(false, null);
 
                         Task.Factory.StartNew(() =>
-                        {
-                            lock (res)
+                        {                                
+                            var dat = (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data;
+                            lock (res = new Tuple<bool, IMultiStreamEntry>(dat != null, dat))
                             {
-                                var dat = (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data;
-                                res = new Tuple<bool, IMultiStreamEntry>(dat != null, dat);
                             }
                         }).ContinueWith(t => t.Dispose());
 
@@ -245,8 +249,10 @@ namespace Hanasu.ViewModel
                             res = new Tuple<bool, IMultiStreamEntry>(false, null);
                         else
                         {
-                            Thread.Sleep(50); //May add this back if problems arise.
+                            Thread.Sleep(75); //May add this back if problems arise.
                         }
+
+                        cssw.Close();
 
                         //NeedsStationStreamSelection = false;
 

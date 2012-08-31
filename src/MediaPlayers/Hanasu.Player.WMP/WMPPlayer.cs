@@ -25,6 +25,8 @@ namespace Hanasu.Player.WMP
 
         private WindowsFormsHost wpfhost = null;
 
+        private PlayerDetectedStationType stationType = PlayerDetectedStationType.None;
+
         public void Initialize()
         {
             return;
@@ -39,6 +41,37 @@ namespace Hanasu.Player.WMP
                         parseAttributes();
 
                         GlobalHanasuCore.OnStationMediaTypeDetected(this, IsVideo);
+
+
+                        if (stationType == PlayerDetectedStationType.None)
+                        {
+                            try
+                            {
+                                if (Hanasu.Core.Stations.Shoutcast.ShoutcastService.GetIfShoutcastStation(currentStationAttributes))
+                                {
+                                    stationType = PlayerDetectedStationType.Shoutcast;
+                                }
+                                else
+                                {
+                                    stationType = PlayerDetectedStationType.Unknown;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                            }
+
+                            Uri url = null;
+
+                            try
+                            {
+                                url = new Uri(currentStationAttributes["SourceURL"].ToString());
+                            }
+                            catch (Exception)
+                            {
+                            }
+
+                            GlobalHanasuCore.OnStationTypeDetected(this, new Tuple<PlayerDetectedStationType,Uri>(stationType,url));
+                        }
                     }
                     break;
             }
@@ -120,6 +153,7 @@ namespace Hanasu.Player.WMP
                         Child = host,
                     };
                 }
+                stationType = PlayerDetectedStationType.None;
 
                 player.URL = url.ToString();
                 player.Ctlcontrols.play();
@@ -323,6 +357,15 @@ namespace Hanasu.Player.WMP
             }
 
             return false;
+        }
+
+
+        public object GetPosition()
+        {
+            if (IsVideo)
+                return mediaElement.Position;
+            else
+                return player.Ctlcontrols.currentPositionString;
         }
     }
 }

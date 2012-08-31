@@ -18,5 +18,7 @@ namespace Hanasu.Core.Media
 
         bool IsVideo { get; }
         object GetVideoControl();
+
+        object GetPosition();
     }
 }

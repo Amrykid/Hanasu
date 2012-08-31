@@ -85,7 +85,7 @@ namespace Hanasu.Core.ArtistService.Artist_Data_Sources
                 }
                 catch (WebException ex)
                 {
-                    throw;
+                    throw ex;
                 }
 
                 var results = Regex.Matches(html, "<div class=\"content box\">.+?</div>.+?</div>.+?</div>", RegexOptions.Compiled | RegexOptions.Singleline);

@@ -20,7 +20,7 @@ namespace Hanasu.Core.Songs
         {
             SongCache = new Hashtable();
             DataSource = new YesAsia();
-            LyricsSource = new Lyric_Data_Sources.LetrasTerraLyricDataSource();
+            LyricsSource = new TTPlayerLyricsDataSource();
         }
 
         public bool IsSongAvailable(string songdata, Station station, out Uri lyricsUri)
@@ -40,17 +40,17 @@ namespace Hanasu.Core.Songs
                 lyricssource = LyricsSource;
             else
                 lyricssource = AllLyricsSources.First(t => t.WebsiteName == station.PreferredLyricsSource);
-            
+
 
             var bits = newsongdata.Split(new string[] { " - " }, StringSplitOptions.None);
 
 
-            string lyrics = null;
+            object lyrics = null;
 
             try
             {
-
-                if (lyricssource.GetLyrics(bits[0].Trim(' ', ' '), bits[1].Trim(' ', ' '), out lyrics, out lyricsUri))
+                bool issynchronized;
+                if (lyricssource.GetLyrics(bits[0].Trim(' ', ' '), bits[1].Trim(' ', ' '), out lyrics, out lyricsUri, out issynchronized))
                 {
                     var song = new SongData();
 
@@ -58,6 +58,7 @@ namespace Hanasu.Core.Songs
                     song.TrackTitle = bits[1].Trim(' ');
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
+                    song.LyricsSynchronized = issynchronized;
                     song.OriginallyPlayedStation = station;
                     song.OriginallyBroadcastSongData = songdata;
 
@@ -70,7 +71,7 @@ namespace Hanasu.Core.Songs
 
                     return true;
                 }
-                else if (lyricssource.GetLyrics(bits[1].Trim(' ', ' '), bits[0].Trim(' ', ' '), out lyrics, out lyricsUri))
+                else if (lyricssource.GetLyrics(bits[1].Trim(' ', ' '), bits[0].Trim(' ', ' '), out lyrics, out lyricsUri, out issynchronized))
                 {
                     var song = new SongData();
 
@@ -78,6 +79,7 @@ namespace Hanasu.Core.Songs
                     song.TrackTitle = bits[0].Trim(' ');
                     song.Lyrics = lyrics;
                     song.LyricsUri = lyricsUri;
+                    song.LyricsSynchronized = issynchronized;
                     song.OriginallyPlayedStation = station;
                     song.OriginallyBroadcastSongData = songdata;
 
@@ -163,7 +165,7 @@ namespace Hanasu.Core.Songs
         public IAlbumInfoDataSource DataSource { get; set; }
         public IAlbumInfoDataSource[] AllDataSources { get { return new IAlbumInfoDataSource[] { DataSource, new MSMetaServices() }; } }
         public ILyricsDataSource LyricsSource { get; set; }
-        public ILyricsDataSource[] AllLyricsSources { get { return new ILyricsDataSource[] { LyricsSource }; } }
+        public ILyricsDataSource[] AllLyricsSources { get { return new ILyricsDataSource[] { new LetrasTerraLyricDataSource(), LyricsSource }; } }
 
         internal SongData ParseSongData(string songData, Station station)
         {
@@ -176,6 +178,29 @@ namespace Hanasu.Core.Songs
             a.TrackTitle = bits[1];
 
             return a;
+        }
+
+        internal bool GetLyricsFromSong(ref SongData x)
+        {
+            object lyrics = null;
+            Uri lyricsUri = null;
+
+            try
+            {
+                bool issynchronized;
+
+                LyricsSource.GetLyrics(x.Artist, x.TrackTitle, out lyrics, out lyricsUri, out issynchronized);
+
+                x.Lyrics = lyrics;
+                x.LyricsSynchronized = issynchronized;
+                x.LyricsUri = lyricsUri;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
