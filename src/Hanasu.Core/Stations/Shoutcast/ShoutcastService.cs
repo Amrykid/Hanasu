@@ -106,6 +106,7 @@ namespace Hanasu.Core.Stations.Shoutcast
         }
         public static DateTime GetShoutcastStationCurrentSongStartTime(Station station, string url)
         {
+
             var things = GetShoutcastStationSongHistory(station, url);
             var lastime = things.Keys.First();
 

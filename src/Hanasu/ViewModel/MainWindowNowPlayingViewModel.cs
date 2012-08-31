@@ -149,54 +149,71 @@ namespace Hanasu.ViewModel
                 CurrentArtistFromPlayer = GlobalHanasuCore.CurrentSong.Artist;
                 CurrentSongFromPlayer = GlobalHanasuCore.CurrentSong.TrackTitle;
 
+                CurrentSongWasCaughtAtBeginning = false;
 
-                Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
-                {
-
-                    Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                CheckIfSongWasCaughtAtTheBeginning().ContinueWith((t) =>
                     {
-                        if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
-                            NowPlayingImage = GlobalHanasuCore.CurrentSong.AlbumCoverUri;
-                        else
-                            if (GlobalHanasuCore.CurrentStation.Logo != null)
-                                NowPlayingImage = GlobalHanasuCore.CurrentStation.Logo;
-                            else
-                                NowPlayingImage = DefaultAlbumArtUri;
-
-                        if (CurrentArtistFromPlayer == null || CurrentSongFromPlayer == null) return;
-
-                        Hanasu.Services.Notifications.NotificationsService.AddNotification(
-                            LocalizationManager.GetLocalizedValue("NowPlayingGridHeader"), 
-                            CurrentArtistFromPlayer + " - " + CurrentSongFromPlayer, 3000, false, 
-                            Services.Notifications.NotificationType.Now_Playing, null, NowPlayingImage);
-                    }));
-
-                    x.Dispose();
-                });
-
-
-                if (StationType == PlayerDetectedStationType.Shoutcast)
-                {
-                    Task.Factory.StartNew(() => Hanasu.Core.Stations.Shoutcast.ShoutcastService.GetShoutcastStationCurrentSongStartTime(GlobalHanasuCore.CurrentStation, DirectStationUrl.ToString()))
-                        .ContinueWith(t =>
-                            {
-                                var starttime = t.Result;
-
-                                var diff = DateTime.Now.Subtract(starttime);
-
-                                if (diff.TotalSeconds <= 10)
-                                {
-                                    CurrentSongWasCaughtAtBeginning = true;
-                                }
-                                else
-                                {
-                                    CurrentSongWasCaughtAtBeginning = false;
-                                }
-
-                                t.Dispose();
-                            });
-                }
+                        HandleNowPlaying();
+                    });
             }
+        }
+
+        private Task HandleNowPlaying()
+        {
+            return Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
+            {
+
+                Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                {
+                    if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
+                        NowPlayingImage = GlobalHanasuCore.CurrentSong.AlbumCoverUri;
+                    else
+                        if (GlobalHanasuCore.CurrentStation.Logo != null)
+                            NowPlayingImage = GlobalHanasuCore.CurrentStation.Logo;
+                        else
+                            NowPlayingImage = DefaultAlbumArtUri;
+
+                    if (CurrentArtistFromPlayer == null || CurrentSongFromPlayer == null) return;
+
+                    Hanasu.Services.Notifications.NotificationsService.AddNotification(
+                        LocalizationManager.GetLocalizedValue("NowPlayingGridHeader"),
+                        CurrentArtistFromPlayer + " - " + CurrentSongFromPlayer, 3000, false,
+                        Services.Notifications.NotificationType.Now_Playing, null, NowPlayingImage);
+                }));
+
+                x.Dispose();
+            });
+        }
+
+        private Task CheckIfSongWasCaughtAtTheBeginning()
+        {
+            if (StationType == PlayerDetectedStationType.Shoutcast)
+            {
+                return Task.Factory.StartNew(() => Hanasu.Core.Stations.Shoutcast.ShoutcastService.GetShoutcastStationCurrentSongStartTime(GlobalHanasuCore.CurrentStation, DirectStationUrl.ToString()))
+                    .ContinueWith(t =>
+                    {
+                        if (t.Exception == null)
+                        {
+                            var starttime = t.Result;
+
+                            var diff = DateTime.Now.Subtract(starttime);
+
+                            if (diff.TotalSeconds <= 25.0)
+                            {
+                                CurrentSongWasCaughtAtBeginning = true;
+                            }
+                            else
+                            {
+                                CurrentSongWasCaughtAtBeginning = false;
+
+                            }
+                        }
+
+                        t.Dispose();
+                    });
+            }
+
+            return null;
         }
 
         [MessageHandler("DisplayStationLogo")]
