@@ -15,7 +15,15 @@ namespace Hanasu.Services
         public void ShowMessage(string title = "Title", string message = "Message")
         {
             MessageBoxWindow mbw = new MessageBoxWindow(title, message, System.Windows.MessageBoxButton.OK);
-            mbw.Owner = Application.Current.MainWindow;
+
+            if (Application.Current.MainWindow.IsLoaded)
+                mbw.Owner = Application.Current.MainWindow;
+            else
+            {
+                mbw.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                mbw.ShowInTaskbar = true;
+            }
+
             mbw.ShowDialog();
             mbw.Close();
         }

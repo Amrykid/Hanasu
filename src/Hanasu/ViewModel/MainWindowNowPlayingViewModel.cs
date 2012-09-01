@@ -149,12 +149,17 @@ namespace Hanasu.ViewModel
                 CurrentArtistFromPlayer = GlobalHanasuCore.CurrentSong.Artist;
                 CurrentSongFromPlayer = GlobalHanasuCore.CurrentSong.TrackTitle;
 
-                CurrentSongWasCaughtAtBeginning = false;
+                if (GlobalHanasuCore.CurrentStation.TimeZoneInfo != null)
+                {
+                    CurrentSongWasCaughtAtBeginning = false;
 
-                CheckIfSongWasCaughtAtTheBeginning().ContinueWith((t) =>
-                    {
-                        HandleNowPlaying();
-                    });
+                    CheckIfSongWasCaughtAtTheBeginning().ContinueWith((t) =>
+                        {
+                            HandleNowPlaying();
+                        });
+                }
+                else
+                    HandleNowPlaying();
             }
         }
 

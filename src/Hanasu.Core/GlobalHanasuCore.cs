@@ -74,6 +74,10 @@ namespace Hanasu.Core
                     CurrentPlayer = Plugins.Players.First();
                     CurrentPlayer.Initialize();
                 }
+                else
+                {
+                    PushMessageToGUI(CoreWarningPushed, "Player components were not loaded. Hanasu will be unable to play stations.");
+                }
             }
             catch (Exception)
             {
@@ -191,6 +195,7 @@ namespace Hanasu.Core
         public const string PlayerDetectedStationTypeDetected = "PlayerDetectedStationTypeDetected";
         public const string SongCaughtAtBeginning = "SongCaughtAtBeginning";
         public const string StationMessagePushed = "StationMessagePushed";
+        public const string CoreWarningPushed = "CoreWarningPushed";
 
         public static bool Initialized { get; private set; }
 

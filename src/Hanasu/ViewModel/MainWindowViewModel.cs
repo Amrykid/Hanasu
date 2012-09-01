@@ -36,10 +36,10 @@ namespace Hanasu.ViewModel
             }
             catch (Exception) { }
 
+            ServiceManager.ComposeAssemblyFromType(typeof(MainWindowViewModel));
+
             GlobalHanasuCore.Initialize(new Func<string, object, object>(HandleEvents),
                 AppDir + "\\Plugins\\");
-
-            ServiceManager.ComposeAssemblyFromType(typeof(MainWindowViewModel));
 
             //LocalizationManager.ProbeDirectory
 
@@ -94,7 +94,8 @@ namespace Hanasu.ViewModel
                 IsMuted = !IsMuted;
             });
 
-            IsMuted = false;
+            if (GlobalHanasuCore.Plugins.Players.Count() > 0)
+                IsMuted = false;
 
             MediaFastForwardCommand = new NullCommand();
             MediaRewindCommand = new NullCommand();
@@ -128,7 +129,7 @@ namespace Hanasu.ViewModel
         {
             get
             {
-                return (bool)this.GetProperty("IsMuted");
+                return (bool)this.GetPropertyOrDefaultType<bool>("IsMuted");
             }
             set
             {
@@ -142,7 +143,7 @@ namespace Hanasu.ViewModel
         {
             get
             {
-                return (int)this.GetProperty("CurrentVolume");
+                return (int)this.GetPropertyOrDefaultType<int>("CurrentVolume");
             }
             set
             {
@@ -217,7 +218,17 @@ namespace Hanasu.ViewModel
                     }
                 case GlobalHanasuCore.StationMessagePushed:
                     {
-                        NotificationsService.AddNotification(GlobalHanasuCore.CurrentStation.StationType == StationType.Radio ? LocalizationManager.GetLocalizedValue("RadioMessageHeader") : LocalizationManager.GetLocalizedValue("TVMessageHeader"), data.ToString());
+                        NotificationsService.AddNotification(
+                            GlobalHanasuCore.CurrentStation.StationType == StationType.Radio 
+                                ? LocalizationManager.GetLocalizedValue("RadioMessageHeader") 
+                                : LocalizationManager.GetLocalizedValue("TVMessageHeader"), 
+                            data.ToString());
+                        break;
+                    }
+                case GlobalHanasuCore.CoreWarningPushed:
+                    {
+                        ServiceManager.Resolve<IMessageBoxService>()
+                            .ShowMessage("Internal Error", data.ToString());
                         break;
                     }
                 case GlobalHanasuCore.StationConnectionError:
@@ -227,7 +238,8 @@ namespace Hanasu.ViewModel
 
                         Exception ex = (Exception)data;
 
-                        ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Connection Error", "Unable to stream from station:" + Environment.NewLine + ex.Message);
+                        ServiceManager.Resolve<IMessageBoxService>()
+                            .ShowMessage("Connection Error", "Unable to stream from station:" + Environment.NewLine + ex.Message);
                         break;
                     }
                 case GlobalHanasuCore.MediaTypeDetected:
