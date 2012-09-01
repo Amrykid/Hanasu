@@ -190,6 +190,7 @@ namespace Hanasu.Core
         public const string MediaTypeDetected = "MediaTypeDetected";
         public const string PlayerDetectedStationTypeDetected = "PlayerDetectedStationTypeDetected";
         public const string SongCaughtAtBeginning = "SongCaughtAtBeginning";
+        public const string StationMessagePushed = "StationMessagePushed";
 
         public static bool Initialized { get; private set; }
 
@@ -258,7 +259,12 @@ namespace Hanasu.Core
 
             playingTimer.Stop();
         }
-
+        #region No Idea why i did this
+        public static int Volume
+        {
+            get { return GetVolume(); }
+            set { SetVolume(value); }
+        }
         public static int GetVolume()
         {
             if (CurrentPlayer == null)
@@ -273,6 +279,13 @@ namespace Hanasu.Core
 
             if (CurrentPlayer != null)
                 CurrentPlayer.Volume = vol;
+        }
+        #endregion
+
+        public static bool IsMuted
+        {
+            get { return CurrentPlayer.IsMuted; }
+            set { CurrentPlayer.IsMuted = value; }
         }
 
         public static object GetPlayerView()
@@ -315,6 +328,12 @@ namespace Hanasu.Core
         public static void OnStationTypeDetected(IMediaPlayer player, Tuple<PlayerDetectedStationType,Uri> playerDetectedStationType)
         {
             PushMessageToGUI(PlayerDetectedStationTypeDetected, playerDetectedStationType);
+            return;
+        }
+
+        public static void OnStationMessage(IMediaPlayer player, string name)
+        {
+            PushMessageToGUI(StationMessagePushed, name);
             return;
         }
     }

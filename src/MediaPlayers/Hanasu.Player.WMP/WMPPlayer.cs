@@ -86,6 +86,7 @@ namespace Hanasu.Player.WMP
             stationName = null;
         }
 
+        private List<string> radioMessages = new List<string>();
         void player_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
         {
             //Differentating Song titles, station titles and radio messages is basic for now. Will be expanded to be equal to or better than Hanasu 1.0. It also differs based on the player selected.
@@ -108,7 +109,12 @@ namespace Hanasu.Player.WMP
                 }
                 else
                 {
-                    //Radio message
+                    if (!radioMessages.Contains(name) && name != songName)
+                    {
+                        //Radio message
+                        GlobalHanasuCore.OnStationMessage(this, name);
+                        radioMessages.Add(name);
+                    }
                 }
 
         }
@@ -133,6 +139,8 @@ namespace Hanasu.Player.WMP
         {
             if (type != MediaType.Video)
             {
+                radioMessages.Clear();
+
                 if (player == null)
                 {
                     host = new AxWMP();
@@ -366,6 +374,35 @@ namespace Hanasu.Player.WMP
                 return mediaElement.Position;
             else
                 return player.Ctlcontrols.currentPositionString;
+        }
+
+
+        public bool IsMuted
+        {
+            get
+            {
+                if (player != null)
+                    return player.settings.mute;
+                if (mediaElement != null)
+                    return mediaElement.IsMuted;
+
+                return false;
+            }
+            set
+            {
+                if (player != null)
+                {
+                    player.settings.mute = value;
+                    return;
+                }
+
+                if (mediaElement != null)
+                {
+                    mediaElement.IsMuted = value;
+                    return;
+                }
+
+            }
         }
     }
 }

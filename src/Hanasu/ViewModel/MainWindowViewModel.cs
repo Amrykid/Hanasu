@@ -19,6 +19,7 @@ using Crystal.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
 using Crystal.Services;
+using Hanasu.Services.Notifications;
 
 namespace Hanasu.ViewModel
 {
@@ -88,6 +89,13 @@ namespace Hanasu.ViewModel
                     CurrentVolume = 50;
                 });
 
+            VolumeMuteButtonCommand = new CrystalCommand(this, true, (o) =>
+            {
+                IsMuted = !IsMuted;
+            });
+
+            IsMuted = false;
+
             MediaFastForwardCommand = new NullCommand();
             MediaRewindCommand = new NullCommand();
         }
@@ -111,14 +119,31 @@ namespace Hanasu.ViewModel
             lcw.Close();
         }
 
-
+        public CrystalCommand VolumeMuteButtonCommand { get; set; }
         public CrystalCommand VolumeLowButtonCommand { get; set; }
         public CrystalCommand VolumeMidButtonCommand { get; set; }
         public CrystalCommand VolumeHighButtonCommand { get; set; }
 
+        public bool IsMuted
+        {
+            get
+            {
+                return (bool)this.GetProperty("IsMuted");
+            }
+            set
+            {
+                this.SetProperty("IsMuted", value);
+
+                GlobalHanasuCore.IsMuted = value;
+            }
+        }
+
         public int CurrentVolume
         {
-            get { return (int)this.GetProperty("CurrentVolume"); }
+            get
+            {
+                return (int)this.GetProperty("CurrentVolume");
+            }
             set
             {
                 this.SetProperty("CurrentVolume", value);
@@ -190,6 +215,11 @@ namespace Hanasu.ViewModel
                             UIBackPanelView = null;
                         break;
                     }
+                case GlobalHanasuCore.StationMessagePushed:
+                    {
+                        NotificationsService.AddNotification(GlobalHanasuCore.CurrentStation.StationType == StationType.Radio ? LocalizationManager.GetLocalizedValue("RadioMessageHeader") : LocalizationManager.GetLocalizedValue("TVMessageHeader"), data.ToString());
+                        break;
+                    }
                 case GlobalHanasuCore.StationConnectionError:
                     {
                         //MahApps.Metro.Behaviours.
@@ -236,7 +266,7 @@ namespace Hanasu.ViewModel
                         res = new Tuple<bool, IMultiStreamEntry>(false, null);
 
                         Task.Factory.StartNew(() =>
-                        {                                
+                        {
                             var dat = (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data;
                             lock (res = new Tuple<bool, IMultiStreamEntry>(dat != null, dat))
                             {

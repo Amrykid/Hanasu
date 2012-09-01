@@ -21,7 +21,8 @@ namespace Hanasu.Services.Notifications
         }
 
         public static ConcurrentQueue<NotificationInfo> Notifications { get; private set; }
-        public static bool QueueRunning { get; private set; }
+        public static volatile bool QueueRunning = false;
+
 
         public static void ClearNotificationQueue()
         {
@@ -48,7 +49,7 @@ namespace Hanasu.Services.Notifications
         }
 
 
-        public static void AddNotification(string title, string message = "", int duration = 3000, bool isUrgent = false, NotificationType type = NotificationType.Information, Action<NotificationInfo> onClickCallback = null, object displayImage = null)
+        public static void AddNotification(string title, string message = "", int duration = 5000, bool isUrgent = false, NotificationType type = NotificationType.Information, Action<NotificationInfo> onClickCallback = null, object displayImage = null)
         {
             if (System.Windows.Application.Current == null)
                 return;

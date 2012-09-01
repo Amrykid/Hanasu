@@ -20,5 +20,7 @@ namespace Hanasu.Core.Media
         object GetVideoControl();
 
         object GetPosition();
+
+        bool IsMuted { get; set; }
     }
 }

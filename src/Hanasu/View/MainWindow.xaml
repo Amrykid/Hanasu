@@ -144,8 +144,22 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Name="VolumeControlPanel" Margin="0 0 50 0">
-                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60">
+                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Command="{Binding VolumeMuteButtonCommand}">
                                         <Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                            <Rectangle.Style>
+                                                <Style TargetType="Rectangle">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsMuted,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                            <Setter Property="Fill">
+                                                                <Setter.Value>
+                                                                    <VisualBrush Stretch="Uniform"
+                            					    Visual="{StaticResource appbar_sound_0}" />
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Rectangle.Style>
                                             <Rectangle.Fill>
                                                 <VisualBrush Stretch="Uniform"
                             					    Visual="{StaticResource appbar_sound_2}" />
