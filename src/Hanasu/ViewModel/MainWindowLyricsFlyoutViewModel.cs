@@ -5,6 +5,7 @@ using System.Text;
 using Crystal.Core;
 using Crystal.Messaging;
 using Hanasu.Core.Songs;
+using Hanasu.Core;
 
 namespace Hanasu.ViewModel
 {
@@ -16,6 +17,13 @@ namespace Hanasu.ViewModel
         }
 
         private bool synchronized = false;
+        private volatile bool _CurrentSongWasCaughtAtBeginning = false;
+
+        [MessageHandler("CurrentSongWasCaughtAtBeginning")]
+        public void HandleCurrentSongWasCaughtAtBeginning(object data)
+        {
+            _CurrentSongWasCaughtAtBeginning = (bool)data;
+        }
 
         [MessageHandler("LyricsReceived")]
         public void HandleLyricsReceived(object data)
@@ -27,8 +35,14 @@ namespace Hanasu.ViewModel
                 synchronized = true;
 
                 //start displaying lyrics
+
+                if (_CurrentSongWasCaughtAtBeginning)
+                {
+                }
             }
-            
+            else
+                synchronized = false;
+
             Lyrics = sd.Lyrics;
         }
 

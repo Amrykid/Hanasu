@@ -38,50 +38,55 @@ namespace Hanasu.Core
 
             StationsService = new Stations.StationsService();
 
-            StationsService.LoadStationsFromRepoAsync().ContinueWith(t =>
-                {
-                    PushMessageToGUI(StationsUpdated, StationsService.Stations);
-                });
-
             playingTimer = new Timer(1000);
             playingTimer.Elapsed += new ElapsedEventHandler(playingTimer_Elapsed);
 
             SongService = new Songs.SongService();
 
-            ArtistService = new Core.ArtistService.ArtistService();
+            ArtistService = new Core.ArtistService.ArtistService();              
 
-            Plugins = new PluginImporterInstance();
-
-            try
-            {
-                if (!Directory.Exists(pluginDir))
-                    Directory.CreateDirectory(pluginDir);
-
-                var ac = new AggregateCatalog();
-
-                ac.Catalogs.Add(new DirectoryCatalog(pluginDir, "*.dll"));
-
-                foreach (var dir in Directory.EnumerateDirectories(pluginDir))
+            System.Threading.Tasks.Parallel.Invoke(() =>
                 {
-                    ac.Catalogs.Add(new DirectoryCatalog(dir, "*.dll"));
-                }
+                    StationsService.LoadStationsFromRepoAsync().ContinueWith(t =>
+                        {
+                            PushMessageToGUI(StationsUpdated, StationsService.Stations);
+                        });
 
-                var comp = new CompositionContainer(ac);
-                comp.ComposeParts(Plugins);
+                },
+                () =>
+                {
+                    Plugins = new PluginImporterInstance();
+                    try
+                    {
+                        if (!Directory.Exists(pluginDir))
+                            Directory.CreateDirectory(pluginDir);
 
-                if (Plugins.Players.Count() > 0)
-                {
-                    CurrentPlayer = Plugins.Players.First();
-                    CurrentPlayer.Initialize();
-                }
-                else
-                {
-                    PushMessageToGUI(CoreWarningPushed, "Player components were not loaded. Hanasu will be unable to play stations.");
-                }
-            }
-            catch (Exception)
-            {
-            }
+                        var ac = new AggregateCatalog();
+
+                        ac.Catalogs.Add(new DirectoryCatalog(pluginDir, "*.dll"));
+
+                        foreach (var dir in Directory.EnumerateDirectories(pluginDir))
+                        {
+                            ac.Catalogs.Add(new DirectoryCatalog(dir, "*.dll"));
+                        }
+
+                        var comp = new CompositionContainer(ac);
+                        comp.ComposeParts(Plugins);
+
+                        if (Plugins.Players.Count() > 0)
+                        {
+                            CurrentPlayer = Plugins.Players.First();
+                            CurrentPlayer.Initialize();
+                        }
+                        else
+                        {
+                            PushMessageToGUI(CoreWarningPushed, "Player components were not loaded. Hanasu will be unable to play stations.");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                });
 
             Initialized = true;
         }

@@ -47,6 +47,7 @@ namespace Hanasu.Core.Preprocessor.Preprocessors.M3U
                         item.Length = int.Parse(m3udata.Substring(0, m3udata.IndexOf(",")));
 
                         item.Title = m3udata.Substring(m3udata.IndexOf(",") + 1).TrimEnd('\r', '\n');
+
                     }
                     else
                     {
@@ -54,6 +55,7 @@ namespace Hanasu.Core.Preprocessor.Preprocessors.M3U
                         list.Add(item);
                     }
                 }
+
             }
             else
             {

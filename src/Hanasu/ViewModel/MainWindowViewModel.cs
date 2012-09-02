@@ -41,11 +41,15 @@ namespace Hanasu.ViewModel
             GlobalHanasuCore.Initialize(new Func<string, object, object>(HandleEvents),
                 AppDir + "\\Plugins\\");
 
-            //LocalizationManager.ProbeDirectory
+            if (GlobalHanasuCore.Plugins.Players.Count() > 0)
+                IsMuted = false;
+
 
             CurrentVolume = 50;
 
             GlobalHanasuCore.SetVolume(CurrentVolume);
+
+            //LocalizationManager.ProbeDirectory
 
             SelectedStation = new Station();
 
@@ -94,8 +98,6 @@ namespace Hanasu.ViewModel
                 IsMuted = !IsMuted;
             });
 
-            if (GlobalHanasuCore.Plugins.Players.Count() > 0)
-                IsMuted = false;
 
             MediaFastForwardCommand = new NullCommand();
             MediaRewindCommand = new NullCommand();
@@ -219,9 +221,9 @@ namespace Hanasu.ViewModel
                 case GlobalHanasuCore.StationMessagePushed:
                     {
                         NotificationsService.AddNotification(
-                            GlobalHanasuCore.CurrentStation.StationType == StationType.Radio 
-                                ? LocalizationManager.GetLocalizedValue("RadioMessageHeader") 
-                                : LocalizationManager.GetLocalizedValue("TVMessageHeader"), 
+                            GlobalHanasuCore.CurrentStation.StationType == StationType.Radio
+                                ? LocalizationManager.GetLocalizedValue("RadioMessageHeader")
+                                : LocalizationManager.GetLocalizedValue("TVMessageHeader"),
                             data.ToString());
                         break;
                     }

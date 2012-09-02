@@ -149,24 +149,23 @@ namespace Hanasu.ViewModel
                 CurrentArtistFromPlayer = GlobalHanasuCore.CurrentSong.Artist;
                 CurrentSongFromPlayer = GlobalHanasuCore.CurrentSong.TrackTitle;
 
-                if (GlobalHanasuCore.CurrentStation.TimeZoneInfo != null)
-                {
-                    CurrentSongWasCaughtAtBeginning = false;
-
-                    CheckIfSongWasCaughtAtTheBeginning().ContinueWith((t) =>
+                Parallel.Invoke(() =>
+                    {
+                        if (GlobalHanasuCore.CurrentStation.TimeZoneInfo != null)
                         {
-                            HandleNowPlaying();
-                        });
-                }
-                else
-                    HandleNowPlaying();
+                            CurrentSongWasCaughtAtBeginning = false;
+
+                            CheckIfSongWasCaughtAtTheBeginning();
+                        }
+                    },
+                () => HandleNowPlaying());
             }
         }
 
-        private Task HandleNowPlaying()
+        private void HandleNowPlaying()
         {
-            return Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
-            {
+            //return Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
+            //{
 
                 Dispatcher.BeginInvoke(new EmptyDelegate(() =>
                 {
@@ -186,8 +185,8 @@ namespace Hanasu.ViewModel
                         Services.Notifications.NotificationType.Now_Playing, null, NowPlayingImage);
                 }));
 
-                x.Dispose();
-            });
+            //    x.Dispose();
+            //});
         }
 
         private Task CheckIfSongWasCaughtAtTheBeginning()
@@ -212,6 +211,8 @@ namespace Hanasu.ViewModel
                                 CurrentSongWasCaughtAtBeginning = false;
 
                             }
+
+                            Messenger.PushMessage(this, "CurrentSongWasCaughtAtBeginning", CurrentSongWasCaughtAtBeginning);
                         }
 
                         t.Dispose();
