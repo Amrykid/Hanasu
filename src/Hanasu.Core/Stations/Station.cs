@@ -33,6 +33,8 @@ namespace Hanasu.Core.Stations
 
         public TimeZoneInfo TimeZoneInfo { get; set; }
 
+        public StationServerType ServerType { get; set; }
+
         public static bool operator ==(Station s1, Station s2)
         {
             return s1.Equals(s2);

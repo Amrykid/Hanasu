@@ -41,7 +41,7 @@ namespace Hanasu.ViewModel
             GlobalHanasuCore.Initialize(new Func<string, object, object>(HandleEvents),
                 AppDir + "\\Plugins\\");
 
-            if (GlobalHanasuCore.Plugins.Players.Count() > 0)
+            if (GlobalHanasuCore.Plugins.Players != null)
                 IsMuted = false;
 
 

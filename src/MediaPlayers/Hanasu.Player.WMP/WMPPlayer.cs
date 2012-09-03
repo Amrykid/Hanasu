@@ -43,7 +43,7 @@ namespace Hanasu.Player.WMP
                         GlobalHanasuCore.OnStationMediaTypeDetected(this, IsVideo);
 
 
-                        if (stationType == PlayerDetectedStationType.None)
+                        if (stationType == PlayerDetectedStationType.None && GlobalHanasuCore.CurrentStation.ServerType == Core.Stations.StationServerType.Auto)
                         {
                             try
                             {
@@ -403,6 +403,12 @@ namespace Hanasu.Player.WMP
                 }
 
             }
+        }
+
+
+        public Hashtable DataAttributes
+        {
+            get { return currentStationAttributes; }
         }
     }
 }

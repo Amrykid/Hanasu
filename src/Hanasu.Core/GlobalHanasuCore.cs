@@ -12,6 +12,7 @@ using Hanasu.Core.Utilities;
 using Hanasu.Core.Songs;
 using Hanasu.Core.ArtistService;
 using System.Timers;
+using Hanasu.Core.Stations.Shoutcast;
 
 namespace Hanasu.Core
 {
@@ -180,6 +181,13 @@ namespace Hanasu.Core
                 playingTimer.Start();
                 PushMessageToGUI(NowPlayingReset, null);
                 PushMessageToGUI(NowPlayingStatus, true);
+
+                if (CurrentStation.ServerType != StationServerType.Auto && CurrentStation.ServerType != StationServerType.None && CurrentStation.ServerType != StationServerType.Unknown)
+                {
+                    OnStationTypeDetected(CurrentPlayer, 
+                        new Tuple<PlayerDetectedStationType, Uri>(CurrentStation.ServerType == StationServerType.Shoutcast ? PlayerDetectedStationType.Shoutcast : PlayerDetectedStationType.Unknown, 
+                            new Uri(CurrentPlayer.DataAttributes["SourceUrl"].ToString())));
+                }
             }
             catch (Exception ex)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace Hanasu.Core.Media
 {
@@ -22,5 +23,7 @@ namespace Hanasu.Core.Media
         object GetPosition();
 
         bool IsMuted { get; set; }
+
+        Hashtable DataAttributes { get; }
     }
 }

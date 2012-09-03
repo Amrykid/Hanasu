@@ -63,7 +63,8 @@ namespace Hanasu.Core.Stations
                 ScheduleUrl = x.ContainsElement("Schedule") ? (string.IsNullOrEmpty(x.Element("Schedule").Value) ? null : new Uri(x.Element("Schedule").Value)) : null,
                 Logo = x.ContainsElement("Logo") ? (string.IsNullOrEmpty(x.Element("Logo").Value) ? null : new Uri(x.Element("Logo").Value)) : null,
                 UseAlternateSongTitleFetching = x.ContainsElement("UseAlternateSongTitleFetching") ? bool.Parse(x.Element("UseAlternateSongTitleFetching").Value) : false,
-                TimeZoneInfo = x.ContainsElement("Timezone") ? TimeZoneInfo.FindSystemTimeZoneById(x.Element("Timezone").Value) : null
+                TimeZoneInfo = x.ContainsElement("Timezone") ? TimeZoneInfo.FindSystemTimeZoneById(x.Element("Timezone").Value) : null,
+                ServerType = x.ContainsElement("ServerType") ? (StationServerType)Enum.Parse(typeof(StationServerType), x.Element("ServerType").Value) : StationServerType.None
             };
         }
 
