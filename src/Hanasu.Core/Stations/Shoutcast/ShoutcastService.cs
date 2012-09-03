@@ -125,6 +125,10 @@ namespace Hanasu.Core.Stations.Shoutcast
         public static SongData GetShoutcastStationCurrentSong(Station station, Hashtable playerAttributes)
         {
             var url = (string)playerAttributes["SourceURL"];
+            return GetShoutcastStationCurrentSong(station, url);
+        }
+        public static SongData GetShoutcastStationCurrentSong(Station station, string url)
+        {
 
             var html = Hanasu.Core.Utilities.HtmlTextUtility.GetHtmlFromUrl2(url.ToString());
             var songtable = Regex.Matches(html, "<table.+?>.+?</table>", RegexOptions.Singleline | RegexOptions.Compiled)[2];

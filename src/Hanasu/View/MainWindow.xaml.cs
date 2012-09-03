@@ -101,6 +101,15 @@ namespace Hanasu
             //GridViewObject.ColumnHeaderContainerStyle = new Style(typeof(GridViewColumnHeader));
             GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationNameColumn"), DisplayMemberBinding = new Binding("Name") });
             GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationLanguageColumn"), DisplayMemberBinding = new Binding("Language") });
+            GridViewObject.Columns.Add(new GridViewColumn()
+            {
+                Header = LocalizationManager.GetLocalizedValue("StationNowPlayingColumn"),
+                DisplayMemberBinding = new Binding()
+                {
+                    Path = new PropertyPath("DetectedNowPlaying"),
+                    UpdateSourceTrigger = UpdateSourceTrigger.LostFocus,
+                }
+            });
             //GridViewObject.ColumnHeaderContainerStyle = (Style)Application.Current.FindResource("GridViewColumnHeaderGripper");
 
             ImageViewObject = new ImageHeaderView();

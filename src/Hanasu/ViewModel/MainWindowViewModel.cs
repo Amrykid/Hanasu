@@ -244,6 +244,15 @@ namespace Hanasu.ViewModel
                             .ShowMessage("Connection Error", "Unable to stream from station:" + Environment.NewLine + ex.Message);
                         break;
                     }
+                case GlobalHanasuCore.CoreDispatcherInvoke:
+                    {
+                        Dispatcher.Invoke(new EmptyDelegate(() =>
+                            {
+                                ((Action)data).Invoke();
+                            }));
+
+                        break;
+                    }
                 case GlobalHanasuCore.MediaTypeDetected:
                     {
                         bool isvideo = (bool)data;

@@ -11,6 +11,7 @@
     <ExplicitExtension>.m3u</ExplicitExtension>
     <Schedule type="page">http://www.animenfo.com/radio/schedule.php</Schedule>
     <Logo>http://d1i6vahw24eb07.cloudfront.net/s54119q.png</Logo>
+    <ServerType>Shoutcast</ServerType>
   </Station>
   <Station>
     <Name>Gensokyo Radio</Name>

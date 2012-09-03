@@ -13,6 +13,8 @@ using Hanasu.Core.Songs;
 using Hanasu.Core.ArtistService;
 using System.Timers;
 using Hanasu.Core.Stations.Shoutcast;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Hanasu.Core
 {
@@ -39,18 +41,24 @@ namespace Hanasu.Core
 
             StationsService = new Stations.StationsService();
 
-            playingTimer = new Timer(1000);
+            playingTimer = new System.Timers.Timer(1000);
             playingTimer.Elapsed += new ElapsedEventHandler(playingTimer_Elapsed);
+
+            nowPlayingTimer = new System.Timers.Timer(TimeSpan.FromMinutes(5).TotalMilliseconds);
+            nowPlayingTimer.Elapsed += new ElapsedEventHandler(nowPlayingTimer_Elapsed);
 
             SongService = new Songs.SongService();
 
-            ArtistService = new Core.ArtistService.ArtistService();              
+            ArtistService = new Core.ArtistService.ArtistService();
 
             System.Threading.Tasks.Parallel.Invoke(() =>
                 {
                     StationsService.LoadStationsFromRepoAsync().ContinueWith(t =>
                         {
                             PushMessageToGUI(StationsUpdated, StationsService.Stations);
+
+                            PollStationsNowPlaying();
+                            nowPlayingTimer.Start();
                         });
 
                 },
@@ -92,6 +100,93 @@ namespace Hanasu.Core
             Initialized = true;
         }
 
+        static void nowPlayingTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            PollStationsNowPlaying();
+        }
+
+        private static void PollStationsNowPlaying()
+        {
+            if (StationsService.Stations.Count == 0) return;
+
+            int i = 0;
+            while (i != StationsService.Stations.Count - 1)
+            {
+                var station = StationsService.Stations[i];
+
+                if (station.ServerType == StationServerType.Shoutcast)
+                {
+                    if (station == CurrentStation)
+                        station.DetectedNowPlaying = ShoutcastService.GetShoutcastStationCurrentSong(CurrentStation, CurrentPlayer.DataAttributes).ToSongString();
+                    else
+                    {
+                        Uri url = station.DataSource;
+                        if (station._directstreamurl == null)
+                        {
+                            PreprocessUrl(ref url, CurrentStation, null, true);
+                            station._directstreamurl = url;
+                        }
+                        station.DetectedNowPlaying = ShoutcastService.GetShoutcastStationCurrentSong(station, url.ToString()).ToSongString();
+                    }
+                }
+
+                PushActionToGUIDispatcher(() =>
+                    {
+                        StationsService.Stations[i] = station;
+                    });
+
+                i++;
+            }
+            PushMessageToGUI(StationsUpdated, StationsService.Stations);
+        }
+        private static void PreprocessUrl(ref Uri url, Station stat, string ext, bool autochoose = false)
+        {
+
+            var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
+
+            if (pro == null && stat.ExplicitExtension == null)
+            {
+                //We don't know if its possible to play
+            }
+            else
+            {
+                //We know its possible to play and have a preprocessor for it.
+
+                if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
+                {
+                    var p = (Preprocessor.MultiStreamPreprocessor)pro;
+
+                    var entries = p.Parse(url);
+
+                    if (entries.Length == 0)
+                    {
+                        return;
+                    }
+                    else if (entries.Length == 1)
+                    {
+                        url = new Uri(entries[0].File);
+                    }
+                    else
+                    {
+                        if (autochoose == false)
+                        {
+                            var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
+
+                            if (result == null) return;
+
+                            if (result.Item1 == false) return;
+
+                            url = new Uri(result.Item2.File);
+                        }
+                        else
+                            url = new Uri(entries[0].File);
+                    }
+                }
+
+                Preprocessor.PreprocessorService.Process(ref url);
+            }
+        }
+
         static void playingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (CurrentPlayer != null)
@@ -100,7 +195,8 @@ namespace Hanasu.Core
             }
         }
 
-        private static Timer playingTimer = null;
+        private static System.Timers.Timer playingTimer = null;
+        private static System.Timers.Timer nowPlayingTimer = null;
 
         public static void PlayStation(Nullable<Station> station = null)
         {
@@ -128,49 +224,9 @@ namespace Hanasu.Core
 
                         if ((!CurrentPlayer.Supports(ext)))
                         {
-                            //pre-process the url here.
-                            //stolen code from Hanasu 1.0 because it works like it should. :|
+                            PreprocessUrl(ref url, stat, ext);
+                        }
 
-                                var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
-
-                                if (pro == null && stat.ExplicitExtension == null)
-                                {
-                                    //We don't know if its possible to play
-                                }
-                                else
-                                {
-                                    //We know its possible to play and have a preprocessor for it.
-
-                                    if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
-                                    {
-                                        var p = (Preprocessor.MultiStreamPreprocessor)pro;
-
-                                        var entries = p.Parse(url);
-
-                                        if (entries.Length == 0)
-                                        {
-                                            return;
-                                        }
-                                        else if (entries.Length == 1)
-                                        {
-                                            url = new Uri(entries[0].File);
-                                        }
-                                        else
-                                        {
-                                            var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
-
-                                            if (result == null) return;
-
-                                            if (result.Item1 == false) return;
-
-                                            url = new Uri(result.Item2.File);
-                                        }
-                                    }
-
-                                    Preprocessor.PreprocessorService.Process(ref url);
-                                }
-                            }
-                        
                     }
                 }
 
@@ -184,9 +240,16 @@ namespace Hanasu.Core
 
                 if (CurrentStation.ServerType != StationServerType.Auto && CurrentStation.ServerType != StationServerType.None && CurrentStation.ServerType != StationServerType.Unknown)
                 {
-                    OnStationTypeDetected(CurrentPlayer, 
-                        new Tuple<PlayerDetectedStationType, Uri>(CurrentStation.ServerType == StationServerType.Shoutcast ? PlayerDetectedStationType.Shoutcast : PlayerDetectedStationType.Unknown, 
-                            new Uri(CurrentPlayer.DataAttributes["SourceUrl"].ToString())));
+                    Task.Factory.StartNew(() =>
+                        {
+                            Thread.Sleep(5000);
+
+                            var urlx = CurrentPlayer.DataAttributes["SourceURL"].ToString();
+
+                            OnStationTypeDetected(CurrentPlayer,
+                                new Tuple<PlayerDetectedStationType, Uri>(CurrentStation.ServerType == StationServerType.Shoutcast ? PlayerDetectedStationType.Shoutcast : PlayerDetectedStationType.Unknown,
+                                    new Uri(urlx)));
+                        });
                 }
             }
             catch (Exception ex)
@@ -209,6 +272,7 @@ namespace Hanasu.Core
         public const string SongCaughtAtBeginning = "SongCaughtAtBeginning";
         public const string StationMessagePushed = "StationMessagePushed";
         public const string CoreWarningPushed = "CoreWarningPushed";
+        public const string CoreDispatcherInvoke = "CoreDispatcherInvoke";
 
         public static bool Initialized { get; private set; }
 
@@ -225,6 +289,14 @@ namespace Hanasu.Core
         {
             if (eventHandler != null)
                 return eventHandler(eventstr, data);
+
+            return null;
+        }
+
+        private static object PushActionToGUIDispatcher(Action a)
+        {
+            if (eventHandler != null)
+                return eventHandler(CoreDispatcherInvoke, a);
 
             return null;
         }
@@ -343,7 +415,7 @@ namespace Hanasu.Core
             return x;
         }
 
-        public static void OnStationTypeDetected(IMediaPlayer player, Tuple<PlayerDetectedStationType,Uri> playerDetectedStationType)
+        public static void OnStationTypeDetected(IMediaPlayer player, Tuple<PlayerDetectedStationType, Uri> playerDetectedStationType)
         {
             PushMessageToGUI(PlayerDetectedStationTypeDetected, playerDetectedStationType);
             return;

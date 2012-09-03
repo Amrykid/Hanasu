@@ -35,6 +35,11 @@ namespace Hanasu.Core.Stations
 
         public StationServerType ServerType { get; set; }
 
+        public string DetectedNowPlaying { get; set; }
+
+        [NonSerialized]
+        internal Uri _directstreamurl;
+
         public static bool operator ==(Station s1, Station s2)
         {
             return s1.Equals(s2);
