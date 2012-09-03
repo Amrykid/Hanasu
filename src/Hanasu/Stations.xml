@@ -126,6 +126,7 @@
     <Cacheable>False</Cacheable>
     <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-ash4/183955_10150109837200101_5682548_n.jpg</Logo>
     <Schedule type="ics">https://www.google.com/calendar/ical/jphip.net_h2ddkfp90b6e6bct9usubrvev8%40group.calendar.google.com/public/basic.ics</Schedule>
+    <ServerType>Shoutcast</ServerType>
   </Station>
   <Station>
     <Name>AnimeNexus</Name>

@@ -126,7 +126,14 @@ namespace Hanasu.Core
                             PreprocessUrl(ref url, CurrentStation, null, true);
                             station._directstreamurl = url;
                         }
-                        station.DetectedNowPlaying = ShoutcastService.GetShoutcastStationCurrentSong(station, url.ToString()).ToSongString();
+                        try
+                        {
+                            station.DetectedNowPlaying = ShoutcastService.GetShoutcastStationCurrentSong(station, station._directstreamurl != null ? station._directstreamurl.ToString() : url.ToString()).ToSongString();
+                        }
+                        catch (Exception)
+                        {
+                            station.DetectedNowPlaying = "N/A";
+                        }
                     }
                 }
 
@@ -141,7 +148,6 @@ namespace Hanasu.Core
         }
         private static void PreprocessUrl(ref Uri url, Station stat, string ext, bool autochoose = false)
         {
-
             var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
 
             if (pro == null && stat.ExplicitExtension == null)
@@ -224,7 +230,13 @@ namespace Hanasu.Core
 
                         if ((!CurrentPlayer.Supports(ext)))
                         {
-                            PreprocessUrl(ref url, stat, ext);
+                            if (stat.ExplicitExtension != null)
+                            {
+                                if (!CurrentPlayer.Supports(stat.ExplicitExtension))
+                                    PreprocessUrl(ref url, stat, ext);
+                            }
+                            else
+                                PreprocessUrl(ref url, stat, ext);
                         }
 
                     }
