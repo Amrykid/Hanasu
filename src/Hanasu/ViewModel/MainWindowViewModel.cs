@@ -218,6 +218,12 @@ namespace Hanasu.ViewModel
                             UIBackPanelView = null;
                         break;
                     }
+                case GlobalHanasuCore.StationBufferingStatusChanged:
+                    {
+                        Messenger.PushMessage(this, "BufferingStatus", data);
+
+                        break;
+                    }
                 case GlobalHanasuCore.StationMessagePushed:
                     {
                         NotificationsService.AddNotification(

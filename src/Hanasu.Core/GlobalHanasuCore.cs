@@ -44,7 +44,7 @@ namespace Hanasu.Core
             playingTimer = new System.Timers.Timer(1000);
             playingTimer.Elapsed += new ElapsedEventHandler(playingTimer_Elapsed);
 
-            nowPlayingTimer = new System.Timers.Timer(TimeSpan.FromMinutes(5).TotalMilliseconds);
+            nowPlayingTimer = new System.Timers.Timer(TimeSpan.FromMinutes(3.2).TotalMilliseconds);
             nowPlayingTimer.Elapsed += new ElapsedEventHandler(nowPlayingTimer_Elapsed);
 
             SongService = new Songs.SongService();
@@ -114,33 +114,39 @@ namespace Hanasu.Core
             {
                 var station = StationsService.Stations[i];
 
-                if (station.ServerType == StationServerType.Shoutcast)
+                try
                 {
-                    if (station == CurrentStation)
-                        station.DetectedNowPlaying = ShoutcastService.GetShoutcastStationCurrentSong(CurrentStation, CurrentPlayer.DataAttributes).ToSongString();
-                    else
+                    if (station.ServerType == StationServerType.Shoutcast)
                     {
-                        Uri url = station.DataSource;
-                        if (station._directstreamurl == null)
+                        if (station.Name == CurrentStation.Name)
+                            station.DetectedNowPlaying = ShoutcastService.GetShoutcastStationCurrentSong(CurrentStation, CurrentPlayer.DataAttributes).ToSongString();
+                        else
                         {
-                            PreprocessUrl(ref url, CurrentStation, null, true);
-                            station._directstreamurl = url;
-                        }
-                        try
-                        {
-                            station.DetectedNowPlaying = ShoutcastService.GetShoutcastStationCurrentSong(station, station._directstreamurl != null ? station._directstreamurl.ToString() : url.ToString()).ToSongString();
-                        }
-                        catch (Exception)
-                        {
-                            station.DetectedNowPlaying = "N/A";
+                            Uri url = station.DataSource;
+                            if (station._directstreamurl == null)
+                            {
+                                PreprocessUrl(ref url, CurrentStation, null, true);
+                                station._directstreamurl = url;
+                            }
+                            try
+                            {
+                                station.DetectedNowPlaying = ShoutcastService.GetShoutcastStationCurrentSong(station, station._directstreamurl != null ? station._directstreamurl.ToString() : url.ToString()).ToSongString();
+                            }
+                            catch (Exception)
+                            {
+                                station.DetectedNowPlaying = "N/A";
+                            }
                         }
                     }
-                }
 
-                PushActionToGUIDispatcher(() =>
-                    {
-                        StationsService.Stations[i] = station;
-                    });
+                    PushActionToGUIDispatcher(() =>
+                        {
+                            StationsService.Stations[i] = station;
+                        });
+                }
+                catch (Exception)
+                {
+                }
 
                 i++;
             }
@@ -197,7 +203,10 @@ namespace Hanasu.Core
         {
             if (CurrentPlayer != null)
             {
-                var pos = CurrentPlayer.GetPosition();
+                PushActionToGUIDispatcher(() =>
+                    {
+                        var pos = CurrentPlayer.GetPosition();
+                    });
             }
         }
 
@@ -285,6 +294,7 @@ namespace Hanasu.Core
         public const string StationMessagePushed = "StationMessagePushed";
         public const string CoreWarningPushed = "CoreWarningPushed";
         public const string CoreDispatcherInvoke = "CoreDispatcherInvoke";
+        public const string StationBufferingStatusChanged = "StationBufferingStatusChanged";
 
         public static bool Initialized { get; private set; }
 
@@ -311,6 +321,11 @@ namespace Hanasu.Core
                 return eventHandler(CoreDispatcherInvoke, a);
 
             return null;
+        }
+
+        public static void OnBufferingStatusChanged(IMediaPlayer player, bool status)
+        {
+            PushMessageToGUI(StationBufferingStatusChanged, status);
         }
 
         public static void OnSongTitleDetected(IMediaPlayer player, string songdata)

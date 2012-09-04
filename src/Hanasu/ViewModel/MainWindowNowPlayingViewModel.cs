@@ -103,6 +103,18 @@ namespace Hanasu.ViewModel
         }
         public CrystalCommand FindArtistInfoCommand { get; set; }
 
+        public bool IsBuffering
+        {
+            get { return (bool)this.GetPropertyOrDefaultType<bool>("IsBuffering"); }
+            set { this.SetProperty("IsBuffering", value); }
+        }
+
+        [MessageHandler("BufferingStatus")]
+        public void HandleBufferingStatus(object data)
+        {
+            IsBuffering = (bool)data;
+        }
+
         [MessageHandler("StationTitleUpdated")]
         public void HandleStationTitleUpdated(object data)
         {
@@ -167,23 +179,23 @@ namespace Hanasu.ViewModel
             //return Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
             //{
 
-                Dispatcher.BeginInvoke(new EmptyDelegate(() =>
-                {
-                    if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
-                        NowPlayingImage = GlobalHanasuCore.CurrentSong.AlbumCoverUri;
+            Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+            {
+                if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
+                    NowPlayingImage = GlobalHanasuCore.CurrentSong.AlbumCoverUri;
+                else
+                    if (GlobalHanasuCore.CurrentStation.Logo != null)
+                        NowPlayingImage = GlobalHanasuCore.CurrentStation.Logo;
                     else
-                        if (GlobalHanasuCore.CurrentStation.Logo != null)
-                            NowPlayingImage = GlobalHanasuCore.CurrentStation.Logo;
-                        else
-                            NowPlayingImage = DefaultAlbumArtUri;
+                        NowPlayingImage = DefaultAlbumArtUri;
 
-                    if (CurrentArtistFromPlayer == null || CurrentSongFromPlayer == null) return;
+                if (CurrentArtistFromPlayer == null || CurrentSongFromPlayer == null) return;
 
-                    Hanasu.Services.Notifications.NotificationsService.AddNotification(
-                        LocalizationManager.GetLocalizedValue("NowPlayingGridHeader"),
-                        CurrentArtistFromPlayer + " - " + CurrentSongFromPlayer, 3000, false,
-                        Services.Notifications.NotificationType.Now_Playing, null, NowPlayingImage);
-                }));
+                Hanasu.Services.Notifications.NotificationsService.AddNotification(
+                    LocalizationManager.GetLocalizedValue("NowPlayingGridHeader"),
+                    CurrentArtistFromPlayer + " - " + CurrentSongFromPlayer, 3000, false,
+                    Services.Notifications.NotificationType.Now_Playing, null, NowPlayingImage);
+            }));
 
             //    x.Dispose();
             //});

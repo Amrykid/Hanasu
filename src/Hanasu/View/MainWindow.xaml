@@ -309,7 +309,46 @@
                                                 </ResourceDictionary>
                                             </StackPanel.Resources>
                                             <!--Sample data that I fetched from my previous Hanasu data-->
-                                            <Image MaxWidth="150" MinWidth="150" Source="{Binding UpdateSourceTrigger=PropertyChanged, FallbackValue='http://www.ufomafia.com/radiographic.jpg', Path=NowPlayingImage, Converter={StaticResource ResourceKey='UrlConv'}}" />
+                                            <Grid>
+                                                <Grid Panel.ZIndex="4" MaxWidth="150" MinWidth="150" Visibility="Hidden">
+                                                    <metro:ProgressRing Width="100" IsActive="True"/>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Style.Triggers>
+                                                                <!--<DataTrigger Binding="{Binding IsBuffering,UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                                    <DataTrigger.Setters>
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger.Setters>
+                                                                </DataTrigger>-->
+                                                                <DataTrigger Binding="{Binding IsBuffering,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                                    <DataTrigger.Setters>
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger.Setters>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                </Grid>
+                                                <Grid Panel.ZIndex="5" MaxWidth="150" MinWidth="150" Visibility="Visible">
+                                                    <Image MaxWidth="150" MinWidth="150" Source="{Binding UpdateSourceTrigger=PropertyChanged, FallbackValue='http://www.ufomafia.com/radiographic.jpg', Path=NowPlayingImage, Converter={StaticResource ResourceKey='UrlConv'}}"   />
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Style.Triggers>
+                                                                <!--<DataTrigger Binding="{Binding IsBuffering,UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                                    <DataTrigger.Setters>
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger.Setters>
+                                                                </DataTrigger>-->
+                                                                <DataTrigger Binding="{Binding IsBuffering,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                                    <DataTrigger.Setters>
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger.Setters>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                </Grid>
+                                            </Grid>
                                             <Grid Margin="10 7 0 0">
                                                 <StackPanel>
                                                     <StackPanel Orientation="Horizontal">

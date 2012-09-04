@@ -168,7 +168,14 @@ namespace Hanasu
 
         private void StationListView_TargetUpdated(object sender, DataTransferEventArgs e)
         {
-            StationsListAdorner.IsAdornerVisible = StationListView.Items.Count == 0;
+            if (LibraryTreeView.SelectedItem == null)
+                StationsListAdorner.IsAdornerVisible = true;
+            else
+                if (((TreeViewItem)LibraryTreeView.SelectedItem).DataContext == null)
+                    StationsListAdorner.IsAdornerVisible = true;
+                else
+                    StationsListAdorner.IsAdornerVisible = StationListView.Items.Count == 0;
+
         }
 
         private void LibraryTreeView_Expanded(object sender, RoutedEventArgs e)

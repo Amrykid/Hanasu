@@ -41,7 +41,9 @@ namespace Hanasu.Player.WMP
                         parseAttributes();
 
                         GlobalHanasuCore.OnStationMediaTypeDetected(this, IsVideo);
+                        GlobalHanasuCore.OnBufferingStatusChanged(this, true);
 
+                        buffering = false;
 
                         if (stationType == PlayerDetectedStationType.None && GlobalHanasuCore.CurrentStation.ServerType == Core.Stations.StationServerType.Auto)
                         {
@@ -74,9 +76,22 @@ namespace Hanasu.Player.WMP
                         }
                     }
                     break;
+                case WMPPlayState.wmppsBuffering:
+                    {
+                        buffering = !buffering;
+                        GlobalHanasuCore.OnBufferingStatusChanged(this, buffering);
+                    }
+                    break;
+                case WMPPlayState.wmppsStopped:
+                    {
+                        buffering = false;
+                        GlobalHanasuCore.OnBufferingStatusChanged(this, false);
+                    }
+                    break;
             }
 
         }
+        private bool buffering = false;
 
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
         {
