@@ -15,6 +15,10 @@ using MahApps.Metro.Controls;
 using Hanasu.UI;
 using Crystal.Localization;
 using System.ComponentModel;
+using Hanasu.ViewModel;
+using System.Threading.Tasks;
+using System.Threading;
+using Crystal.Core;
 
 namespace Hanasu
 {
@@ -168,19 +172,34 @@ namespace Hanasu
 
         private void StationListView_TargetUpdated(object sender, DataTransferEventArgs e)
         {
-            if (LibraryTreeView.SelectedItem == null)
-                StationsListAdorner.IsAdornerVisible = true;
-            else
-                if (((TreeViewItem)LibraryTreeView.SelectedItem).DataContext == null)
-                    StationsListAdorner.IsAdornerVisible = true;
-                else
-                    StationsListAdorner.IsAdornerVisible = StationListView.Items.Count == 0;
+            
+            //if (LibraryTreeView.SelectedItem == null)
+            //    StationsListAdorner.IsAdornerVisible = true;
+            //else
+            //    if (((TreeViewItem)LibraryTreeView.SelectedItem).DataContext == null)
+            //        StationsListAdorner.IsAdornerVisible = true;
+            //    else
+            //        StationsListAdorner.IsAdornerVisible = StationListView.Items.Count == 0;
 
         }
 
         private void LibraryTreeView_Expanded(object sender, RoutedEventArgs e)
         {
             (e.OriginalSource as TreeViewItem).IsSelected = true;
+        }
+
+        private void StationListView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
+            Task.Factory.StartNew(() =>
+                {
+                    Thread.Sleep(500);
+
+                    Dispatcher.Invoke(new EmptyDelegate(() =>
+                        {
+                            StationsListAdorner.IsAdornerVisible = (e.NewValue == null || e.NewValue is MainWindowViewModel) ? true : StationListView.Items.Count == 0;
+                        }));
+                }).ContinueWith(t => t.Dispose());
         }
     }
 }

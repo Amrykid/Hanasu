@@ -265,7 +265,7 @@
                                               DataContext="{Binding ElementName=LibraryTreeView, Path=SelectedItem,UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" ItemsSource="{Binding DataContext}"
                                               SelectedItem="{Binding Path=DataContext.SelectedStation, RelativeSource={RelativeSource FindAncestor, 
                                                             AncestorType=metro:MetroWindow, AncestorLevel=1},UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single"
-                                                  PreviewMouseDoubleClick="StationListView_PreviewMouseDoubleClick" TargetUpdated="StationListView_TargetUpdated">
+                                                  PreviewMouseDoubleClick="StationListView_PreviewMouseDoubleClick" TargetUpdated="StationListView_TargetUpdated" DataContextChanged="StationListView_DataContextChanged">
                                                 <!--View="{Binding UpdateSourceTrigger=PropertyChanged,Path=DataContext.CurrentSelectedView, 
                                                         RelativeSource={RelativeSource FindAncestor, AncestorType=metro:MetroWindow, AncestorLevel=1}}"-->
                                                 <i:Interaction.Triggers>
