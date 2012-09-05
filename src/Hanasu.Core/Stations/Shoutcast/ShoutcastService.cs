@@ -142,9 +142,9 @@ namespace Hanasu.Core.Stations.Shoutcast
             songData = GlobalHanasuCore.SongService.CleanSongDataStr(songData);
 
             Uri lyrics = null;
-            if (GlobalHanasuCore.SongService.IsSongAvailable(songData, station, out lyrics))
-                return GlobalHanasuCore.SongService.GetSongData(songData, station);
-            else
+            //if (GlobalHanasuCore.SongService.IsSongAvailable(songData, station, out lyrics))
+            //    return GlobalHanasuCore.SongService.GetSongData(songData, station);
+            //else
                 if (GlobalHanasuCore.SongService.IsSongTitle(songData, station))
                     return GlobalHanasuCore.SongService.ParseSongData(songData, station);
                 else throw new Exception();

@@ -6,14 +6,30 @@ using System.Net;
 using System.Xml.Serialization;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace Hanasu.Core.Songs.Lyric_Data_Sources
 {
     public class TTPlayerLyricsDataSource : ILyricsDataSource
     {
+        private Hashtable cachedLyrics = new Hashtable();
+
         public bool GetLyrics(string artist, string track, out object lyrics, out Uri lyricsUri, out bool isSynchronizedLyrics)
         {
-            var result = LyricsAssistant.GetLyrics(artist, track);
+            Lyrics result = null;
+            var tuple = new Tuple<string, string>(artist, track);
+            if (cachedLyrics.ContainsKey(tuple))
+                result = (Lyrics)cachedLyrics[tuple];
+            else
+            {
+                result = LyricsAssistant.GetLyrics(artist, track);
+                cachedLyrics.Add(tuple, result);
+            }
+
+            if (cachedLyrics.Count > 20)
+            {
+                //implement some sort of memory saving, collection cleaning crap.
+            }
 
             lyricsUri = null;
             isSynchronizedLyrics = true;
