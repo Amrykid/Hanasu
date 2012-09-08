@@ -340,6 +340,23 @@ namespace Hanasu.Core
                     return;
             }
             PushMessageToGUI(SongTitleUpdated, songdata);
+
+            PushActionToGUIDispatcher(() =>
+                        {
+                            var station = CurrentStation;
+                            station.DetectedNowPlaying = songdata;
+                            
+                            int i = 0;
+                            foreach (Station sv in StationsService.Stations)
+                            {
+                                if (sv.Name == station.Name) break;
+                                i++;
+                            }
+
+                            StationsService.Stations[i] = station;
+                        });
+            PushMessageToGUI(StationsUpdated, StationsService.Stations);
+
             return;
         }
         public static void OnStationTitleDetected(IMediaPlayer player, string stationdata)
