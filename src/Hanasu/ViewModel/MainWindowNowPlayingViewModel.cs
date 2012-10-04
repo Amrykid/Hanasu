@@ -49,6 +49,8 @@ namespace Hanasu.ViewModel
                     Task.Factory.StartNew(() => GlobalHanasuCore.GetLyricsFromCurrentSong())
                         .ContinueWith(t =>
                         {
+                            this.RaisePropertyChanged(x => this.CurrentSongLyrics);
+
                             if (t.Exception != null)
                             {
                                 //not found for some reason
@@ -73,6 +75,8 @@ namespace Hanasu.ViewModel
                                 {
                                     LyricsPaneIsOpen = true;
                                 }));
+
+                                this.RaisePropertyChanged(x => this.CurrentSongLyrics);
                             }
 
                             t.Dispose();
@@ -95,6 +99,10 @@ namespace Hanasu.ViewModel
 
         public CrystalCommand FindLyricsCommand { get; set; }
 
+        public object CurrentSongLyrics
+        {
+            get { return GlobalHanasuCore.CurrentSong.Lyrics; }
+        }
 
         public bool IsFetchingArtistInfo
         {

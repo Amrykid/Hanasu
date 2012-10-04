@@ -37,6 +37,7 @@ namespace Hanasu.Core.Stations
             Stations.Clear();
 
             RadioFormat dummie = 0;
+
             dynamic stats = from x in StreamStationsXml()
                             select ParseStation(ref dummie, x);
 

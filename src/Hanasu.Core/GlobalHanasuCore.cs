@@ -418,7 +418,13 @@ namespace Hanasu.Core
 
         public static bool IsMuted
         {
-            get { return CurrentPlayer.IsMuted; }
+            get
+            {
+                if (CurrentPlayer != null)
+                    return CurrentPlayer.IsMuted;
+                else
+                    return false;
+            }
             set { CurrentPlayer.IsMuted = value; }
         }
 

@@ -52,8 +52,8 @@
         </metro:WindowCommands>
     </metro:MetroWindow.WindowCommands>
     <metro:MetroWindow.Flyouts>
-        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='ArtistInfoHeader'}" Position="Right" Name="ArtistInfoFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Width="400" Visibility="{Binding IsOpen,Converter={StaticResource IsPlayingToVisibilityConv},UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource Self}}">
-            <Grid DataContext="{Binding CurrentArtistInfo}">
+        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='ArtistInfoHeader'}" Position="Right" Name="ArtistInfoFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+            <Grid DataContext="{Binding CurrentArtistInfo}" Width="400">
                 <GroupBox Header="{Binding Name}" FontSize="22" BorderThickness="0">
                     <StackPanel>
                         <Image Source="{Binding ArtistImageUrl,Converter={StaticResource ResourceKey='UrlConv'}}"/>
@@ -64,8 +64,8 @@
                 </GroupBox>
             </Grid>
         </metro:Flyout>
-        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='LyricsFlyoutHeader'}" Position="Right" Name="LyricsFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding CurrentArtistInfoPaneIsOpen,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
-            <ListBox SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}">
+        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='LyricsFlyoutHeader'}" Position="Right" Name="LyricsFlyout" DataContext="{Binding ElementName=NowPlayingStackPanel,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" IsOpen="{Binding LyricsPaneIsOpen,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+            <ListBox SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Lyrics,UpdateSourceTrigger=PropertyChanged}">
                 <ListBox.DataContext>
                     <local:MainWindowLyricsFlyoutViewModel/>
                 </ListBox.DataContext>
