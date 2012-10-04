@@ -43,7 +43,10 @@ namespace Hanasu.ViewModel
             else
                 synchronized = false;
 
-            Lyrics = sd.Lyrics;
+            Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                {
+                    Lyrics = sd.Lyrics;
+                }));
         }
 
         public object SelectedItem
