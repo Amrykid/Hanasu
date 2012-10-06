@@ -485,4 +485,15 @@
     <Cacheable>True</Cacheable>
     <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash4/423448_10150597744445938_1518964583_n.jpg</Logo>
   </Station>
+  <Station>
+    <Name>Subarashii</Name>
+    <DataSource>http://streaming204.radionomy.com:80/Subarashii</DataSource>
+    <Homepage>http://www.subarashii.be/english/index.html</Homepage>
+    <Format>Anime</Format>
+    <City>France</City>
+    <Language>French</Language>
+    <Cacheable>True</Cacheable>
+    <Schedule type="page">http://www.subarashii.be/english/schedule.html</Schedule>
+    <Logo>http://www.subarashii.be/english/images/subarashii_logo.png</Logo>
+  </Station>
 </Stations>
