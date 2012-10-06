@@ -121,9 +121,11 @@ namespace Hanasu.UI
             {
                 case FadeablePanelState.LowerFocus: VisualStateManager.GoToState((FrameworkElement)obj, "LowerPanelFocus", true);
                     panel.PART_UpperPanel.IsHitTestVisible = false;
+                    panel.PART_LowerPanel.Focus();
                     break;
                 case FadeablePanelState.UpperFocus: VisualStateManager.GoToState((FrameworkElement)obj, "UpperPanelFocus", true);
                     panel.PART_UpperPanel.IsHitTestVisible = true;
+                    panel.PART_UpperPanel.Focus();
                     break;
             }
 

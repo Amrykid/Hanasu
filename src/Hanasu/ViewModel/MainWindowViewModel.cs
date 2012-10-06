@@ -28,6 +28,8 @@ namespace Hanasu.ViewModel
         public string AppDir = null;
         public MainWindowViewModel()
         {
+            if (IsDesignMode) return;
+
             AppDir = new FileInfo(Application.ResourceAssembly.Location).DirectoryName;
 
             try
