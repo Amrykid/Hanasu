@@ -7,6 +7,7 @@ using Hanasu.Core.Preprocessor;
 using System.Collections.ObjectModel;
 using Crystal.Command;
 using Crystal.Messaging;
+using Hanasu.Core.Stations;
 
 namespace Hanasu.ViewModel
 {
@@ -38,6 +39,12 @@ namespace Hanasu.ViewModel
             AvailableStreams = (dynamic)data;
         }
 
+        [MessageHandler("StationStreamWindowStationPushed")]
+        public void HandleStation(object data)
+        {
+            WorkingStation = (dynamic)data;
+        }
+
         public CrystalCommand AcceptStreamCommand { get; set; }
         public CrystalCommand CancelCommand { get; set; }
 
@@ -51,6 +58,12 @@ namespace Hanasu.ViewModel
         {
             get { return (IMultiStreamEntry)this.GetProperty("SelectedStream"); }
             set { this.SetProperty("SelectedStream", value); }
+        }
+
+        public Station WorkingStation
+        {
+            get { return (Station)this.GetPropertyOrDefaultType<Station>("WorkingStation"); }
+            set { this.SetProperty(x => this.WorkingStation, value); }
         }
     }
 }

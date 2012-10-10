@@ -182,7 +182,7 @@ namespace Hanasu.Core
                     {
                         if (autochoose == false)
                         {
-                            var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, entries);
+                            var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, new Tuple<Station, IMultiStreamEntry[]>(stat, entries));
 
                             if (result == null) return;
 
@@ -345,7 +345,7 @@ namespace Hanasu.Core
                         {
                             var station = CurrentStation;
                             station.DetectedNowPlaying = songdata;
-                            
+
                             int i = 0;
                             foreach (Station sv in StationsService.Stations)
                             {

@@ -293,12 +293,15 @@ namespace Hanasu.ViewModel
 
                         //NeedsStationStreamSelection = true;
 
-                        IMultiStreamEntry[] entries = (dynamic)data;
+                        Tuple<Station,IMultiStreamEntry[]> info = (dynamic)data;
+
+                        IMultiStreamEntry[] entries = info.Item2;
 
                         Tuple<bool, IMultiStreamEntry> res = null;
 
                         ChooseStationStreamWindow cssw = new ChooseStationStreamWindow();
 
+                        Messenger.PushMessage(this, "StationStreamWindowStationPushed", info.Item1);
                         Messenger.PushMessage(this, "StationStreamWindowStreamsPushed", entries);
 
                         cssw.Owner = Application.Current.MainWindow;

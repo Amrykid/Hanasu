@@ -9,7 +9,8 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:extras="clr-namespace:Crystal.Command;assembly=Crystal.Extras"
         xmlns:ccore="clr-namespace:Crystal.Core;assembly=Crystal"
-        Title="{i18n:CrystalLocalizedValueMarkup Key='ChooseStationStreamWindowTitle'}" Height="370" Width="454" WindowStartupLocation="CenterOwner" 
+        xmlns:conv="clr-namespace:Hanasu.Converters"
+        Title="{i18n:CrystalLocalizedValueMarkup Key='ChooseStationStreamWindowTitle'}" Height="500" Width="654" WindowStartupLocation="CenterOwner" 
                    ccore:WindowViewModelHelper.AutoBindingClear="True" Topmost="True" ShowInTaskbar="False" ShowMaxRestoreButton="False" ShowMinButton="False" ResizeMode="NoResize">
     <Window.DataContext>
         <vm:ChooseStationStreamViewModel />
@@ -24,6 +25,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Hanasu;component/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <conv:UriToBitmapImageConverter x:Key="UrlConv"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -33,26 +36,42 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <ListView ItemsSource="{Binding AvailableStreams, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedStream, UpdateSourceTrigger=PropertyChanged}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
-                                <Label FontSize="18" Grid.Row="0" Content="{Binding Title}"/>
-                                <Label FontSize="15" Grid.Row="1" Content="{Binding File}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseLeftButtonUp">
-                            <extras:EventToCommand 
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="45*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <ListView ItemsSource="{Binding AvailableStreams, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedStream, UpdateSourceTrigger=PropertyChanged}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <Label FontSize="18" Grid.Row="0" Content="{Binding Title}"/>
+                                        <Label FontSize="15" Grid.Row="1" Content="{Binding File}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonUp">
+                                    <extras:EventToCommand 
                                                         Command="{Binding AcceptStreamCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ListView>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ListView>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <GroupBox DataContext="{Binding WorkingStation}">
+                            <StackPanel>
+                                <Image Source="{Binding UpdateSourceTrigger=PropertyChanged, FallbackValue='http://www.ufomafia.com/radiographic.jpg', Path=NowPlayingImage, Converter={StaticResource ResourceKey='UrlConv'}}"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </Grid>
+                </Grid>
+
             </Grid>
             <Grid Grid.Row="1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="Auto">
