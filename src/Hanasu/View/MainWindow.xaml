@@ -353,6 +353,18 @@
                                                 <StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <Label FontSize="22" Content="{Binding CurrentArtistFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
+
+                                                    </StackPanel>
+
+                                                    <Label FontSize="20" Content="{Binding CurrentSongFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <!--<Label FontSize="18" 
+                                                           Content="{Binding SongTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>-->
+                                                    <Label FontSize="17" 
+                                                           Content="{Binding StationTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
                                                         <Button Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="5 0 0 0" Command="{Binding FindArtistInfoCommand}" Visibility="{Binding HasArtist, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ArtistToVisConv}}">
                                                             <Rectangle Width="15" Height="15" Margin="0 0 0 0">
                                                                 <Rectangle.Fill>
@@ -364,14 +376,6 @@
                                                                 <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='FindArtistInfomation'}"/>
                                                             </Button.ToolTip>
                                                         </Button>
-                                                    </StackPanel>
-
-                                                    <Label FontSize="20" Content="{Binding CurrentSongFromPlayer,UpdateSourceTrigger=PropertyChanged}"/>
-                                                    <!--<Label FontSize="18" 
-                                                           Content="{Binding SongTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>-->
-                                                    <Label FontSize="17" 
-                                                           Content="{Binding StationTitleFromPlayer,UpdateSourceTrigger=PropertyChanged, FallbackValue='N/A'}"/>
-                                                    <StackPanel Orientation="Horizontal">
                                                         <Button Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Margin="5 0 0 0" Command="{Binding FindLyricsCommand}" Visibility="{Binding HasArtist, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ArtistToVisConv}}">
                                                             <Rectangle Width="15" Height="15" Margin="0 0 0 0">
                                                                 <Rectangle.Fill>

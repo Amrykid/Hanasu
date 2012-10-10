@@ -254,10 +254,19 @@ namespace Hanasu.ViewModel
                     }
                 case GlobalHanasuCore.CoreDispatcherInvoke:
                     {
-                        Dispatcher.Invoke(new EmptyDelegate(() =>
+                        if (Dispatcher != null)
+                            Dispatcher.Invoke(new EmptyDelegate(() =>
+                                {
+                                    ((Action)data).Invoke();
+                                }));
+                        else
+                            try
                             {
                                 ((Action)data).Invoke();
-                            }));
+                            }
+                            catch (Exception)
+                            {
+                            }
 
                         break;
                     }
