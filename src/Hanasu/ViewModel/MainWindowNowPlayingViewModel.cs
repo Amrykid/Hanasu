@@ -64,6 +64,11 @@ namespace Hanasu.ViewModel
                                     Dispatcher.BeginInvoke(new EmptyDelegate(() =>
                                     {
                                         LyricsPaneIsOpen = false;
+
+                                        Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
+                                            .ShowMessage(
+                                                LocalizationManager.GetLocalizedValue("UnableToFindLyrics"),
+                                                LocalizationManager.GetLocalizedValue("UnableToFindLyricsBody"));
                                     }));
 
                                     return;

@@ -32,20 +32,27 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <ListView ItemsSource="{Binding AvailableLocales}" SelectedItem="{Binding SelectedLocale, UpdateSourceTrigger=PropertyChanged}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
-                                <Label FontSize="18" Grid.Row="0" Content="{Binding Name}"/>
-                                <Label FontSize="16" Grid.Row="1" Content="{Binding EnglishName}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <Label ContentStringFormat="{i18n:CrystalLocalizedValueMarkup Key='SystemLocaleFormatString'}" Content="{Binding SystemDetectedLocale,UpdateSourceTrigger=PropertyChanged}">
+                        </Label>
+                    </StackPanel>
+                    <ListView ItemsSource="{Binding AvailableLocales}" SelectedItem="{Binding SelectedLocale, UpdateSourceTrigger=PropertyChanged}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <Label FontSize="18" Grid.Row="0" Content="{Binding Name}"/>
+                                    <Label FontSize="16" Grid.Row="1" Content="{Binding EnglishName}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+
             </Grid>
             <Grid Grid.Row="1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="Auto">

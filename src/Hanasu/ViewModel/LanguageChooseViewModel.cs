@@ -6,6 +6,7 @@ using Crystal.Core;
 using Crystal.Localization;
 using System.Windows;
 using Crystal.Messaging;
+using System.Globalization;
 
 namespace Hanasu.ViewModel
 {
@@ -15,6 +16,8 @@ namespace Hanasu.ViewModel
         {
             AvailableLocales = LocalizationManager.AvailableLocales;
             SelectedLocale = LocalizationManager.CurrentLocale;
+
+            SystemDetectedLocale = CultureInfo.InstalledUICulture.DisplayName;
         }
 
         [MessageHandler("AffirmativeButtonClicked")]
@@ -40,6 +43,12 @@ namespace Hanasu.ViewModel
         {
             get { return (LocaleDataFrame)this.GetProperty("SelectedLocale"); }
             set { this.SetProperty("SelectedLocale", value); }
+        }
+
+        public string SystemDetectedLocale
+        {
+            get { return (string)this.GetPropertyOrDefaultType<string>("SystemDetectedLocale"); }
+            set { this.SetProperty(x => this.SystemDetectedLocale, value); }
         }
     }
 }

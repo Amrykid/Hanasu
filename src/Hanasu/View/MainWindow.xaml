@@ -13,7 +13,7 @@
         xmlns:ac="clr-namespace:AdornedControl"
         xmlns:conv="clr-namespace:Hanasu.Converters"
         Title="Hanasu" Height="556" Width="788" MinWidth="700" 
-                   MinHeight="500" ShowActivated="True" 
+                   MinHeight="500" ShowActivated="True" SaveWindowPosition="True"
                    cutils:MainWindowSetterHelper.IsMainWindow="True" SnapsToDevicePixels="True">
     <Window.DataContext>
         <local:MainWindowViewModel/>
