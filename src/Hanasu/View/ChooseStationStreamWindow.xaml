@@ -66,7 +66,9 @@
                     <Grid Grid.Column="1">
                         <GroupBox DataContext="{Binding WorkingStation}">
                             <StackPanel>
-                                <Image Source="{Binding UpdateSourceTrigger=PropertyChanged, FallbackValue='http://www.ufomafia.com/radiographic.jpg', Path=NowPlayingImage, Converter={StaticResource ResourceKey='UrlConv'}}"/>
+                                <Image 
+                                    Source="{Binding UpdateSourceTrigger=PropertyChanged, FallbackValue='http://www.ufomafia.com/radiographic.jpg', Path=NowPlayingImage, Converter={StaticResource ResourceKey='UrlConv'}}"
+                                    Height="200"/>
                             </StackPanel>
                         </GroupBox>
                     </Grid>

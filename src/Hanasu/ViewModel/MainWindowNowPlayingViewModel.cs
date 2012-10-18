@@ -192,8 +192,12 @@ namespace Hanasu.ViewModel
             //return Task.Factory.StartNew(() => GlobalHanasuCore.GetExtendedSongInfoFromCurrentSong()).ContinueWith(x =>
             //{
 
+
             Dispatcher.BeginInvoke(new EmptyDelegate(() =>
             {
+                StationTitleFromPlayer = GlobalHanasuCore.CurrentStation.Name;
+
+
                 if (GlobalHanasuCore.CurrentSong.AlbumCoverUri != null)
                     NowPlayingImage = GlobalHanasuCore.CurrentSong.AlbumCoverUri;
                 else

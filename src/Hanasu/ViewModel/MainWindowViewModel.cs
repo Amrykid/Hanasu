@@ -46,6 +46,7 @@ namespace Hanasu.ViewModel
             if (GlobalHanasuCore.Plugins.Players != null)
                 IsMuted = false;
 
+            Hanasu.Misc.HTTPd.HTTPdService.Start();
 
             CurrentVolume = 50;
 
@@ -315,6 +316,7 @@ namespace Hanasu.ViewModel
                             {
                             }
                         }).ContinueWith(t => t.Dispose());
+
 
                         var dResult = cssw.ShowDialog();
 
