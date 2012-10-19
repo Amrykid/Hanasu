@@ -252,10 +252,13 @@
     <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\jquery-1.8.2.min.js" />
     <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\less.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\images\stationexample.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

@@ -83,18 +83,28 @@ namespace Hanasu.Misc.HTTPd
 
                     var s = Application.GetResourceStream(
                         new Uri(@BaseDir + fileToGet, UriKind.RelativeOrAbsolute));
-                    using (var sr = new System.IO.StreamReader(s.Stream))
+
+                    if (s != null)
                     {
-                        var mimeType = s.ContentType;
+                        using (var sr = new System.IO.StreamReader(s.Stream))
+                        {
+                            var mimeType = s.ContentType;
 
-                        if (fileToGet.EndsWith(".js"))
-                            mimeType = HttpMimeTypes.Javascript;
-                        else if (fileToGet.EndsWith(".css"))
-                            mimeType = HttpMimeTypes.Css;
+                            if (fileToGet.EndsWith(".js"))
+                                mimeType = HttpMimeTypes.Javascript;
+                            else if (fileToGet.EndsWith(".css"))
+                                mimeType = HttpMimeTypes.Css;
 
-                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), mimeType, close), close);
+                            WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), mimeType, close), close);
 
-                        sr.Close();
+                            sr.Close();
+                        }
+
+                        s.Stream.Close();
+                    }
+                    else
+                    {
+                        WriteSocket(ref tcp, HttpResponseBuilder.NotFoundResponse(), close);
                     }
                     #endregion
                 }

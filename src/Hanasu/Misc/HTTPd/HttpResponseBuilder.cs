@@ -48,6 +48,18 @@ namespace Hanasu.Misc.HTTPd
         }
 
 
+
+        public static string NotFoundResponse()
+        {
+            StringBuilder sb = new StringBuilder();
+            GenerateStandardHeaders(ref sb, "404 Not Found");
+
+            sb.AppendLine("Connection: close");
+
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
     }
 
     public static class HttpMimeTypes

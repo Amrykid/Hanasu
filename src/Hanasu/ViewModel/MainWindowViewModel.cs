@@ -110,7 +110,20 @@ namespace Hanasu.ViewModel
 
         void HTTPdService_HttpPostReceived(string file, object postdata)
         {
-            throw new NotImplementedException();
+            Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                {
+                    switch (file.ToLower())
+                    {
+                        case "/play":
+                            if (MediaPlayCommand.CanExecute(null))
+                                MediaPlayCommand.Execute(null);
+                            break;
+                        case "/pause":
+                            if (MediaStopCommand.CanExecute(null))
+                                MediaStopCommand.Execute(null);
+                            break;
+                    }
+                }));
         }
 
 
