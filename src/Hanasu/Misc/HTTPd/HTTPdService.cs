@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Net.Sockets;
 using System.Net;
+using System.Reflection;
+using System.Windows;
 
 namespace Hanasu.Misc.HTTPd
 {
@@ -40,18 +42,69 @@ namespace Hanasu.Misc.HTTPd
 
         }
 
+        private const string BaseDir = "/Misc/HTTPd/Web App/Hanasu-Web-App";
+
         private static void HandleConnection(ref TcpClient tcp)
         {
-            string head = "";
-            while (head.EndsWith("\r\n\r\n") == false)
-                head += ReadSocket(ref tcp);
+            try
+            {
+                string head = "";
+                while (head.EndsWith("\r\n\r\n") == false)
+                    head += ReadSocket(ref tcp);
 
-            var headLines = head.Replace("\r\n", "\n").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                var headLines = head.Replace("\r\n", "\n").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var firstLine = headLines[0].Split(' ');
-            string method = firstLine[0], file = firstLine[1], httpversion = firstLine[2];
+                var firstLine = headLines[0].Split(' ');
+                string method = firstLine[0].ToUpper(), file = firstLine[1], httpversion = firstLine[2];
+
+                if (method == "GET")
+                {
+                    //hard coded atm
+
+                    var fileToGet = "";
+                    bool close = true;
+                    switch (file.ToLower())
+                    {
+                        case "/":
+                            {
+                                fileToGet = "/index.html";
+                            }
+                            break;
+                        default:
+                            fileToGet = file;
+                            break;
+                    }
+
+                    var s = Application.GetResourceStream(
+                        new Uri(@BaseDir + fileToGet, UriKind.RelativeOrAbsolute));
+                    using (var sr = new System.IO.StreamReader(s.Stream))
+                    {
+                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), fileToGet.EndsWith(".js") ? HttpMimeTypes.Javascript : s.ContentType));
+
+                        sr.Close();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                tcp.Close();
+            }
 
 
+        }
+        private static void WriteSocket(ref TcpClient tcp, string data, bool close = true)
+        {
+            try
+            {
+                tcp.Client.Send(
+                    System.Text.ASCIIEncoding.ASCII.GetBytes(data));
+            }
+            catch (Exception)
+            {
+            }
+
+            if (close)
+                tcp.Close();
         }
         private static string ReadSocket(ref TcpClient tcp)
         {
