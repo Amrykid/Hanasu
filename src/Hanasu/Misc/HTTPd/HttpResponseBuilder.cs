@@ -18,7 +18,7 @@ namespace Hanasu.Misc.HTTPd
             else
                 sb.AppendLine("Connection: keep-alive");
 
-            sb.AppendLine("Content-type: " + mimetype);
+            sb.AppendLine("Content-Type: " + mimetype + "; charset=ASCII");
             sb.AppendLine("Contenth-Length: " + fileText.Length);
 
             sb.AppendLine();
@@ -60,6 +60,6 @@ namespace Hanasu.Misc.HTTPd
         public const string Png = "image/png";
         public const string Tiff = "image/tiff";
         public const string Css = "text/css";
-        public const string Javascript = "application/javascript";
+        public const string Javascript = "text/javascript"; //"application/javascript";
     }
 }

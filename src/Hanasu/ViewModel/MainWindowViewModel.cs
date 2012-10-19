@@ -46,8 +46,6 @@ namespace Hanasu.ViewModel
             if (GlobalHanasuCore.Plugins.Players != null)
                 IsMuted = false;
 
-            Hanasu.Misc.HTTPd.HTTPdService.Start();
-
             CurrentVolume = 50;
 
             GlobalHanasuCore.SetVolume(CurrentVolume);
@@ -104,7 +102,17 @@ namespace Hanasu.ViewModel
 
             MediaFastForwardCommand = new NullCommand();
             MediaRewindCommand = new NullCommand();
+
+
+            Hanasu.Misc.HTTPd.HTTPdService.HttpPostReceived += HTTPdService_HttpPostReceived;
+            Hanasu.Misc.HTTPd.HTTPdService.Start();
         }
+
+        void HTTPdService_HttpPostReceived(string file, object postdata)
+        {
+            throw new NotImplementedException();
+        }
+
 
         /// <summary>
         /// Not sure if this should be in this view model or in the view's code behind

@@ -37,32 +37,38 @@ namespace Hanasu.Misc.HTTPd
 
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(HandleRequest), null);
 
-            HandleConnection(ref tcp);
-
-
+            HandleConnection(tcp);
         }
 
         private const string BaseDir = "/Misc/HTTPd/Web App/Hanasu-Web-App";
 
-        private static void HandleConnection(ref TcpClient tcp)
+        private static void HandleConnection(TcpClient tcp)
         {
             try
             {
                 string head = "";
                 while (head.EndsWith("\r\n\r\n") == false)
+                {
                     head += ReadSocket(ref tcp);
+
+                    if (head == "") return;
+                }
 
                 var headLines = head.Replace("\r\n", "\n").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
                 var firstLine = headLines[0].Split(' ');
                 string method = firstLine[0].ToUpper(), file = firstLine[1], httpversion = firstLine[2];
 
+                bool keepalive = headLines.First(t => t.StartsWith("Connection: ")) == null ? false : headLines.First(t => t.StartsWith("Connection: ")).Substring("Connection: ".Length).ToLower() == "keep-alive";
+
                 if (method == "GET")
                 {
+                    #region GET
                     //hard coded atm
+                    //TODO: make this not hard-coded.
 
                     var fileToGet = "";
-                    bool close = true;
+                    bool close = !keepalive;
                     switch (file.ToLower())
                     {
                         case "/":
@@ -79,11 +85,27 @@ namespace Hanasu.Misc.HTTPd
                         new Uri(@BaseDir + fileToGet, UriKind.RelativeOrAbsolute));
                     using (var sr = new System.IO.StreamReader(s.Stream))
                     {
-                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), fileToGet.EndsWith(".js") ? HttpMimeTypes.Javascript : s.ContentType));
+                        var mimeType = s.ContentType;
+
+                        if (fileToGet.EndsWith(".js"))
+                            mimeType = HttpMimeTypes.Javascript;
+                        else if (fileToGet.EndsWith(".css"))
+                            mimeType = HttpMimeTypes.Css;
+
+                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), mimeType, close), close);
 
                         sr.Close();
                     }
+                    #endregion
                 }
+                else if (method == "POST")
+                {
+                    if (HttpPostReceived != null)
+                        HttpPostReceived(file, null);
+                }
+
+                if (keepalive)
+                    HandleConnection(tcp);
             }
             catch (Exception)
             {
@@ -108,6 +130,8 @@ namespace Hanasu.Misc.HTTPd
         }
         private static string ReadSocket(ref TcpClient tcp)
         {
+            tcp.Client.ReceiveTimeout = 100;
+
             //This is used for converting bytes to strings.
             byte[] b = new byte[100];
             int k = tcp.Client.Receive(b);
@@ -134,5 +158,8 @@ namespace Hanasu.Misc.HTTPd
         }
 
         public static bool IsRunning { get; private set; }
+
+        public delegate void HttpPostReceivedHandler(string file, object postdata);
+        public static event HttpPostReceivedHandler HttpPostReceived;
     }
 }
