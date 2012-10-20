@@ -59,16 +59,20 @@ namespace Hanasu.Misc.HTTPd
                 var firstLine = headLines[0].Split(' ');
                 string method = firstLine[0].ToUpper(), file = firstLine[1], httpversion = firstLine[2];
 
-                bool keepalive = headLines.First(t => t.StartsWith("Connection: ")) == null ? false : headLines.First(t => t.StartsWith("Connection: ")).Substring("Connection: ".Length).ToLower() == "keep-alive";
+                bool keepalive = headLines.First(t => t.StartsWith("Connection: ")) == null ?
+                    false :
+                    headLines.First(t => t.StartsWith("Connection: ")).Substring("Connection: ".Length).ToLower() == "keep-alive";
 
-                if (method == "GET")
+                bool close = !keepalive;
+
+                if (method == "GET" || method == "HEAD")
                 {
-                    #region GET
+                    #region GET/HEAD
                     //hard coded atm
                     //TODO: make this not hard-coded.
 
                     var fileToGet = "";
-                    bool close = !keepalive;
+
                     switch (file.ToLower())
                     {
                         case "/":
@@ -83,23 +87,51 @@ namespace Hanasu.Misc.HTTPd
 
                     try
                     {
-                        var s = Application.GetResourceStream(
-                            new Uri(@BaseDir + fileToGet, UriKind.RelativeOrAbsolute));
-                        using (var sr = new System.IO.StreamReader(s.Stream))
+                        if (method == "GET")
                         {
-                            var mimeType = s.ContentType;
 
-                            if (fileToGet.EndsWith(".js"))
-                                mimeType = HttpMimeTypes.Javascript;
-                            else if (fileToGet.EndsWith(".css"))
-                                mimeType = HttpMimeTypes.Css;
+                            if (_urlHandlers.ContainsKey(fileToGet))
+                            {
+                                if (_urlHandlers[fileToGet].Item1 == HttpRequestType.GET || _urlHandlers[fileToGet].Item1 == HttpRequestType.GETANDPOST)
+                                {
+                                    if (HttpUrlHandler != null)
+                                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(fileToGet, HttpRequestType.GET, null).ToString(), HttpMimeTypes.Html, close), close);
+                                }
+                                else
+                                {
+                                    WriteSocket(ref tcp, HttpResponseBuilder.NoContentResponse(), close);
+                                }
+                            }
+                            else
+                            {
+                                //is a included file and not a handler.
 
-                            WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), mimeType, close), close);
+                                var s = Application.GetResourceStream(
+                                    new Uri(@BaseDir + fileToGet, UriKind.RelativeOrAbsolute));
 
-                            sr.Close();
+                                using (var sr = new System.IO.StreamReader(s.Stream))
+                                {
+                                    var mimeType = s.ContentType;
+
+                                    if (fileToGet.EndsWith(".js"))
+                                        mimeType = HttpMimeTypes.Javascript;
+                                    else if (fileToGet.EndsWith(".css"))
+                                        mimeType = HttpMimeTypes.Css;
+
+                                    WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), mimeType, close), close);
+
+                                    sr.Close();
+                                }
+
+                                s.Stream.Close();
+                            }
+                        }
+                        else if (method == "HEAD")
+                        {
+                            WriteSocket(ref tcp, HttpResponseBuilder.OKResponse("", HttpMimeTypes.Html, close), close);
                         }
 
-                        s.Stream.Close();
+
                     }
                     catch (Exception)
                     {
@@ -111,6 +143,26 @@ namespace Hanasu.Misc.HTTPd
                 {
                     if (HttpPostReceived != null)
                         HttpPostReceived(file, null);
+
+                    if (_urlHandlers.ContainsKey(file))
+                    {
+                        if (_urlHandlers[file].Item1 == HttpRequestType.POST || _urlHandlers[file].Item1 == HttpRequestType.GETANDPOST)
+                        {
+                            object postData = null; // to be implemented
+
+                            if (HttpUrlHandler != null)
+                                WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(file, HttpRequestType.POST, postData).ToString(), HttpMimeTypes.Html, close), close);
+                        }
+                        else
+                        {
+                            WriteSocket(ref tcp, HttpResponseBuilder.NoContentResponse(), close);
+                        }
+                    }
+                    else
+                    {
+                        WriteSocket(ref tcp, HttpResponseBuilder.NoContentResponse(), close);
+                    }
+
                 }
 
                 if (keepalive)
@@ -170,5 +222,30 @@ namespace Hanasu.Misc.HTTPd
 
         public delegate void HttpPostReceivedHandler(string file, object postdata);
         public static event HttpPostReceivedHandler HttpPostReceived;
+
+        public delegate object HttpUrlHandlerHandler(string relativeUrl, HttpRequestType type, object postdata);
+        public static event HttpUrlHandlerHandler HttpUrlHandler;
+
+        public static void RegisterUrlHandler(string relativeUrl, HttpRequestType type, string helpInformation)
+        {
+            if (_urlHandlers.ContainsKey(relativeUrl)) throw new Exception("Url is already registered.");
+
+            _urlHandlers.Add(relativeUrl, new Tuple<HttpRequestType, string>(type, helpInformation));
+        }
+
+        private static Dictionary<string, Tuple<HttpRequestType, string>> _urlHandlers = new Dictionary<string, Tuple<HttpRequestType, string>>();
+
+        public static IEnumerable<KeyValuePair<string, Tuple<HttpRequestType, string>>> GetUrlHandlers()
+        {
+            return _urlHandlers.ToArray();
+        }
+
+        public enum HttpRequestType
+        {
+            GET = 0,
+            HEAD = 1,
+            POST = 2,
+            GETANDPOST = 3
+        }
     }
 }

@@ -48,6 +48,17 @@ namespace Hanasu.Misc.HTTPd
         }
 
 
+        public static string NoContentResponse()
+        {
+            StringBuilder sb = new StringBuilder();
+            GenerateStandardHeaders(ref sb, "204 No Content");
+
+            sb.AppendLine("Connection: close");
+
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
 
         public static string NotFoundResponse()
         {

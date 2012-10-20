@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Crystal.Services;
 using Hanasu.Services.Notifications;
+using Hanasu.Misc.HTTPd;
 
 namespace Hanasu.ViewModel
 {
@@ -106,16 +107,92 @@ namespace Hanasu.ViewModel
 
             try
             {
-                Hanasu.Misc.HTTPd.HTTPdService.HttpPostReceived += HTTPdService_HttpPostReceived;
-                Hanasu.Misc.HTTPd.HTTPdService.Start();
+                //Hanasu.Misc.HTTPd.HTTPdService.HttpPostReceived += HTTPdService_HttpPostReceived;
+                HTTPdService.HttpUrlHandler += HTTPdService_HttpUrlHandler;
+
+                //TODO: make the help data localizable
+                HTTPdService.RegisterUrlHandler("/play", HTTPdService.HttpRequestType.POST, "Tells Hanasu to start playing the previously selected station.");
+                HTTPdService.RegisterUrlHandler("/pause", HTTPdService.HttpRequestType.POST, "Tells Hanasu to stop playing the previously selected station.");
+                HTTPdService.RegisterUrlHandler("/nowplaying", HTTPdService.HttpRequestType.GET, "Gets what the current song is from Hanasu.");
+                HTTPdService.RegisterUrlHandler("/api", HTTPdService.HttpRequestType.GET, "Reports all of the commands that are registered in Hanasu.");
+
+                HTTPdService.Start();
             }
             catch (Exception)
             {
             }
         }
 
+        object HTTPdService_HttpUrlHandler(string relativeUrl, Misc.HTTPd.HTTPdService.HttpRequestType type, object postdata)
+        {
+            if (type == Misc.HTTPd.HTTPdService.HttpRequestType.POST)
+            {
+                return Dispatcher.Invoke(new EmptyReturnDelegate(() =>
+                        {
+                            switch (relativeUrl.ToLower())
+                            {
+                                case "/play":
+                                    if (MediaPlayCommand.CanExecute(null))
+                                        MediaPlayCommand.Execute(null);
+                                    break;
+                                case "/pause":
+                                    if (MediaStopCommand.CanExecute(null))
+                                        MediaStopCommand.Execute(null);
+                                    break;
+
+                            }
+
+                            return string.Empty;
+                        }));
+            }
+            else if (type == Misc.HTTPd.HTTPdService.HttpRequestType.GET)
+            {
+                switch (relativeUrl.ToLower())
+                {
+                    case "/nowplaying":
+                        if (GlobalHanasuCore.CurrentSong != null)
+                            return GlobalHanasuCore.CurrentSong.ToSongString();
+                        else
+                            return "Nothing";
+                    case "/api":
+                        {
+                            StringBuilder sb = new StringBuilder(); //its going to get messy
+
+                            sb.AppendLine("<html>");
+                            sb.AppendLine("\t<head>");
+                            sb.AppendLine("\t\t<title>Hanasu Web API</title>"); //TODO: Localize
+                            sb.AppendLine("\t</head>");
+                            sb.AppendLine("\t<body>");
+
+                            sb.AppendLine("\t\t<ul>");
+
+
+                            foreach (var handler in HTTPdService.GetUrlHandlers())
+                            {
+                                sb.AppendLine("\t\t\t<li>");
+                                sb.AppendLine("\t\t\t\t<h2>" + handler.Key + "</h2>");
+                                sb.AppendLine("\t\t\t\t<h4>Http Method: " +
+                                    Enum.GetName(typeof(Hanasu.Misc.HTTPd.HTTPdService.HttpRequestType), handler.Value.Item1));
+                                sb.AppendLine("\t\t\t\t<h4>" + handler.Value.Item2 + "</h4>");
+                                sb.AppendLine("\t\t\t</li>");
+                            }
+
+                            sb.AppendLine("\t\t</ul>");
+                            sb.AppendLine("\t</body>");
+                            sb.AppendLine("</html>");
+
+                            return sb.ToString();
+                        }
+                }
+            }
+
+            return string.Empty;
+        }
+
         void HTTPdService_HttpPostReceived(string file, object postdata)
         {
+            //no longer used
+
             Dispatcher.BeginInvoke(new EmptyDelegate(() =>
                 {
                     switch (file.ToLower())
@@ -321,7 +398,7 @@ namespace Hanasu.ViewModel
 
                         //NeedsStationStreamSelection = true;
 
-                        Tuple<Station,IMultiStreamEntry[]> info = (dynamic)data;
+                        Tuple<Station, IMultiStreamEntry[]> info = (dynamic)data;
 
                         IMultiStreamEntry[] entries = info.Item2;
 
