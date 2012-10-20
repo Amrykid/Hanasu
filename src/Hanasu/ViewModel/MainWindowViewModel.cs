@@ -116,6 +116,7 @@ namespace Hanasu.ViewModel
                 HTTPdService.RegisterUrlHandler("/nowplaying", HTTPdService.HttpRequestType.GET, "Gets what the current song is from Hanasu.");
                 HTTPdService.RegisterUrlHandler("/api", HTTPdService.HttpRequestType.GET, "Reports all of the commands that are registered in Hanasu.");
                 HTTPdService.RegisterUrlHandler("/getlocalizedvalue", HTTPdService.HttpRequestType.GET, "Gets the localized vaule from the specified key. I.E. /getlocalizedvalue?key=Welcome");
+                HTTPdService.RegisterUrlHandler("/isplaying", HTTPdService.HttpRequestType.GET, "Gets if Hanasu is playing or not. Returns 'true' or 'false'.");
 
                 HTTPdService.Start();
             }
@@ -207,6 +208,8 @@ namespace Hanasu.ViewModel
 
                             return string.Empty;
                         }
+                    case "/isplaying":
+                        return IsPlaying.ToString().ToLower();
                 }
             }
 
