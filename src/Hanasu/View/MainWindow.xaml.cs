@@ -35,7 +35,27 @@ namespace Hanasu
             this.Title = "Hanasu v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 #endif
 
+            System.Timers.Timer treeViewTimer = new System.Timers.Timer();
+            treeViewTimer.Elapsed += new System.Timers.ElapsedEventHandler(treeViewTimer_Elapsed);
+            treeViewTimer.Interval = TimeSpan.FromSeconds(1).TotalMilliseconds;
+            treeViewTimer.Start();
+
             InitializeViews();
+        }
+
+        void treeViewTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+                Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                {
+                    if (LibraryTreeView.SelectedItem == null)
+                        StationsListAdorner.IsAdornerVisible = true;
+                    else
+                        if (((TreeViewItem)LibraryTreeView.SelectedItem).DataContext == null)
+                            StationsListAdorner.IsAdornerVisible = true;
+                        else
+                            StationsListAdorner.IsAdornerVisible = StationListView.Items.Count == 0;
+
+                }));
         }
 
         #region Related to view selection
@@ -190,16 +210,7 @@ namespace Hanasu
 
         private void StationListView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-
-            Task.Factory.StartNew(() =>
-                {
-                    Thread.Sleep(500);
-
-                    Dispatcher.Invoke(new EmptyDelegate(() =>
-                        {
-                            StationsListAdorner.IsAdornerVisible = (e.NewValue == null || e.NewValue is MainWindowViewModel) ? true : StationListView.Items.Count == 0;
-                        }));
-                }).ContinueWith(t => t.Dispose());
+            return;
         }
     }
 }
