@@ -273,11 +273,15 @@ namespace Hanasu.Core
                         {
                             Thread.Sleep(5000);
 
-                            var urlx = CurrentPlayer.DataAttributes["SourceURL"].ToString();
+                            if (CurrentPlayer.DataAttributes.ContainsKey("SourceURL"))
+                            {
 
-                            OnStationTypeDetected(CurrentPlayer,
-                                new Tuple<PlayerDetectedStationType, Uri>(CurrentStation.ServerType == StationServerType.Shoutcast ? PlayerDetectedStationType.Shoutcast : PlayerDetectedStationType.Unknown,
-                                    new Uri(urlx)));
+                                var urlx = CurrentPlayer.DataAttributes["SourceURL"].ToString();
+
+                                OnStationTypeDetected(CurrentPlayer,
+                                    new Tuple<PlayerDetectedStationType, Uri>(CurrentStation.ServerType == StationServerType.Shoutcast ? PlayerDetectedStationType.Shoutcast : PlayerDetectedStationType.Unknown,
+                                        new Uri(urlx)));
+                            }
                         });
                 }
             }
