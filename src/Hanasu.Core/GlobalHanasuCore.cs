@@ -152,13 +152,14 @@ namespace Hanasu.Core
             }
             PushMessageToGUI(StationsUpdated, StationsService.Stations);
         }
-        private static void PreprocessUrl(ref Uri url, Station stat, string ext, bool autochoose = false)
+        private static bool PreprocessUrl(ref Uri url, Station stat, string ext, bool autochoose = false)
         {
             var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);
 
             if (pro == null && stat.ExplicitExtension == null)
             {
                 //We don't know if its possible to play
+                return false;
             }
             else
             {
@@ -172,7 +173,7 @@ namespace Hanasu.Core
 
                     if (entries.Length == 0)
                     {
-                        return;
+                        return false;
                     }
                     else if (entries.Length == 1)
                     {
@@ -184,18 +185,23 @@ namespace Hanasu.Core
                         {
                             var result = (Tuple<bool, IMultiStreamEntry>)PushMessageToGUI(StationMultipleServersFound, new Tuple<Station, IMultiStreamEntry[]>(stat, entries));
 
-                            if (result == null) return;
+                            if (result == null) return false;
 
-                            if (result.Item1 == false) return;
+                            if (result.Item1 == false) return false;
 
                             url = new Uri(result.Item2.File);
                         }
                         else
+                        {
                             url = new Uri(entries[0].File);
+
+                            return true;
+                        }
                     }
                 }
 
                 Preprocessor.PreprocessorService.Process(ref url);
+                return true;
             }
         }
 
@@ -242,10 +248,12 @@ namespace Hanasu.Core
                             if (stat.ExplicitExtension != null)
                             {
                                 if (!CurrentPlayer.Supports(stat.ExplicitExtension))
-                                    PreprocessUrl(ref url, stat, ext);
+                                    if (!PreprocessUrl(ref url, stat, ext))
+                                        return;
                             }
                             else
-                                PreprocessUrl(ref url, stat, ext);
+                                if (!PreprocessUrl(ref url, stat, ext))
+                                    return;
                         }
 
                     }
