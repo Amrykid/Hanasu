@@ -60,6 +60,18 @@ namespace Hanasu.Misc.HTTPd
             return sb.ToString();
         }
 
+        public static string MethodNotAllowedResponse()
+        {
+            StringBuilder sb = new StringBuilder();
+            GenerateStandardHeaders(ref sb, "405 Method Not Allowed");
+
+            sb.AppendLine("Connection: close");
+
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
         public static string NotFoundResponse()
         {
             StringBuilder sb = new StringBuilder();

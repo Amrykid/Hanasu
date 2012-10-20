@@ -99,7 +99,7 @@ namespace Hanasu.Misc.HTTPd
                                 }
                                 else
                                 {
-                                    WriteSocket(ref tcp, HttpResponseBuilder.NoContentResponse(), close);
+                                    WriteSocket(ref tcp, HttpResponseBuilder.MethodNotAllowedResponse(), close);
                                 }
                             }
                             else
@@ -155,12 +155,12 @@ namespace Hanasu.Misc.HTTPd
                         }
                         else
                         {
-                            WriteSocket(ref tcp, HttpResponseBuilder.NoContentResponse(), close);
+                            WriteSocket(ref tcp, HttpResponseBuilder.MethodNotAllowedResponse(), close);
                         }
                     }
                     else
                     {
-                        WriteSocket(ref tcp, HttpResponseBuilder.NoContentResponse(), close);
+                        WriteSocket(ref tcp, HttpResponseBuilder.NotFoundResponse(), close);
                     }
 
                 }
