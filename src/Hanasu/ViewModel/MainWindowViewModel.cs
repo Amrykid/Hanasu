@@ -115,6 +115,7 @@ namespace Hanasu.ViewModel
                 HTTPdService.RegisterUrlHandler("/pause", HTTPdService.HttpRequestType.POST, "Tells Hanasu to stop playing the previously selected station.");
                 HTTPdService.RegisterUrlHandler("/nowplaying", HTTPdService.HttpRequestType.GET, "Gets what the current song is from Hanasu.");
                 HTTPdService.RegisterUrlHandler("/api", HTTPdService.HttpRequestType.GET, "Reports all of the commands that are registered in Hanasu.");
+                HTTPdService.RegisterUrlHandler("/getlocalizedvalue", HTTPdService.HttpRequestType.GET, "Gets the localized vaule from the specified key. I.e. {Welcome}. Not Implemented Yet.");
 
                 HTTPdService.Start();
             }
