@@ -11,7 +11,7 @@ namespace Hanasu.Misc.HTTPd
 {
     public static class HTTPdService
     {
-        private static TcpListener tcpListener = new TcpListener(IPAddress.Any, 80);
+        private static TcpListener tcpListener = new TcpListener(IPAddress.Any, 4477);
 
         public static void Start()
         {

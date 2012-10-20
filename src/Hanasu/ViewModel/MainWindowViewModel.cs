@@ -104,8 +104,14 @@ namespace Hanasu.ViewModel
             MediaRewindCommand = new NullCommand();
 
 
-            Hanasu.Misc.HTTPd.HTTPdService.HttpPostReceived += HTTPdService_HttpPostReceived;
-            Hanasu.Misc.HTTPd.HTTPdService.Start();
+            try
+            {
+                Hanasu.Misc.HTTPd.HTTPdService.HttpPostReceived += HTTPdService_HttpPostReceived;
+                Hanasu.Misc.HTTPd.HTTPdService.Start();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         void HTTPdService_HttpPostReceived(string file, object postdata)
