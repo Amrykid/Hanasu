@@ -262,8 +262,12 @@ namespace Hanasu.Core
                 if (playingTimer.Enabled) playingTimer.Stop();
 
                 CurrentStation = stat;
+
+                CurrentPlayer.Volume = GetVolume();
                 CurrentPlayer.Play(url, CurrentStation.StationType == StationType.Radio ? MediaType.Audio : MediaType.Video);
+
                 playingTimer.Start();
+
                 PushMessageToGUI(NowPlayingReset, null);
                 PushMessageToGUI(NowPlayingStatus, true);
 
