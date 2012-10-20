@@ -125,13 +125,10 @@ namespace Hanasu.Misc.HTTPd
                                 if (mimeType.StartsWith("text"))
                                     using (var sr = new System.IO.StreamReader(s.Stream))
                                     {
-
-
                                         if (fileToGet.EndsWith(".js"))
                                             mimeType = HttpMimeTypes.Javascript;
                                         else if (fileToGet.EndsWith(".css"))
                                             mimeType = HttpMimeTypes.Css;
-
 
                                         WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), host, mimeType, close), close); //for text documents
 
@@ -139,6 +136,8 @@ namespace Hanasu.Misc.HTTPd
                                     }
                                 else
                                 {
+                                    //for non text-based files
+
                                     List<byte> bytes = new List<byte>();
 
                                     int byt;
@@ -148,8 +147,10 @@ namespace Hanasu.Misc.HTTPd
                                         bytes.Add((byte)byt);
                                     }
 
-                                    WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(bytes.ToArray(), host, mimeType, close), false);
-                                    WriteSocket(ref tcp, bytes.ToArray(), close);
+                                    var dataBytes = bytes.ToArray();
+
+                                    WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(dataBytes, host, mimeType, close), false);
+                                    WriteSocket(ref tcp, dataBytes, close);
 
                                 }
 
