@@ -63,6 +63,8 @@ namespace Hanasu.Misc.HTTPd
                     false :
                     headLines.First(t => t.StartsWith("Connection: ")).Substring("Connection: ".Length).ToLower() == "keep-alive";
 
+                string host = headLines.First(t => t.StartsWith("Host: ")).Substring("Host :".Length);
+
                 bool close = !keepalive;
 
                 if (method == "GET" || method == "HEAD")
@@ -105,11 +107,11 @@ namespace Hanasu.Misc.HTTPd
                                 if (_urlHandlers[fileToGet].Item1 == HttpRequestType.GET || _urlHandlers[fileToGet].Item1 == HttpRequestType.GETANDPOST)
                                 {
                                     if (HttpUrlHandler != null)
-                                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(fileToGet, HttpRequestType.GET, queryVars, null).ToString(), HttpMimeTypes.Html, close), close);
+                                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(fileToGet, HttpRequestType.GET, queryVars, null).ToString(), host, HttpMimeTypes.Html, close), close);
                                 }
                                 else
                                 {
-                                    WriteSocket(ref tcp, HttpResponseBuilder.MethodNotAllowedResponse(), close);
+                                    WriteSocket(ref tcp, HttpResponseBuilder.MethodNotAllowedResponse(host), close);
                                 }
                             }
                             else
@@ -128,7 +130,7 @@ namespace Hanasu.Misc.HTTPd
                                     else if (fileToGet.EndsWith(".css"))
                                         mimeType = HttpMimeTypes.Css;
 
-                                    WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), mimeType, close), close);
+                                    WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), host, mimeType, close), close);
 
                                     sr.Close();
                                 }
@@ -138,14 +140,14 @@ namespace Hanasu.Misc.HTTPd
                         }
                         else if (method == "HEAD")
                         {
-                            WriteSocket(ref tcp, HttpResponseBuilder.OKResponse("", HttpMimeTypes.Html, close), close);
+                            WriteSocket(ref tcp, HttpResponseBuilder.OKResponse("", host, HttpMimeTypes.Html, close), close);
                         }
 
 
                     }
                     catch (Exception)
                     {
-                        WriteSocket(ref tcp, HttpResponseBuilder.NotFoundResponse(), close);
+                        WriteSocket(ref tcp, HttpResponseBuilder.NotFoundResponse(host), close);
                     }
                     #endregion
                 }
@@ -161,16 +163,16 @@ namespace Hanasu.Misc.HTTPd
                             string[] postData = null; // to be implemented
 
                             if (HttpUrlHandler != null)
-                                WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(file, HttpRequestType.POST, null, postData).ToString(), HttpMimeTypes.Html, close), close);
+                                WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(file, HttpRequestType.POST, null, postData).ToString(), host, HttpMimeTypes.Html, close), close);
                         }
                         else
                         {
-                            WriteSocket(ref tcp, HttpResponseBuilder.MethodNotAllowedResponse(), close);
+                            WriteSocket(ref tcp, HttpResponseBuilder.MethodNotAllowedResponse(host), close);
                         }
                     }
                     else
                     {
-                        WriteSocket(ref tcp, HttpResponseBuilder.NotFoundResponse(), close);
+                        WriteSocket(ref tcp, HttpResponseBuilder.NotFoundResponse(host), close);
                     }
 
                 }
@@ -190,7 +192,7 @@ namespace Hanasu.Misc.HTTPd
             try
             {
                 tcp.Client.Send(
-                    System.Text.ASCIIEncoding.ASCII.GetBytes(data));
+                    System.Text.UTF8Encoding.UTF8.GetBytes(data));
             }
             catch (Exception)
             {

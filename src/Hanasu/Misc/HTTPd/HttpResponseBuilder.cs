@@ -8,17 +8,17 @@ namespace Hanasu.Misc.HTTPd
     public static class HttpResponseBuilder
     {
 
-        public static string OKResponse(string fileText,string mimetype = "text/html; charset=ASCII", bool close = true)
+        public static string OKResponse(string fileText, string host, string mimetype = "text/html; charset=UTF-8", bool close = true)
         {
             StringBuilder sb = new StringBuilder();
-            GenerateStandardHeaders(ref sb, "100 OK");
+            GenerateStandardHeaders(ref sb, "200 OK", host);
 
             if (close)
                 sb.AppendLine("Connection: close");
             else
                 sb.AppendLine("Connection: keep-alive");
 
-            sb.AppendLine("Content-Type: " + mimetype + "; charset=ASCII");
+            sb.AppendLine("Content-Type: " + mimetype + "; charset=UTF-8");
             sb.AppendLine("Contenth-Length: " + fileText.Length);
 
             sb.AppendLine();
@@ -27,10 +27,10 @@ namespace Hanasu.Misc.HTTPd
             return sb.ToString();
         }
 
-        public static string TemporaryRedirectResponse(string url)
+        public static string TemporaryRedirectResponse(string url, string host)
         {
             StringBuilder sb = new StringBuilder();
-            GenerateStandardHeaders(ref sb, "307 Temporary Redirect");
+            GenerateStandardHeaders(ref sb, "307 Temporary Redirect", host);
 
             sb.AppendLine("Location: " + url);
             sb.AppendLine("Connection: close");
@@ -40,18 +40,19 @@ namespace Hanasu.Misc.HTTPd
             return sb.ToString();
         }
 
-        private static void GenerateStandardHeaders(ref StringBuilder sb, string p)
+        private static void GenerateStandardHeaders(ref StringBuilder sb, string p, string host)
         {
             sb.AppendLine("HTTP/1.1 " + p);
             sb.AppendLine("Date: " + DateTime.UtcNow.ToLongTimeString());
             sb.AppendLine("Server: Hanasu 2.0 HTTPd");
+            sb.AppendLine("Host: " + host);
         }
 
 
-        public static string NoContentResponse()
+        public static string NoContentResponse(string host)
         {
             StringBuilder sb = new StringBuilder();
-            GenerateStandardHeaders(ref sb, "204 No Content");
+            GenerateStandardHeaders(ref sb, "204 No Content", host);
 
             sb.AppendLine("Connection: close");
 
@@ -60,10 +61,10 @@ namespace Hanasu.Misc.HTTPd
             return sb.ToString();
         }
 
-        public static string MethodNotAllowedResponse()
+        public static string MethodNotAllowedResponse(string host)
         {
             StringBuilder sb = new StringBuilder();
-            GenerateStandardHeaders(ref sb, "405 Method Not Allowed");
+            GenerateStandardHeaders(ref sb, "405 Method Not Allowed", host);
 
             sb.AppendLine("Connection: close");
 
@@ -72,10 +73,10 @@ namespace Hanasu.Misc.HTTPd
             return sb.ToString();
         }
 
-        public static string NotFoundResponse()
+        public static string NotFoundResponse(string host)
         {
             StringBuilder sb = new StringBuilder();
-            GenerateStandardHeaders(ref sb, "404 Not Found");
+            GenerateStandardHeaders(ref sb, "404 Not Found", host);
 
             sb.AppendLine("Connection: close");
 
