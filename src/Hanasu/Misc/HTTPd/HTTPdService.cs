@@ -81,11 +81,10 @@ namespace Hanasu.Misc.HTTPd
                             break;
                     }
 
-                    var s = Application.GetResourceStream(
-                        new Uri(@BaseDir + fileToGet, UriKind.RelativeOrAbsolute));
-
-                    if (s != null)
+                    try
                     {
+                        var s = Application.GetResourceStream(
+                            new Uri(@BaseDir + fileToGet, UriKind.RelativeOrAbsolute));
                         using (var sr = new System.IO.StreamReader(s.Stream))
                         {
                             var mimeType = s.ContentType;
@@ -102,7 +101,7 @@ namespace Hanasu.Misc.HTTPd
 
                         s.Stream.Close();
                     }
-                    else
+                    catch (Exception)
                     {
                         WriteSocket(ref tcp, HttpResponseBuilder.NotFoundResponse(), close);
                     }
