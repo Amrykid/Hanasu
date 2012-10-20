@@ -72,6 +72,16 @@ namespace Hanasu.Misc.HTTPd
                     //TODO: make this not hard-coded.
 
                     var fileToGet = "";
+                    string[] queryVars = null;
+
+                    if (file.Contains("?"))
+                    {
+                        var fileSplit = file.Split(new char[] { '?' }, 2);
+
+                        file = fileSplit[0];
+
+                        queryVars = fileSplit[1].Split('&');
+                    }
 
                     switch (file.ToLower())
                     {
@@ -95,7 +105,7 @@ namespace Hanasu.Misc.HTTPd
                                 if (_urlHandlers[fileToGet].Item1 == HttpRequestType.GET || _urlHandlers[fileToGet].Item1 == HttpRequestType.GETANDPOST)
                                 {
                                     if (HttpUrlHandler != null)
-                                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(fileToGet, HttpRequestType.GET, null).ToString(), HttpMimeTypes.Html, close), close);
+                                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(fileToGet, HttpRequestType.GET, queryVars, null).ToString(), HttpMimeTypes.Html, close), close);
                                 }
                                 else
                                 {
@@ -148,10 +158,10 @@ namespace Hanasu.Misc.HTTPd
                     {
                         if (_urlHandlers[file].Item1 == HttpRequestType.POST || _urlHandlers[file].Item1 == HttpRequestType.GETANDPOST)
                         {
-                            object postData = null; // to be implemented
+                            string[] postData = null; // to be implemented
 
                             if (HttpUrlHandler != null)
-                                WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(file, HttpRequestType.POST, postData).ToString(), HttpMimeTypes.Html, close), close);
+                                WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(file, HttpRequestType.POST, null, postData).ToString(), HttpMimeTypes.Html, close), close);
                         }
                         else
                         {
@@ -223,7 +233,7 @@ namespace Hanasu.Misc.HTTPd
         public delegate void HttpPostReceivedHandler(string file, object postdata);
         public static event HttpPostReceivedHandler HttpPostReceived;
 
-        public delegate object HttpUrlHandlerHandler(string relativeUrl, HttpRequestType type, object postdata);
+        public delegate object HttpUrlHandlerHandler(string relativeUrl, HttpRequestType type, string[] queryVars, string[] postdata);
         public static event HttpUrlHandlerHandler HttpUrlHandler;
 
         public static void RegisterUrlHandler(string relativeUrl, HttpRequestType type, string helpInformation)

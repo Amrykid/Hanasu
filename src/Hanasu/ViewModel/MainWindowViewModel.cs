@@ -115,7 +115,7 @@ namespace Hanasu.ViewModel
                 HTTPdService.RegisterUrlHandler("/pause", HTTPdService.HttpRequestType.POST, "Tells Hanasu to stop playing the previously selected station.");
                 HTTPdService.RegisterUrlHandler("/nowplaying", HTTPdService.HttpRequestType.GET, "Gets what the current song is from Hanasu.");
                 HTTPdService.RegisterUrlHandler("/api", HTTPdService.HttpRequestType.GET, "Reports all of the commands that are registered in Hanasu.");
-                HTTPdService.RegisterUrlHandler("/getlocalizedvalue", HTTPdService.HttpRequestType.GET, "Gets the localized vaule from the specified key. I.e. {Welcome}. Not Implemented Yet.");
+                HTTPdService.RegisterUrlHandler("/getlocalizedvalue", HTTPdService.HttpRequestType.GET, "Gets the localized vaule from the specified key. I.E. /getlocalizedvalue?key=Welcome");
 
                 HTTPdService.Start();
             }
@@ -124,7 +124,7 @@ namespace Hanasu.ViewModel
             }
         }
 
-        object HTTPdService_HttpUrlHandler(string relativeUrl, Misc.HTTPd.HTTPdService.HttpRequestType type, object postdata)
+        object HTTPdService_HttpUrlHandler(string relativeUrl, Misc.HTTPd.HTTPdService.HttpRequestType type, string[] queryVars, string[] postdata)
         {
             if (type == Misc.HTTPd.HTTPdService.HttpRequestType.POST)
             {
@@ -157,6 +157,7 @@ namespace Hanasu.ViewModel
                             return "Nothing";
                     case "/api":
                         {
+                            #region Generates API doc
                             StringBuilder sb = new StringBuilder(); //its going to get messy
 
                             sb.AppendLine("<html>");
@@ -183,6 +184,28 @@ namespace Hanasu.ViewModel
                             sb.AppendLine("</html>");
 
                             return sb.ToString();
+                            #endregion
+                        }
+                    case "/getlocalizedvalue":
+                        {
+                            if (queryVars.Length == 0)
+                                return string.Empty;
+
+                            var keyBit = queryVars[0].Split('=');
+
+                            var key = keyBit[0].ToLower();
+
+                            if (key == "key")
+                                try
+                                {
+                                    return LocalizationManager.GetLocalizedValue(keyBit[1]);
+                                }
+                                catch (Exception)
+                                {
+                                    break;
+                                }
+
+                            return string.Empty;
                         }
                 }
             }
