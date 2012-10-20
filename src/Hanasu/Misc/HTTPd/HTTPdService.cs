@@ -120,19 +120,37 @@ namespace Hanasu.Misc.HTTPd
 
                                 var s = Application.GetResourceStream(
                                     new Uri(@BaseDir + fileToGet, UriKind.RelativeOrAbsolute));
+                                var mimeType = s.ContentType;
 
-                                using (var sr = new System.IO.StreamReader(s.Stream))
+                                if (mimeType.StartsWith("text"))
+                                    using (var sr = new System.IO.StreamReader(s.Stream))
+                                    {
+
+
+                                        if (fileToGet.EndsWith(".js"))
+                                            mimeType = HttpMimeTypes.Javascript;
+                                        else if (fileToGet.EndsWith(".css"))
+                                            mimeType = HttpMimeTypes.Css;
+
+
+                                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), host, mimeType, close), close); //for text documents
+
+                                        sr.Close();
+                                    }
+                                else
                                 {
-                                    var mimeType = s.ContentType;
+                                    List<byte> bytes = new List<byte>();
 
-                                    if (fileToGet.EndsWith(".js"))
-                                        mimeType = HttpMimeTypes.Javascript;
-                                    else if (fileToGet.EndsWith(".css"))
-                                        mimeType = HttpMimeTypes.Css;
+                                    int byt;
 
-                                    WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), host, mimeType, close), close);
+                                    while ((byt = s.Stream.ReadByte()) > -1)
+                                    {
+                                        bytes.Add((byte)byt);
+                                    }
 
-                                    sr.Close();
+                                    WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(bytes.ToArray(), host, mimeType, close), false);
+                                    WriteSocket(ref tcp, bytes.ToArray(), close);
+
                                 }
 
                                 s.Stream.Close();
@@ -193,6 +211,19 @@ namespace Hanasu.Misc.HTTPd
             {
                 tcp.Client.Send(
                     System.Text.UTF8Encoding.UTF8.GetBytes(data));
+            }
+            catch (Exception)
+            {
+            }
+
+            if (close)
+                tcp.Close();
+        }
+        private static void WriteSocket(ref TcpClient tcp, Byte[] data, bool close = true)
+        {
+            try
+            {
+                tcp.Client.Send(data);
             }
             catch (Exception)
             {

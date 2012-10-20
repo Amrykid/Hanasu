@@ -8,7 +8,7 @@ namespace Hanasu.Misc.HTTPd
     public static class HttpResponseBuilder
     {
 
-        public static string OKResponse(string fileText, string host, string mimetype = "text/html; charset=UTF-8", bool close = true)
+        public static string OKResponse(dynamic fileData, string host, string mimetype = "text/html; charset=UTF-8", bool close = true)
         {
             StringBuilder sb = new StringBuilder();
             GenerateStandardHeaders(ref sb, "200 OK", host);
@@ -18,11 +18,13 @@ namespace Hanasu.Misc.HTTPd
             else
                 sb.AppendLine("Connection: keep-alive");
 
-            sb.AppendLine("Content-Type: " + mimetype + "; charset=UTF-8");
-            sb.AppendLine("Contenth-Length: " + fileText.Length);
+            sb.AppendLine("Content-Type: " + (mimetype.StartsWith("text") ? mimetype + "; charset=UTF-8" : mimetype));
+            sb.AppendLine("Contenth-Length: " + fileData.Length);
 
             sb.AppendLine();
-            sb.Append(fileText);
+
+            if (mimetype.StartsWith("text"))
+                sb.Append(fileData);
 
             return sb.ToString();
         }
