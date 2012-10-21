@@ -122,6 +122,9 @@ namespace Hanasu.Misc.HTTPd
                                     new Uri(@BaseDir + fileToGet, UriKind.RelativeOrAbsolute));
                                 var mimeType = s.ContentType;
 
+                                if (fileToGet.EndsWith(".woff"))
+                                    mimeType = "application/font-woff"; //may need to make this like urlhandlers where you can register them.
+
                                 if (mimeType.StartsWith("text"))
                                     using (var sr = new System.IO.StreamReader(s.Stream))
                                     {
