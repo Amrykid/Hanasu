@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Reflection;
 using System.Windows;
+using System.IO;
 
 namespace Hanasu.Misc.HTTPd
 {
@@ -97,6 +98,23 @@ namespace Hanasu.Misc.HTTPd
                             break;
                     }
 
+                    //find if compression is supported
+                    var compressionSupported = headLines.First(t => t.ToLower().StartsWith("accept-encoding")).Split(',');
+                    compressionSupported[0] = compressionSupported[0].Substring("accept-encoding: ".Length);
+                    //only ones that would be supported is deflate (default) and gzip
+
+                    bool useCompression = compressionSupported.Any(t => t.ToLower() == "deflate") || compressionSupported.Any(t => t.ToLower() == "gzip");
+                    string compressionToUse = null;
+                    string compressionHeader = null;
+
+                    if (compressionSupported.Contains("deflate"))
+                        compressionToUse = "deflate";
+                    else if (compressionSupported.Contains("gzip"))
+                        compressionToUse = "gzip";
+
+                    if (compressionToUse != null)
+                        compressionHeader = "Content-Encoding: " + compressionToUse;
+
                     try
                     {
                         if (method == "GET")
@@ -107,7 +125,12 @@ namespace Hanasu.Misc.HTTPd
                                 if (_urlHandlers[fileToGet].Item1 == HttpRequestType.GET || _urlHandlers[fileToGet].Item1 == HttpRequestType.GETANDPOST)
                                 {
                                     if (HttpUrlHandler != null)
-                                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(fileToGet, HttpRequestType.GET, queryVars, null).ToString(), host, HttpMimeTypes.Html, close), close);
+                                    {
+                                        var output = HttpUrlHandler(fileToGet, HttpRequestType.GET, queryVars, null).ToString();
+
+                                        WriteSocket(ref tcp, 
+                                            HttpResponseBuilder.OKResponse(output, host, HttpMimeTypes.Html, close, false, compressionHeader), output, close, new Tuple<bool, string>(useCompression, compressionToUse));
+                                    }
                                 }
                                 else
                                 {
@@ -133,7 +156,11 @@ namespace Hanasu.Misc.HTTPd
                                         else if (fileToGet.EndsWith(".css"))
                                             mimeType = HttpMimeTypes.Css;
 
-                                        WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(sr.ReadToEnd(), host, mimeType, close), close); //for text documents
+                                        var data = sr.ReadToEnd();
+
+                                        WriteSocket(ref tcp, 
+                                            HttpResponseBuilder.OKResponse(data, host, mimeType, close,false, compressionHeader),
+                                            data, close, new Tuple<bool, string>(useCompression, compressionToUse)); //for text documents
 
                                         sr.Close();
                                     }
@@ -213,8 +240,36 @@ namespace Hanasu.Misc.HTTPd
         {
             try
             {
-                tcp.Client.Send(
-                    System.Text.UTF8Encoding.UTF8.GetBytes(data));
+                var bits = System.Text.UTF8Encoding.UTF8.GetBytes(data);
+
+                tcp.Client.Send(bits);
+            }
+            catch (Exception)
+            {
+            }
+
+            if (close)
+                tcp.Close();
+        }
+        private static void WriteSocket(ref TcpClient tcp, string headers, string data, bool close = true, Tuple<bool, string> compressionScheme = null)
+        {
+            try
+            {
+                var headerBits = System.Text.UTF8Encoding.UTF8.GetBytes(headers);
+                tcp.Client.Send(headerBits);
+
+
+                var bits = System.Text.UTF8Encoding.UTF8.GetBytes(data);
+
+                if (compressionScheme != null && compressionScheme.Item1 == true)
+                {
+                    if (compressionScheme.Item2.ToLower() == "deflate")
+                        bits = CompressData_Deflate(bits);
+                    else if (compressionScheme.Item2.ToLower() == "gzip")
+                        bits = CompressData_GZip(bits);
+                }
+
+                tcp.Client.Send(bits);
             }
             catch (Exception)
             {
@@ -236,6 +291,32 @@ namespace Hanasu.Misc.HTTPd
             if (close)
                 tcp.Close();
         }
+
+        private static byte[] CompressData_Deflate(byte[] data)
+        {
+            MemoryStream ms = new MemoryStream();
+            System.IO.Compression.DeflateStream ds = new System.IO.Compression.DeflateStream(ms, System.IO.Compression.CompressionMode.Compress);
+            ds.Write(data, 0, data.Length);
+            ds.Close();
+            ds.Dispose();
+            byte[] compressed = (byte[])ms.ToArray();
+            ms.Close();
+            ds.Dispose();
+            return compressed;
+        }
+        private static byte[] CompressData_GZip(byte[] data)
+        {
+            MemoryStream ms = new MemoryStream();
+            System.IO.Compression.GZipStream ds = new System.IO.Compression.GZipStream(ms, System.IO.Compression.CompressionMode.Compress);
+            ds.Write(data, 0, data.Length);
+            ds.Close();
+            ds.Dispose();
+            byte[] compressed = (byte[])ms.ToArray();
+            ms.Close();
+            ms.Dispose();
+            return compressed;
+        }
+
         private static string ReadSocket(ref TcpClient tcp)
         {
             tcp.Client.ReceiveTimeout = 100;
