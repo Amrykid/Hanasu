@@ -118,6 +118,7 @@ namespace Hanasu.ViewModel
                 HTTPdService.RegisterUrlHandler("/getlocalizedvalue", HTTPdService.HttpRequestType.GET, "Gets the localized vaule from the specified key. I.E. /getlocalizedvalue?key=Welcome");
                 HTTPdService.RegisterUrlHandler("/isplaying", HTTPdService.HttpRequestType.GET, "Gets if Hanasu is playing or not. Returns 'true' or 'false'.");
                 HTTPdService.RegisterUrlHandler("/stations", HTTPdService.HttpRequestType.GET, "Gets the Hanasu stations catalog xml data.");
+                HTTPdService.RegisterUrlHandler("/ping", HTTPdService.HttpRequestType.GET, "Sends PONG back to the sender.");
 
                 HTTPdService.Start();
             }
@@ -218,6 +219,8 @@ namespace Hanasu.ViewModel
                         return IsPlaying.ToString().ToLower();
                     case "/stations":
                         return stationsXml.Value;
+                    case "/ping":
+                        return "pong";
                 }
             }
 
