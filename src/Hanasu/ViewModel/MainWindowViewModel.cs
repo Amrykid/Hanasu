@@ -117,6 +117,7 @@ namespace Hanasu.ViewModel
                 HTTPdService.RegisterUrlHandler("/api", HTTPdService.HttpRequestType.GET, "Reports all of the commands that are registered in Hanasu.");
                 HTTPdService.RegisterUrlHandler("/getlocalizedvalue", HTTPdService.HttpRequestType.GET, "Gets the localized vaule from the specified key. I.E. /getlocalizedvalue?key=Welcome");
                 HTTPdService.RegisterUrlHandler("/isplaying", HTTPdService.HttpRequestType.GET, "Gets if Hanasu is playing or not. Returns 'true' or 'false'.");
+                HTTPdService.RegisterUrlHandler("/stations", HTTPdService.HttpRequestType.GET, "Gets the Hanasu stations catalog xml data.");
 
                 HTTPdService.Start();
             }
@@ -124,6 +125,11 @@ namespace Hanasu.ViewModel
             {
             }
         }
+
+        private Lazy<string> stationsXml = new Lazy<string>(() =>
+            {
+                return Hanasu.Core.Utilities.HtmlTextUtility.GetHtmlFromUrl2(GlobalHanasuCore.StationsService.StationsUrl);
+            });
 
         object HTTPdService_HttpUrlHandler(string relativeUrl, Misc.HTTPd.HTTPdService.HttpRequestType type, string[] queryVars, string[] postdata)
         {
@@ -210,6 +216,8 @@ namespace Hanasu.ViewModel
                         }
                     case "/isplaying":
                         return IsPlaying.ToString().ToLower();
+                    case "/stations":
+                        return stationsXml.Value;
                 }
             }
 

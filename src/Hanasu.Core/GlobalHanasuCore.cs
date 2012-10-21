@@ -315,7 +315,7 @@ namespace Hanasu.Core
         public static bool Initialized { get; private set; }
 
         public static PluginImporterInstance Plugins { get; private set; }
-        internal static Stations.StationsService StationsService { get; private set; }
+        public static Stations.StationsService StationsService { get; private set; }
         internal static SongService SongService { get; set; }
         internal static Hanasu.Core.ArtistService.ArtistService ArtistService { get; set; }
 
