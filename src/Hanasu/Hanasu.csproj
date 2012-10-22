@@ -261,6 +261,9 @@
   <ItemGroup>
     <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\jquery.timer.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\jquery-ui-1.9.0.custom.min.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
