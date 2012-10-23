@@ -202,6 +202,17 @@ namespace Hanasu.Misc.HTTPd
                 }
                 else if (method == "POST")
                 {
+                    string[] queryVars = null;
+
+                    if (file.Contains("?"))
+                    {
+                        var fileSplit = file.Split(new char[] { '?' }, 2);
+
+                        file = fileSplit[0];
+
+                        queryVars = fileSplit[1].Split('&');
+                    }
+
                     if (HttpPostReceived != null)
                         HttpPostReceived(file, null);
 
@@ -212,7 +223,7 @@ namespace Hanasu.Misc.HTTPd
                             string[] postData = null; // to be implemented
 
                             if (HttpUrlHandler != null)
-                                WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(file, HttpRequestType.POST, null, postData).ToString(), host, HttpMimeTypes.Html, close), close);
+                                WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(file, HttpRequestType.POST, queryVars, postData).ToString(), host, HttpMimeTypes.Html, close), close);
                         }
                         else
                         {
