@@ -219,6 +219,15 @@ namespace Hanasu.Core
         private static System.Timers.Timer playingTimer = null;
         private static System.Timers.Timer nowPlayingTimer = null;
 
+        public static void PlayStation(Nullable<Station> station, string url)
+        {
+            if (CurrentPlayer == null) return; //Somethings wrong
+
+            Station stat = station.HasValue ? station.Value : CurrentStation;
+
+            stat = _PlayStation(stat, new Uri(url));
+        }
+
         public static void PlayStation(Nullable<Station> station = null)
         {
             //deal with finding the direct url here.
@@ -259,40 +268,46 @@ namespace Hanasu.Core
                     }
                 }
 
-                if (playingTimer.Enabled) playingTimer.Stop();
-
-                CurrentStation = stat;
-
-                CurrentPlayer.Volume = GetVolume();
-                CurrentPlayer.Play(url, CurrentStation.StationType == StationType.Radio ? MediaType.Audio : MediaType.Video);
-
-                playingTimer.Start();
-
-                PushMessageToGUI(NowPlayingReset, null);
-                PushMessageToGUI(NowPlayingStatus, true);
-
-                if (CurrentStation.ServerType != StationServerType.Auto && CurrentStation.ServerType != StationServerType.None && CurrentStation.ServerType != StationServerType.Unknown)
-                {
-                    Task.Factory.StartNew(() =>
-                        {
-                            Thread.Sleep(5000);
-
-                            if (CurrentPlayer.DataAttributes.ContainsKey("SourceURL"))
-                            {
-
-                                var urlx = CurrentPlayer.DataAttributes["SourceURL"].ToString();
-
-                                OnStationTypeDetected(CurrentPlayer,
-                                    new Tuple<PlayerDetectedStationType, Uri>(CurrentStation.ServerType == StationServerType.Shoutcast ? PlayerDetectedStationType.Shoutcast : PlayerDetectedStationType.Unknown,
-                                        new Uri(urlx)));
-                            }
-                        });
-                }
+                stat = _PlayStation(stat, url);
             }
             catch (Exception ex)
             {
                 PushMessageToGUI(StationConnectionError, ex);
             }
+        }
+
+        private static Station _PlayStation(Station stat, Uri url)
+        {
+            if (playingTimer.Enabled) playingTimer.Stop();
+
+            CurrentStation = stat;
+
+            CurrentPlayer.Volume = GetVolume();
+            CurrentPlayer.Play(url, CurrentStation.StationType == StationType.Radio ? MediaType.Audio : MediaType.Video);
+
+            playingTimer.Start();
+
+            PushMessageToGUI(NowPlayingReset, null);
+            PushMessageToGUI(NowPlayingStatus, true);
+
+            if (CurrentStation.ServerType != StationServerType.Auto && CurrentStation.ServerType != StationServerType.None && CurrentStation.ServerType != StationServerType.Unknown)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    Thread.Sleep(5000);
+
+                    if (CurrentPlayer.DataAttributes.ContainsKey("SourceURL"))
+                    {
+
+                        var urlx = CurrentPlayer.DataAttributes["SourceURL"].ToString();
+
+                        OnStationTypeDetected(CurrentPlayer,
+                            new Tuple<PlayerDetectedStationType, Uri>(CurrentStation.ServerType == StationServerType.Shoutcast ? PlayerDetectedStationType.Shoutcast : PlayerDetectedStationType.Unknown,
+                                new Uri(urlx)));
+                    }
+                });
+            }
+            return stat;
         }
 
         public static Station CurrentStation { get; private set; }

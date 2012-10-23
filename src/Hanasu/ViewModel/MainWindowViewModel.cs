@@ -105,20 +105,29 @@ namespace Hanasu.ViewModel
             MediaRewindCommand = new NullCommand();
 
 
+            InitializeHTTPd();
+        }
+
+        #region HTTPd
+        private void InitializeHTTPd()
+        {
             try
             {
                 //Hanasu.Misc.HTTPd.HTTPdService.HttpPostReceived += HTTPdService_HttpPostReceived;
                 HTTPdService.HttpUrlHandler += HTTPdService_HttpUrlHandler;
 
                 //TODO: make the help data localizable
-                HTTPdService.RegisterUrlHandler("/play", HTTPdService.HttpRequestType.POST, "Tells Hanasu to start playing the previously selected station.");
-                HTTPdService.RegisterUrlHandler("/pause", HTTPdService.HttpRequestType.POST, "Tells Hanasu to stop playing the previously selected station.");
-                HTTPdService.RegisterUrlHandler("/nowplaying", HTTPdService.HttpRequestType.GET, "Gets what the current song is from Hanasu.");
                 HTTPdService.RegisterUrlHandler("/api", HTTPdService.HttpRequestType.GET, "Reports all of the commands that are registered in Hanasu.");
                 HTTPdService.RegisterUrlHandler("/getlocalizedvalue", HTTPdService.HttpRequestType.GET, "Gets the localized vaule from the specified key. I.E. /getlocalizedvalue?key=Welcome");
+                HTTPdService.RegisterUrlHandler("/getstationstreams", HTTPdService.HttpRequestType.GET, "Gets the stream(s) of a station and returns it in XML. I.E. /getstationstreams?station=XAMFM");
                 HTTPdService.RegisterUrlHandler("/isplaying", HTTPdService.HttpRequestType.GET, "Gets if Hanasu is playing or not. Returns 'true' or 'false'.");
-                HTTPdService.RegisterUrlHandler("/stations", HTTPdService.HttpRequestType.GET, "Gets the Hanasu stations catalog xml data.");
+                HTTPdService.RegisterUrlHandler("/nowplaying", HTTPdService.HttpRequestType.GET, "Gets what the current song is from Hanasu.");
+                HTTPdService.RegisterUrlHandler("/nowstation", HTTPdService.HttpRequestType.GET, "Gets what the current station is from Hanasu. See <a href=\"#stations\">/stations</a> for details.");
                 HTTPdService.RegisterUrlHandler("/ping", HTTPdService.HttpRequestType.GET, "Sends PONG back to the sender.");
+                HTTPdService.RegisterUrlHandler("/play", HTTPdService.HttpRequestType.POST, "Tells Hanasu to start playing the previously selected station.");
+                HTTPdService.RegisterUrlHandler("/play2", HTTPdService.HttpRequestType.POST, "Tells Hanasu what station to play along with optional direct url. For example: /play2?station=XAMFM&url=http://173.192.205.178:80");
+                HTTPdService.RegisterUrlHandler("/pause", HTTPdService.HttpRequestType.POST, "Tells Hanasu to stop playing the previously selected station.");
+                HTTPdService.RegisterUrlHandler("/stations", HTTPdService.HttpRequestType.GET, "Gets the Hanasu stations catalog xml data.");
 
                 HTTPdService.Start();
             }
@@ -148,6 +157,37 @@ namespace Hanasu.ViewModel
                                     if (MediaStopCommand.CanExecute(null))
                                         MediaStopCommand.Execute(null);
                                     break;
+                                case "/play2":
+                                    {
+                                        try
+                                        {
+                                            if (queryVars.Length == 0 || queryVars == null) return string.Empty;
+
+                                            var station = queryVars.First(x => x.ToLower().StartsWith("station")).Split('=')[1];
+
+                                            if (station == null) return string.Empty;
+
+                                            string url = null;
+                                            if (queryVars.Length >= 2)
+                                            {
+                                                url = queryVars.First(x => x.ToLower().StartsWith("url")).Split('=')[1];
+                                            }
+
+                                            SelectedStation = CatalogStations.First(t => t.Name.ToLower() == station.ToLower());
+
+                                            if (url == null)
+                                                PlaySelectedStation(SelectedStation);
+                                            else
+                                                PlayStationWithDirectUrl(SelectedStation, url);
+
+                                        }
+                                        catch (Exception)
+                                        {
+                                            return string.Empty;
+                                        }
+
+                                    }
+                                    break;
 
                             }
 
@@ -161,6 +201,11 @@ namespace Hanasu.ViewModel
                     case "/nowplaying":
                         if (GlobalHanasuCore.CurrentSong != null)
                             return GlobalHanasuCore.CurrentSong.ToSongString();
+                        else
+                            return "Nothing";
+                    case "/nowstation":
+                        if (GlobalHanasuCore.CurrentStation != null)
+                            return GlobalHanasuCore.CurrentStation.Name;
                         else
                             return "Nothing";
                     case "/api":
@@ -180,7 +225,7 @@ namespace Hanasu.ViewModel
                             foreach (var handler in HTTPdService.GetUrlHandlers())
                             {
                                 sb.AppendLine("\t\t\t<li>");
-                                sb.AppendLine("\t\t\t\t<h2>" + handler.Key + "</h2>");
+                                sb.AppendLine("\t\t\t\t<a id=\"" + handler.Key.TrimStart('/') + "\"><h2>" + handler.Key + "</h2></a>");
                                 sb.AppendLine("\t\t\t\t<h4>Http Method: " +
                                     Enum.GetName(typeof(Hanasu.Misc.HTTPd.HTTPdService.HttpRequestType), handler.Value.Item1));
                                 sb.AppendLine("\t\t\t\t<h4>" + handler.Value.Item2 + "</h4>");
@@ -246,6 +291,7 @@ namespace Hanasu.ViewModel
                     }
                 }));
         }
+        #endregion
 
 
         /// <summary>
@@ -498,6 +544,22 @@ namespace Hanasu.ViewModel
             GlobalHanasuCore.StopStation();
 
             GlobalHanasuCore.PlayStation(stat);
+
+            GlobalHanasuCore.SetVolume(CurrentVolume);
+
+            if (stat.Logo != null)
+                Messenger.PushMessage(this, "DisplayStationLogo", stat.Logo);
+        }
+
+        private void PlayStationWithDirectUrl(Station stat, string url)
+        {
+            if (url == null) return;
+
+            if (stat.Name == null) return;
+
+            GlobalHanasuCore.StopStation();
+
+            GlobalHanasuCore.PlayStation(stat, url);
 
             GlobalHanasuCore.SetVolume(CurrentVolume);
 
