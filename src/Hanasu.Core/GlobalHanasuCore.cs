@@ -152,6 +152,29 @@ namespace Hanasu.Core
             }
             PushMessageToGUI(StationsUpdated, StationsService.Stations);
         }
+        public static IMultiStreamEntry[] PreprocessForUrls(Station stat)
+        {
+            var pro = Preprocessor.PreprocessorService.GetProcessor(stat.DataSource, stat.ExplicitExtension);
+
+            if (pro == null && stat.ExplicitExtension == null)
+            {
+                //We don't know if its possible to play
+                return null;
+            }
+            else
+            {
+                //We know its possible to play and have a preprocessor for it.
+
+                if (pro.GetType().BaseType == typeof(Preprocessor.MultiStreamPreprocessor))
+                {
+                    var p = (Preprocessor.MultiStreamPreprocessor)pro;
+
+                    return p.Parse(stat.DataSource);
+                }
+            }
+
+            return null;
+        }
         private static bool PreprocessUrl(ref Uri url, Station stat, string ext, bool autochoose = false)
         {
             var pro = Preprocessor.PreprocessorService.GetProcessor(url, stat.ExplicitExtension);

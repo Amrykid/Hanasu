@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Crystal.Services;
 using Hanasu.Services.Notifications;
 using Hanasu.Misc.HTTPd;
+using System.Xml.Linq;
 
 namespace Hanasu.ViewModel
 {
@@ -260,6 +261,42 @@ namespace Hanasu.ViewModel
 
                             return string.Empty;
                         }
+                    case "/getstationstreams":
+                        {
+                            if (queryVars.Length == 0)
+                                return string.Empty;
+
+                            var stationBit = queryVars[0].Split('=');
+
+                            var station = stationBit[0].ToLower();
+
+                            if (station == "station")
+                                try
+                                {
+                                    var stationValue = stationBit[1];
+
+                                    var stat = CatalogStations.First(t => t.Name.ToLower() == stationValue.ToLower());
+
+                                    var entries = GlobalHanasuCore.PreprocessForUrls(stat);
+
+                                    if (entries == null)
+                                        break;
+
+                                    XDocument doc = new XDocument(
+                                        new XDeclaration("1.0", "Unicode", "yes"),
+                                        new XElement("Station",
+                                            new XElement("Name", stat.Name), new XElement("Streams", entries.Select(x => new XElement("Stream", new XElement("Title", x.Title), new XElement("Url", x.File))))));
+
+                                    return doc.ToString();
+                                }
+                                catch (Exception)
+                                {
+                                    break;
+                                }
+
+                            return string.Empty;
+                        }
+                        break;
                     case "/isplaying":
                         return IsPlaying.ToString().ToLower();
                     case "/stations":
