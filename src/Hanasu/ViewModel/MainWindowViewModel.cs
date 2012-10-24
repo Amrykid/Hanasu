@@ -279,13 +279,25 @@ namespace Hanasu.ViewModel
 
                                     var entries = GlobalHanasuCore.PreprocessForUrls(stat);
 
-                                    if (entries == null)
+                                    if (entries == null && stat.ExplicitExtension != null)
                                         break;
 
                                     XDocument doc = new XDocument(
                                         new XDeclaration("1.0", "Unicode", "yes"),
                                         new XElement("Station",
-                                            new XElement("Name", stat.Name), new XElement("Streams", entries.Select(x => new XElement("Stream", new XElement("Title", x.Title), new XElement("Url", x.File))))));
+                                            new XElement("Name", stat.Name),
+                                            new XElement("Streams",
+                                                stat.ExplicitExtension == null
+                                                ? new XElement[]
+                                                    {
+                                                        new XElement("Stream",
+                                                            new XElement("Title", stat.Name),
+                                                            new XElement("Url", stat.DataSource))
+                                                    }
+                                                : entries.Select(x =>
+                                                    new XElement("Stream",
+                                                        new XElement("Title", x.Title),
+                                                        new XElement("Url", x.File))))));
 
                                     return doc.ToString();
                                 }
