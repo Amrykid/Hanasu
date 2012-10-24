@@ -36,7 +36,8 @@ namespace Hanasu.Misc.HTTPd
         {
             var tcp = tcpListener.EndAcceptTcpClient(res);
 
-            tcpListener.BeginAcceptTcpClient(new AsyncCallback(HandleRequest), null);
+            if (IsRunning)
+                tcpListener.BeginAcceptTcpClient(new AsyncCallback(HandleRequest), null);
 
             HandleConnection(tcp);
         }
@@ -128,7 +129,7 @@ namespace Hanasu.Misc.HTTPd
                                     {
                                         var output = HttpUrlHandler(fileToGet, HttpRequestType.GET, queryVars, null).ToString();
 
-                                        WriteSocket(ref tcp, 
+                                        WriteSocket(ref tcp,
                                             HttpResponseBuilder.OKResponse(output, host, HttpMimeTypes.Html, close, false, compressionHeader), output, close, new Tuple<bool, string>(useCompression, compressionToUse));
                                     }
                                 }
@@ -158,8 +159,8 @@ namespace Hanasu.Misc.HTTPd
 
                                         var data = sr.ReadToEnd();
 
-                                        WriteSocket(ref tcp, 
-                                            HttpResponseBuilder.OKResponse(data, host, mimeType, close,false, compressionHeader),
+                                        WriteSocket(ref tcp,
+                                            HttpResponseBuilder.OKResponse(data, host, mimeType, close, false, compressionHeader),
                                             data, close, new Tuple<bool, string>(useCompression, compressionToUse)); //for text documents
 
                                         sr.Close();

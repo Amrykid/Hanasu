@@ -156,9 +156,12 @@ namespace Hanasu.Core
         {
             var pro = Preprocessor.PreprocessorService.GetProcessor(stat.DataSource, stat.ExplicitExtension);
 
-            if (pro == null && string.IsNullOrEmpty(stat.ExplicitExtension))
+            if (pro == null || string.IsNullOrEmpty(stat.ExplicitExtension))
             {
                 //We don't know if its possible to play
+
+                if (pro != null)
+                    return ((Preprocessor.MultiStreamPreprocessor)pro).Parse(stat.DataSource);
 
                 if (stat.DataSource.Segments.Last().Contains("."))
                 {
@@ -168,7 +171,13 @@ namespace Hanasu.Core
                     if (CurrentPlayer.Supports(ext))
                         return new IMultiStreamEntry[] { new Hanasu.Core.Preprocessor.Preprocessors.M3U.M3UEntry() { File = stat.DataSource.ToString(), Title = stat.Name } };
                     else
+                    {
+                        if (!string.IsNullOrEmpty(stat.ExplicitExtension))
+                            if (CurrentPlayer.Supports(stat.ExplicitExtension))
+                                return new IMultiStreamEntry[] { new Hanasu.Core.Preprocessor.Preprocessors.M3U.M3UEntry() { File = stat.DataSource.ToString(), Title = stat.Name } };
+
                         return null;
+                    }
                 }
                 else
                 {
@@ -177,6 +186,8 @@ namespace Hanasu.Core
                     return new IMultiStreamEntry[] { new Hanasu.Core.Preprocessor.Preprocessors.M3U.M3UEntry() { File = stat.DataSource.ToString(), Title = stat.Name } };
                 }
             }
+            else if (!string.IsNullOrEmpty(stat.ExplicitExtension) && CurrentPlayer.Supports(stat.ExplicitExtension))
+                return new IMultiStreamEntry[] { new Hanasu.Core.Preprocessor.Preprocessors.M3U.M3UEntry() { File = stat.DataSource.ToString(), Title = stat.Name } };
             else
             {
                 //We know its possible to play and have a preprocessor for it.
