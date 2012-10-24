@@ -98,6 +98,10 @@ namespace Hanasu.Core.Utilities
         {
             return text.Replace(" ", "%20");
         }
+        public static string UrlDecode(string text)
+        {
+            return text.Replace("%20", " ");
+        }
 
         public static bool ExtensionIsWebExtension(string ext)
         {

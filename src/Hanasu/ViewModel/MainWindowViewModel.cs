@@ -273,7 +273,7 @@ namespace Hanasu.ViewModel
                             if (station == "station")
                                 try
                                 {
-                                    var stationValue = stationBit[1];
+                                    var stationValue = Hanasu.Core.Utilities.HtmlTextUtility.UrlDecode(stationBit[1]);
 
                                     var stat = CatalogStations.First(t => t.Name.ToLower() == stationValue.ToLower());
 

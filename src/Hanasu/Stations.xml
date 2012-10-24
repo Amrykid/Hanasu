@@ -54,7 +54,7 @@
     <City>N/A</City>
     <Language>Spanish</Language>
     <Cacheable>True</Cacheable>
-    <ExplicitExtension>.asx</ExplicitExtension>
+    <ExplicitExtension></ExplicitExtension>
     <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-snc6/198519_183827418326561_7681770_n.jpg</Logo>
     <UseAlternateSongTitleFetching>True</UseAlternateSongTitleFetching>
     <ServerType>Shoutcast</ServerType>
