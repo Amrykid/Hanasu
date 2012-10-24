@@ -1,0 +1,3 @@
+[submodule "src/Hanasu/Misc/HTTPd/Web App/Hanasu-Web-App"]
+	path = src/Hanasu/Misc/HTTPd/Web App/Hanasu-Web-App
+	url = git@github.com:Amrykid/Hanasu-Web-App.git
