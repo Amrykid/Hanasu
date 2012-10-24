@@ -287,7 +287,7 @@ namespace Hanasu.ViewModel
                                         new XElement("Station",
                                             new XElement("Name", stat.Name),
                                             new XElement("Streams",
-                                                stat.ExplicitExtension == null
+                                                entries.Length == 0
                                                 ? new XElement[]
                                                     {
                                                         new XElement("Stream",
