@@ -50,7 +50,7 @@ namespace Hanasu.Misc.HTTPd
             }
         }
 
-        private const string BaseDir = "/Misc/HTTPd/Web App/Hanasu-Web-App";
+        private const string BaseDir = "/Misc/HTTPd/Web App/Web-App";
 
         private static void HandleConnection(TcpClient tcp)
         {

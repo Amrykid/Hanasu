@@ -186,13 +186,13 @@
     <None Include="I18N\en-US.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\css\styles.less" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\fonts\fontawesome-webfont.eot" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\fonts\fontawesome-webfont.ttf" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\fonts\fontawesome-webfont.woff" />
     <None Include="I18N\fr.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Resource Include="Misc\HTTPd\Web App\Web-App\css\styles.less" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\fonts\fontawesome-webfont.eot" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\fonts\fontawesome-webfont.ttf" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\fonts\fontawesome-webfont.woff" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -241,28 +241,22 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\css\font-awesome-ie7.css" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\css\font-awesome.css" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\favicon.ico" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\favicon_2.ico" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\fonts\fontawesome-webfont.svg" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\humans.txt" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\images\favicon.png" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\images\songexample.png" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\index.html" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\core.js" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\fullscreen.js" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\jquery-1.8.2.min.js" />
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\less.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\images\stationexample.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\jquery.timer.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Misc\HTTPd\Web App\Hanasu-Web-App\js\jquery-ui-1.9.0.custom.min.js" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\css\font-awesome-ie7.css" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\css\font-awesome.css" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\favicon.ico" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\favicon_2.ico" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\fonts\fontawesome-webfont.svg" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\humans.txt" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\images\favicon.png" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\images\songexample.png" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\images\stationexample.png" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\index.html" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\core.js" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\fullscreen.js" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\jquery-1.8.2.min.js" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\jquery-ui-1.9.0.custom.min.js" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\jquery.timer.js" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\less.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
