@@ -377,7 +377,13 @@ namespace Hanasu.ViewModel
             {
                 this.SetProperty("IsMuted", value);
 
-                GlobalHanasuCore.IsMuted = value;
+                try
+                {
+                    GlobalHanasuCore.IsMuted = value;
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -484,10 +490,16 @@ namespace Hanasu.ViewModel
                         //MahApps.Metro.Behaviours.
                         //TODO: Show some sort of error dialog.
 
-                        Exception ex = (Exception)data;
+                        if (data is string)
+                            ServiceManager.Resolve<IMessageBoxService>()
+                            .ShowMessage("Connection Error", "Unable to stream from station:" + Environment.NewLine + data);
+                        else
+                        {
+                            Exception ex = (Exception)data;
 
-                        ServiceManager.Resolve<IMessageBoxService>()
-                            .ShowMessage("Connection Error", "Unable to stream from station:" + Environment.NewLine + ex.Message);
+                            ServiceManager.Resolve<IMessageBoxService>()
+                                .ShowMessage("Connection Error", "Unable to stream from station:" + Environment.NewLine + ex.Message);
+                        }
                         break;
                     }
                 case GlobalHanasuCore.CoreDispatcherInvoke:

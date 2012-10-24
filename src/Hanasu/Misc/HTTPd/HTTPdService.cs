@@ -34,12 +34,20 @@ namespace Hanasu.Misc.HTTPd
 
         private static void HandleRequest(IAsyncResult res)
         {
-            var tcp = tcpListener.EndAcceptTcpClient(res);
+            try
+            {
+                var tcp = tcpListener.EndAcceptTcpClient(res);
 
-            if (IsRunning)
-                tcpListener.BeginAcceptTcpClient(new AsyncCallback(HandleRequest), null);
+                if (IsRunning)
+                    tcpListener.BeginAcceptTcpClient(new AsyncCallback(HandleRequest), null);
 
-            HandleConnection(tcp);
+                HandleConnection(tcp);
+            }
+            catch (Exception)
+            {
+                if (IsRunning)
+                    tcpListener.BeginAcceptTcpClient(new AsyncCallback(HandleRequest), null);
+            }
         }
 
         private const string BaseDir = "/Misc/HTTPd/Web App/Hanasu-Web-App";
@@ -49,6 +57,7 @@ namespace Hanasu.Misc.HTTPd
             try
             {
                 string head = "";
+
                 while (head.EndsWith("\r\n\r\n") == false)
                 {
                     head += ReadSocket(ref tcp);

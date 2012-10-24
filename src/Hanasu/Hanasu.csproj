@@ -51,7 +51,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Crystal">
@@ -267,14 +267,16 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>copy /-Y "$(SolutionDir)src\MediaPlayers\Hanasu.Player.WMP\bin\$(ConfigurationName)\Hanasu.Player.WMP.dll" "$(TargetDir)\Plugins\WMP\"
-copy /-Y "$(SolutionDir)src\MediaPlayers\Hanasu.Player.WMP\bin\$(ConfigurationName)\AxInterop.WMPLib.dll" "$(TargetDir)\Plugins\WMP\"
-copy /-Y "$(SolutionDir)lib\Interop.WMPLib.dll" "$(TargetDir)\Plugins\WMP\"
-if "$(ConfigurationName)"=="Debug" copy /-Y "$(SolutionDir)src\MediaPlayers\Hanasu.Player.WMP\bin\Debug\Hanasu.Player.WMP.pdb" "$(TargetDir)\Plugins\WMP\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

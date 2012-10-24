@@ -464,8 +464,10 @@ namespace Hanasu.Core
             playingTimer.Stop();
         }
 
-        public static void OnStationConnectionTerminated(IMediaPlayer player)
+        public static void OnStationConnectionTerminated(IMediaPlayer player, string errormsg = null)
         {
+
+            PushMessageToGUI(StationConnectionError, errormsg);
             //When the station stops the connection... not the user.
             PushMessageToGUI(NowPlayingReset, null);
             PushMessageToGUI(NowPlayingStatus, false);

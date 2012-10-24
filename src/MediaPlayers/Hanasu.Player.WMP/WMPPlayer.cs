@@ -72,7 +72,7 @@ namespace Hanasu.Player.WMP
                             {
                             }
 
-                            GlobalHanasuCore.OnStationTypeDetected(this, new Tuple<PlayerDetectedStationType,Uri>(stationType,url));
+                            GlobalHanasuCore.OnStationTypeDetected(this, new Tuple<PlayerDetectedStationType, Uri>(stationType, url));
                         }
                     }
                     break;
@@ -95,7 +95,8 @@ namespace Hanasu.Player.WMP
 
         void player_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
         {
-            GlobalHanasuCore.OnStationConnectionTerminated(this);
+            IWMPMedia3 w = (IWMPMedia3)e.pMediaObject;
+            GlobalHanasuCore.OnStationConnectionTerminated(this, w.Error.errorDescription);
 
             songName = null;
             stationName = null;
