@@ -159,13 +159,23 @@ namespace Hanasu.Core
             if (pro == null && string.IsNullOrEmpty(stat.ExplicitExtension))
             {
                 //We don't know if its possible to play
-                var ext = stat.DataSource.Segments.Last();
-                ext = ext.Substring(ext.LastIndexOf("."));
 
-                if (CurrentPlayer.Supports(ext))
-                    return new IMultiStreamEntry[] { new Hanasu.Core.Preprocessor.Preprocessors.M3U.M3UEntry() { File = stat.DataSource.ToString(), Title = stat.Name } };
+                if (stat.DataSource.Segments.Last().Contains("."))
+                {
+                    var ext = stat.DataSource.Segments.Last();
+                    ext = ext.Substring(ext.LastIndexOf("."));
+
+                    if (CurrentPlayer.Supports(ext))
+                        return new IMultiStreamEntry[] { new Hanasu.Core.Preprocessor.Preprocessors.M3U.M3UEntry() { File = stat.DataSource.ToString(), Title = stat.Name } };
+                    else
+                        return null;
+                }
                 else
-                    return null;
+                {
+                    //Assume its playable.
+
+                    return new IMultiStreamEntry[] { new Hanasu.Core.Preprocessor.Preprocessors.M3U.M3UEntry() { File = stat.DataSource.ToString(), Title = stat.Name } };
+                }
             }
             else
             {
