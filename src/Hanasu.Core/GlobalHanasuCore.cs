@@ -559,6 +559,12 @@ namespace Hanasu.Core
             PushMessageToGUI(StationMessagePushed, name);
             return;
         }
+
+        public static void Shutdown()
+        {
+            if (CurrentPlayer != null)
+                CurrentPlayer.Shutdown();
+        }
     }
 
     public enum PlayerDetectedStationType

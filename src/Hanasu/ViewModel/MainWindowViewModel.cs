@@ -107,6 +107,13 @@ namespace Hanasu.ViewModel
 
 
             InitializeHTTPd();
+
+            Application.Current.Exit += new ExitEventHandler(Current_Exit);
+        }
+
+        void Current_Exit(object sender, ExitEventArgs e)
+        {
+            GlobalHanasuCore.Shutdown();
         }
 
         #region HTTPd

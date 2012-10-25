@@ -118,8 +118,12 @@ namespace Hanasu.Player.WMP
                 stationName = name;
             }
             else
-                if (name.Contains(" - ") && songName.ToLower() != name.ToLower())
+                if (name.Contains(" - "))
                 {
+                    if (songName != null)
+                        if (songName.ToLower() == name.ToLower())
+                            return;
+
                     GlobalHanasuCore.OnSongTitleDetected(this, name);
                     songName = name;
                 }
