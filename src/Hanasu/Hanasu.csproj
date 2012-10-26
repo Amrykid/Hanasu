@@ -258,10 +258,13 @@
     <Resource Include="Misc\HTTPd\Web App\Web-App\js\jquery.timer.js" />
     <Resource Include="Misc\HTTPd\Web App\Web-App\js\less.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\boot.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

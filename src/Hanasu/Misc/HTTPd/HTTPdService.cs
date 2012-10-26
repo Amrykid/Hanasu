@@ -136,10 +136,11 @@ namespace Hanasu.Misc.HTTPd
                                 {
                                     if (HttpUrlHandler != null)
                                     {
-                                        var output = HttpUrlHandler(fileToGet, HttpRequestType.GET, queryVars, null).ToString();
+                                        string mime = HttpMimeTypes.Html;
+                                        var output = HttpUrlHandler(fileToGet, HttpRequestType.GET, queryVars, null, out mime).ToString();
 
                                         WriteSocket(ref tcp,
-                                            HttpResponseBuilder.OKResponse(output, host, HttpMimeTypes.Html, close, false, compressionHeader), output, close, new Tuple<bool, string>(useCompression, compressionToUse));
+                                            HttpResponseBuilder.OKResponse(output, host, mime, close, false, compressionHeader), output, close, new Tuple<bool, string>(useCompression, compressionToUse));
                                     }
                                 }
                                 else
@@ -233,7 +234,12 @@ namespace Hanasu.Misc.HTTPd
                             string[] postData = null; // to be implemented
 
                             if (HttpUrlHandler != null)
-                                WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(HttpUrlHandler(file, HttpRequestType.POST, queryVars, postData).ToString(), host, HttpMimeTypes.Html, close), close);
+                            {
+                                string mime = HttpMimeTypes.Html;
+                                string html = (string)HttpUrlHandler(file, HttpRequestType.POST, queryVars, postData, out mime);
+
+                                WriteSocket(ref tcp, HttpResponseBuilder.OKResponse(html.ToString(), host, mime, close), close);
+                            }
                         }
                         else
                         {
@@ -372,7 +378,7 @@ namespace Hanasu.Misc.HTTPd
         public delegate void HttpPostReceivedHandler(string file, object postdata);
         public static event HttpPostReceivedHandler HttpPostReceived;
 
-        public delegate object HttpUrlHandlerHandler(string relativeUrl, HttpRequestType type, string[] queryVars, string[] postdata);
+        public delegate object HttpUrlHandlerHandler(string relativeUrl, HttpRequestType type, string[] queryVars, string[] postdata, out string mimetype);
         public static event HttpUrlHandlerHandler HttpUrlHandler;
 
         public static void RegisterUrlHandler(string relativeUrl, HttpRequestType type, string helpInformation)

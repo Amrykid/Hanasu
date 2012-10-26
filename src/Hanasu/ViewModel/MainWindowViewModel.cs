@@ -105,7 +105,6 @@ namespace Hanasu.ViewModel
             MediaFastForwardCommand = new NullCommand();
             MediaRewindCommand = new NullCommand();
 
-
             InitializeHTTPd();
 
             Application.Current.Exit += new ExitEventHandler(Current_Exit);
@@ -126,6 +125,7 @@ namespace Hanasu.ViewModel
 
                 //TODO: make the help data localizable
                 HTTPdService.RegisterUrlHandler("/api", HTTPdService.HttpRequestType.GET, "Reports all of the commands that are registered in Hanasu.");
+                HTTPdService.RegisterUrlHandler("/js/boot.js", HTTPdService.HttpRequestType.GET, "Not for general use.");
                 HTTPdService.RegisterUrlHandler("/getlocalizedvalue", HTTPdService.HttpRequestType.GET, "Gets the localized vaule from the specified key. I.E. /getlocalizedvalue?key=Welcome");
                 HTTPdService.RegisterUrlHandler("/getstationstreams", HTTPdService.HttpRequestType.GET, "Gets the stream(s) of a station and returns it in XML. I.E. /getstationstreams?station=XAMFM");
                 HTTPdService.RegisterUrlHandler("/isplaying", HTTPdService.HttpRequestType.GET, "Gets if Hanasu is playing or not. Returns 'true' or 'false'.");
@@ -149,10 +149,13 @@ namespace Hanasu.ViewModel
                 return Hanasu.Core.Utilities.HtmlTextUtility.GetHtmlFromUrl2(GlobalHanasuCore.StationsService.StationsUrl);
             });
 
-        object HTTPdService_HttpUrlHandler(string relativeUrl, Misc.HTTPd.HTTPdService.HttpRequestType type, string[] queryVars, string[] postdata)
+        object HTTPdService_HttpUrlHandler(string relativeUrl, Misc.HTTPd.HTTPdService.HttpRequestType type, string[] queryVars, string[] postdata, out string mimetype)
         {
+            mimetype = HttpMimeTypes.Html;
+
             if (type == Misc.HTTPd.HTTPdService.HttpRequestType.POST)
             {
+                #region POST
                 return Dispatcher.Invoke(new EmptyReturnDelegate(() =>
                         {
                             switch (relativeUrl.ToLower())
@@ -201,6 +204,7 @@ namespace Hanasu.ViewModel
 
                             return string.Empty;
                         }));
+                #endregion
             }
             else if (type == Misc.HTTPd.HTTPdService.HttpRequestType.GET)
             {
@@ -216,6 +220,9 @@ namespace Hanasu.ViewModel
                             return GlobalHanasuCore.CurrentStation.Name;
                         else
                             return "Nothing";
+                    case "/js/boot.js":
+                        mimetype = HttpMimeTypes.Javascript;
+                        return "// This will be changed automatically. Do not alter this file, humans." + Environment.NewLine + "var isWeb = false;";
                     case "/api":
                         {
                             #region Generates API doc
