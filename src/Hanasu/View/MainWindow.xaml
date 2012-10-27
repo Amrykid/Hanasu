@@ -49,6 +49,7 @@
     <metro:MetroWindow.WindowCommands>
         <metro:WindowCommands>
             <Button Content="{i18n:CrystalLocalizedValueMarkup Key='WindowCommandLanguagesButton'}" msg:ButtonMessageHelper.Message="WindowCommandLanguagesRequested" />
+            <Button Content="{i18n:CrystalLocalizedValueMarkup Key='WindowCommandWebControlButton'}" msg:ButtonMessageHelper.Message="WindowCommandWebControlRequested"/>
         </metro:WindowCommands>
     </metro:MetroWindow.WindowCommands>
     <metro:MetroWindow.Flyouts>
@@ -70,6 +71,30 @@
                     <local:MainWindowLyricsFlyoutViewModel/>
                 </ListBox.DataContext>
             </ListBox>
+        </metro:Flyout>
+        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='WebControlFlyoutHeader'}" Position="Right" IsOpen="{Binding WebControlPaneIsOpen,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+            <Grid Width="200">
+                <Grid.DataContext>
+                    <local:MainWindowWebControlFlyoutViewModel/>
+                </Grid.DataContext>
+                <StackPanel>
+                    <GroupBox Header="Description">
+                       <TextBlock TextWrapping="WrapWithOverflow" Text="Web Control allows you to control Hanasu from anywhere in your home network or if configured correctly, 
+                                  anywhere in the world! Whether its from another computer, a phone, tablet or gaming console, you will never miss a beat when you use Web Control."/> 
+                    </GroupBox>
+                    <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                        <Label Content="Status:"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Height="30" Width="30">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{Binding StatusVisual, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Label>Running</Label>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
         </metro:Flyout>
     </metro:MetroWindow.Flyouts>
     <Grid>
@@ -157,13 +182,17 @@
                                                                 </Setter.Value>
                                                             </Setter>
                                                         </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsMuted,UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                        <Setter Property="Fill">
+                                                            <Setter.Value>
+                                                                <VisualBrush Stretch="Uniform"
+                            					    Visual="{StaticResource appbar_sound_2}" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </Rectangle.Style>
-                                            <Rectangle.Fill>
-                                                <VisualBrush Stretch="Uniform"
-                            					    Visual="{StaticResource appbar_sound_2}" />
-                                            </Rectangle.Fill>
                                         </Rectangle>
                                     </Button>
                                     <StackPanel>

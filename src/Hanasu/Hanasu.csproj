@@ -96,6 +96,7 @@
     <Compile Include="Notifications\NotificationType.cs" />
     <Compile Include="Services\HanasuMessageBoxService.cs" />
     <Compile Include="ViewModel\MainWindowLyricsFlyoutViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowWebControlFlyoutViewModel.cs" />
     <Compile Include="ViewModel\MessageBoxWindowViewModel.cs" />
     <Compile Include="View\MessageBoxWindow.xaml.cs">
       <DependentUpon>MessageBoxWindow.xaml</DependentUpon>
@@ -263,6 +264,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Misc\HTTPd\Web App\Web-App\js\desktop.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\settings.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\jplayer\Jplayer.swf" />
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\jplayer\jquery.jplayer.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
