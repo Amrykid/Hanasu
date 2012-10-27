@@ -261,6 +261,9 @@
   <ItemGroup>
     <Resource Include="Misc\HTTPd\Web App\Web-App\js\boot.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Misc\HTTPd\Web App\Web-App\js\desktop.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
