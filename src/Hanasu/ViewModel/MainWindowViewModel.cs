@@ -247,7 +247,7 @@ namespace Hanasu.ViewModel
                     }
                 case GlobalHanasuCore.NowPlayingReset:
                     {
-                        Messenger.PushMessage(this, "NowPlayingReset");
+                        Messenger.PushMessage(this, "NowPlayingReset", null);
 
                         if (GlobalHanasuCore.CurrentStation.StationType == StationType.Radio)
                             UIBackPanelView = null;
@@ -349,7 +349,7 @@ namespace Hanasu.ViewModel
 
                         Task.Factory.StartNew(() =>
                         {
-                            var dat = (IMultiStreamEntry)Messenger.WaitForMessage("StationStreamChoosen").Data;
+                            var dat = (IMultiStreamEntry)Messenger.WaitForMessageViaQueue("StationStreamChoosen").Data;
                             lock (res = new Tuple<bool, IMultiStreamEntry>(dat != null, dat))
                             {
                             }

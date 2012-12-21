@@ -123,17 +123,39 @@ namespace Hanasu
         {
             GridViewObject = new GridView();
             //GridViewObject.ColumnHeaderContainerStyle = new Style(typeof(GridViewColumnHeader));
-            GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationNameColumn"), DisplayMemberBinding = new Binding("Name") });
-            GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationLanguageColumn"), DisplayMemberBinding = new Binding("Language") });
-            GridViewObject.Columns.Add(new GridViewColumn()
+            try
             {
-                Header = LocalizationManager.GetLocalizedValue("StationNowPlayingColumn"),
-                DisplayMemberBinding = new Binding()
+                GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationNameColumn"), DisplayMemberBinding = new Binding("Name") });
+                GridViewObject.Columns.Add(new GridViewColumn() { Header = LocalizationManager.GetLocalizedValue("StationLanguageColumn"), DisplayMemberBinding = new Binding("Language") });
+
+                GridViewObject.Columns.Add(new GridViewColumn()
                 {
-                    Path = new PropertyPath("DetectedNowPlaying"),
-                    UpdateSourceTrigger = UpdateSourceTrigger.LostFocus,
-                }
-            });
+                    Header = LocalizationManager.GetLocalizedValue("StationNowPlayingColumn"),
+                    DisplayMemberBinding = new Binding()
+                    {
+                        Path = new PropertyPath("DetectedNowPlaying"),
+                        UpdateSourceTrigger = UpdateSourceTrigger.LostFocus,
+                    }
+                });
+            }
+            catch (Exception)
+            {
+                GridViewObject.Columns.Clear();
+
+
+                GridViewObject.Columns.Add(new GridViewColumn() { Header = "StationNameColumn", DisplayMemberBinding = new Binding("Name") });
+                GridViewObject.Columns.Add(new GridViewColumn() { Header = "StationLanguageColumn", DisplayMemberBinding = new Binding("Language") });
+
+                GridViewObject.Columns.Add(new GridViewColumn()
+                {
+                    Header = "StationNowPlayingColumn",
+                    DisplayMemberBinding = new Binding()
+                    {
+                        Path = new PropertyPath("DetectedNowPlaying"),
+                        UpdateSourceTrigger = UpdateSourceTrigger.LostFocus,
+                    }
+                });
+            }
             //GridViewObject.ColumnHeaderContainerStyle = (Style)Application.Current.FindResource("GridViewColumnHeaderGripper");
 
             ImageViewObject = new ImageHeaderView();

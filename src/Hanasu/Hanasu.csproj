@@ -54,12 +54,6 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Crystal">
-      <HintPath>..\..\..\Crystal\src\Crystal\bin\Debug\Crystal.dll</HintPath>
-    </Reference>
-    <Reference Include="Crystal.Extras">
-      <HintPath>..\..\..\Crystal\src\Crystal.Extras\bin\Debug\Crystal.Extras.dll</HintPath>
-    </Reference>
     <Reference Include="MahApps.Metro, Version=0.9.0.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MahApps.Metro.0.10.0.0\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -203,6 +197,14 @@
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Crystal\src\Crystal.Extras\Crystal.Extras.csproj">
+      <Project>{2409C98F-0DD2-49EB-B41C-336CDD4E11F9}</Project>
+      <Name>Crystal.Extras</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Crystal\src\Crystal\Crystal.csproj">
+      <Project>{8C5A2D35-824E-4F52-9B18-B1AA19C42BDA}</Project>
+      <Name>Crystal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Hanasu.Core\Hanasu.Core.csproj">
       <Project>{F279CE77-EA11-488C-BC03-C008DEE0300F}</Project>
       <Name>Hanasu.Core</Name>
@@ -275,7 +277,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildAction="Build" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
