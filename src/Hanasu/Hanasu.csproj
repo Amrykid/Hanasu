@@ -101,7 +101,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\Crystal\src\Crystal.W8Metro\Crystal.W8Metro.csproj">
+    <ProjectReference Include="..\..\..\Crystal\src\Crystal.W8Metro\Crystal.W8Metro.csproj">
       <Project>{4d1b194d-28db-4a93-93a1-83ef90302f6b}</Project>
       <Name>Crystal.W8Metro</Name>
     </ProjectReference>

@@ -55,7 +55,7 @@ namespace Hanasu
                 if (AvailableStations.Count > 0)
                     AvailableStations.Clear();
 
-            XDocument doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/src/Hanasu/Stations.xml");
+            XDocument doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/2.0/src/Hanasu/Stations.xml");
             var stationsElement = doc.Element("Stations");
 
             var stations = from x in stationsElement.Elements("Station")

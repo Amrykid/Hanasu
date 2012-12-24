@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\Hanasu", "Hanasu\Hanasu.csproj", "{DFBB3459-C292-4080-A077-362F2E7DD44B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanasu", "src\Hanasu\Hanasu.csproj", "{DFBB3459-C292-4080-A077-362F2E7DD44B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{200088CB-9153-47A0-A77F-F44990139533}"
 EndProject
