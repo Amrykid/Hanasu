@@ -120,6 +120,7 @@
     <Compile Include="Tools\Preprocessing\IPreprocessor.cs" />
     <Compile Include="Tools\Preprocessing\MultiStreamPreprocessor.cs" />
     <Compile Include="Tools\Preprocessing\PreprocessorService.cs" />
+    <Compile Include="Tools\Preprocessing\Preprocessors\ASX\ASXPreprocessor.cs" />
     <Compile Include="Tools\Preprocessing\Preprocessors\M3U\M3UPreprocessor.cs" />
     <Compile Include="Tools\Preprocessing\Preprocessors\PLS\PLSPreprocessor.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />

@@ -8,6 +8,7 @@ using Hanasu.Core.Preprocessor.Preprocessors.PLS;
 using Hanasu.Core.Preprocessor.Preprocessors.M3U;
 using System.Reflection;
 using System.Threading.Tasks;
+using Hanasu.Tools.Preprocessing.Preprocessors.ASX;
 
 namespace Hanasu.Core.Preprocessor
 {
@@ -24,6 +25,7 @@ namespace Hanasu.Core.Preprocessor
 
             RegisterPreprocessor(typeof(PLSPreprocessor));
             RegisterPreprocessor(typeof(M3UPreprocessor));
+            RegisterPreprocessor(typeof(ASXPreprocessor));
         }
 
         public static void RegisterPreprocessor(Type processor)
