@@ -196,7 +196,7 @@
 
     <local:LayoutAwarePage.BottomAppBar>
         <AppBar>
-            <StackPanel Orientation="Horizontal" x:Name="MediaControlPanel">
+            <StackPanel Orientation="Horizontal" x:Name="MediaControlPanel" HorizontalAlignment="Center">
                 <Button Style="{StaticResource SkipBackAppBarButtonStyle}" x:Name="SkipBackButton"/>
                 <Button Style="{StaticResource PlayAppBarButtonStyle}" x:Name="PlayButton" Command="{Binding PlayCommand}"/>
                 <Button Style="{StaticResource PauseAppBarButtonStyle}" x:Name="PauseButton" Command="{Binding PauseCommand}"/>
