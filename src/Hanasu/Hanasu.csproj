@@ -115,6 +115,13 @@
     <Compile Include="Extensions\MediaElementExtensions.cs" />
     <Compile Include="Extensions\XElementExtensions.cs" />
     <Compile Include="Model\Station.cs" />
+    <Compile Include="Tools\HtmlTextUtility.cs" />
+    <Compile Include="Tools\Preprocessing\BasePreprocessor.cs" />
+    <Compile Include="Tools\Preprocessing\IPreprocessor.cs" />
+    <Compile Include="Tools\Preprocessing\MultiStreamPreprocessor.cs" />
+    <Compile Include="Tools\Preprocessing\PreprocessorService.cs" />
+    <Compile Include="Tools\Preprocessing\Preprocessors\M3U\M3UPreprocessor.cs" />
+    <Compile Include="Tools\Preprocessing\Preprocessors\PLS\PLSPreprocessor.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -163,6 +170,7 @@
       <Name>Microsoft Player Framework Timed Text Plugin</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>

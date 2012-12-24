@@ -227,7 +227,12 @@ namespace Hanasu.ViewModel
             if (me.CurrentState == MediaElementState.Playing || me.CurrentState == MediaElementState.Opening || me.CurrentState == MediaElementState.Buffering)
                 me.Stop();
 
-            await mediaElement.OpenAsync(new Uri(s.StreamUrl, UriKind.Absolute), System.Threading.CancellationToken.None);
+            Uri finalUri = new Uri(s.StreamUrl, UriKind.Absolute);
+
+            if (Hanasu.Core.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(finalUri, s.PreprocessorFormat))
+                finalUri = await Hanasu.Core.Preprocessor.PreprocessorService.GetProcessor(finalUri, s.PreprocessorFormat).Process(finalUri);
+
+            await mediaElement.OpenAsync(finalUri, System.Threading.CancellationToken.None);
             await mediaElement.PlayAsync(System.Threading.CancellationToken.None);
 
         }
