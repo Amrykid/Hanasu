@@ -27,6 +27,6 @@ namespace Hanasu.Model
     {
         public string Name { get; set; }
         public ObservableCollection<Station> Items { get; set; }
-        public ObservableCollection<Station> TopItems { get { return Items; } } // ????
+        public IEnumerable<Station> TopItems { get { if (Items != null) return Items.Take(5); else return null; } } // ????
     }
 }
