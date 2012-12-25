@@ -5,10 +5,11 @@
     xmlns:local="using:Hanasu"
     xmlns:vm="using:Hanasu.ViewModel"
     xmlns:i18n="using:Crystal.Localization"
+    xmlns:cbind="using:Crystal.Binding"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" x:Name="pageRoot">
-    
+
     <local:LayoutAwarePage.DataContext>
         <vm:MainPageViewModel />
     </local:LayoutAwarePage.DataContext>
@@ -29,7 +30,7 @@
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}" Style="{StaticResource LayoutRootStyle}">
         <!-- Background="{StaticResource ApplicationPageBackgroundThemeBrush}" -->
-        
+
         <!--<Grid.Background>
             <ImageBrush ImageSource="ms-appx:/Assets/hanasu_winrt_bg.png" Stretch="Fill"/>
         </Grid.Background>-->
@@ -54,7 +55,8 @@
                 <!-- Now Playing info -->
                 <StackPanel x:Name="nowPlayingPanel" Visibility="Collapsed" Width="200">
                     <TextBlock Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader"/>
-                    <TextBlock x:Name="stationTitle" Text="{Binding CurrentStationName}" IsHitTestVisible="false" FontSize="17"/>
+                    <TextBlock x:Name="stationTitle" Text="{Binding CurrentStationName}"
+                               IsHitTestVisible="false" FontSize="17"/>
                 </StackPanel>
             </Grid>
         </Grid>
@@ -62,7 +64,7 @@
 
         <Grid Grid.Row="1">
             <MediaElement x:Name="globalMediaElement" Visibility="Collapsed" AudioCategory="BackgroundCapableMedia" AudioDeviceType="Multimedia" AutoPlay="False"/>
-            
+
             <!-- Horizontal scrolling grid used in most view states -->
             <GridView
             x:Name="itemGridView"
@@ -80,7 +82,13 @@
 
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Horizontal"/>
+                        <VirtualizingStackPanel Orientation="Horizontal">
+                            <VirtualizingStackPanel.ChildrenTransitions>
+                                <TransitionCollection>
+                                    <AddDeleteThemeTransition />
+                                </TransitionCollection>
+                            </VirtualizingStackPanel.ChildrenTransitions>
+                        </VirtualizingStackPanel>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
                 <GridView.GroupStyle>
@@ -124,7 +132,7 @@
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
             ItemClick="ItemView_ItemClick">
-<!--Grid.Row="1"-->
+                <!--Grid.Row="1"-->
                 <ListView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>

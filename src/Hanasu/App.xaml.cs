@@ -59,6 +59,7 @@ namespace Hanasu
             var stationsElement = doc.Element("Stations");
 
             var stations = from x in stationsElement.Elements("Station")
+                           where x.ContainsElement("StationType") ? x.Element("StationType").Value != "TV" : true
                            select new Station()
                            {
                                Title = x.Element("Name").Value,
