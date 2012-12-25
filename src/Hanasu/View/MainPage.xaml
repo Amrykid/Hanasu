@@ -5,6 +5,7 @@
     xmlns:local="using:Hanasu"
     xmlns:vm="using:Hanasu.ViewModel"
     xmlns:i18n="using:Crystal.Localization"
+    xmlns:cbind="using:Crystal.Binding"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" x:Name="pageRoot">
@@ -54,7 +55,12 @@
                 <!-- Now Playing info -->
                 <StackPanel x:Name="nowPlayingPanel" Visibility="Collapsed" Width="200">
                     <TextBlock Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader"/>
-                    <TextBlock x:Name="stationTitle" Text="{Binding CurrentStationName}" IsHitTestVisible="false" FontSize="17"/>
+                    <TextBlock x:Name="stationTitle" Text="{Binding CurrentStationName}" 
+                               cbind:AutoUpdatePropertyHelper.SourceObject="{Binding .}" 
+                               cbind:AutoUpdatePropertyHelper.SourceProperty="CurrentStationName" 
+                               cbind:AutoUpdatePropertyHelper.TargetProperty="Text" 
+                               cbind:AutoUpdatePropertyHelper.IsEnabled="True" 
+                               IsHitTestVisible="false" FontSize="17"/>
                 </StackPanel>
             </Grid>
         </Grid>

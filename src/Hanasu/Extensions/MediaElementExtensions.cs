@@ -21,7 +21,7 @@ namespace Hanasu.Extensions
     public static class MediaElementExtensions
     {
         //I modified the PlayAsync into a StopAsync method ~Amrykid
-        public static Task StopAsync(this MediaElement media, CancellationToken cancel)
+        public static Task PauseAsync(this MediaElement media, CancellationToken cancel)
         {
 
             TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
@@ -54,10 +54,14 @@ namespace Hanasu.Extensions
                 removeLambdas();
                 tcs.TrySetResult(null);
             };
-            lambdaChanged = (x, y) =>
+            lambdaChanged = async (x, y) =>
             {
                 if (media.CurrentState == MediaElementState.Stopped || media.CurrentState == MediaElementState.Paused)
+                {
+                    await Task.Delay(1000);
+
                     return;
+                }
                 removeLambdas();
                 //tcs.TrySetCanceled();
             };
@@ -68,7 +72,8 @@ namespace Hanasu.Extensions
             if (media.CurrentState == MediaElementState.Playing)
                 media.Pause();
 
-            media.Stop();
+            //media.Stop();
+            media.Pause();
 
             if (!tcs.Task.IsCompleted)
             {
