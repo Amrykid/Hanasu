@@ -112,7 +112,8 @@ namespace Hanasu.ViewModel
 
         void mediaElement_MediaOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            SendToast("Now streaming: " + CurrentStationName);
+            if (Windows.UI.Xaml.Window.Current.Visible)
+                SendToast("Now streaming: " + CurrentStationName);
         }
 
         void mediaElement_MediaFailed(object sender, Windows.UI.Xaml.ExceptionRoutedEventArgs e)
@@ -195,7 +196,7 @@ namespace Hanasu.ViewModel
                 sGroup.Name = format;
                 sGroup.Items = new ObservableCollection<Station>();
 
-                foreach (var i in stations.Where(x => x.Format == format))
+                foreach (var i in stations.Where(x => x.Format == format).Take(5))
                     sGroup.Items.Add(i);
 
                 AvailableStations.Add(sGroup);
@@ -225,7 +226,10 @@ namespace Hanasu.ViewModel
 
 
             if (me.CurrentState == MediaElementState.Playing || me.CurrentState == MediaElementState.Opening || me.CurrentState == MediaElementState.Buffering)
-                await me.PauseAsync(System.Threading.CancellationToken.None);
+            {
+                me.Pause();
+                await Task.Delay(1000);
+            }
 
             Uri finalUri = new Uri(s.StreamUrl, UriKind.Absolute);
 
@@ -250,6 +254,10 @@ namespace Hanasu.ViewModel
 
         private void SendToast(string txt)
         {
+            var toaster = ToastNotificationManager.CreateToastNotifier();
+
+            if (toaster.Setting != NotificationSetting.Enabled) return;
+
             // It is possible to start from an existing template and modify what is needed.
             // Alternatively you can construct the XML from scratch.
             var toastXml = new Windows.Data.Xml.Dom.XmlDocument();
@@ -282,7 +290,7 @@ namespace Hanasu.ViewModel
 
             // Create a ToastNotification from our XML, and send it to the Toast Notification Manager
             var toast = new ToastNotification(toastXml);
-            ToastNotificationManager.CreateToastNotifier().Show(toast);
+            toaster.Show(toast);
         }
     }
 }
