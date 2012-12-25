@@ -19,7 +19,7 @@ namespace Hanasu.Model
 
         //Things to statisfy the built-in templates
         public string ImageUrl { get; set; }
-        public ImageSource Image { get { if (ImageUrl != null) return new BitmapImage(new Uri(ImageUrl)); else return null; } }
+        public ImageSource Image { get { if (ImageUrl != null) return new BitmapImage(new Uri(ImageUrl)) { DecodePixelWidth = 250 }; else return null; } }
         public string Subtitle { get; set; }
     }
 
@@ -27,6 +27,6 @@ namespace Hanasu.Model
     {
         public string Name { get; set; }
         public ObservableCollection<Station> Items { get; set; }
-        public IEnumerable<Station> TopItems { get { if (Items != null) return Items.Take(5); else return null; } } // ????
+        public ObservableCollection<Station> TopItems { get { if (Items != null) return Items; else return null; } }//{ get { if (Items != null) return Items.Take(5); else return null; } } // ????
     }
 }

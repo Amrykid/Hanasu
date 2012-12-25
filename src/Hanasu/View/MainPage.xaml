@@ -55,11 +55,7 @@
                 <!-- Now Playing info -->
                 <StackPanel x:Name="nowPlayingPanel" Visibility="Collapsed" Width="200">
                     <TextBlock Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader"/>
-                    <TextBlock x:Name="stationTitle" Text="{Binding CurrentStationName}" 
-                               cbind:AutoUpdatePropertyHelper.SourceObject="{Binding .}" 
-                               cbind:AutoUpdatePropertyHelper.SourceProperty="CurrentStationName" 
-                               cbind:AutoUpdatePropertyHelper.TargetProperty="Text" 
-                               cbind:AutoUpdatePropertyHelper.IsEnabled="True" 
+                    <TextBlock x:Name="stationTitle" Text="{Binding CurrentStationName}"
                                IsHitTestVisible="false" FontSize="17"/>
                 </StackPanel>
             </Grid>
