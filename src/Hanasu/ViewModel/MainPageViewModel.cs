@@ -225,7 +225,7 @@ namespace Hanasu.ViewModel
 
 
             if (me.CurrentState == MediaElementState.Playing || me.CurrentState == MediaElementState.Opening || me.CurrentState == MediaElementState.Buffering)
-                me.Stop();
+                await me.StopAsync(System.Threading.CancellationToken.None);
 
             Uri finalUri = new Uri(s.StreamUrl, UriKind.Absolute);
 
