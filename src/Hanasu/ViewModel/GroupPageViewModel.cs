@@ -28,6 +28,8 @@ namespace Hanasu.ViewModel
 
             var name = args.Value;
 
+            GroupName = name;
+
             foreach (var stat in ((App)BaseCrystalApplication.Current).AvailableStations.Where(x => x.Format == name))
                 Stations.Add(stat);
 

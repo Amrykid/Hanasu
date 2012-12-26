@@ -52,37 +52,49 @@ namespace Hanasu
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) return;
 
-            // Create an empty default view model
-            this.DefaultViewModel = new ObservableDictionary<String, Object>();
-
-            // When this page is part of the visual tree make two changes:
-            // 1) Map application view state to visual state for the page
-            // 2) Handle keyboard and mouse navigation requests
-            this.Loaded += (sender, e) =>
+            try
             {
-                this.StartLayoutUpdates(sender, e);
+                // Create an empty default view model
+                this.DefaultViewModel = new ObservableDictionary<String, Object>();
+            }
+            catch (Exception)
+            {
+            }
 
-                // Keyboard and mouse navigation only apply when occupying the entire window
-                if (this.ActualHeight == Window.Current.Bounds.Height &&
-                    this.ActualWidth == Window.Current.Bounds.Width)
+            try
+            {
+                // When this page is part of the visual tree make two changes:
+                // 1) Map application view state to visual state for the page
+                // 2) Handle keyboard and mouse navigation requests
+                this.Loaded += (sender, e) =>
                 {
-                    // Listen to the window directly so focus isn't required
-                    Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated +=
-                        CoreDispatcher_AcceleratorKeyActivated;
-                    Window.Current.CoreWindow.PointerPressed +=
-                        this.CoreWindow_PointerPressed;
-                }
-            };
+                    this.StartLayoutUpdates(sender, e);
 
-            // Undo the same changes when the page is no longer visible
-            this.Unloaded += (sender, e) =>
+                    // Keyboard and mouse navigation only apply when occupying the entire window
+                    if (this.ActualHeight == Window.Current.Bounds.Height &&
+                        this.ActualWidth == Window.Current.Bounds.Width)
+                    {
+                        // Listen to the window directly so focus isn't required
+                        Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated +=
+                            CoreDispatcher_AcceleratorKeyActivated;
+                        Window.Current.CoreWindow.PointerPressed +=
+                            this.CoreWindow_PointerPressed;
+                    }
+                };
+
+                // Undo the same changes when the page is no longer visible
+                this.Unloaded += (sender, e) =>
+                {
+                    this.StopLayoutUpdates(sender, e);
+                    Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated -=
+                        CoreDispatcher_AcceleratorKeyActivated;
+                    Window.Current.CoreWindow.PointerPressed -=
+                        this.CoreWindow_PointerPressed;
+                };
+            }
+            catch (Exception)
             {
-                this.StopLayoutUpdates(sender, e);
-                Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated -=
-                    CoreDispatcher_AcceleratorKeyActivated;
-                Window.Current.CoreWindow.PointerPressed -=
-                    this.CoreWindow_PointerPressed;
-            };
+            }
         }
 
         /// <summary>
@@ -93,12 +105,25 @@ namespace Hanasu
         {
             get
             {
-                return this.GetValue(DefaultViewModelProperty) as IObservableMap<String, Object>;
+                try
+                {
+                    return this.GetValue(DefaultViewModelProperty) as IObservableMap<String, Object>;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
 
             set
             {
-                this.SetValue(DefaultViewModelProperty, value);
+                try
+                {
+                    this.SetValue(DefaultViewModelProperty, value);
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -373,7 +398,9 @@ namespace Hanasu
             var frameState = SuspensionManager.SessionStateForFrame(this.Frame);
             var pageState = new Dictionary<String, Object>();
             this.SaveState(pageState);
-            frameState[_pageKey] = pageState;
+
+            if (_pageKey != null)
+                frameState[_pageKey] = pageState;
         }
 
         /// <summary>

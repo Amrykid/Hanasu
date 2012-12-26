@@ -31,6 +31,11 @@ namespace Hanasu
         public GroupPage()
         {
             this.InitializeComponent();
+            this.Loaded += GroupPage_Loaded;
+        }
+
+        async void GroupPage_Loaded(object sender, RoutedEventArgs e)
+        {
 
         }
 
@@ -50,6 +55,15 @@ namespace Hanasu
             }
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            var args = e.Parameter;
+
+            pageTitle.Text = ((GroupPageViewModel)this.DataContext).GroupName;
+
+            base.OnNavigatedTo(e);
+        }
+
         private void Header_Click(object sender, RoutedEventArgs e)
         {
 
@@ -57,7 +71,7 @@ namespace Hanasu
 
         private async void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var vm = ((MainPageViewModel)this.DataContext);
+            var vm = ((GroupPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;
 
             Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessAllIfPresent));
