@@ -61,6 +61,8 @@ namespace Hanasu
 
             pageTitle.Text = ((GroupPageViewModel)this.DataContext).GroupName;
 
+            
+
             base.OnNavigatedTo(e);
         }
 

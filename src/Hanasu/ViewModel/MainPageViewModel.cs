@@ -198,7 +198,7 @@ namespace Hanasu.ViewModel
                 sGroup.Name = format;
                 sGroup.Items = new ObservableCollection<Station>();
 
-                foreach (var i in stations.Where(x => x.Format == format).Take(3))
+                foreach (var i in stations.Where(x => x.Format == format).Take(2))
                     sGroup.Items.Add(i);
 
                 AvailableStations.Add(sGroup);

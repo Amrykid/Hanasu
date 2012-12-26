@@ -39,7 +39,7 @@
 
 
         <Grid Grid.Row="1">
-            <!--<ListView
+            <ListView
             x:Name="itemListView"
             AutomationProperties.AutomationId="ItemListView"
             AutomationProperties.Name="Grouped Items" 
@@ -72,7 +72,7 @@
                         </GroupStyle.HeaderTemplate>
                     </GroupStyle>
                 </ListView.GroupStyle>
-            </ListView>-->
+            </ListView>
 
             <VisualStateManager.VisualStateGroups>
 
