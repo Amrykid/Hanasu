@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace Hanasu.ViewModel
 {
-    public class GroupPageViewModel : BaseViewModel
+    public class GroupPageViewModel : Crystal.Dynamic.AutoIPNotifyingBaseViewModel
     {
         public GroupPageViewModel()
         {
@@ -22,7 +22,20 @@ namespace Hanasu.ViewModel
 
         public override void OnNavigatedTo(dynamic argument = null)
         {
-            
+            var args = (KeyValuePair<string, string>)argument[0];
+
+            Stations = new ObservableCollection<Station>();
+
+            var name = args.Value;
+
+            foreach (var stat in ((App)BaseCrystalApplication.Current).AvailableStations.Where(x => x.Format == name))
+                Stations.Add(stat);
+
+            RaisePropertyChanged(x => this.Stations);
         }
+
+        public string GroupName { get; set; }
+
+        public ObservableCollection<Station> Stations { get; set; }
     }
 }
