@@ -141,7 +141,13 @@
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\vector_icon.png" />
+    <Content Include="Assets\vector_icon_150_150.png" />
+    <Content Include="Assets\vector_icon_270_270.png" />
+    <Content Include="Assets\vector_icon_splash.png" />
+    <Content Include="Assets\WideLogo.scale-100.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

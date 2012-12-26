@@ -15,9 +15,9 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Hanasu.App">
-      <VisualElements DisplayName="Hanasu" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Hanasu" ForegroundText="light" BackgroundColor="#464646" ToastCapable="true">
-        <DefaultTile ShowName="allLogos" ShortName="Hanasu" />
-        <SplashScreen Image="Assets\SplashScreen.png" />
+      <VisualElements DisplayName="Hanasu" Logo="Assets\vector_icon_150_150.png" SmallLogo="Assets\SmallLogo.png" Description="Hanasu" ForegroundText="light" BackgroundColor="#464646" ToastCapable="true">
+        <DefaultTile ShowName="wideLogoOnly" ShortName="Hanasu" WideLogo="Assets\WideLogo.png" />
+        <SplashScreen Image="Assets\vector_icon_splash.png" BackgroundColor="#0F0F0F" />
         <InitialRotationPreference>
           <Rotation Preference="portrait" />
           <Rotation Preference="landscape" />

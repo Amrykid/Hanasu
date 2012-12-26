@@ -112,8 +112,10 @@ namespace Hanasu.ViewModel
 
         void mediaElement_MediaOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (Windows.UI.Xaml.Window.Current.Visible)
+            if (!Windows.UI.Xaml.Window.Current.Visible)
+            {
                 SendToast("Now streaming: " + CurrentStationName);
+            }
         }
 
         void mediaElement_MediaFailed(object sender, Windows.UI.Xaml.ExceptionRoutedEventArgs e)
