@@ -1,4 +1,5 @@
-﻿using Hanasu.Model;
+﻿using Crystal.Navigation;
+using Hanasu.Model;
 using Hanasu.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace Hanasu
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    [Crystal.Navigation.NavigationSetViewModel(typeof(MainPageViewModel))]
     public sealed partial class MainPage : LayoutAwarePage
     {
         public MainPage()
@@ -80,7 +82,7 @@ namespace Hanasu
 
         private void Header_Click(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.NavigateTo<GroupPageViewModel>();
         }
 
         private async void ItemView_ItemClick(object sender, ItemClickEventArgs e)
@@ -100,7 +102,8 @@ namespace Hanasu
             if (keyCode == 0 
                 || (keyCode > 0 && keyCode < 32)
                 || (keyCode > 33 && keyCode < 47)
-                || (keyCode > 91 && keyCode < 165))
+                || (keyCode > 91 && keyCode < 165)
+                || keyCode == 91)
                 return;
 
 

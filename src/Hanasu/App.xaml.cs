@@ -19,6 +19,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Hanasu.Extensions;
+using Crystal.Navigation;
+using Hanasu.ViewModel;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -41,6 +43,7 @@ namespace Hanasu
 
         protected override void PreStartup()
         {
+            EnableSelfAssemblyResolution = true;
             EnableCrystalLocalization = true;
 
             base.PreStartup();
@@ -151,17 +154,7 @@ namespace Hanasu
                 Window.Current.Content = rootFrame;
             }
 
-            if (rootFrame.Content == null)
-            {
-                // When the navigation stack isn't restored navigate to the first page,
-                // configuring the new page by passing required information as a navigation
-                // parameter
-                if (!rootFrame.Navigate(typeof(MainPage), args.Arguments))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
-            }
-
+            NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string,string>("args",args.Arguments));
             // Ensure the current window is active
             Window.Current.Activate();
         }

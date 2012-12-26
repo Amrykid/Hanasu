@@ -503,4 +503,16 @@
     <Cacheable>True</Cacheable>
     <Logo>http://d1i6vahw24eb07.cloudfront.net/s122799q.png</Logo>
   </Station>
+  <Station>
+    <Name>Radio Nami</Name>
+    <DataSource><![CDATA[http://animeradio.ru/play.m3u]]></DataSource>
+    <Homepage>http://animeradio.ru/</Homepage>
+    <Format>Anime</Format>
+    <City>Moscow, Russia</City>
+    <ExplicitExtension>.m3u</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Russian</Language>
+    <Cacheable>True</Cacheable>
+    <Logo>http://d1i6vahw24eb07.cloudfront.net/s105944q.png</Logo>
+  </Station>
 </Stations>

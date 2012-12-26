@@ -26,41 +26,41 @@ namespace Hanasu.Model
         public string Subtitle { get; set; }
     }
 
-    public class StationGroup : Crystal.Dynamic.AutoIPNotifyingBaseModel, ISupportIncrementalLoading
+    public class StationGroup : Crystal.Dynamic.AutoIPNotifyingBaseModel //, ISupportIncrementalLoading
     {
         public string Name { get; set; }
         public ObservableCollection<Station> Items { get; set; }
         public ObservableCollection<Station> TopItems { get { if (Items != null) return Items; else return null; } }//{ get { if (Items != null) return Items.Take(5); else return null; } } // ????
 
 
-        #region ISupportIncrementalLoading from http://www.silverlightshow.net/items/Windows-8-metro-Improve-GridView-and-ListView-with-SemanticZoom-and-Incremental-Loading.aspx
-        public Func<Station, bool> Selector { get; set; }
+        //#region ISupportIncrementalLoading from http://www.silverlightshow.net/items/Windows-8-metro-Improve-GridView-and-ListView-with-SemanticZoom-and-Incremental-Loading.aspx
+        //public Func<Station, bool> Selector { get; set; }
 
-        public bool HasMoreItems
-        {
-            get { return TopItems.Count != Items.Count; }
-        }
+        //public bool HasMoreItems
+        //{
+        //    get { return TopItems.Count != Items.Count; }
+        //}
 
-        public Windows.Foundation.IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
-        {
-            CoreDispatcher dispatcher = Window.Current.Dispatcher;
+        //public Windows.Foundation.IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
+        //{
+        //    CoreDispatcher dispatcher = Window.Current.Dispatcher;
 
-            return Task.Run<LoadMoreItemsResult>(
-                () =>
-                {
-                    var items = Items.Take((int)count);
+        //    return Task.Run<LoadMoreItemsResult>(
+        //        () =>
+        //        {
+        //            var items = Items.Take((int)count);
 
-                    dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                          () =>
-                          {
-                              foreach (var item in items)
-                                  if (this.Selector(item))
-                                      TopItems.Add(item);
-                          });
+        //            dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+        //                  () =>
+        //                  {
+        //                      foreach (var item in items)
+        //                          if (this.Selector(item))
+        //                              TopItems.Add(item);
+        //                  });
 
-                    return new LoadMoreItemsResult() { Count = 100 };
-                }).AsAsyncOperation<LoadMoreItemsResult>();
-        }
-        #endregion
+        //            return new LoadMoreItemsResult() { Count = 100 };
+        //        }).AsAsyncOperation<LoadMoreItemsResult>();
+        //}
+        //#endregion
     }
 }
