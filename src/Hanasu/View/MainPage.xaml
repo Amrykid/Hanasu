@@ -79,13 +79,12 @@
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
             ItemClick="ItemView_ItemClick">
-
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel Orientation="Horizontal">
                             <VirtualizingStackPanel.ChildrenTransitions>
                                 <TransitionCollection>
-                                    <AddDeleteThemeTransition />
+                                    <EntranceThemeTransition/>
                                 </TransitionCollection>
                             </VirtualizingStackPanel.ChildrenTransitions>
                         </VirtualizingStackPanel>

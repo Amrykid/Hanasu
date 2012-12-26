@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Search;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,6 +30,8 @@ namespace Hanasu
         public MainPage()
         {
             this.InitializeComponent();
+
+            CoreWindow.GetForCurrentThread().KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
         }
 
         public override void OnVisualStateChange(string newVisualState)
@@ -71,6 +75,7 @@ namespace Hanasu
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+
         }
 
         private void Header_Click(object sender, RoutedEventArgs e)
@@ -86,6 +91,84 @@ namespace Hanasu
             Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessAllIfPresent));
 
             await Task.Run(() => Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => vm.PlayStation(stat, globalMediaElement)));
+        }
+
+        private SearchPane searchPane = null;
+        private void pageRoot_KeyDown_1(object sender, Windows.UI.Core‌.KeyEventArgs e)
+        {
+            int keyCode = (int)e.VirtualKey;
+            if (keyCode == 0 
+                || (keyCode > 0 && keyCode < 32)
+                || (keyCode > 33 && keyCode < 47)
+                || (keyCode > 91 && keyCode < 165))
+                return;
+
+
+            string initialchar = Enum.GetName(typeof(Windows.System.VirtualKey), e.VirtualKey);
+
+
+            if (searchPane == null)
+            {
+                searchPane = SearchPane.GetForCurrentView();
+
+                searchPane.PlaceholderText = "Enter the name of a station to play."; //Needs to be localized.
+                searchPane.ResultSuggestionChosen += searchPane_ResultSuggestionChosen;
+                searchPane.QuerySubmitted += searchPane_QuerySubmitted;
+                searchPane.SuggestionsRequested += searchPane_SuggestionsRequested;
+                searchPane.VisibilityChanged += searchPane_VisibilityChanged;
+            }
+
+            if (!searchPane.Visible)
+                searchPane.Show(initialchar);
+        }
+
+        void searchPane_ResultSuggestionChosen(SearchPane sender, SearchPaneResultSuggestionChosenEventArgs args)
+        {
+            foreach (StationGroup sg in ((MainPageViewModel)this.DataContext).AvailableStations)
+                foreach (Station st in sg.Items)
+                    if (st.Title.StartsWith(args.Tag, StringComparison.CurrentCultureIgnoreCase) || st.Title.Contains(args.Tag))
+                    {
+                        ((MainPageViewModel)this.DataContext).PlayStation(st, globalMediaElement);
+
+                        break;
+                    }
+        }
+
+        void searchPane_QuerySubmitted(SearchPane sender, SearchPaneQuerySubmittedEventArgs args)
+        {
+            foreach (StationGroup sg in ((MainPageViewModel)this.DataContext).AvailableStations)
+                foreach (Station st in sg.Items)
+                    if (st.Title.StartsWith(args.QueryText, StringComparison.CurrentCultureIgnoreCase) || st.Title.Contains(args.QueryText))
+                    {
+                        ((MainPageViewModel)this.DataContext).PlayStation(st, globalMediaElement);
+
+                        break;
+                    }
+        }
+
+        void searchPane_VisibilityChanged(SearchPane sender, SearchPaneVisibilityChangedEventArgs args)
+        {
+            if (args.Visible == false)
+            {
+                searchPane.SuggestionsRequested -= searchPane_SuggestionsRequested;
+                searchPane.VisibilityChanged -= searchPane_VisibilityChanged;
+                searchPane.ResultSuggestionChosen -= searchPane_ResultSuggestionChosen;
+                searchPane.QuerySubmitted -= searchPane_QuerySubmitted;
+
+                searchPane = null;
+
+                
+                this.Focus(Windows.UI.Xaml.FocusState.Programmatic);
+                Window.Current.Activate();
+            }
+        }
+
+        void searchPane_SuggestionsRequested(SearchPane sender, SearchPaneSuggestionsRequestedEventArgs args)
+        {
+            foreach (StationGroup sg in ((MainPageViewModel)this.DataContext).AvailableStations)
+                foreach (Station st in sg.Items)
+                    if (st.Title.StartsWith(args.QueryText, StringComparison.CurrentCultureIgnoreCase) || st.Title.Contains(args.QueryText))
+                        args.Request.SearchSuggestionCollection.AppendQuerySuggestion(st.Title);
         }
     }
 }
