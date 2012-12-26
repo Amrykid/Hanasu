@@ -37,16 +37,6 @@
     <ServerType>Shoutcast</ServerType>
   </Station>
   <Station>
-    <Name>Radio Hikari.pl</Name>
-    <DataSource><![CDATA[http://nowemitsuki.panelradiowy.pl/listen.php?ip=s1.slotex.pl&port=7442&format=asx]]></DataSource>
-    <Homepage>http://www.radiohikari.pl/news.php</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <Language>Polish</Language>
-    <Cacheable>False</Cacheable>
-    <ExplicitExtension>.asx</ExplicitExtension>
-  </Station>
-  <Station>
     <Name>AnimeID</Name>
     <DataSource>http://95.211.115.197/tunein.php/animeid/playlist.asx</DataSource>
     <Homepage>http://www.animeidradio.jp/</Homepage>
@@ -190,6 +180,7 @@
     <City>N/A</City>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-snc6/177619_412524978814166_1899587737_o.jpg</Logo>
   </Station>
   <Station>
     <Name>NHK World Radio Japan</Name>
@@ -200,6 +191,7 @@
     <StationType>Radio</StationType>
     <Language>English</Language>
     <Cacheable>False</Cacheable>
+    <Logo>http://www3.nhk.or.jp/nhkworld/english/common/images/header_logo.gif</Logo>
   </Station>
   <Station>
     <Name>Keiichi.net EX2</Name>
@@ -456,6 +448,7 @@
     <City>Moscow, Russia</City>
     <Language>Russian</Language>
     <Cacheable>False</Cacheable>
+    <Logo>http://d1i6vahw24eb07.cloudfront.net/s140355q.png</Logo>
   </Station>
   <Station>
     <Name>KAWAii Radio</Name>
