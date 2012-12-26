@@ -11,6 +11,7 @@ using Windows.UI.Notifications;
 using Windows.UI.Xaml.Media;
 using Hanasu.Extensions;
 using System.Windows.Input;
+using Crystal.Localization;
 
 namespace Hanasu.ViewModel
 {
@@ -28,9 +29,9 @@ namespace Hanasu.ViewModel
 
             var name = args.Value;
 
-            GroupName = name;
+            GroupName = LocalizationManager.GetLocalizedValue("Group" + name);
 
-            foreach (var stat in ((App)BaseCrystalApplication.Current).AvailableStations.Where(x => x.Format == name))
+            foreach (var stat in ((App)BaseCrystalApplication.Current).AvailableStations.Where(x => x.UnlocalizedFormat == name))
                 Stations.Add(stat);
 
             RaisePropertyChanged(x => this.Stations);

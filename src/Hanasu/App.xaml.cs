@@ -21,6 +21,7 @@ using Windows.UI.Xaml.Navigation;
 using Hanasu.Extensions;
 using Crystal.Navigation;
 using Hanasu.ViewModel;
+using Crystal.Localization;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -69,7 +70,8 @@ namespace Hanasu
                                StreamUrl = x.Element("DataSource").Value,
                                PreprocessorFormat = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : string.Empty,
                                ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : null,
-                               Format = x.Element("Format").Value,
+                               UnlocalizedFormat = x.Element("Format").Value,
+                               Format = LocalizationManager.GetLocalizedValue("Group" + x.Element("Format").Value),
                                Subtitle = "Play this station."
                            };
 

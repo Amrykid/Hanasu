@@ -24,11 +24,14 @@ namespace Hanasu.Model
         public string ImageUrl { get; set; }
         public ImageSource Image { get { if (ImageUrl != null) return new BitmapImage(new Uri(ImageUrl)) { DecodePixelWidth = 250 }; else return null; } }
         public string Subtitle { get; set; }
+
+        public string UnlocalizedFormat { get; set; }
     }
 
     public class StationGroup : Crystal.Dynamic.AutoIPNotifyingBaseModel //, ISupportIncrementalLoading
     {
         public string Name { get; set; }
+        public string UnlocalizedName { get; set; }
         public ObservableCollection<Station> Items { get; set; }
         public ObservableCollection<Station> TopItems { get { if (Items != null) return Items; else return null; } }//{ get { if (Items != null) return Items.Take(5); else return null; } } // ????
 

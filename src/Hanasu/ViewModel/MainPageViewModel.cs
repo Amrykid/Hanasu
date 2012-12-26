@@ -11,6 +11,7 @@ using Windows.UI.Notifications;
 using Windows.UI.Xaml.Media;
 using Hanasu.Extensions;
 using System.Windows.Input;
+using Crystal.Localization;
 
 namespace Hanasu.ViewModel
 {
@@ -114,7 +115,10 @@ namespace Hanasu.ViewModel
         {
             if (!Windows.UI.Xaml.Window.Current.Visible)
             {
-                SendToast("Now streaming: " + CurrentStationName);
+                SendToast(
+                    string.Format(
+                        LocalizationManager.GetLocalizedValue("NowStreamingMsg"), 
+                        CurrentStationName));
             }
         }
 
@@ -190,15 +194,16 @@ namespace Hanasu.ViewModel
                 stations = ((App)App.Current).AvailableStations;
             }
 
-            var formats = stations.Select(x => x.Format).Distinct();
+            var formats = stations.Select(x => x.UnlocalizedFormat).Distinct();
 
             foreach (var format in formats)
             {
                 var sGroup = new StationGroup();
-                sGroup.Name = format;
+                sGroup.Name = LocalizationManager.GetLocalizedValue("Group" + format);
+                sGroup.UnlocalizedName = format;
                 sGroup.Items = new ObservableCollection<Station>();
 
-                foreach (var i in stations.Where(x => x.Format == format).Take(2))
+                foreach (var i in stations.Where(x => x.UnlocalizedFormat == format).Take(2))
                     sGroup.Items.Add(i);
 
                 AvailableStations.Add(sGroup);

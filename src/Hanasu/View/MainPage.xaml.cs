@@ -1,4 +1,5 @@
-﻿using Crystal.Navigation;
+﻿using Crystal.Localization;
+using Crystal.Navigation;
 using Hanasu.Model;
 using Hanasu.ViewModel;
 using System;
@@ -91,7 +92,7 @@ namespace Hanasu
 
         private void Header_Click(object sender, RoutedEventArgs e)
         {
-            var name = ((TextBlock)((StackPanel)((Button)e.OriginalSource).Content).Children[0]).Text;
+            var name = ((StationGroup)((Button)e.OriginalSource).DataContext).UnlocalizedName;
 
             NavigationService.NavigateTo<GroupPageViewModel>(new KeyValuePair<string, string>("groupName", name));
         }
@@ -125,7 +126,7 @@ namespace Hanasu
             {
                 searchPane = SearchPane.GetForCurrentView();
 
-                searchPane.PlaceholderText = "Enter the name of a station to play."; //Needs to be localized.
+                searchPane.PlaceholderText = LocalizationManager.GetLocalizedValue("SearchPanePlaceholder"); //Needs to be localized.
                 searchPane.ResultSuggestionChosen += searchPane_ResultSuggestionChosen;
                 searchPane.QuerySubmitted += searchPane_QuerySubmitted;
                 searchPane.SuggestionsRequested += searchPane_SuggestionsRequested;
