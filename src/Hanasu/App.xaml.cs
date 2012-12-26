@@ -136,6 +136,8 @@ namespace Hanasu
         {
             base.PostStartup(args);
 
+            RootFrame.Style = Resources["RootFrameStyle"] as Style; // Fixes background audio issue across pages http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/
+
             Frame rootFrame = RootFrame;
 
             // Do not repeat app initialization when the Window already has content,

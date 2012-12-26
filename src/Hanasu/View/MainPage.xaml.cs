@@ -33,7 +33,16 @@ namespace Hanasu
         {
             this.InitializeComponent();
 
+            this.Loaded += MainPage_Loaded;
+
             CoreWindow.GetForCurrentThread().KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
+        }
+
+        MediaElement globalMediaElement = null;
+        void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
+            globalMediaElement = (MediaElement)VisualTreeHelper.GetChild(rootGrid, 0);
         }
 
         public override void OnVisualStateChange(string newVisualState)
@@ -101,7 +110,7 @@ namespace Hanasu
         private void pageRoot_KeyDown_1(object sender, Windows.UI.Core‌.KeyEventArgs e)
         {
             int keyCode = (int)e.VirtualKey;
-            if (keyCode == 0 
+            if (keyCode == 0
                 || (keyCode > 0 && keyCode < 32)
                 || (keyCode > 33 && keyCode < 47)
                 || (keyCode > 91 && keyCode < 165)
@@ -162,7 +171,7 @@ namespace Hanasu
 
                 searchPane = null;
 
-                
+
                 this.Focus(Windows.UI.Xaml.FocusState.Programmatic);
                 Window.Current.Activate();
             }

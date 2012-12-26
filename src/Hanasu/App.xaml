@@ -20,6 +20,20 @@
             <!-- Application-specific resources -->
 
             <x:String x:Key="AppName">Hanasu</x:String>
+
+            <!-- Fixes background audio issue across pages: http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/-->
+            <Style  x:Key="RootFrameStyle" TargetType="Frame">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Frame">
+                            <Grid>
+                                <MediaElement x:Name="MediaPlayer" AudioCategory="BackgroundCapableMedia" AudioDeviceType="Multimedia" AutoPlay="False" />
+                                <ContentPresenter />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </ccore:BaseCrystalApplication>
