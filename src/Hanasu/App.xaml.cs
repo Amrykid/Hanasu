@@ -155,6 +155,7 @@ namespace Hanasu
             }
 
             NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string,string>("args",args.Arguments));
+
             // Ensure the current window is active
             Window.Current.Activate();
         }

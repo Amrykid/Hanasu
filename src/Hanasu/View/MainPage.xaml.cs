@@ -82,7 +82,9 @@ namespace Hanasu
 
         private void Header_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.NavigateTo<GroupPageViewModel>();
+            var name = ((TextBlock)((StackPanel)((Button)e.OriginalSource).Content).Children[0]).Text;
+
+            NavigationService.NavigateTo<GroupPageViewModel>(new KeyValuePair<string, string>("groupName", name));
         }
 
         private async void ItemView_ItemClick(object sender, ItemClickEventArgs e)
