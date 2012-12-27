@@ -42,7 +42,7 @@ namespace Hanasu.Tools.Shoutcast
             sb.AppendLine("GET / HTTP/1.1");
             sb.AppendLine("Connection: keep-alive");
             sb.AppendLine("Host: " + url.Host);
-            sb.AppendLine("icy-metadata: 1");
+            sb.AppendLine("icy-metadata: 0");
             sb.AppendLine();
 
             outStream = underlayingSocket.OutputStream.AsStreamForWrite();
@@ -166,7 +166,7 @@ namespace Hanasu.Tools.Shoutcast
 
         private ulong _metapos = 0;
         private ulong _pos = 0;
-        ulong IRandomAccessStream.Position
+        public ulong Position
         {
             get { return _pos; }
         }
@@ -182,7 +182,7 @@ namespace Hanasu.Tools.Shoutcast
         {
             get
             {
-                return ulong.MaxValue;
+                return  _pos == 0 ? 100000 : _pos * 4;
             }
             set
             {
@@ -194,49 +194,60 @@ namespace Hanasu.Tools.Shoutcast
 
         public Windows.Foundation.IAsyncOperationWithProgress<IBuffer, uint> ReadAsync(IBuffer buffer, uint count, InputStreamOptions options)
         {
-            if ((ulong)Icy_Metaint > _metapos + count)
+            if (Icy_Metaint == 0) //title streaming is disabled
             {
                 _pos += count;
-
-                return underlayingSocket.InputStream.ReadAsync(buffer, count, options);
+                return underlayingSocket.InputStream.ReadAsync(buffer, count, InputStreamOptions.None);
             }
             else
             {
-                for (int i = 0; i < bytesToSkip; i++)
+                if ((ulong)Icy_Metaint > _metapos + count)
                 {
-                    underlayingStream.ReadByte();
-                    _pos += (uint)i;
+                    _pos += count;
+
+                    return underlayingSocket.InputStream.ReadAsync(buffer, count, options);
                 }
-                bytesToSkip = 0;
-
-                var x = (int)count;
-
-                var amountLeft = (ulong)Icy_Metaint - _metapos;
-
-                _pos += (uint)Icy_Metaint;
-
-                _metapos = 0;
-
-                var amountLeftInt = (uint)amountLeft;
-
-                int metalength = 0; //underlayingStream.ReadByte();
-
-                var data = underlayingSocket.InputStream.ReadAsync(new Windows.Storage.Streams.Buffer((uint)Icy_Metaint), (uint)Icy_Metaint, InputStreamOptions.None);
-
-                if (metalength != 0)
+                else
                 {
-                    //ParseTitle();
+                    #region try to handle stream and extract title
+                    for (int i = 0; i < bytesToSkip; i++)
+                    {
+                        underlayingStream.ReadByte();
+                        _pos += (uint)i;
+                    }
+                    bytesToSkip = 0;
 
-                    //var calc = (uint)Icy_Metaint - (uint)MetaDataTagLength + 1;
+                    var x = (int)count;
 
-                    //_pos += calc;
+                    var amountLeft = (ulong)Icy_Metaint - _metapos;
 
-                    //return underlayingSocket.InputStream.ReadAsync(
-                    //    new Windows.Storage.Streams.Buffer(calc), 
-                    //    calc, InputStreamOptions.None);
+                    _pos += (uint)Icy_Metaint;
+
+                    _metapos = 0;
+
+                    var amountLeftInt = (uint)amountLeft;
+
+                    int metalength = 0; //underlayingStream.ReadByte();
+
+                    var data = underlayingSocket.InputStream.ReadAsync(new Windows.Storage.Streams.Buffer((uint)Icy_Metaint), (uint)Icy_Metaint, InputStreamOptions.None);
+
+                    if (metalength != 0)
+                    {
+                        //ParseTitle();
+
+                        //var calc = (uint)Icy_Metaint - (uint)MetaDataTagLength + 1;
+
+                        //_pos += calc;
+
+                        //return underlayingSocket.InputStream.ReadAsync(
+                        //    new Windows.Storage.Streams.Buffer(calc), 
+                        //    calc, InputStreamOptions.None);
+                    }
+
+                    return data;
+
+                    #endregion
                 }
-
-                return data;
             }
 
             return null;
