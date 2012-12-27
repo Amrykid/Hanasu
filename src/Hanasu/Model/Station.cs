@@ -26,6 +26,8 @@ namespace Hanasu.Model
         public string Subtitle { get; set; }
 
         public string UnlocalizedFormat { get; set; }
+
+        public string ServerType { get; set; }
     }
 
     public class StationGroup : Crystal.Dynamic.AutoIPNotifyingBaseModel //, ISupportIncrementalLoading

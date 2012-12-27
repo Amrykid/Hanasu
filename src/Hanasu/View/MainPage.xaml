@@ -56,7 +56,9 @@
                 <StackPanel x:Name="nowPlayingPanel" Visibility="Collapsed" Width="200">
                     <TextBlock Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader"/>
                     <TextBlock x:Name="stationTitle" Text="{Binding CurrentStationName}"
-                               IsHitTestVisible="false" FontSize="17"/>
+                               IsHitTestVisible="false" FontSize="15"/>
+                    <TextBlock x:Name="songTitle" Text="{Binding CurrentStationSongData}"
+                               IsHitTestVisible="false" FontSize="15"/>
                 </StackPanel>
             </Grid>
         </Grid>

@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Media;
 using Hanasu.Extensions;
 using System.Windows.Input;
 using Crystal.Localization;
+using Hanasu.Tools.Shoutcast;
 
 namespace Hanasu.ViewModel
 {
@@ -121,7 +122,7 @@ namespace Hanasu.ViewModel
         }
         #endregion
 
-        void mediaElement_MediaOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        async void mediaElement_MediaOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (!Windows.UI.Xaml.Window.Current.Visible)
             {
@@ -130,11 +131,19 @@ namespace Hanasu.ViewModel
                         LocalizationManager.GetLocalizedValue("NowStreamingMsg"), 
                         CurrentStationName));
             }
+
+            if (CurrentStation.ServerType.ToLower() == "shoutcast")
+            {
+                var currentSong = await ShoutcastService.GetShoutcastStationCurrentSong(CurrentStation, CurrentStationStreamedUri.ToString());
+
+                CurrentStationSongData = currentSong.ToSongString();
+            }
         }
 
         void mediaElement_MediaFailed(object sender, Windows.UI.Xaml.ExceptionRoutedEventArgs e)
         {
-
+            CurrentStationSongData = null;
+            CurrentStationStreamedUri = null;
         }
 
         void mediaElement_BufferingProgressChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -242,6 +251,8 @@ namespace Hanasu.ViewModel
                     SetMediaElement(ref me);
 
                     CurrentStation = s;
+                    CurrentStationSongData = null;
+                    CurrentStationStreamedUri = null;
                 });
 
             //MediaControl.AlbumArt = new Uri(CurrentStation.ImageUrl, UriKind.Absolute);
@@ -260,9 +271,17 @@ namespace Hanasu.ViewModel
             if (await Hanasu.Core.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(finalUri, s.PreprocessorFormat))
                 finalUri = await Hanasu.Core.Preprocessor.PreprocessorService.GetProcessor(finalUri, s.PreprocessorFormat).Process(finalUri);
 
+            CurrentStationStreamedUri = finalUri;
+
             await mediaElement.OpenAsync(finalUri, System.Threading.CancellationToken.None);
             await mediaElement.PlayAsync(System.Threading.CancellationToken.None);
 
+        }
+
+        public Uri CurrentStationStreamedUri
+        {
+            get { return GetPropertyOrDefaultType<Uri>(x => this.CurrentStationStreamedUri); }
+            set { SetProperty(x => this.CurrentStationStreamedUri, value); }
         }
 
         public Station CurrentStation
@@ -275,6 +294,13 @@ namespace Hanasu.ViewModel
         {
             get { if (CurrentStation != null) return CurrentStation.Title; else return string.Empty; }
         }
+
+        public string CurrentStationSongData
+        {
+            get { return GetPropertyOrDefaultType<string>(x => this.CurrentStationSongData); }
+            set { SetProperty(x => this.CurrentStationSongData, value); }
+        }
+
 
         private void SendToast(string txt)
         {

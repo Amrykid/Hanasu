@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Hanasu.Extensions;
 
 namespace Hanasu.Tools.Preprocessing.Preprocessors.ASX
 {
@@ -21,7 +22,14 @@ namespace Hanasu.Tools.Preprocessing.Preprocessors.ASX
 
             XDocument doc = XDocument.Parse(data); //Yes, I know I could have used Load but I needed this to be an asynchronous method.
 
-            foreach (var item in from x in doc.Element("asx").Elements("entry")
+            XElement head = null;
+
+            head = doc.Element("asx");
+            if (head == null)
+                head = doc.Element("Asx");
+
+
+            foreach (var item in from x in head.Elements("entry")
                                  select new ASXEntry()
                                  {
                                      File = x.Element("ref").Attribute("href").Value

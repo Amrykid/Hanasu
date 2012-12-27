@@ -7,6 +7,7 @@ using System.Net;
 using System.IO;
 using System.Collections;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace Hanasu.Core.Utilities
 {
@@ -62,27 +63,42 @@ namespace Hanasu.Core.Utilities
         }
         public static async Task<string> GetHtmlFromUrl2(string url, bool hasRedirected)
         {
-            string result = null;
-            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
-            //req.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11";
-            //req.ServicePoint.Expect100Continue = true;
-            //req.UserAgent = 
+            //http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/d701a6ea-ddb0-40f6-82fb-c3bbb37234b4
 
-            using (HttpWebResponse res = (HttpWebResponse) await req.GetResponseAsync())
-            {
-                hasRedirected = res.ResponseUri.ToString() != url + "/";
+            url = url.Replace("\r","");
 
-                using (StreamReader sr = new StreamReader(res.GetResponseStream()))
-                {
-                    result = sr.ReadToEnd();
-                    //sr.Close();
-                }
-                //res.Close();
-            }
+            System.Net.Http.HttpClient client = new HttpClient();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Date = DateTime.Now.Subtract(new TimeSpan(10, 0, 0));
+            request.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11");
+            HttpResponseMessage response = await client.SendAsync(request);
+            string resultCode = response.StatusCode.ToString();
 
-            hasRedirected = false;
+            return await response.Content.ReadAsStringAsync();
 
-            return result;
+
+            //string result = null;
+            //HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
+            //req.Headers.UserAgent.ParseAdd("New User Agent Value");
+            ////req.Headers[HttpRequestHeader.UserAgent] = ;
+            ////req.ServicePoint.Expect100Continue = true;
+            ////req.UserAgent = 
+
+            //using (HttpWebResponse res = (HttpWebResponse) await req.GetResponseAsync())
+            //{
+            //    hasRedirected = res.ResponseUri.ToString() != url + "/";
+
+            //    using (StreamReader sr = new StreamReader(res.GetResponseStream()))
+            //    {
+            //        result = sr.ReadToEnd();
+            //        //sr.Close();
+            //    }
+            //    //res.Close();
+            //}
+
+            //hasRedirected = false;
+
+            //return result;
         }
         public static string Decode(string html)
         {

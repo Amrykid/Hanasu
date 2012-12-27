@@ -73,13 +73,19 @@ namespace Hanasu
             ((MainPageViewModel)this.DataContext).SetMediaElement(globalMediaElement);
 
             globalMediaElement.CurrentStateChanged += globalMediaElement_CurrentStateChanged;
+            nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
             AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationName, stationTitle, TextBlock.TextProperty);
+
+            AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationSongData, songTitle, TextBlock.TextProperty);
         }
 
         void globalMediaElement_CurrentStateChanged(object sender, RoutedEventArgs e)
         {
-            nowPlayingPanel.Visibility = globalMediaElement.CurrentState == MediaElementState.Playing ? Visibility.Visible : Visibility.Collapsed;
+            if (globalMediaElement.CurrentState == MediaElementState.Playing)
+                nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            else if (globalMediaElement.CurrentState == MediaElementState.Closed || globalMediaElement.CurrentState == MediaElementState.Stopped)
+                nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         public override void OnVisualStateChange(string newVisualState)

@@ -123,6 +123,9 @@
     <Compile Include="Tools\Preprocessing\Preprocessors\ASX\ASXPreprocessor.cs" />
     <Compile Include="Tools\Preprocessing\Preprocessors\M3U\M3UPreprocessor.cs" />
     <Compile Include="Tools\Preprocessing\Preprocessors\PLS\PLSPreprocessor.cs" />
+    <Compile Include="Tools\Shoutcast\ShoutcastService.cs" />
+    <Compile Include="Tools\Song\SongData.cs" />
+    <Compile Include="Tools\Song\SongService.cs" />
     <Compile Include="ViewModel\GroupPageViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="View\GroupPage.xaml.cs">

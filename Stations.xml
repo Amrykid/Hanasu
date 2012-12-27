@@ -462,7 +462,7 @@
   </Station>
   <Station>
     <Name>Anime Academy Radio</Name>
-    <DataSource><![CDATA[http://stream.radiotime.com/listen.stream?streamId=4095170&rti=dihyG20zLx8JURd1F0lTQVsoWUNFXQo9XRVWQkVcJgsVQxAhZltYDFYCcXoQRgNiXQdMDFcVRGkUEQMjSxUNFlUQWHRqGAVEBUMGU1tUZgE%3d%7e%7e%7e]]></DataSource>
+    <DataSource><![CDATA[http://coolface.info:8888/mpd.mp3]]></DataSource>
     <Homepage>https://www.facebook.com/pages/Anime-Academy-Radio/173616517763</Homepage>
     <Format>Anime</Format>
     <City>Seattle, WA</City>
