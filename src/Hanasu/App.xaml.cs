@@ -72,7 +72,7 @@ namespace Hanasu
                                ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : null,
                                UnlocalizedFormat = x.Element("Format").Value,
                                Format = LocalizationManager.GetLocalizedValue("Group" + x.Element("Format").Value),
-                               Subtitle = "Play this station."
+                               Subtitle = LocalizationManager.GetLocalizedValue("StationSubtitle")
                            };
 
             foreach (var x in stations)
