@@ -296,22 +296,35 @@ namespace Hanasu.ViewModel
             //MediaControl.ArtistName = CurrentStation.Title;
             MediaControl.IsPlaying = true;
 
-
-            if (me.CurrentState == MediaElementState.Playing || me.CurrentState == MediaElementState.Opening || me.CurrentState == MediaElementState.Buffering)
+            try
             {
-                me.Pause();
-                await Task.Delay(1000);
+
+                if (me.CurrentState == MediaElementState.Playing || me.CurrentState == MediaElementState.Opening || me.CurrentState == MediaElementState.Buffering)
+                {
+                    me.Pause();
+                    await Task.Delay(1000);
+                    me.Stop();
+                }
+
+                Uri finalUri = new Uri(s.StreamUrl, UriKind.Absolute);
+
+                if (await Hanasu.Core.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(finalUri, s.PreprocessorFormat))
+                    finalUri = await Hanasu.Core.Preprocessor.PreprocessorService.GetProcessor(finalUri, s.PreprocessorFormat).Process(finalUri);
+
+                CurrentStationStreamedUri = finalUri;
+
+                await mediaElement.OpenAsync(finalUri, System.Threading.CancellationToken.None);
+                await mediaElement.PlayAsync(System.Threading.CancellationToken.None);
             }
+            catch (Exception ex)
+            {
+                if (ex is TaskCanceledException) return;
 
-            Uri finalUri = new Uri(s.StreamUrl, UriKind.Absolute);
-
-            if (await Hanasu.Core.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(finalUri, s.PreprocessorFormat))
-                finalUri = await Hanasu.Core.Preprocessor.PreprocessorService.GetProcessor(finalUri, s.PreprocessorFormat).Process(finalUri);
-
-            CurrentStationStreamedUri = finalUri;
-
-            await mediaElement.OpenAsync(finalUri, System.Threading.CancellationToken.None);
-            await mediaElement.PlayAsync(System.Threading.CancellationToken.None);
+                Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
+                    .ShowMessage(
+                        LocalizationManager.GetLocalizedValue("StreamingErrorHeader"),
+                        LocalizationManager.GetLocalizedValue("StreamingErrorMsg"));
+            }
 
         }
 

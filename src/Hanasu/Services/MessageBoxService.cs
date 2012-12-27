@@ -12,8 +12,14 @@ namespace Hanasu.Services
     {
         public async void ShowMessage(string title = "Title", string message = "Message")
         {
-            MessageDialog md = new MessageDialog(message, title);
-            await md.ShowAsync();
+            try
+            {
+                MessageDialog md = new MessageDialog(message, title);
+                await md.ShowAsync();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         public bool? ShowOkayCancelMessage(string title, string message)
