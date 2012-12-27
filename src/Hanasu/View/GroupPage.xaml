@@ -44,7 +44,7 @@
             AutomationProperties.AutomationId="ItemListView"
             AutomationProperties.Name="Grouped Items" 
             Visibility="Visible"
-            Margin="0,-10,0,0"
+            Margin="0,0,0,0"
             Padding="10,0,0,60"
             ItemsSource="{Binding Stations}"
             ItemTemplate="{StaticResource Standard80ItemTemplate}"
@@ -52,7 +52,11 @@
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
             ItemClick="ItemView_ItemClick">
-                
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel VirtualizingStackPanel.VirtualizationMode="Recycling"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
                 <ListView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>

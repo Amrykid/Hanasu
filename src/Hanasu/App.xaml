@@ -34,6 +34,14 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+            <Style x:Key="HanasuLayoutRootStyle" TargetType="Grid" BasedOn="{StaticResource LayoutRootStyle}">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="/Assets/hanasu_winrt_bg.png" Stretch="Fill"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </ccore:BaseCrystalApplication>

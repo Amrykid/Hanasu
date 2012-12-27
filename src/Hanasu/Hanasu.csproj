@@ -138,7 +138,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="Hanasu_TemporaryKey.pfx" />
-    <EmbeddedResource Include="I18N\en-US.ini" />
+    <EmbeddedResource Include="I18N\en.ini" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\hanasu_winrt_bg.png" />

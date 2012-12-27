@@ -276,6 +276,7 @@ namespace Hanasu
 
             // Set the initial visual state of the control
             VisualStateManager.GoToState(control, DetermineVisualState(ApplicationView.Value), false);
+            OnVisualStateChange(DetermineVisualState(ApplicationView.Value));
         }
 
         private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)

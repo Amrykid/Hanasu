@@ -36,6 +36,8 @@ namespace Hanasu
 
             this.Loaded += MainPage_Loaded;
 
+            Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessUntilQuit));
+
             CoreWindow.GetForCurrentThread().KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
         }
 
@@ -101,8 +103,6 @@ namespace Hanasu
         {
             var vm = ((MainPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;
-
-            Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessAllIfPresent));
 
             await Task.Run(() => Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => vm.PlayStation(stat, globalMediaElement)));
         }
