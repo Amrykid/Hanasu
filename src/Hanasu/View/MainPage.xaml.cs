@@ -39,6 +39,28 @@ namespace Hanasu
             Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessUntilQuit));
 
             CoreWindow.GetForCurrentThread().KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
+
+            if (((App)App.Current).ptm == null)
+            {
+                ((App)App.Current).ptm = Windows.Media.PlayTo.PlayToManager.GetForCurrentView();
+                ((App)App.Current).ptm.SourceRequested += ptm_SourceRequested;
+            }
+        }
+
+        async void ptm_SourceRequested(Windows.Media.PlayTo.PlayToManager sender, Windows.Media.PlayTo.PlayToSourceRequestedEventArgs args)
+        {
+            //http://msdn.microsoft.com/en-us/library/windows/apps/xaml/hh465191.aspx
+
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                    Windows.Media.PlayTo.PlayToSourceRequest sr = args.SourceRequest;
+                    Windows.Media.PlayTo.PlayToSource controller = null;
+                    Windows.Media.PlayTo.PlayToSourceDeferral deferral = args.SourceRequest.GetDeferral();
+                    controller = ((MediaElement)globalMediaElement).PlayToSource;
+                    
+                    sr.SetSource(controller);
+                    deferral.Complete();
+            });
         }
 
         MediaElement globalMediaElement = null;
@@ -46,6 +68,8 @@ namespace Hanasu
         {
             DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
             globalMediaElement = (MediaElement)VisualTreeHelper.GetChild(rootGrid, 0);
+
+            ((MainPageViewModel)this.DataContext).SetMediaElement(globalMediaElement);
         }
 
         public override void OnVisualStateChange(string newVisualState)
@@ -101,6 +125,7 @@ namespace Hanasu
 
         private async void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
+
             var vm = ((MainPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;
 

@@ -97,6 +97,16 @@ namespace Hanasu.ViewModel
                 InitializeGlobalMediaElement();
             }
         }
+        internal void SetMediaElement(Windows.UI.Xaml.Controls.MediaElement me)
+        {
+            if (mediaElement == null)
+            {
+                mediaElement = me;
+
+                InitializeGlobalMediaElement();
+            }
+        }
+
         private Windows.UI.Xaml.Controls.MediaElement mediaElement = null; //what
 
         private void InitializeGlobalMediaElement()
@@ -168,14 +178,14 @@ namespace Hanasu.ViewModel
                 case true: //was playing, should pause
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, new Windows.UI.Core.DispatchedHandler(() =>
                     {
-                        mediaElement.Pause();
+                        mediaElement.PlaybackRate = 0;
                         MediaControl.IsPlaying = false;
                     }));
                     break;
                 case false:
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, new Windows.UI.Core.DispatchedHandler(() =>
                     {
-                        mediaElement.Play();
+                        mediaElement.PlaybackRate = 1;
                         MediaControl.IsPlaying = true;
                     }));
                     break;
@@ -218,6 +228,13 @@ namespace Hanasu.ViewModel
             set { SetProperty(x => this.AvailableStations, value); }
         }
 
+
+
+        [Crystal.Messaging.MessageHandler("PlayStation")]
+        public void PlayStation(Station s)
+        {
+            PlayStation(s, mediaElement);
+        }
         public async void PlayStation(Station s, Windows.UI.Xaml.Controls.MediaElement me)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
@@ -240,7 +257,7 @@ namespace Hanasu.ViewModel
 
             Uri finalUri = new Uri(s.StreamUrl, UriKind.Absolute);
 
-            if (Hanasu.Core.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(finalUri, s.PreprocessorFormat))
+            if (await Hanasu.Core.Preprocessor.PreprocessorService.CheckIfPreprocessingIsNeeded(finalUri, s.PreprocessorFormat))
                 finalUri = await Hanasu.Core.Preprocessor.PreprocessorService.GetProcessor(finalUri, s.PreprocessorFormat).Process(finalUri);
 
             await mediaElement.OpenAsync(finalUri, System.Threading.CancellationToken.None);

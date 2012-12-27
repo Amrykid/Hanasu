@@ -1,4 +1,5 @@
-﻿using Hanasu.Model;
+﻿using Crystal.Messaging;
+using Hanasu.Model;
 using Hanasu.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -76,7 +77,7 @@ namespace Hanasu
             var vm = ((GroupPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;
 
-            Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessAllIfPresent));
+            Messenger.PushMessage(vm, "PlayStation", stat);
 
             //await Task.Run(() => Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => vm.PlayStation(stat, globalMediaElement)));
         }

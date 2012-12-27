@@ -177,5 +177,8 @@ namespace Hanasu
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+        public Windows.Media.PlayTo.PlayToManager ptm = null;
+
     }
 }

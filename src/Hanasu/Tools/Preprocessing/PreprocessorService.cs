@@ -44,19 +44,19 @@ namespace Hanasu.Core.Preprocessor
             }
         }
 
-        public static bool CheckIfPreprocessingIsNeeded(Uri url, string ExplicitExtension = "")
+        public static async Task<bool> CheckIfPreprocessingIsNeeded(Uri url, string ExplicitExtension = "")
         {
             if (Preprocessors == null)
                 Initialize();
 
-            return Preprocessors.Any((pre) =>
+            return await Task.Run(() => Preprocessors.Any((pre) =>
             {
                 return pre.Supports(url) || pre.Extension == ExplicitExtension;
-            });
+            }));
         }
-        public static bool CheckIfPreprocessingIsNeeded(string url, string ExplicitExtension = "")
+        public static async Task<bool> CheckIfPreprocessingIsNeeded(string url, string ExplicitExtension = "")
         {
-            return CheckIfPreprocessingIsNeeded(new Uri(url), ExplicitExtension);
+            return await CheckIfPreprocessingIsNeeded(new Uri(url), ExplicitExtension);
         }
 
         public static IFileFormatPreprocessor GetProcessor(Uri url, string ExplicitExtension = "")
