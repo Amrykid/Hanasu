@@ -91,5 +91,13 @@ namespace Hanasu.Tools.Shoutcast
                 return SongService.ParseSongData(songData, station);
             else throw new Exception();
         }
+
+        public static async Task<ShoutcastStream> GetShoutcastStream(Uri url)
+        {
+            var s = new ShoutcastStream();
+            await s.ConnectAsync(url);
+
+            return s;
+        }
     }
 }

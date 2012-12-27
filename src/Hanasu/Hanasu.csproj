@@ -127,6 +127,7 @@
     <Compile Include="Tools\Preprocessing\Preprocessors\M3U\M3UPreprocessor.cs" />
     <Compile Include="Tools\Preprocessing\Preprocessors\PLS\PLSPreprocessor.cs" />
     <Compile Include="Tools\Shoutcast\ShoutcastService.cs" />
+    <Compile Include="Tools\Shoutcast\ShoutcastStream.cs" />
     <Compile Include="Tools\Song\SongData.cs" />
     <Compile Include="Tools\Song\SongService.cs" />
     <Compile Include="ViewModel\GroupPageViewModel.cs" />

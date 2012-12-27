@@ -140,7 +140,7 @@ namespace Hanasu.ViewModel
             {
                 SendToast(
                     string.Format(
-                        LocalizationManager.GetLocalizedValue("NowStreamingMsg"), 
+                        LocalizationManager.GetLocalizedValue("NowStreamingMsg"),
                         CurrentStationName), CurrentStation.ImageUrl);
             }
 
@@ -313,8 +313,18 @@ namespace Hanasu.ViewModel
 
                 CurrentStationStreamedUri = finalUri;
 
+                //if (CurrentStation.ServerType.ToLower() == "shoutcast")
+                //{
+                //    var str = await ShoutcastService.GetShoutcastStream(finalUri);
+                //    mediaElement.SetSource(str, str.Content_Type);
+
+                //    mediaElement.Play();
+                //}
+                //else
+                //{
                 await mediaElement.OpenAsync(finalUri, System.Threading.CancellationToken.None);
                 await mediaElement.PlayAsync(System.Threading.CancellationToken.None);
+                //}
             }
             catch (Exception ex)
             {
