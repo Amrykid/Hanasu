@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Hanasu.Extensions
 {
     //Converted and modified from http://blogs.msdn.com/b/lucian/archive/2012/11/28/how-to-await-a-mediaelement.aspx
     //May be buggy
 
-    using Microsoft.VisualBasic;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Threading;
-    using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Media;
     public static class MediaElementExtensions
     {
         //I modified the PlayAsync into a StopAsync method ~Amrykid

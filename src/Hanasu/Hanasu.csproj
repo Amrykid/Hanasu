@@ -115,6 +115,9 @@
     <Compile Include="Extensions\MediaElementExtensions.cs" />
     <Compile Include="Extensions\XElementExtensions.cs" />
     <Compile Include="Model\Station.cs" />
+    <Compile Include="Services\MessageBoxService.cs" />
+    <Compile Include="SystemControllers\NetworkCostController.cs" />
+    <Compile Include="SystemControllers\PlayToController.cs" />
     <Compile Include="Tools\HtmlTextUtility.cs" />
     <Compile Include="Tools\Preprocessing\BasePreprocessor.cs" />
     <Compile Include="Tools\Preprocessing\IPreprocessor.cs" />

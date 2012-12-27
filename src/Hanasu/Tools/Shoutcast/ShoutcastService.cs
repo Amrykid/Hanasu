@@ -3,8 +3,6 @@ using Hanasu.Model;
 using Hanasu.Tools.Song;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -32,7 +30,7 @@ namespace Hanasu.Tools.Shoutcast
                 return false;
             }
 
-            return false;
+            //return false;
         }
 
         public static async Task<Dictionary<string, string>> GetShoutcastStationSongHistory(Station station, string url)
@@ -85,7 +83,7 @@ namespace Hanasu.Tools.Shoutcast
             songData = Regex.Replace(songData, "<.+?>", "", RegexOptions.Singleline).Trim();
             songData = SongService.CleanSongDataStr(songData);
 
-            Uri lyrics = null;
+            //Uri lyrics = null;
             //if (GlobalHanasuCore.SongService.IsSongAvailable(songData, station, out lyrics))
             //    return GlobalHanasuCore.SongService.GetSongData(songData, station);
             //else

@@ -1,18 +1,17 @@
 ﻿using Crystal.Core;
+using Crystal.Localization;
+using Hanasu.Extensions;
 using Hanasu.Model;
+using Hanasu.SystemControllers;
+using Hanasu.Tools.Shoutcast;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.Media;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml.Media;
-using Hanasu.Extensions;
-using System.Windows.Input;
-using Crystal.Localization;
-using Hanasu.Tools.Shoutcast;
 
 namespace Hanasu.ViewModel
 {
@@ -119,6 +118,19 @@ namespace Hanasu.ViewModel
             mediaElement.BufferingProgressChanged += mediaElement_BufferingProgressChanged;
             mediaElement.MediaFailed += mediaElement_MediaFailed;
             mediaElement.MediaOpened += mediaElement_MediaOpened;
+
+            PlayToController.Initialize(ref mediaElement);
+            NetworkCostController.ApproachingDataLimitEvent += NetworkCostController_ApproachingDataLimitEvent;
+        }
+
+        void NetworkCostController_ApproachingDataLimitEvent()
+        {
+            Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
+                .ShowMessage(
+                    LocalizationManager.GetLocalizedValue("DataConstraintsHeader"),
+                    LocalizationManager.GetLocalizedValue("StreamingDisabledMsg"));
+
+            mediaElement.Stop();
         }
         #endregion
 
@@ -132,11 +144,17 @@ namespace Hanasu.ViewModel
                         CurrentStationName));
             }
 
-            if (CurrentStation.ServerType.ToLower() == "shoutcast")
+            try
             {
-                var currentSong = await ShoutcastService.GetShoutcastStationCurrentSong(CurrentStation, CurrentStationStreamedUri.ToString());
+                if (CurrentStation.ServerType.ToLower() == "shoutcast")
+                {
+                    var currentSong = await ShoutcastService.GetShoutcastStationCurrentSong(CurrentStation, CurrentStationStreamedUri.ToString());
 
-                CurrentStationSongData = currentSong.ToSongString();
+                    CurrentStationSongData = currentSong.ToSongString();
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -246,6 +264,25 @@ namespace Hanasu.ViewModel
         }
         public async void PlayStation(Station s, Windows.UI.Xaml.Controls.MediaElement me)
         {
+            if (!NetworkCostController.IsConnectedToInternet)
+            {
+                Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
+                    .ShowMessage(
+                        LocalizationManager.GetLocalizedValue("InternetConnectionHeader"),
+                        LocalizationManager.GetLocalizedValue("NoInternetConnectionMsg"));
+                return;
+            }
+
+            if (NetworkCostController.ApproachingDataLimit)
+            {
+                Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
+                    .ShowMessage(
+                        LocalizationManager.GetLocalizedValue("DataConstraintsHeader"),
+                        LocalizationManager.GetLocalizedValue("StreamingDisabled2Msg"));
+
+                return;
+            }
+
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
                     SetMediaElement(ref me);

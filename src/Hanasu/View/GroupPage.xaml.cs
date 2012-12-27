@@ -1,22 +1,8 @@
 ﻿using Crystal.Messaging;
 using Hanasu.Model;
 using Hanasu.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Search;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -35,7 +21,7 @@ namespace Hanasu
             this.Loaded += GroupPage_Loaded;
         }
 
-        async void GroupPage_Loaded(object sender, RoutedEventArgs e)
+        void GroupPage_Loaded(object sender, RoutedEventArgs e)
         {
 
         }
@@ -72,7 +58,7 @@ namespace Hanasu
 
         }
 
-        private async void ItemView_ItemClick(object sender, ItemClickEventArgs e)
+        private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var vm = ((GroupPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;

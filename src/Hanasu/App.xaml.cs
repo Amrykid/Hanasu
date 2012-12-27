@@ -1,27 +1,21 @@
 ﻿using Crystal.Core;
+using Crystal.Localization;
+using Crystal.Navigation;
+using Crystal.Services;
+using Hanasu.Extensions;
 using Hanasu.Model;
+using Hanasu.SystemControllers;
+using Hanasu.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Search;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Hanasu.Extensions;
-using Crystal.Navigation;
-using Hanasu.ViewModel;
-using Crystal.Localization;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -47,6 +41,8 @@ namespace Hanasu
             EnableSelfAssemblyResolution = true;
             EnableCrystalLocalization = true;
 
+            ServiceManager.RegisterService<Hanasu.Services.MessageBoxService>();
+
             base.PreStartup();
         }
 
@@ -59,25 +55,37 @@ namespace Hanasu
                 if (AvailableStations.Count > 0)
                     AvailableStations.Clear();
 
-            XDocument doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml");
-            var stationsElement = doc.Element("Stations");
+            NetworkCostController.Initialize();
 
-            var stations = from x in stationsElement.Elements("Station")
-                           where x.ContainsElement("StationType") ? x.Element("StationType").Value != "TV" : true
-                           select new Station()
-                           {
-                               Title = x.Element("Name").Value,
-                               StreamUrl = x.Element("DataSource").Value,
-                               PreprocessorFormat = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : string.Empty,
-                               ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : null,
-                               UnlocalizedFormat = x.Element("Format").Value,
-                               Format = LocalizationManager.GetLocalizedValue("Group" + x.Element("Format").Value),
-                               Subtitle = LocalizationManager.GetLocalizedValue("StationSubtitle"),
-                               ServerType = x.ContainsElement("ServerType") ? x.Element("ServerType").Value : "Raw"
-                           };
+            if (NetworkCostController.IsConnectedToInternet)
+            {
+                XDocument doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml");
+                var stationsElement = doc.Element("Stations");
 
-            foreach (var x in stations)
-                AvailableStations.Add(x);
+                var stations = from x in stationsElement.Elements("Station")
+                               where x.ContainsElement("StationType") ? x.Element("StationType").Value != "TV" : true
+                               select new Station()
+                               {
+                                   Title = x.Element("Name").Value,
+                                   StreamUrl = x.Element("DataSource").Value,
+                                   PreprocessorFormat = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : string.Empty,
+                                   ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : null,
+                                   UnlocalizedFormat = x.Element("Format").Value,
+                                   Format = LocalizationManager.GetLocalizedValue("Group" + x.Element("Format").Value),
+                                   Subtitle = LocalizationManager.GetLocalizedValue("StationSubtitle"),
+                                   ServerType = x.ContainsElement("ServerType") ? x.Element("ServerType").Value : "Raw"
+                               };
+
+                foreach (var x in stations)
+                    AvailableStations.Add(x);
+            }
+            else
+            {
+                Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
+                    .ShowMessage(
+                        LocalizationManager.GetLocalizedValue("InternetConnectionHeader"), 
+                        LocalizationManager.GetLocalizedValue("NoInternetConnectionMsg"));
+            }
 
             //          <Stations>
             //<Station>
