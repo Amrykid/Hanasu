@@ -141,7 +141,7 @@ namespace Hanasu.ViewModel
                 SendToast(
                     string.Format(
                         LocalizationManager.GetLocalizedValue("NowStreamingMsg"), 
-                        CurrentStationName));
+                        CurrentStationName), CurrentStation.ImageUrl);
             }
 
             try
@@ -339,7 +339,7 @@ namespace Hanasu.ViewModel
         }
 
 
-        private void SendToast(string txt)
+        private void SendToast(string txt, string imgurl = "")
         {
             var toaster = ToastNotificationManager.CreateToastNotifier();
 
@@ -360,7 +360,7 @@ namespace Hanasu.ViewModel
             // An image element is then created under the ToastImageAndText01 XML node. The path to the image is specified
             var image = toastXml.CreateElement("image");
             image.SetAttribute("id", "1");
-            image.SetAttribute("src", @"Assets/DemoImage.png");
+            image.SetAttribute("src", imgurl);
 
             // A text element is created under the ToastImageAndText01 XML node.
             var text = toastXml.CreateElement("text");
