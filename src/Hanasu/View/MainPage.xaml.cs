@@ -1,4 +1,5 @@
-﻿using Crystal.Localization;
+﻿using Crystal.Binding;
+using Crystal.Localization;
 using Crystal.Navigation;
 using Hanasu.Model;
 using Hanasu.ViewModel;
@@ -70,6 +71,15 @@ namespace Hanasu
             globalMediaElement = (MediaElement)VisualTreeHelper.GetChild(rootGrid, 0);
 
             ((MainPageViewModel)this.DataContext).SetMediaElement(globalMediaElement);
+
+            globalMediaElement.CurrentStateChanged += globalMediaElement_CurrentStateChanged;
+
+            AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationName, stationTitle, TextBlock.TextProperty);
+        }
+
+        void globalMediaElement_CurrentStateChanged(object sender, RoutedEventArgs e)
+        {
+            nowPlayingPanel.Visibility = globalMediaElement.CurrentState == MediaElementState.Playing ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public override void OnVisualStateChange(string newVisualState)
