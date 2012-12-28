@@ -1,4 +1,5 @@
 ﻿using Crystal.Messaging;
+using Hanasu.Model;
 using Hanasu.Tools.Shoutcast;
 using System;
 using System.Collections.Generic;
@@ -92,7 +93,10 @@ namespace Hanasu.SystemControllers
 
         private static async Task<bool> IsStreamable(Uri uri)
         {
-            return await Messenger.
+            var msg = (Message)await Messenger.GetViewModelPropertyViaMessageAsync("CurrentStation");
+            Station currentStation = (Station)msg.Data;
+
+            return currentStation.ServerType.ToLower() != "shoutcast";
         }
 
 

@@ -422,6 +422,7 @@ namespace Hanasu.ViewModel
             set { SetProperty(x => this.CurrentStationStreamedUri, value); }
         }
 
+        [Crystal.Messaging.PropertyMessage("CurrentStation")]
         public Station CurrentStation
         {
             get { return GetPropertyOrDefaultType<Station>(x => this.CurrentStation); }
