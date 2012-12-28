@@ -45,6 +45,8 @@ namespace Hanasu
 
             ServiceManager.RegisterService<Hanasu.Services.MessageBoxService>();
 
+            NetworkCostController.Initialize();
+
             base.PreStartup();
         }
 
@@ -56,8 +58,6 @@ namespace Hanasu
             else
                 if (AvailableStations.Count > 0)
                     AvailableStations.Clear();
-
-            NetworkCostController.Initialize();
 
             if (NetworkCostController.IsConnectedToInternet)
             {
