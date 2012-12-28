@@ -47,7 +47,8 @@ namespace Hanasu
         MediaElement globalMediaElement = null;
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            CoreWindow.GetForCurrentThread().KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
+            thisCoreWindow = CoreWindow.GetForCurrentThread();
+            thisCoreWindow.KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
 
             DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
             globalMediaElement = (MediaElement)VisualTreeHelper.GetChild(rootGrid, 0);
@@ -93,9 +94,11 @@ namespace Hanasu
                 });
         }
 
+        CoreWindow thisCoreWindow = null;
+
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            CoreWindow.GetForCurrentThread().KeyDown -= pageRoot_KeyDown_1;
+            thisCoreWindow.KeyDown -= pageRoot_KeyDown_1;
 
             globalMediaElement.CurrentStateChanged -= globalMediaElement_CurrentStateChanged;
             this.Loaded -= MainPage_Loaded;
@@ -181,6 +184,8 @@ namespace Hanasu
         private SearchPane searchPane = null;
         private void pageRoot_KeyDown_1(object sender, Windows.UI.Core‌.KeyEventArgs e)
         {
+            //This function sends the enter chars to the search page for processing.
+
             int keyCode = (int)e.VirtualKey;
             if (keyCode == 0
                 || (keyCode > 0 && keyCode < 32)
