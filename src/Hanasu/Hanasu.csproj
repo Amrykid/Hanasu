@@ -158,10 +158,11 @@
   <ItemGroup>
     <Content Include="Assets\hanasu_winrt_bg.png" />
     <Content Include="Assets\Logo.png" />
-    <Content Include="Assets\SmallLogo.png" />
+    <Content Include="Assets\vector_icon_30_30.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\vector_icon_50_50.png" />
     <Content Include="Assets\vector_icon.png" />
     <Content Include="Assets\vector_icon_150_150.png" />
     <Content Include="Assets\vector_icon_270_270.png" />
