@@ -43,7 +43,13 @@ namespace Hanasu
             EnableSelfAssemblyResolution = true;
             EnableCrystalLocalization = true;
 
-            ServiceManager.RegisterService<Hanasu.Services.MessageBoxService>();
+            try
+            {
+                ServiceManager.RegisterService<Hanasu.Services.MessageBoxService>();
+            }
+            catch (Exception)
+            {
+            }
 
             NetworkCostController.Initialize();
 
