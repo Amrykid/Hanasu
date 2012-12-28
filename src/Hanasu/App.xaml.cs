@@ -1,5 +1,6 @@
 ﻿using Crystal.Core;
 using Crystal.Localization;
+using Crystal.Messaging;
 using Crystal.Navigation;
 using Crystal.Services;
 using Hanasu.Extensions;
@@ -83,7 +84,7 @@ namespace Hanasu
             {
                 Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
                     .ShowMessage(
-                        LocalizationManager.GetLocalizedValue("InternetConnectionHeader"), 
+                        LocalizationManager.GetLocalizedValue("InternetConnectionHeader"),
                         LocalizationManager.GetLocalizedValue("NoInternetConnectionMsg"));
             }
 
@@ -111,28 +112,7 @@ namespace Hanasu
         {
             base.OnSearchActivated(args);
 
-            //args.QueryText, args.Language
-            var searchPanel = SearchPane.GetForCurrentView();
-
-            searchPanel.QueryChanged += delegate(SearchPane s, SearchPaneQueryChangedEventArgs e)
-            {
-
-            };
-
-            searchPanel.SuggestionsRequested += delegate(SearchPane s, SearchPaneSuggestionsRequestedEventArgs e)
-            {
-                //http://weblogs.asp.net/nmarun/archive/2012/09/28/implementing-search-contract-in-windows-8-application.aspx
-
-                IEnumerable<string> names = from suggestion in AvailableStations
-                                            where suggestion.Title.StartsWith(e.QueryText,
-                                                                       StringComparison.CurrentCultureIgnoreCase)
-                                            select suggestion.Title;
-
-                // Take(5) is implemented because the SearchPane 
-                // can show a maximum of 5 suggestions
-                // passing a larger collection will only show the first 5
-                e.Request.SearchSuggestionCollection.AppendQuerySuggestions(names.Take(5));
-            };
+            NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", args.QueryText));
         }
 
 
@@ -167,7 +147,7 @@ namespace Hanasu
                 Window.Current.Content = rootFrame;
             }
 
-            NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string,string>("args",args.Arguments));
+            NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("args", args.Arguments));
 
             // Ensure the current window is active
             Window.Current.Activate();

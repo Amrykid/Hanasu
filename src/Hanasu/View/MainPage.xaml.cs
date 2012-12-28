@@ -41,12 +41,14 @@ namespace Hanasu
 
             //Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessUntilQuit));
 
-            CoreWindow.GetForCurrentThread().KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
+            
 
         }
         MediaElement globalMediaElement = null;
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+            CoreWindow.GetForCurrentThread().KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
+
             DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
             globalMediaElement = (MediaElement)VisualTreeHelper.GetChild(rootGrid, 0);
 
@@ -93,6 +95,8 @@ namespace Hanasu
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            CoreWindow.GetForCurrentThread().KeyDown -= pageRoot_KeyDown_1;
+
             globalMediaElement.CurrentStateChanged -= globalMediaElement_CurrentStateChanged;
             this.Loaded -= MainPage_Loaded;
             PlayToController.PlayToConnectionStateChanged -= PlayToController_PlayToConnectionStateChanged;
@@ -194,63 +198,65 @@ namespace Hanasu
                 searchPane = SearchPane.GetForCurrentView();
 
                 searchPane.PlaceholderText = LocalizationManager.GetLocalizedValue("SearchPanePlaceholder"); //Needs to be localized.
-                searchPane.ResultSuggestionChosen += searchPane_ResultSuggestionChosen;
-                searchPane.QuerySubmitted += searchPane_QuerySubmitted;
-                searchPane.SuggestionsRequested += searchPane_SuggestionsRequested;
-                searchPane.VisibilityChanged += searchPane_VisibilityChanged;
+                //searchPane.ResultSuggestionChosen += searchPane_ResultSuggestionChosen;
+                //searchPane.QuerySubmitted += searchPane_QuerySubmitted;
+                //searchPane.SuggestionsRequested += searchPane_SuggestionsRequested;
+                //searchPane.VisibilityChanged += searchPane_VisibilityChanged;
             }
 
             if (!searchPane.Visible)
                 searchPane.Show(initialchar);
+
+            NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", initialchar));
         }
 
-        void searchPane_ResultSuggestionChosen(SearchPane sender, SearchPaneResultSuggestionChosenEventArgs args)
-        {
-            foreach (StationGroup sg in ((MainPageViewModel)this.DataContext).AvailableStations)
-                foreach (Station st in sg.Items)
-                    if (st.Title.StartsWith(args.Tag, StringComparison.CurrentCultureIgnoreCase) || st.Title.Contains(args.Tag))
-                    {
-                        ((MainPageViewModel)this.DataContext).PlayStation(st, globalMediaElement);
+        //void searchPane_ResultSuggestionChosen(SearchPane sender, SearchPaneResultSuggestionChosenEventArgs args)
+        //{
+        //    foreach (StationGroup sg in ((MainPageViewModel)this.DataContext).AvailableStations)
+        //        foreach (Station st in sg.Items)
+        //            if (st.Title.StartsWith(args.Tag, StringComparison.CurrentCultureIgnoreCase) || st.Title.Contains(args.Tag))
+        //            {
+        //                ((MainPageViewModel)this.DataContext).PlayStation(st, globalMediaElement);
 
-                        break;
-                    }
-        }
+        //                break;
+        //            }
+        //}
 
-        void searchPane_QuerySubmitted(SearchPane sender, SearchPaneQuerySubmittedEventArgs args)
-        {
-            foreach (StationGroup sg in ((MainPageViewModel)this.DataContext).AvailableStations)
-                foreach (Station st in sg.Items)
-                    if (st.Title.StartsWith(args.QueryText, StringComparison.CurrentCultureIgnoreCase) || st.Title.Contains(args.QueryText))
-                    {
-                        ((MainPageViewModel)this.DataContext).PlayStation(st, globalMediaElement);
+        //void searchPane_QuerySubmitted(SearchPane sender, SearchPaneQuerySubmittedEventArgs args)
+        //{
+        //    foreach (StationGroup sg in ((MainPageViewModel)this.DataContext).AvailableStations)
+        //        foreach (Station st in sg.Items)
+        //            if (st.Title.StartsWith(args.QueryText, StringComparison.CurrentCultureIgnoreCase) || st.Title.Contains(args.QueryText))
+        //            {
+        //                ((MainPageViewModel)this.DataContext).PlayStation(st, globalMediaElement);
 
-                        break;
-                    }
-        }
+        //                break;
+        //            }
+        //}
 
-        void searchPane_VisibilityChanged(SearchPane sender, SearchPaneVisibilityChangedEventArgs args)
-        {
-            if (args.Visible == false)
-            {
-                searchPane.SuggestionsRequested -= searchPane_SuggestionsRequested;
-                searchPane.VisibilityChanged -= searchPane_VisibilityChanged;
-                searchPane.ResultSuggestionChosen -= searchPane_ResultSuggestionChosen;
-                searchPane.QuerySubmitted -= searchPane_QuerySubmitted;
+        //void searchPane_VisibilityChanged(SearchPane sender, SearchPaneVisibilityChangedEventArgs args)
+        //{
+        //    if (args.Visible == false)
+        //    {
+        //        searchPane.SuggestionsRequested -= searchPane_SuggestionsRequested;
+        //        searchPane.VisibilityChanged -= searchPane_VisibilityChanged;
+        //        searchPane.ResultSuggestionChosen -= searchPane_ResultSuggestionChosen;
+        //        searchPane.QuerySubmitted -= searchPane_QuerySubmitted;
 
-                searchPane = null;
+        //        searchPane = null;
 
 
-                this.Focus(Windows.UI.Xaml.FocusState.Programmatic);
-                Window.Current.Activate();
-            }
-        }
+        //        this.Focus(Windows.UI.Xaml.FocusState.Programmatic);
+        //        Window.Current.Activate();
+        //    }
+        //}
 
-        void searchPane_SuggestionsRequested(SearchPane sender, SearchPaneSuggestionsRequestedEventArgs args)
-        {
-            foreach (StationGroup sg in ((MainPageViewModel)this.DataContext).AvailableStations)
-                foreach (Station st in sg.Items)
-                    if (st.Title.StartsWith(args.QueryText, StringComparison.CurrentCultureIgnoreCase) || st.Title.Contains(args.QueryText))
-                        args.Request.SearchSuggestionCollection.AppendQuerySuggestion(st.Title);
-        }
+        //void searchPane_SuggestionsRequested(SearchPane sender, SearchPaneSuggestionsRequestedEventArgs args)
+        //{
+        //    foreach (StationGroup sg in ((MainPageViewModel)this.DataContext).AvailableStations)
+        //        foreach (Station st in sg.Items)
+        //            if (st.Title.StartsWith(args.QueryText, StringComparison.CurrentCultureIgnoreCase) || st.Title.Contains(args.QueryText))
+        //                args.Request.SearchSuggestionCollection.AppendQuerySuggestion(st.Title);
+        //}
     }
 }
