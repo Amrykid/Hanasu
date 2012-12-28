@@ -15,7 +15,6 @@ using Windows.Storage;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml.Media;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Collections.Generic;
 
 namespace Hanasu.ViewModel
 {
@@ -439,23 +438,6 @@ namespace Hanasu.ViewModel
         {
             get { return GetPropertyOrDefaultType<string>(x => this.CurrentStationSongData); }
             set { SetProperty(x => this.CurrentStationSongData, value); }
-        }
-
-        public override void OnNavigatedTo(dynamic argument = null)
-        {
-            var args = (KeyValuePair<string, string>)argument[0];
-
-            switch (args.Key.ToLower())
-            {
-                case "stationtoplay":
-                    {
-                        var stat = ((App)App.Current).AvailableStations.First(x => x.Title == args.Value);
-
-                        PlayStation(stat, ((App)App.Current).MediaElement);
-
-                        break;
-                    }
-            }
         }
 
 

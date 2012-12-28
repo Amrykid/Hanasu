@@ -3,7 +3,6 @@ using Crystal.Navigation;
 using Hanasu.Model;
 using Hanasu.ViewModel;
 using System;
-using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -71,12 +70,8 @@ namespace Hanasu
 
             //await Task.Run(() => Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => vm.PlayStation(stat, globalMediaElement)));
 
-            //NavigationService.NavigateToAsHome<MainPageViewModel>();
+            NavigationService.NavigateToAsHome<MainPageViewModel>();
 
-            if (NavigationService.CanGoBack)
-                NavigationService.GoBack();
-            else
-                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("StationToPlay", stat.Title));
         }
     }
 }
