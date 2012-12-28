@@ -13,34 +13,13 @@ namespace Hanasu.SystemControllers
 
             NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
 
-            ConnectionProfile InternetConnectionProfile = NetworkInformation.GetInternetConnectionProfile();
-
-            IsConnectedToNetwork = InternetConnectionProfile != null;
-
-            if (InternetConnectionProfile == null)
-            {
-                //not connected to internet
-
-                IsConnectedToInternet = false;
-            }
-            else
-            {
-                //is connected to internet
-
-                if (InternetConnectionProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess)
-                    IsConnectedToInternet = true;
-                else
-                    IsConnectedToInternet = false;
-            }
+            DetectStatus();
 
             Initialized = true;
         }
 
-        static void NetworkInformation_NetworkStatusChanged(object sender)
+        private static void DetectStatus()
         {
-            string connectionProfileInfo = string.Empty;
-
-            // get the ConnectionProfile that is currently used to connect to the Internet                
             ConnectionProfile InternetConnectionProfile = NetworkInformation.GetInternetConnectionProfile();
 
             IsConnectedToNetwork = InternetConnectionProfile != null;
@@ -60,7 +39,27 @@ namespace Hanasu.SystemControllers
                 else
                     IsConnectedToInternet = false;
 
+
+
+                //Detect behaviors
+
+
                 var connCost = InternetConnectionProfile.GetConnectionCost();
+
+                if ((connCost.NetworkCostType == NetworkCostType.Unrestricted || connCost.NetworkCostType == NetworkCostType.Unknown)
+                    && connCost.Roaming == false)
+                {
+                    CurrentNetworkingBehavior = NetworkingBehavior.Normal;
+                }
+                else if ((connCost.NetworkCostType == NetworkCostType.Fixed || connCost.NetworkCostType == NetworkCostType.Variable)
+                    && ((connCost.Roaming == false || connCost.OverDataLimit == false)))
+                {
+                    CurrentNetworkingBehavior = NetworkingBehavior.Conservative;
+                }
+                else if (connCost.Roaming || connCost.OverDataLimit)
+                {
+                    CurrentNetworkingBehavior = NetworkingBehavior.Opt_In;
+                }
 
                 ApproachingDataLimit = connCost.ApproachingDataLimit;
 
@@ -69,9 +68,16 @@ namespace Hanasu.SystemControllers
                     if (ApproachingDataLimitEvent != null)
                         ApproachingDataLimitEvent();
                 }
-
             }
+
         }
+
+        static void NetworkInformation_NetworkStatusChanged(object sender)
+        {
+            DetectStatus();
+        }
+
+        public static NetworkingBehavior CurrentNetworkingBehavior { get; private set; }
 
         public delegate void ApproachingDataLimitHandler();
         public static event ApproachingDataLimitHandler ApproachingDataLimitEvent;
@@ -148,5 +154,36 @@ namespace Hanasu.SystemControllers
             return dataplanStatusInfo;
         }
 
+    }
+
+    /// <summary>
+    /// Behaviors as defined here: http://msdn.microsoft.com/en-us/library/windows/apps/xaml/jj835821.aspx
+    /// </summary>
+    public enum NetworkingBehavior
+    {
+        /// <summary>
+        /// In Normal scenarios, your app should not implement restrictions. The connection should be treated as Unlimited in cost, and Unrestricted by usage charges and capacity constraints.
+        /// 
+        /// Examples:
+        ///     Play an entire HD movie.
+        ///     Download a large file without restrictions or UI prompts.
+        /// </summary>
+        Normal = 1,
+        /// <summary>
+        /// In conservative scenarios, the app should implement restrictions for optimizing network usage to handle transfers over metered networks.
+        /// Examples:
+        ///     Play movies in lower resolutions.
+        ///     Delay non-critical downloads.
+        ///     Avoid pre-fetching of information over a network.
+        ///      Switch to a header-only mode when retrieving email messages.
+        /// </summary>
+        Conservative = 2,
+        /// <summary>
+        /// For opt-in scenarios, your app should handle cases where the network access cost is significantly higher than the plan cost. For example, when a user is roaming, a mobile carrier may charge a higher rate data usage.
+        /// Examples:
+        ///     Prompt the user before accessing the network.
+        ///     Suspend all background data network activities.
+        /// </summary>
+        Opt_In = 3
     }
 }
