@@ -135,7 +135,7 @@ namespace Hanasu
                 || (keyCode > 0 && keyCode < 32)
                 || (keyCode > 33 && keyCode < 47)
                 || (keyCode > 91 && keyCode < 165)
-                || keyCode == 91)
+                || keyCode == 91|| keyCode > 166)
                 return;
 
 
