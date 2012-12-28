@@ -132,7 +132,11 @@
     <Compile Include="Tools\Song\SongService.cs" />
     <Compile Include="ViewModel\GroupPageViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
+    <Compile Include="ViewModel\NowPlayingPageViewModel.cs" />
     <Compile Include="ViewModel\SearchPageViewModel.cs" />
+    <Compile Include="View\NowPlayingPage.xaml.cs">
+      <DependentUpon>NowPlayingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
@@ -170,6 +174,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Common\StandardStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\NowPlayingPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
