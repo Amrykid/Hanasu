@@ -1,6 +1,8 @@
 ﻿using Crystal.Messaging;
+using Crystal.Navigation;
 using Hanasu.Model;
 using Hanasu.ViewModel;
+using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -11,7 +13,7 @@ namespace Hanasu
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
-    
+
     [Crystal.Navigation.NavigationSetViewModel(typeof(SearchPageViewModel))]
     public sealed partial class SearchPage : LayoutAwarePage
     {
@@ -60,12 +62,16 @@ namespace Hanasu
 
         private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
+
             var vm = ((SearchPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;
 
             Messenger.PushMessage(vm, "PlayStation", stat);
 
             //await Task.Run(() => Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => vm.PlayStation(stat, globalMediaElement)));
+
+            NavigationService.NavigateToAsHome<MainPageViewModel>();
+
         }
     }
 }
