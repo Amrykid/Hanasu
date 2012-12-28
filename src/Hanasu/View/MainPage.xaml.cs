@@ -47,6 +47,20 @@ namespace Hanasu
         MediaElement globalMediaElement = null;
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+            GrabMediaElement();
+
+            thisCoreWindow = CoreWindow.GetForCurrentThread();
+            thisCoreWindow.KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
+
+            PlayToController.PlayToConnectionStateChanged += PlayToController_PlayToConnectionStateChanged;
+
+            AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationName, stationTitle, TextBlock.TextProperty);
+
+            AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationSongData, songTitle, TextBlock.TextProperty);
+        }
+
+        private void GrabMediaElement()
+        {
 
             DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
 
@@ -155,15 +169,6 @@ namespace Hanasu
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            thisCoreWindow = CoreWindow.GetForCurrentThread();
-            thisCoreWindow.KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
-
-            PlayToController.PlayToConnectionStateChanged += PlayToController_PlayToConnectionStateChanged;
-
-
-            AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationName, stationTitle, TextBlock.TextProperty);
-
-            AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationSongData, songTitle, TextBlock.TextProperty);
         }
 
         private void Header_Click(object sender, RoutedEventArgs e)
