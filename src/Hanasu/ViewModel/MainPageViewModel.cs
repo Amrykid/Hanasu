@@ -7,11 +7,14 @@ using Hanasu.Tools.Shoutcast;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Media;
+using Windows.Storage;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml.Media;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Hanasu.ViewModel
 {
@@ -118,9 +121,15 @@ namespace Hanasu.ViewModel
             mediaElement.BufferingProgressChanged += mediaElement_BufferingProgressChanged;
             mediaElement.MediaFailed += mediaElement_MediaFailed;
             mediaElement.MediaOpened += mediaElement_MediaOpened;
+            mediaElement.MediaEnded += mediaElement_MediaEnded;
 
             PlayToController.Initialize(ref mediaElement);
             NetworkCostController.ApproachingDataLimitEvent += NetworkCostController_ApproachingDataLimitEvent;
+        }
+
+        void mediaElement_MediaEnded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            ResetMediaControlInfo();
         }
 
         void NetworkCostController_ApproachingDataLimitEvent()
@@ -144,17 +153,22 @@ namespace Hanasu.ViewModel
                         CurrentStationName), CurrentStation.ImageUrl);
             }
 
-            try
+            if (NetworkCostController.CurrentNetworkingBehavior == NetworkingBehavior.Normal)
             {
-                if (CurrentStation.ServerType.ToLower() == "shoutcast")
+                try
                 {
-                    var currentSong = await ShoutcastService.GetShoutcastStationCurrentSong(CurrentStation, CurrentStationStreamedUri.ToString());
+                    if (CurrentStation.ServerType.ToLower() == "shoutcast")
+                    {
+                        var currentSong = await ShoutcastService.GetShoutcastStationCurrentSong(CurrentStation, CurrentStationStreamedUri.ToString());
 
-                    CurrentStationSongData = currentSong.ToSongString();
+                        CurrentStationSongData = currentSong.ToSongString();
+
+                        MediaControl.TrackName = CurrentStationSongData;
+                    }
                 }
-            }
-            catch (Exception)
-            {
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -162,6 +176,15 @@ namespace Hanasu.ViewModel
         {
             CurrentStationSongData = null;
             CurrentStationStreamedUri = null;
+
+            ResetMediaControlInfo();
+        }
+
+        private static void ResetMediaControlInfo()
+        {
+            MediaControl.AlbumArt = null;
+            MediaControl.ArtistName = null;
+            MediaControl.TrackName = null;
         }
 
         void mediaElement_BufferingProgressChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -273,7 +296,7 @@ namespace Hanasu.ViewModel
                 return;
             }
 
-            if (NetworkCostController.ApproachingDataLimit)
+            if (NetworkCostController.CurrentNetworkingBehavior == NetworkingBehavior.Opt_In)
             {
                 Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
                     .ShowMessage(
@@ -292,8 +315,10 @@ namespace Hanasu.ViewModel
                     CurrentStationStreamedUri = null;
                 });
 
-            //MediaControl.AlbumArt = new Uri(CurrentStation.ImageUrl, UriKind.Absolute);
-            //MediaControl.ArtistName = CurrentStation.Title;
+            StorageFile albumFile = await GetStationAlbumFromCache();
+
+            MediaControl.AlbumArt = new Uri("ms-appdata:///local/" + albumFile.DisplayName);
+            MediaControl.ArtistName = CurrentStation.Title;
             MediaControl.IsPlaying = true;
 
             try
@@ -336,6 +361,36 @@ namespace Hanasu.ViewModel
                         LocalizationManager.GetLocalizedValue("StreamingErrorMsg"));
             }
 
+        }
+
+        private async Task<StorageFile> GetStationAlbumFromCache()
+        {
+            StorageFile albumFile = null;
+
+            try
+            {
+                albumFile = await Windows.Storage.ApplicationData.Current.LocalFolder.CreateFileAsync(CurrentStation.Title + CurrentStation.ImageUrl.Substring(CurrentStation.ImageUrl.LastIndexOf(".")));
+
+                var str = await albumFile.OpenAsync(FileAccessMode.ReadWrite);
+
+                var http = new HttpClient();
+                var data = await http.GetByteArrayAsync(CurrentStation.ImageUrl);
+
+                await str.WriteAsync(data.AsBuffer());
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                if (albumFile == null)
+                    albumFile = await Windows.Storage.ApplicationData.Current.LocalFolder.GetFileAsync(CurrentStation.Title + CurrentStation.ImageUrl.Substring(CurrentStation.ImageUrl.LastIndexOf(".")));
+            }
+            catch (Exception)
+            {
+            }
+            return albumFile;
         }
 
         public Uri CurrentStationStreamedUri

@@ -100,6 +100,7 @@ namespace Hanasu.Core.Utilities
 
             //return result;
         }
+
         public static string Decode(string html)
         {
             if (HtmlDict == null)
