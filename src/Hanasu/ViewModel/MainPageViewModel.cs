@@ -123,7 +123,7 @@ namespace Hanasu.ViewModel
             mediaElement.MediaOpened += mediaElement_MediaOpened;
             mediaElement.MediaEnded += mediaElement_MediaEnded;
 
-            PlayToController.Initialize(ref mediaElement);
+            PlayToController.Initialize(mediaElement);
             NetworkCostController.ApproachingDataLimitEvent += NetworkCostController_ApproachingDataLimitEvent;
         }
 
@@ -183,8 +183,8 @@ namespace Hanasu.ViewModel
         private static void ResetMediaControlInfo()
         {
             MediaControl.AlbumArt = null;
-            MediaControl.ArtistName = null;
-            MediaControl.TrackName = null;
+            MediaControl.ArtistName = string.Empty;
+            MediaControl.TrackName = string.Empty;
         }
 
         void mediaElement_BufferingProgressChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -347,13 +347,36 @@ namespace Hanasu.ViewModel
                 //}
                 //else
                 //{
-                await mediaElement.OpenAsync(finalUri, System.Threading.CancellationToken.None);
-                await mediaElement.PlayAsync(System.Threading.CancellationToken.None);
+
+                //finalUri = new Uri(finalUri.ToString() + ";stream.nsv", UriKind.Absolute);
+
+                try
+                {
+                    await mediaElement.OpenAsync(finalUri, System.Threading.CancellationToken.None);
+                }
+                catch (Exception ex)
+                {
+                    if (ex is TaskCanceledException) return;
+
+                    throw ex;
+                }
+
+                try
+                {
+                    if (!PlayToController.IsConnectedViaPlayTo)
+                        await mediaElement.PlayAsync(System.Threading.CancellationToken.None);
+                }
+                catch (Exception ex)
+                {
+                    if (ex is TaskCanceledException) return;
+
+                    throw ex;
+                }
                 //}
             }
             catch (Exception ex)
             {
-                if (ex is TaskCanceledException) return;
+                if (mediaElement.CurrentState == MediaElementState.Playing) return; //Ignorable error. Probably nothing.
 
                 Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
                     .ShowMessage(

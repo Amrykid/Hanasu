@@ -38,6 +38,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
             <RowDefinition Height="20*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
 
@@ -200,6 +201,17 @@
             </VisualStateManager.VisualStateGroups>
         </Grid>
 
+
+        <Grid x:Name="PlayToPanel" Grid.Row="2" Visibility="Collapsed" Height="100">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Play To:" Style="{StaticResource PageSubheaderTextStyle}"/>
+                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                    <Image x:Name="PlayToDeviceIcon" Height="64"/>
+                    <TextBlock x:Name="PlayToDeviceName" FontSize="17"/>
+                </StackPanel>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 
 

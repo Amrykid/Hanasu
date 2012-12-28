@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -38,7 +39,7 @@ namespace Hanasu
 
             this.Loaded += MainPage_Loaded;
 
-            Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessUntilQuit));
+            //Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessUntilQuit));
 
             CoreWindow.GetForCurrentThread().KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
 
@@ -51,6 +52,10 @@ namespace Hanasu
 
             ((MainPageViewModel)this.DataContext).SetMediaElement(ref globalMediaElement);
 
+            DetectMediaElementState();
+
+            PlayToController.PlayToConnectionStateChanged += PlayToController_PlayToConnectionStateChanged;
+
             globalMediaElement.CurrentStateChanged += globalMediaElement_CurrentStateChanged;
             nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
@@ -59,7 +64,49 @@ namespace Hanasu
             AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationSongData, songTitle, TextBlock.TextProperty);
         }
 
+        void PlayToController_PlayToConnectionStateChanged()
+        {
+            Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                {
+                    if (PlayToController.IsConnectedViaPlayTo)
+                    {
+                        PlayToPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+                        var img = new BitmapImage();
+                        img.SetSource(PlayToController.CurrentConnectionDetails.Icon);
+
+                        PlayToDeviceIcon.Source = img;
+
+                        PlayToDeviceName.Text = PlayToController.CurrentConnectionDetails.FriendlyName;
+
+                    }
+                    else
+                    {
+                        PlayToPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+                        PlayToDeviceIcon.Source = null;
+
+                        PlayToDeviceName.Text = string.Empty;
+                    }
+                });
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            globalMediaElement.CurrentStateChanged -= globalMediaElement_CurrentStateChanged;
+            this.Loaded -= MainPage_Loaded;
+            PlayToController.PlayToConnectionStateChanged -= PlayToController_PlayToConnectionStateChanged;
+
+
+            base.OnNavigatedFrom(e);
+        }
+
         void globalMediaElement_CurrentStateChanged(object sender, RoutedEventArgs e)
+        {
+            DetectMediaElementState();
+        }
+
+        private void DetectMediaElementState()
         {
             if (globalMediaElement.CurrentState == MediaElementState.Playing)
                 nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -135,7 +182,7 @@ namespace Hanasu
                 || (keyCode > 0 && keyCode < 32)
                 || (keyCode > 33 && keyCode < 47)
                 || (keyCode > 91 && keyCode < 165)
-                || keyCode == 91|| keyCode > 166)
+                || keyCode == 91 || keyCode > 166)
                 return;
 
 
