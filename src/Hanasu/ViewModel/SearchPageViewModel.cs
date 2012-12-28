@@ -12,7 +12,7 @@ using Windows.UI.Core;
 
 namespace Hanasu.ViewModel
 {
-    public class SearchPageViewModel: Crystal.Dynamic.AutoIPNotifyingBaseViewModel
+    public class SearchPageViewModel : Crystal.Dynamic.AutoIPNotifyingBaseViewModel
     {
         public override void OnNavigatedTo(dynamic argument = null)
         {
@@ -23,7 +23,7 @@ namespace Hanasu.ViewModel
 
             Stations = new ObservableCollection<Station>();
 
-            SetupSearch();
+            SetupSearch(args.Value);
 
             UpdateSearchQuery(args.Value);
         }
@@ -43,10 +43,16 @@ namespace Hanasu.ViewModel
 
             SetupSearch(initialchar);
         }
-
+        private SearchPane searchPanel = null;
         private void SetupSearch(string initial = null)
         {
-            var searchPanel = SearchPane.GetForCurrentView();
+            if (searchPanel == null)
+            {
+                searchPanel = SearchPane.GetForCurrentView();
+                searchPanel.PlaceholderText = LocalizationManager.GetLocalizedValue("SearchPanePlaceholder"); //Needs to be localized.
+                if (initial != null)
+                    searchPanel.Show(initial);
+            }
 
             searchPanel.QuerySubmitted += delegate(SearchPane s, SearchPaneQuerySubmittedEventArgs e)
             {

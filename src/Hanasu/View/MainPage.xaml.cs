@@ -204,19 +204,17 @@ namespace Hanasu
             string initialchar = Enum.GetName(typeof(Windows.System.VirtualKey), e.VirtualKey);
 
 
-            if (searchPane == null)
-            {
-                searchPane = SearchPane.GetForCurrentView();
+            //if (searchPane == null)
+            //{
+            //    searchPane = SearchPane.GetForCurrentView();
 
-                searchPane.PlaceholderText = LocalizationManager.GetLocalizedValue("SearchPanePlaceholder"); //Needs to be localized.
-                //searchPane.ResultSuggestionChosen += searchPane_ResultSuggestionChosen;
-                //searchPane.QuerySubmitted += searchPane_QuerySubmitted;
-                //searchPane.SuggestionsRequested += searchPane_SuggestionsRequested;
-                //searchPane.VisibilityChanged += searchPane_VisibilityChanged;
-            }
+            //    searchPane.PlaceholderText = LocalizationManager.GetLocalizedValue("SearchPanePlaceholder"); //Needs to be localized.
+            //    //searchPane.ResultSuggestionChosen += searchPane_ResultSuggestionChosen;
+            //    //searchPane.QuerySubmitted += searchPane_QuerySubmitted;
+            //    //searchPane.SuggestionsRequested += searchPane_SuggestionsRequested;
+            //    //searchPane.VisibilityChanged += searchPane_VisibilityChanged;
+            //}
 
-            if (!searchPane.Visible)
-                searchPane.Show(initialchar);
 
             NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", initialchar));
         }
