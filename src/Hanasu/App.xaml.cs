@@ -17,6 +17,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Search;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -176,6 +177,16 @@ namespace Hanasu
         }
 
         public Windows.Media.PlayTo.PlayToManager ptm = null;
+
+        public MediaElement MediaElement
+        {
+            get
+            {
+                DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
+
+                return (MediaElement)VisualTreeHelper.GetChild(rootGrid, 0);
+            }
+        }
 
     }
 }
