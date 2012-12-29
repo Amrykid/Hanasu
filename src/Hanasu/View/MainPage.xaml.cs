@@ -165,7 +165,7 @@ namespace Hanasu
 
                     itemListView.Margin = new Thickness(0, 0, 0, 20);
 
-                    pageTitle.Margin = new Thickness(10, 0, 0, 0);
+                    pageTitle.Margin = new Thickness(30, 0, 0, 0);
 
                     foreach (Button ui in MediaControlPanel.Children)
                         ui.Margin = new Thickness(-15, 0, -15, 0);
