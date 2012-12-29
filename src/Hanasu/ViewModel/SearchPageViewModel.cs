@@ -28,6 +28,13 @@ namespace Hanasu.ViewModel
             UpdateSearchQuery(args.Value);
         }
 
+        public override void OnNavigatedFrom()
+        {
+            searchPanel.QuerySubmitted -= searchPanel_QuerySubmitted;
+
+            searchPanel.SuggestionsRequested -= searchPanel_SuggestionsRequested;
+        }
+
         void SearchPageViewModel_KeyDown(CoreWindow sender, KeyEventArgs args)
         {
             int keyCode = (int)args.VirtualKey;
@@ -54,28 +61,32 @@ namespace Hanasu.ViewModel
                     searchPanel.Show(initial);
             }
 
-            searchPanel.QuerySubmitted += delegate(SearchPane s, SearchPaneQuerySubmittedEventArgs e)
-            {
-                UpdateSearchQuery(e.QueryText);
-            };
+            searchPanel.QuerySubmitted += searchPanel_QuerySubmitted;
 
-            searchPanel.SuggestionsRequested += delegate(SearchPane s, SearchPaneSuggestionsRequestedEventArgs e)
-            {
-                //http://weblogs.asp.net/nmarun/archive/2012/09/28/implementing-search-contract-in-windows-8-application.aspx
-
-                IEnumerable<string> names = from suggestion in ((App)App.Current).AvailableStations
-                                            where suggestion.Title.StartsWith(e.QueryText,
-                                                                       StringComparison.CurrentCultureIgnoreCase)
-                                            select suggestion.Title;
-
-                // Take(5) is implemented because the SearchPane 
-                // can show a maximum of 5 suggestions
-                // passing a larger collection will only show the first 5
-                e.Request.SearchSuggestionCollection.AppendQuerySuggestions(names.Take(5));
-            };
+            searchPanel.SuggestionsRequested += searchPanel_SuggestionsRequested;
 
             if (initial != null)
                 searchPanel.Show(initial);
+        }
+
+        void searchPanel_SuggestionsRequested(SearchPane s, SearchPaneSuggestionsRequestedEventArgs e)
+        {
+            //http://weblogs.asp.net/nmarun/archive/2012/09/28/implementing-search-contract-in-windows-8-application.aspx
+
+            IEnumerable<string> names = from suggestion in ((App)App.Current).AvailableStations
+                                        where suggestion.Title.StartsWith(e.QueryText,
+                                                                   StringComparison.CurrentCultureIgnoreCase)
+                                        select suggestion.Title;
+
+            // Take(5) is implemented because the SearchPane 
+            // can show a maximum of 5 suggestions
+            // passing a larger collection will only show the first 5
+            e.Request.SearchSuggestionCollection.AppendQuerySuggestions(names.Take(5));
+        }
+
+        void searchPanel_QuerySubmitted(SearchPane sender, SearchPaneQuerySubmittedEventArgs args)
+        {
+            UpdateSearchQuery(args.QueryText);
         }
 
         [MessageHandler("UpdateSearchQuery")]
