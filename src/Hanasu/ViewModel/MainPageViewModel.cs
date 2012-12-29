@@ -29,14 +29,14 @@ namespace Hanasu.ViewModel
 
             PlayCommand = CommandManager.CreateCommand(() =>
                 {
-                    if (mediaElement != null && CurrentStation != null)
+                    if (mediaElement != null)
                         if (mediaElement.CurrentState != MediaElementState.Playing)
                             PlayStation(CurrentStation, mediaElement);
                 });
 
             PauseCommand = CommandManager.CreateCommand(() =>
                 {
-                    if (mediaElement != null && CurrentStation != null)
+                    if (mediaElement != null)
                         if (mediaElement.CurrentState != MediaElementState.Paused)
                             mediaElement.Pause();
                 });
