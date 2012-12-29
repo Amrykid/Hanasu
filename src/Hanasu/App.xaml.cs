@@ -202,5 +202,7 @@ namespace Hanasu
             }
         }
 
+        public MainPageViewModel MainPageViewModel { get; set; }
+
     }
 }

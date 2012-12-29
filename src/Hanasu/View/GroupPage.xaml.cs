@@ -1,4 +1,5 @@
 ﻿using Crystal.Messaging;
+using Crystal.Navigation;
 using Hanasu.Model;
 using Hanasu.ViewModel;
 using Windows.UI.Xaml;
@@ -62,6 +63,8 @@ namespace Hanasu
         {
             var vm = ((GroupPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;
+
+            NavigationService.GoBack();
 
             Messenger.PushMessage(vm, "PlayStation", stat);
 

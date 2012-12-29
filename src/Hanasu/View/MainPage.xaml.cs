@@ -39,7 +39,16 @@ namespace Hanasu
 
             this.Loaded += MainPage_Loaded;
 
+            SetViewModel();
+
             //Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessUntilQuit));
+        }
+
+        private void SetViewModel()
+        {
+            if (((App)App.Current).MainPageViewModel == null)
+                ((App)App.Current).MainPageViewModel = new MainPageViewModel();
+            this.DataContext = ((App)App.Current).MainPageViewModel;
         }
         MediaElement globalMediaElement = null;
         void MainPage_Loaded(object sender, RoutedEventArgs e)

@@ -10,9 +10,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" x:Name="pageRoot" Background="Red">
 
-    <local:LayoutAwarePage.DataContext>
-        <vm:MainPageViewModel />
-    </local:LayoutAwarePage.DataContext>
 
     <Page.Resources>
 
