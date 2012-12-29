@@ -375,6 +375,10 @@ namespace Hanasu.ViewModel
                     throw ex;
                 }
 
+
+                //if its made it this far, try navigating to the "now playing page".
+                NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, string>("station", CurrentStationName));
+
                 try
                 {
                     if (!PlayToController.IsConnectedViaPlayTo)
@@ -386,6 +390,7 @@ namespace Hanasu.ViewModel
 
                     throw ex;
                 }
+
                 //}
             }
             catch (Exception ex)
