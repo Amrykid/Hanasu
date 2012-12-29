@@ -123,7 +123,11 @@ namespace Hanasu
 
             LoadStations();
 
-            NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", args.QueryText));
+            if (RootFrame.CurrentSourcePageType == null)
+                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("search", args.QueryText)); //App was just activated via search but it wasn't already running. We go to the main page first to have it as the home window.
+            else
+                NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", args.QueryText));
+            //NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", args.QueryText));
 
             // Ensure the current window is active
             Window.Current.Activate();

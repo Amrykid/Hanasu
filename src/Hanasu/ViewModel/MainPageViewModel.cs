@@ -16,6 +16,7 @@ using Windows.UI.Notifications;
 using Windows.UI.Xaml.Media;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Collections.Generic;
+using Crystal.Navigation;
 
 namespace Hanasu.ViewModel
 {

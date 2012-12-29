@@ -44,6 +44,27 @@ namespace Hanasu
         MediaElement globalMediaElement = null;
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+
+            if (onLoadedCommand.Key != null)
+            {
+                switch (onLoadedCommand.Key.ToLower())
+                {
+                    case "search":
+                        {
+                            //App was just activated via search but it wasn't already running. We go to the main page first to have it as the home window.
+
+                            var query = onLoadedCommand.Value;
+
+                            onLoadedCommand = new KeyValuePair<string, string>();
+
+                            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
+
+                            NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", query));
+                            break;
+                        }
+                }
+            }
+
             GrabMediaElement();
 
             thisCoreWindow = CoreWindow.GetForCurrentThread();
@@ -102,9 +123,12 @@ namespace Hanasu
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            thisCoreWindow.KeyDown -= pageRoot_KeyDown_1;
+            if (thisCoreWindow != null)
+                thisCoreWindow.KeyDown -= pageRoot_KeyDown_1;
 
-            globalMediaElement.CurrentStateChanged -= globalMediaElement_CurrentStateChanged;
+            if (globalMediaElement != null)
+                globalMediaElement.CurrentStateChanged -= globalMediaElement_CurrentStateChanged;
+
             this.Loaded -= MainPage_Loaded;
             PlayToController.PlayToConnectionStateChanged -= PlayToController_PlayToConnectionStateChanged;
 
@@ -180,7 +204,16 @@ namespace Hanasu
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.NavigationMode == NavigationMode.Back) return;
+
+            if (((object[])e.Parameter)[0] is KeyValuePair<string, string>)
+            {
+                onLoadedCommand = (KeyValuePair<string, string>)((object[])e.Parameter)[0];
+
+            }
         }
+
+        KeyValuePair<string, string> onLoadedCommand;
 
         private void Header_Click(object sender, RoutedEventArgs e)
         {
