@@ -47,11 +47,12 @@ namespace Hanasu
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var args = e.Parameter;
+            var args = e.Parameter; //grab any paramaters that was passed for navigation.
 
-            pageTitle.Text = ((SearchPageViewModel)this.DataContext).TitleString;
+            pageTitle.Text = ((SearchPageViewModel)this.DataContext).TitleString; //set the page title to the localized string
 
-            Crystal.Binding.AutoUpdatePropertyHelper.BindObjects<SearchPageViewModel>(((SearchPageViewModel)this.DataContext), x => x.TitleString, pageTitle, TextBlock.TextProperty);
+            //bind the page title to the localized string on the view model so it auto updates.
+            Crystal.Binding.AutoUpdatePropertyHelper.BindObjects<SearchPageViewModel>(((SearchPageViewModel)this.DataContext), x => x.TitleString, pageTitle, TextBlock.TextProperty); 
 
             base.OnNavigatedTo(e);
         }
@@ -63,20 +64,21 @@ namespace Hanasu
 
         private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            //handles when an item is clicked
 
             var vm = ((SearchPageViewModel)this.DataContext);
-            var stat = (Station)e.ClickedItem;
+            var stat = (Station)e.ClickedItem; //grab the clicked station
 
-            Messenger.PushMessage(vm, "PlayStation", stat);
+            Messenger.PushMessage(vm, "PlayStation", stat); //sends a message to the main view model to play the station
 
             //await Task.Run(() => Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => vm.PlayStation(stat, globalMediaElement)));
 
             //NavigationService.NavigateToAsHome<MainPageViewModel>();
 
             if (NavigationService.CanGoBack)
-                NavigationService.GoBack();
+                NavigationService.GoBack(); //goes back to the main page.
             else
-                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("StationToPlay", stat.Title));
+                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("StationToPlay", stat.Title)); //in rare cases, go straight to the main page, passying the station to play, with it.
         }
     }
 }

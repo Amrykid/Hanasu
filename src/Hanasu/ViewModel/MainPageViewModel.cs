@@ -42,6 +42,17 @@ namespace Hanasu.ViewModel
                             mediaElement.Pause();
                 });
         }
+        public override void OnNavigatedFrom()
+        {
+            if (mediaElement != null)
+            {
+                mediaElement.BufferingProgressChanged -= mediaElement_BufferingProgressChanged;
+                mediaElement.MediaFailed -= mediaElement_MediaFailed;
+                mediaElement.MediaOpened -= mediaElement_MediaOpened;
+                mediaElement.MediaEnded -= mediaElement_MediaEnded;
+            }
+        }
+
         #region Registering these events are required for playing media in the background AND in order to play from a mediaelement that is set to BackgroundCompatibleMedia.
         //If they are not used, app will hang.
         private void RegisterWithMediaTransportControls()
@@ -289,7 +300,7 @@ namespace Hanasu.ViewModel
         }
         public async void PlayStation(Station s, Windows.UI.Xaml.Controls.MediaElement me)
         {
-            if (!NetworkCostController.IsConnectedToInternet)
+            if (!NetworkCostController.IsConnectedToInternet) //makes sure Hanasu is connected to the internet.
             {
                 Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
                     .ShowMessage(
@@ -298,7 +309,7 @@ namespace Hanasu.ViewModel
                 return;
             }
 
-            if (NetworkCostController.CurrentNetworkingBehavior == NetworkingBehavior.Opt_In)
+            if (NetworkCostController.CurrentNetworkingBehavior == NetworkingBehavior.Opt_In) //if the user is roaming and/or over the data limit, notify them
             {
                 Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
                     .ShowMessage(
@@ -308,6 +319,7 @@ namespace Hanasu.ViewModel
                 return;
             }
 
+            // Reset things things are ready to be played.
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
                     SetMediaElement(ref me);
@@ -317,10 +329,10 @@ namespace Hanasu.ViewModel
                     CurrentStationStreamedUri = null;
                 });
 
-            StorageFile albumFile = await GetStationAlbumFromCache();
+            StorageFile albumFile = await GetStationAlbumFromCache(); //Grab the current station's logo from the cache.
 
-            MediaControl.AlbumArt = new Uri("ms-appdata:///local/" + albumFile.DisplayName);
-            MediaControl.ArtistName = CurrentStation.Title;
+            MediaControl.AlbumArt = new Uri("ms-appdata:///local/" + albumFile.DisplayName); //Set the logo in the media control.
+            MediaControl.ArtistName = CurrentStation.Title; //set the station's name
             MediaControl.IsPlaying = true;
 
             try
@@ -388,6 +400,10 @@ namespace Hanasu.ViewModel
 
         }
 
+        /// <summary>
+        /// Grabs the current station's album art from a cached file.
+        /// </summary>
+        /// <returns></returns>
         private async Task<StorageFile> GetStationAlbumFromCache()
         {
             StorageFile albumFile = null;
@@ -444,11 +460,15 @@ namespace Hanasu.ViewModel
 
         public override void OnNavigatedTo(dynamic argument = null)
         {
+            //grab any arguments pass to the mainpage when it was navigated to.
+
+            if (argument == null) return;
+
             var args = (KeyValuePair<string, string>)argument[0];
 
             switch (args.Key.ToLower())
             {
-                case "stationtoplay":
+                case "stationtoplay": //plays a station if it was passed from another page/viewmodel
                     {
                         var stat = ((App)App.Current).AvailableStations.First(x => x.Title == args.Value);
 

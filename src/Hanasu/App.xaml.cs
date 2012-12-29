@@ -40,6 +40,9 @@ namespace Hanasu
 
         protected override void PreStartup()
         {
+            //set some Crystal initialization values.
+            //note, this runs even if the app was suspended previousily.
+
             EnableSelfAssemblyResolution = true;
             EnableCrystalLocalization = true;
 
@@ -119,16 +122,17 @@ namespace Hanasu
         {
             base.OnSearchActivated(args); //required
 
-            RootFrame.Style = Resources["RootFrameStyle"] as Style; // Fixes background audio issue across pages http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/
+            RootFrame.Style = Resources["RootFrameStyle"] as Style; // Fixes background audio issue across pages 
+                                                                    // http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/
 
             LoadStations();
 
             if (RootFrame.CurrentSourcePageType == null)
-                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("search", args.QueryText)); //App was just activated via search but it wasn't already running. We go to the main page first to have it as the home window.
+                //App was just activated via search but it wasn't already running. We go to the main page first to have it as the home window.
+                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("search", args.QueryText)); 
             else
                 NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", args.QueryText));
-            //NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", args.QueryText));
-
+           
             // Ensure the current window is active
             Window.Current.Activate();
 
