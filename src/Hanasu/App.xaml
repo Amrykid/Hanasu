@@ -21,6 +21,9 @@
 
             <x:String x:Key="AppName">Hanasu</x:String>
 
+            <!-- Fixes progress bar indeterminate foreground bug: http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/957b333f-035f-448e-9f4a-213d1290ee51/ -->
+            <x:String x:Key="ProgressBarIndeterminateForegroundThemeBrush">#FFFFD200</x:String>
+
             <!-- Fixes background audio issue across pages: http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/-->
             <Style x:Key="RootFrameStyle" TargetType="Frame">
                 <Setter Property="Template">
