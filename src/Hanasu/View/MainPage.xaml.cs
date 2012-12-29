@@ -40,9 +40,6 @@ namespace Hanasu
             this.Loaded += MainPage_Loaded;
 
             //Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessUntilQuit));
-
-            
-
         }
         MediaElement globalMediaElement = null;
         void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -123,9 +120,19 @@ namespace Hanasu
         private void DetectMediaElementState()
         {
             if (globalMediaElement.CurrentState == MediaElementState.Playing)
+            {
                 nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            else if (globalMediaElement.CurrentState == MediaElementState.Closed || globalMediaElement.CurrentState == MediaElementState.Stopped)
+                ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+            else if (globalMediaElement.CurrentState == MediaElementState.Opening || globalMediaElement.CurrentState == MediaElementState.Buffering)
+            {
+                ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+            else //if (globalMediaElement.CurrentState == MediaElementState.Closed || globalMediaElement.CurrentState == MediaElementState.Stopped)
+            {
                 nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
         }
 
         public override void OnVisualStateChange(string newVisualState)
@@ -144,6 +151,8 @@ namespace Hanasu
 
                     itemListView.Margin = new Thickness(0, 0, 0, 0);
 
+                    pageTitle.Margin = new Thickness(0, 0, 0, 0);
+
                     foreach (Button ui in MediaControlPanel.Children)
                         ui.Margin = new Thickness(0, 0, 0, 0);
                     break;
@@ -155,6 +164,8 @@ namespace Hanasu
                     backButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
                     itemListView.Margin = new Thickness(0, 0, 0, 20);
+
+                    pageTitle.Margin = new Thickness(10, 0, 0, 0);
 
                     foreach (Button ui in MediaControlPanel.Children)
                         ui.Margin = new Thickness(-15, 0, -15, 0);

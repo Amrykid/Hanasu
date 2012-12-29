@@ -50,7 +50,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"/>
+            <Grid Grid.Column="1">
+                <ProgressBar IsIndeterminate="True" Width="600" Margin="0 0 0 0" x:Name="ProgressIndicator" Foreground="White" Visibility="Collapsed" VerticalAlignment="Top"/>
+                <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"/>
+            </Grid>
+            
 
             <Grid Grid.Column="2">
                 <!-- Now Playing info -->
