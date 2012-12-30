@@ -24,7 +24,7 @@
     <ExplicitExtension>.pls</ExplicitExtension>
     <Logo>https://si0.twimg.com/profile_images/2428178695/zbowwrigexldj3lbw363.png</Logo>
   </Station>
-  <Station>
+  <--<Station>
     <Name>Nihon Radio</Name>
     <DataSource><![CDATA[http://www.makeavoice.com/shoutcast/tuneinlinks.php?file=m3u&host=67.215.229.100&port=8290]]></DataSource>
     <Homepage>http://nihonradio.net/2/</Homepage>
@@ -35,7 +35,7 @@
     <ExplicitExtension>.m3u</ExplicitExtension>
     <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-snc7/384761_392046544194525_872098057_n.jpg?dl=1</Logo>
     <ServerType>Shoutcast</ServerType>
-  </Station>
+  </Station>-->
   <Station>
     <Name>AnimeID</Name>
     <DataSource>http://95.211.115.197/tunein.php/animeid/playlist.asx</DataSource>
