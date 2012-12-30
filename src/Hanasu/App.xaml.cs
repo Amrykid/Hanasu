@@ -38,7 +38,9 @@ namespace Hanasu
             this.Suspending += OnSuspending;
         }
 
-        protected override void PreStartup()
+        public static Windows.Storage.StorageFolder AppFolder = null;
+
+        protected override async void PreStartup()
         {
             //set some Crystal initialization values.
             //note, this runs even if the app was suspended previousily.
@@ -56,7 +58,21 @@ namespace Hanasu
 
             NetworkCostController.Initialize();
 
+            await GetAppFolder();
+
             base.PreStartup();
+        }
+
+        private static async System.Threading.Tasks.Task GetAppFolder()
+        {
+            try
+            {
+                AppFolder = await Windows.Storage.ApplicationData.Current.LocalFolder.GetFolderAsync("Hanasu");
+            }
+            catch { }
+
+            if (AppFolder == null)
+                AppFolder = await Windows.Storage.ApplicationData.Current.LocalFolder.CreateFolderAsync("Hanasu");
         }
 
 
@@ -123,16 +139,16 @@ namespace Hanasu
             base.OnSearchActivated(args); //required
 
             RootFrame.Style = Resources["RootFrameStyle"] as Style; // Fixes background audio issue across pages 
-                                                                    // http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/
+            // http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/
 
             LoadStations();
 
             if (RootFrame.CurrentSourcePageType == null)
                 //App was just activated via search but it wasn't already running. We go to the main page first to have it as the home window.
-                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("search", args.QueryText)); 
+                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("search", args.QueryText));
             else
                 NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", args.QueryText));
-           
+
             // Ensure the current window is active
             Window.Current.Activate();
 

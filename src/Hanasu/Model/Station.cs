@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Core;
@@ -10,6 +11,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Storage;
 
 namespace Hanasu.Model
 {
@@ -22,7 +25,57 @@ namespace Hanasu.Model
 
         //Things to statisfy the built-in templates
         public string ImageUrl { get; set; }
-        public ImageSource Image { get { if (ImageUrl != null) return new BitmapImage(new Uri(ImageUrl)) { DecodePixelWidth = 250 }; else return null; } }
+
+        private ImageSource _image = null;
+        public ImageSource Image
+        {
+            get
+            {
+                if (ImageUrl != null)
+                {
+                    if (_image == null)
+                    {
+                        GetCachedImage();
+                    }
+
+                    return _image;
+                }
+                else return null;
+            }
+        }
+
+        private async Task GetCachedImage()
+        {
+            var idealName = Title + ImageUrl.Substring(ImageUrl.LastIndexOf("."));
+
+            StorageFile file = null;
+            try
+            {
+                file = await App.AppFolder.GetFileAsync(idealName);
+            }
+            catch (Exception)
+            {
+
+            }
+
+            if (file == null)
+            {
+                file = await App.AppFolder.CreateFileAsync(idealName);
+
+                var str = await file.OpenAsync(FileAccessMode.ReadWrite);
+
+                var http = new HttpClient();
+                var data = await http.GetByteArrayAsync(ImageUrl);
+
+                await str.WriteAsync(data.AsBuffer());
+                await str.FlushAsync();
+
+                str.Dispose();
+            }
+            _image = new BitmapImage(new Uri("ms-appdata:///local/Hanasu/" + file.DisplayName, UriKind.RelativeOrAbsolute));
+
+            RaisePropertyChanged(z => this.Image);
+        }
         public string Subtitle { get; set; }
 
         public string UnlocalizedFormat { get; set; }

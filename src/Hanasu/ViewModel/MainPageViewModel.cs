@@ -451,7 +451,7 @@ namespace Hanasu.ViewModel
 
             try
             {
-                albumFile = await Windows.Storage.ApplicationData.Current.LocalFolder.CreateFileAsync(CurrentStation.Title + CurrentStation.ImageUrl.Substring(CurrentStation.ImageUrl.LastIndexOf(".")));
+                albumFile = await App.AppFolder.CreateFileAsync(CurrentStation.Title + CurrentStation.ImageUrl.Substring(CurrentStation.ImageUrl.LastIndexOf(".")));
 
                 var str = await albumFile.OpenAsync(FileAccessMode.ReadWrite);
 
@@ -459,6 +459,8 @@ namespace Hanasu.ViewModel
                 var data = await http.GetByteArrayAsync(CurrentStation.ImageUrl);
 
                 await str.WriteAsync(data.AsBuffer());
+                await str.FlushAsync();
+                str.Dispose();
             }
             catch (Exception)
             {
@@ -467,7 +469,7 @@ namespace Hanasu.ViewModel
             try
             {
                 if (albumFile == null)
-                    albumFile = await Windows.Storage.ApplicationData.Current.LocalFolder.GetFileAsync(CurrentStation.Title + CurrentStation.ImageUrl.Substring(CurrentStation.ImageUrl.LastIndexOf(".")));
+                    albumFile = await App.AppFolder.GetFileAsync(CurrentStation.Title + CurrentStation.ImageUrl.Substring(CurrentStation.ImageUrl.LastIndexOf(".")));
             }
             catch (Exception)
             {
