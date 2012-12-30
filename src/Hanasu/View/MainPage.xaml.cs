@@ -245,7 +245,6 @@ namespace Hanasu
 
         private async void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
-
             var vm = ((MainPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;
 
