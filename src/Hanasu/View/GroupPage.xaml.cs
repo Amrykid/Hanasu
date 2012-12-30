@@ -12,7 +12,7 @@ namespace Hanasu
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
-    
+
     [Crystal.Navigation.NavigationSetViewModel(typeof(GroupPageViewModel))]
     public sealed partial class GroupPage : LayoutAwarePage
     {
@@ -36,9 +36,13 @@ namespace Hanasu
                 case "Filled":
                 case "FullScreenLandscape":
                 case "FullScreenPortrait":
+                    pageTitle.Style = App.Current.Resources["PageHeaderTextStyle"] as Style;
+                    backButton.Style = App.Current.Resources["BackButtonStyle"] as Style;
                     break;
 
                 case "Snapped":
+                    pageTitle.Style = App.Current.Resources["SnappedPageHeaderTextStyle"] as Style;
+                    backButton.Style = App.Current.Resources["SnappedBackButtonStyle"] as Style;
                     break;
             }
         }

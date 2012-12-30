@@ -202,20 +202,6 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="Microsoft.PlayerFramework.Xaml, Version=1.7.0.0">
-      <Name>Microsoft Player Framework</Name>
-    </SDKReference>
-    <SDKReference Include="Microsoft.PlayerFramework.Xaml.Adaptive, Version=1.7.0.0">
-      <Name>Microsoft Player Framework Adaptive Streaming Plugin</Name>
-    </SDKReference>
-    <SDKReference Include="Microsoft.PlayerFramework.Xaml.Advertising, Version=1.7.0.0">
-      <Name>Microsoft Player Framework Advertising Plugin</Name>
-    </SDKReference>
-    <SDKReference Include="Microsoft.PlayerFramework.Xaml.TimedText, Version=1.7.0.0">
-      <Name>Microsoft Player Framework Timed Text Plugin</Name>
-    </SDKReference>
-  </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
