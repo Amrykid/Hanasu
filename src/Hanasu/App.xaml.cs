@@ -40,6 +40,17 @@ namespace Hanasu
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.UnhandledException += App_UnhandledException;
+        }
+
+        void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
+                    .ShowMessage(
+                        LocalizationManager.GetLocalizedValue("UnusualErrorHeader"),
+                        LocalizationManager.GetLocalizedValue("UnusualErrorMsg") + Environment.NewLine + e.Message + Environment.NewLine + e.Exception.StackTrace);
+
+            e.Handled = true;
         }
 
         public static Windows.Storage.StorageFolder AppFolder = null;
