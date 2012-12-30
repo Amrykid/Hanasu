@@ -72,8 +72,8 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
 
-                        <Grid Grid.Row="1" Margin="20 10 0 0" Width="500">
-                            <GridView ItemsSource="{Binding SongHistory}">
+                        <Grid Grid.Row="1" Margin="20 10 0 0" Width="Auto">
+                            <GridView ItemsSource="{Binding SongHistory}" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="Auto">
                                 <GridView.ItemContainerTransitions>
                                     <TransitionCollection>
                                         <AddDeleteThemeTransition/>
@@ -82,10 +82,10 @@
                                 
                                 <GridView.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
+                                        <Grid Width="500">
                                             <StackPanel>
-                                                <TextBlock FontSize="17" Text="{Binding Song}" TextTrimming="WordEllipsis" TextAlignment="Center"/>
-                                                <TextBlock FontFamily="14" Margin="0 3 0 0" Text="{Binding Time}"/>
+                                                <TextBlock FontSize="17" Text="{Binding Song}" TextTrimming="WordEllipsis" TextAlignment="Center" Width="Auto"/>
+                                                <TextBlock FontSize="14" Margin="0 3 0 0" Text="{Binding Time}" HorizontalAlignment="Center"/>
                                             </StackPanel>
                                         </Grid>
                                     </DataTemplate>
