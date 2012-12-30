@@ -43,7 +43,7 @@
 
 
         <Grid Grid.Row="1">
-            <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible">
+            <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible" x:Name="PageScrollViewer">
                 <!--<ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapGrid  />
@@ -60,7 +60,7 @@
                         <Grid Grid.Row="1">
                             <StackPanel>
                                 <Image Height="300" Width="300" Margin="-100 20 0 0" Source="{Binding Image}" x:Name="StationImage"/>
-                                <TextBlock FontSize="17" Text="{Binding CurrentSong}" Margin="50 15 0 0"/>
+                                <TextBlock FontSize="17" Text="{Binding CurrentSong}" x:Name="CurrentSongTextBlock" Margin="50 15 0 0"/>
                             </StackPanel>
                         </Grid>
                     </Grid>

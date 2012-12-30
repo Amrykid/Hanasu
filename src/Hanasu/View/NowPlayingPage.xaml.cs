@@ -36,12 +36,26 @@ namespace Hanasu
                     StationImage.Margin = new Thickness(-100, 20, 0, 0);
                     StationImage.Width = 300;
                     StationImage.Height = 300;
+                    CurrentSongTextBlock.Margin = new Thickness(50, 15, 0, 0);
+                    CurrentSongTextBlock.Width = double.NaN;
+                    pageTitle.Style = App.Current.Resources["PageHeaderTextStyle"] as Style;
+                    backButton.Style = App.Current.Resources["BackButtonStyle"] as Style;
+                    NowPlayingGrid.Width = 500;
+                    PageScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
                     break;
 
                 case "Snapped":
                     SongHistoryGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                    StationImage.Width = 200;
-                    StationImage.Height = 200;
+                    StationImage.Width = 250;
+                    StationImage.Height = 250;
+                    StationImage.Margin = new Thickness(30, 15, 0, 0);
+                    CurrentSongTextBlock.Margin = new Thickness(5, 15, 0, 0);
+                    CurrentSongTextBlock.Width = 200;
+                    CurrentSongTextBlock.TextWrapping = TextWrapping.Wrap;
+                    pageTitle.Style = App.Current.Resources["SnappedPageHeaderTextStyle"] as Style;
+                    backButton.Style = App.Current.Resources["SnappedBackButtonStyle"] as Style;
+                    NowPlayingGrid.Width = 300;
+                    PageScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
                     break;
             }
         }
