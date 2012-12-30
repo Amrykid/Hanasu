@@ -11,13 +11,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Xml.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Search;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -76,7 +80,7 @@ namespace Hanasu
         }
 
 
-        internal void LoadStations()
+        internal async Task LoadStations()
         {
             if (AvailableStations == null)
                 AvailableStations = new ObservableCollection<Station>();
@@ -86,7 +90,53 @@ namespace Hanasu
 
             if (NetworkCostController.IsConnectedToInternet)
             {
-                XDocument doc = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml");
+                StorageFile localRepo = null;
+
+                try
+                {
+                    localRepo = await AppFolder.GetFileAsync("Stations.xml");
+                }
+                catch (Exception)
+                {
+
+                }
+
+                try
+                {
+                    if (localRepo == null)
+                    {
+                        localRepo = await App.AppFolder.CreateFileAsync("Stations.xml");
+
+                        var str = await localRepo.OpenAsync(FileAccessMode.ReadWrite);
+
+                        var http = new HttpClient();
+                        var data = await http.GetByteArrayAsync("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml");
+
+                        await str.WriteAsync(data.AsBuffer());
+                        await str.FlushAsync();
+
+                        str.Dispose();
+
+                        http.Dispose();
+                    }
+                }
+                catch (Exception)
+                {
+                    localRepo = null;
+                }
+
+
+                XDocument doc = null;
+
+                if (localRepo == null)
+                    using (var http = new HttpClient())
+                    {
+                        //making things asynchronous
+                        doc = XDocument.Parse(await http.GetStringAsync("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml")); //XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml");
+                    }
+                else
+                    doc = XDocument.Load(localRepo.Path);
+
                 var stationsElement = doc.Element("Stations");
 
                 var stations = from x in stationsElement.Elements("Station")
@@ -134,14 +184,14 @@ namespace Hanasu
         public ObservableCollection<Station> AvailableStations { get; set; }
 
 
-        protected override void OnSearchActivated(SearchActivatedEventArgs args)
+        protected override async void OnSearchActivated(SearchActivatedEventArgs args)
         {
             base.OnSearchActivated(args); //required
 
             RootFrame.Style = Resources["RootFrameStyle"] as Style; // Fixes background audio issue across pages 
             // http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/
 
-            LoadStations();
+            await LoadStations();
 
             if (RootFrame.CurrentSourcePageType == null)
                 //App was just activated via search but it wasn't already running. We go to the main page first to have it as the home window.

@@ -277,7 +277,7 @@ namespace Hanasu.ViewModel
             }
         }
 
-        private void LoadStationsFromAppGlobal()
+        private async void LoadStationsFromAppGlobal()
         {
             AvailableStations = new ObservableCollection<StationGroup>();
 
@@ -285,7 +285,7 @@ namespace Hanasu.ViewModel
 
             if (stations == null)
             {
-                ((App)App.Current).LoadStations();
+                await ((App)App.Current).LoadStations();
                 stations = ((App)App.Current).AvailableStations;
             }
 
@@ -461,6 +461,7 @@ namespace Hanasu.ViewModel
                 await str.WriteAsync(data.AsBuffer());
                 await str.FlushAsync();
                 str.Dispose();
+                http.Dispose();
             }
             catch (Exception)
             {

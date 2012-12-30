@@ -71,6 +71,8 @@ namespace Hanasu.Model
                 await str.FlushAsync();
 
                 str.Dispose();
+
+                http.Dispose();
             }
             _image = new BitmapImage(new Uri("ms-appdata:///local/Hanasu/" + file.DisplayName, UriKind.RelativeOrAbsolute));
 
