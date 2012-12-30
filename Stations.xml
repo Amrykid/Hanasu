@@ -14,6 +14,17 @@
     <ServerType>Shoutcast</ServerType>
   </Station>
   <Station>
+    <Name>Gensokyo Radio</Name>
+    <DataSource>http://stream.gensokyoradio.net:8000/listen.pls?sid=1</DataSource>
+    <Homepage>http://www.gensokyoradio.net/</Homepage>
+    <Format>Mix</Format>
+    <City>Tokyo, Japan</City>
+    <Language>Japanese</Language>
+    <Cacheable>True</Cacheable>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <Logo>https://si0.twimg.com/profile_images/2428178695/zbowwrigexldj3lbw363.png</Logo>
+  </Station>
+  <Station>
     <Name>Nihon Radio</Name>
     <DataSource><![CDATA[http://www.makeavoice.com/shoutcast/tuneinlinks.php?file=m3u&host=67.215.229.100&port=8290]]></DataSource>
     <Homepage>http://nihonradio.net/2/</Homepage>
