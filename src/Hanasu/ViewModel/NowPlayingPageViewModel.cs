@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Media;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 namespace Hanasu.ViewModel
@@ -20,8 +22,16 @@ namespace Hanasu.ViewModel
         }
         public override void OnNavigatedFrom()
         {
-            
+            try
+            {
+                dt.Stop();
+                dt.Tick -= dt_Tick;
+            }
+            catch (Exception)
+            {
+            }
         }
+        DispatcherTimer dt = new DispatcherTimer();
         public override async void OnNavigatedTo(dynamic argument = null)
         {
             //grab any arguments pass to the page when it was navigated to.
@@ -39,8 +49,17 @@ namespace Hanasu.ViewModel
             Image = CurrentStation.Image;
             RaisePropertyChanged(x => this.Image);
 
+            directUrl = direct;
 
             await RefreshCurrentSongAndHistory(direct);
+        }
+
+        private KeyValuePair<string, string> directUrl;
+
+        async void dt_Tick(object sender, object e)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
+                await RefreshCurrentSongAndHistory(directUrl));
         }
 
         private async Task RefreshCurrentSongAndHistory(KeyValuePair<string, string> direct)
@@ -54,6 +73,15 @@ namespace Hanasu.ViewModel
                 RaisePropertyChanged(x => this.CurrentSong);
 
                 RaisePropertyChanged(x => this.SongHistory);
+
+                MediaControl.TrackName = CurrentSong;
+
+
+                dt.Interval = new TimeSpan(0, 2, 0);
+
+                dt.Tick += dt_Tick;
+
+                dt.Start();
             }
         }
 
