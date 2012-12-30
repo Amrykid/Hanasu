@@ -38,9 +38,13 @@ namespace Hanasu
                 case "Filled":
                 case "FullScreenLandscape":
                 case "FullScreenPortrait":
+                    pageTitle.Style = App.Current.Resources["PageHeaderTextStyle"] as Style;
+                    backButton.Style = App.Current.Resources["BackButtonStyle"] as Style;
                     break;
 
                 case "Snapped":
+                    pageTitle.Style = App.Current.Resources["SnappedPageHeaderTextStyle"] as Style;
+                    backButton.Style = App.Current.Resources["SnappedBackButtonStyle"] as Style;
                     break;
             }
         }
@@ -52,7 +56,7 @@ namespace Hanasu
             pageTitle.Text = ((SearchPageViewModel)this.DataContext).TitleString; //set the page title to the localized string
 
             //bind the page title to the localized string on the view model so it auto updates.
-            Crystal.Binding.AutoUpdatePropertyHelper.BindObjects<SearchPageViewModel>(((SearchPageViewModel)this.DataContext), x => x.TitleString, pageTitle, TextBlock.TextProperty); 
+            Crystal.Binding.AutoUpdatePropertyHelper.BindObjects<SearchPageViewModel>(((SearchPageViewModel)this.DataContext), x => x.TitleString, pageTitle, TextBlock.TextProperty);
 
             base.OnNavigatedTo(e);
         }
