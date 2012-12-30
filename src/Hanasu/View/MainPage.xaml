@@ -44,17 +44,17 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <!--<ColumnDefinition Width="Auto"/>-->
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
             <Grid Grid.Column="1">
                 <ProgressBar IsIndeterminate="True" HorizontalAlignment="Stretch" Margin="0 0 0 0" x:Name="ProgressIndicator" Visibility="Collapsed" VerticalAlignment="Top"/>
                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"/>
             </Grid>
-            
 
-            <Grid Grid.Column="2">
-                <!-- Now Playing info -->
+
+            <!--<Grid Grid.Column="2">
+                Now Playing info
                 <StackPanel x:Name="nowPlayingPanel" Visibility="Collapsed" Width="200">
                     <TextBlock Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader"/>
                     <TextBlock x:Name="stationTitle" Text="{Binding CurrentStationName}"
@@ -62,7 +62,7 @@
                     <TextBlock x:Name="songTitle" Text="{Binding CurrentStationSongData}"
                                IsHitTestVisible="false" FontSize="15"/>
                 </StackPanel>
-            </Grid>
+            </Grid>-->
         </Grid>
 
 
@@ -215,6 +215,15 @@
         </Grid>
     </Grid>
 
+
+    <local:LayoutAwarePage.TopAppBar>
+        <AppBar>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Home" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="HomeAppBarButton" IsEnabled="False"/>
+                <Button Content="Now Playing" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="NowPlayingAppBarButton" Click="NowPlayingAppBarButton_Click_1"/>
+            </StackPanel>
+        </AppBar>
+    </local:LayoutAwarePage.TopAppBar>
 
     <local:LayoutAwarePage.BottomAppBar>
         <AppBar>

@@ -81,9 +81,9 @@ namespace Hanasu
 
             PlayToController.PlayToConnectionStateChanged += PlayToController_PlayToConnectionStateChanged;
 
-            AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationName, stationTitle, TextBlock.TextProperty);
+            //AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationName, stationTitle, TextBlock.TextProperty);
 
-            AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationSongData, songTitle, TextBlock.TextProperty);
+            //AutoUpdatePropertyHelper.BindObjects<MainPageViewModel>(((MainPageViewModel)this.DataContext), x => x.CurrentStationSongData, songTitle, TextBlock.TextProperty);
         }
 
         private void GrabMediaElement()
@@ -154,8 +154,9 @@ namespace Hanasu
         {
             if (globalMediaElement.CurrentState == MediaElementState.Playing)
             {
-                nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                //nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                NowPlayingAppBarButton.IsEnabled = true;
             }
             else if (globalMediaElement.CurrentState == MediaElementState.Opening || globalMediaElement.CurrentState == MediaElementState.Buffering)
             {
@@ -163,7 +164,8 @@ namespace Hanasu
             }
             else //if (globalMediaElement.CurrentState == MediaElementState.Closed || globalMediaElement.CurrentState == MediaElementState.Stopped)
             {
-                nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                //nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                NowPlayingAppBarButton.IsEnabled = false;
                 ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
         }
@@ -179,7 +181,7 @@ namespace Hanasu
                 case "FullScreenPortrait":
                     itemGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
                     itemListView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                    nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    //nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
                     backButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
                     itemListView.Margin = new Thickness(0, 0, 0, 0);
@@ -193,7 +195,7 @@ namespace Hanasu
                 case "Snapped":
                     itemGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                     itemListView.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                    nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    //nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                     backButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
                     itemListView.Margin = new Thickness(0, 0, 0, 20);
@@ -270,6 +272,11 @@ namespace Hanasu
 
 
             NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", initialchar));
+        }
+
+        private void NowPlayingAppBarButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            ((MainPageViewModel)this.DataContext).NavigateToNowPlayingPage();
         }
 
         //void searchPane_ResultSuggestionChosen(SearchPane sender, SearchPaneResultSuggestionChosenEventArgs args)

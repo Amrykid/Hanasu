@@ -56,5 +56,10 @@ namespace Hanasu
 
             base.OnNavigatedTo(e);
         }
+
+        private void HomeAppBarButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
     }
 }

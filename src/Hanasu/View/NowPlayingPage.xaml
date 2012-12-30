@@ -14,6 +14,15 @@
         <vm:NowPlayingPageViewModel />
     </local:LayoutAwarePage.DataContext>
 
+    <local:LayoutAwarePage.TopAppBar>
+        <AppBar>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Home" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="HomeAppBarButton" Click="HomeAppBarButton_Click_1"/>
+                <Button Content="Now Playing" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="NowPlayingAppBarButton" IsEnabled="False"/>
+            </StackPanel>
+        </AppBar>
+    </local:LayoutAwarePage.TopAppBar>
+
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}" Style="{StaticResource LayoutRootStyle}">
 
         <Grid.RowDefinitions>

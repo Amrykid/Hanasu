@@ -376,8 +376,7 @@ namespace Hanasu.ViewModel
                 }
 
 
-                //if its made it this far, try navigating to the "now playing page".
-                NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, string>("station", CurrentStationName), new KeyValuePair<string,string>("directurl", finalUri.ToString()));
+                NavigateToNowPlayingPage(finalUri);
 
                 try
                 {
@@ -403,6 +402,16 @@ namespace Hanasu.ViewModel
                         LocalizationManager.GetLocalizedValue("StreamingErrorMsg"));
             }
 
+        }
+
+        private void NavigateToNowPlayingPage(Uri finalUri)
+        {
+            //if its made it this far, try navigating to the "now playing page".
+            NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, string>("station", CurrentStationName), new KeyValuePair<string, string>("directurl", finalUri.ToString()));
+        }
+        public void NavigateToNowPlayingPage()
+        {
+            NavigateToNowPlayingPage(CurrentStationStreamedUri);
         }
 
         /// <summary>
