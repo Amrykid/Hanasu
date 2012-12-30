@@ -52,6 +52,13 @@ namespace Hanasu.Model
             try
             {
                 file = await App.AppFolder.GetFileAsync(idealName);
+
+                var prop = await file.GetBasicPropertiesAsync();
+                if (prop.Size == 0)
+                {
+                    await file.DeleteAsync();
+                    file = null; //Size = 0, so its not completed.
+                }
             }
             catch (Exception)
             {
