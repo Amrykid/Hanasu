@@ -288,10 +288,15 @@ namespace Hanasu.ViewModel
         [Crystal.Messaging.MessageHandler("PlayStation")]
         public void PlayStation(Station s)
         {
+            if (mediaElement == null)
+                mediaElement = ((App)App.Current).MediaElement;
+
             PlayStation(s, mediaElement);
         }
         public async void PlayStation(Station s, Windows.UI.Xaml.Controls.MediaElement me, bool navigate = true)
         {
+            if (s == null) return;
+
             if (!NetworkCostController.IsConnectedToInternet) //makes sure Hanasu is connected to the internet.
             {
                 Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
