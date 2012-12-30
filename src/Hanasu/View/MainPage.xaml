@@ -228,10 +228,10 @@
     <local:LayoutAwarePage.BottomAppBar>
         <AppBar>
             <StackPanel Orientation="Horizontal" x:Name="MediaControlPanel" HorizontalAlignment="Center">
-                <Button Style="{StaticResource SkipBackAppBarButtonStyle}" x:Name="SkipBackButton"/>
+                <Button Style="{StaticResource SkipBackAppBarButtonStyle}" x:Name="SkipBackButton" Command="{Binding PreviousStationCommand}"/>
                 <Button Style="{StaticResource PlayAppBarButtonStyle}" x:Name="PlayButton" Command="{Binding PlayCommand}"/>
                 <Button Style="{StaticResource PauseAppBarButtonStyle}" x:Name="PauseButton" Command="{Binding PauseCommand}"/>
-                <Button Style="{StaticResource SkipAheadAppBarButtonStyle}" x:Name="SkipAheadButton"/>
+                <Button Style="{StaticResource SkipAheadAppBarButtonStyle}" x:Name="SkipAheadButton" Command="{Binding NextStationCommand}"/>
             </StackPanel>
         </AppBar>
     </local:LayoutAwarePage.BottomAppBar>

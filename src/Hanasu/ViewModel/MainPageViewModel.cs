@@ -41,6 +41,14 @@ namespace Hanasu.ViewModel
                         if (mediaElement.CurrentState != MediaElementState.Paused)
                             mediaElement.Pause();
                 });
+
+            NextStationCommand = CommandManager.CreateCommand(() =>
+                {
+                });
+
+            PreviousStationCommand = CommandManager.CreateCommand(() =>
+                {
+                });
         }
         public override void OnNavigatedFrom()
         {
@@ -207,6 +215,8 @@ namespace Hanasu.ViewModel
 
         public ICommand PlayCommand { get; set; }
         public ICommand PauseCommand { get; set; }
+        public ICommand PreviousStationCommand { get; set; }
+        public ICommand NextStationCommand { get; set; }
 
 
         async void MediaControl_SoundLevelChanged(object sender, object e)
