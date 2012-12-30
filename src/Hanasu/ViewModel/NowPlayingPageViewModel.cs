@@ -78,11 +78,14 @@ namespace Hanasu.ViewModel
                 MediaControl.TrackName = CurrentSong;
 
 
-                dt.Interval = new TimeSpan(0, 2, 0);
+                if (!dt.IsEnabled)
+                {
+                    dt.Interval = new TimeSpan(0, 2, 0);
 
-                dt.Tick += dt_Tick;
+                    dt.Tick += dt_Tick;
 
-                dt.Start();
+                    dt.Start();
+                }
             }
         }
 
