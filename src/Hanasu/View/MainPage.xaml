@@ -33,7 +33,7 @@
         </Grid.Background>-->
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
+            <RowDefinition Height="140" x:Name="HeaderRow" MaxHeight="140"/>
             <RowDefinition Height="20*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>

@@ -188,6 +188,11 @@ namespace Hanasu
 
                     pageTitle.Margin = new Thickness(0, 0, 0, 0);
 
+                    HeaderRow.Height = new GridLength(HeaderRow.MaxHeight);
+
+                    pageTitle.Style = App.Current.Resources["PageHeaderTextStyle"] as Style;
+                    backButton.Style = App.Current.Resources["BackButtonStyle"] as Style;
+
                     foreach (Button ui in MediaControlPanel.Children)
                         ui.Margin = new Thickness(0, 0, 0, 0);
                     break;
@@ -200,7 +205,12 @@ namespace Hanasu
 
                     itemListView.Margin = new Thickness(0, 0, 0, 20);
 
-                    pageTitle.Margin = new Thickness(30, 0, 0, 0);
+                    pageTitle.Margin = new Thickness(100, -10, 0, 0);
+
+                    HeaderRow.Height = new GridLength(50);
+
+                    pageTitle.Style = App.Current.Resources["SnappedPageHeaderTextStyle"] as Style;
+                    backButton.Style = App.Current.Resources["SnappedBackButtonStyle"] as Style;
 
                     foreach (Button ui in MediaControlPanel.Children)
                         ui.Margin = new Thickness(-15, 0, -15, 0);
