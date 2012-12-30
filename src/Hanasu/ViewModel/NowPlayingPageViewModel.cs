@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Media;
 
 namespace Hanasu.ViewModel
 {
-    public class NowPlayingPageViewModel: Crystal.Dynamic.AutoIPNotifyingBaseViewModel
+    public class NowPlayingPageViewModel : Crystal.Dynamic.AutoIPNotifyingBaseViewModel
     {
         public NowPlayingPageViewModel()
         {
@@ -58,8 +58,9 @@ namespace Hanasu.ViewModel
 
         async void dt_Tick(object sender, object e)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
-                await RefreshCurrentSongAndHistory(directUrl));
+            if (Windows.UI.Xaml.Window.Current.Visible) //only fetch new info if the window is visible.. or else, its a waste of power.
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
+                    await RefreshCurrentSongAndHistory(directUrl));
         }
 
         private async Task RefreshCurrentSongAndHistory(KeyValuePair<string, string> direct)
