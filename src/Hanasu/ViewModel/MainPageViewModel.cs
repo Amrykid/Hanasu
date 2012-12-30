@@ -28,18 +28,24 @@ namespace Hanasu.ViewModel
 
             RegisterWithMediaTransportControls();
 
-            PlayCommand = CommandManager.CreateCommand(() =>
+            PlayCommand = CommandManager.CreateCommandFromBinding((x => this.IsPlaying), (s, e) => !IsPlaying && CurrentStation != null, (o) =>
                 {
                     if (mediaElement != null)
                         if (mediaElement.CurrentState != MediaElementState.Playing)
+                        {
                             PlayStation(CurrentStation, mediaElement, false);
+                            IsPlaying = true;
+                        }
                 });
 
-            PauseCommand = CommandManager.CreateCommand(() =>
+            PauseCommand = CommandManager.CreateCommandFromBinding((x => this.IsPlaying), (s, e) => IsPlaying, (o) =>
                 {
                     if (mediaElement != null)
                         if (mediaElement.CurrentState != MediaElementState.Paused)
+                        {
                             mediaElement.Pause();
+                            IsPlaying = false;
+                        }
                 });
 
             NextStationCommand = CommandManager.CreateCommand(() =>
@@ -186,12 +192,15 @@ namespace Hanasu.ViewModel
                         LocalizationManager.GetLocalizedValue("NowStreamingMsg"),
                         CurrentStationName), CurrentStation.ImageUrl);
             }
+
+            IsPlaying = true;
         }
 
         void mediaElement_MediaFailed(object sender, Windows.UI.Xaml.ExceptionRoutedEventArgs e)
         {
             CurrentStationSongData = null;
             CurrentStationStreamedUri = null;
+            IsPlaying = false;
 
             ResetMediaControlInfo();
         }
@@ -206,6 +215,12 @@ namespace Hanasu.ViewModel
         void mediaElement_BufferingProgressChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
 
+        }
+
+        public bool IsPlaying
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsPlaying); }
+            set { SetProperty<bool>(x => this.IsPlaying, value); }
         }
 
         public ICommand PlayCommand { get; set; }
@@ -248,6 +263,7 @@ namespace Hanasu.ViewModel
                     {
                         mediaElement.PlaybackRate = 0;
                         MediaControl.IsPlaying = false;
+                        IsPlaying = false;
                     }));
                     break;
                 case false:
@@ -255,6 +271,7 @@ namespace Hanasu.ViewModel
                     {
                         mediaElement.PlaybackRate = 1;
                         MediaControl.IsPlaying = true;
+                        IsPlaying = true;
                     }));
                     break;
             }
