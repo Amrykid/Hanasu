@@ -34,80 +34,82 @@
 
 
         <Grid Grid.Row="1">
-            <GridView IsHitTestVisible="False" IsItemClickEnabled="False">
+            <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible">
                 <!--<ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapGrid  />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>-->
-                <Grid VerticalAlignment="Top" Height="600" Width="500" x:Name="NowPlayingGrid">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Now Playing" Margin="20 0 0 0"/>
+                <StackPanel Orientation="Horizontal" ScrollViewer.IsHorizontalRailEnabled="True">
+                    <Grid VerticalAlignment="Top" Height="600" Width="500" x:Name="NowPlayingGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Now Playing" Margin="20 0 0 0"/>
 
-                    <Grid Grid.Row="1">
-                        <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        <Grid Grid.Row="1">
+                            <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        </Grid>
                     </Grid>
-                </Grid>
 
-                <Grid VerticalAlignment="Top" Height="600" Width="500" x:Name="SongHistoryGrid">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
+                    <Grid VerticalAlignment="Top" Height="600" Width="500" x:Name="SongHistoryGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
 
-                    <Grid Grid.Row="1">
-                        <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        <Grid Grid.Row="1">
+                            <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid VerticalAlignment="Top" Height="600" Width="500">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
+                    <Grid VerticalAlignment="Top" Height="600" Width="500">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
 
-                    <Grid Grid.Row="1">
-                        <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        <Grid Grid.Row="1">
+                            <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid VerticalAlignment="Top" Height="600" Width="500">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
+                    <Grid VerticalAlignment="Top" Height="600" Width="500">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
 
-                    <Grid Grid.Row="1">
-                        <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        <Grid Grid.Row="1">
+                            <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid VerticalAlignment="Top" Height="600" Width="500">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
+                    <Grid VerticalAlignment="Top" Height="600" Width="500">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
 
-                    <Grid Grid.Row="1">
-                        <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        <Grid Grid.Row="1">
+                            <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid VerticalAlignment="Top" Height="600" Width="500">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
+                    <Grid VerticalAlignment="Top" Height="600" Width="500">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
 
-                    <Grid Grid.Row="1">
-                        <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        <Grid Grid.Row="1">
+                            <Image Height="400" Width="400" Margin="0 -50 0 0" Source="{Binding Image}"/>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </GridView>
+                </StackPanel>
+            </ScrollViewer>
 
             <VisualStateManager.VisualStateGroups>
 
