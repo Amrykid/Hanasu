@@ -32,9 +32,16 @@ namespace Hanasu
                 case "Filled":
                 case "FullScreenLandscape":
                 case "FullScreenPortrait":
+                    SongHistoryGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    StationImage.Margin = new Thickness(-100, 20, 0, 0);
+                    StationImage.Width = 300;
+                    StationImage.Height = 300;
                     break;
 
                 case "Snapped":
+                    SongHistoryGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    StationImage.Width = 200;
+                    StationImage.Height = 200;
                     break;
             }
         }

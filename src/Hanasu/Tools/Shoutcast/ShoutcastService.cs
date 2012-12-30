@@ -3,6 +3,7 @@ using Hanasu.Model;
 using Hanasu.Tools.Song;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -33,7 +34,19 @@ namespace Hanasu.Tools.Shoutcast
             //return false;
         }
 
-        public static async Task<Dictionary<string, string>> GetShoutcastStationSongHistory(Station station, string url)
+        public static async Task<ObservableCollection<ShoutcastSongHistoryItem>> GetShoutcastStationSongHistory(Station station, string url)
+        {
+            var items = await GetShoutcastStationSongHistoryOld(station, url);
+
+            var coll = new ObservableCollection<ShoutcastSongHistoryItem>();
+
+            foreach (var item in items)
+                coll.Add(new ShoutcastSongHistoryItem() { Time = DateTime.Parse(item.Key), Song = item.Value });
+
+
+            return coll;
+        }
+        public static async Task<Dictionary<string, string>> GetShoutcastStationSongHistoryOld(Station station, string url)
         {
            
             if (url.EndsWith("/") == false)
@@ -99,5 +112,11 @@ namespace Hanasu.Tools.Shoutcast
 
             return s;
         }
+    }
+
+    public struct ShoutcastSongHistoryItem
+    {
+        public DateTime Time { get; set; }
+        public string Song { get; set; }
     }
 }

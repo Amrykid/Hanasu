@@ -377,7 +377,7 @@ namespace Hanasu.ViewModel
 
 
                 //if its made it this far, try navigating to the "now playing page".
-                NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, string>("station", CurrentStationName));
+                NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, string>("station", CurrentStationName), new KeyValuePair<string,string>("directurl", finalUri.ToString()));
 
                 try
                 {
