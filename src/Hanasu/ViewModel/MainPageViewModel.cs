@@ -32,7 +32,7 @@ namespace Hanasu.ViewModel
                 {
                     if (mediaElement != null)
                         if (mediaElement.CurrentState != MediaElementState.Playing)
-                            PlayStation(CurrentStation, mediaElement);
+                            PlayStation(CurrentStation, mediaElement, false);
                 });
 
             PauseCommand = CommandManager.CreateCommand(() =>
@@ -298,7 +298,7 @@ namespace Hanasu.ViewModel
         {
             PlayStation(s, mediaElement);
         }
-        public async void PlayStation(Station s, Windows.UI.Xaml.Controls.MediaElement me)
+        public async void PlayStation(Station s, Windows.UI.Xaml.Controls.MediaElement me, bool navigate = true)
         {
             if (!NetworkCostController.IsConnectedToInternet) //makes sure Hanasu is connected to the internet.
             {
@@ -375,8 +375,8 @@ namespace Hanasu.ViewModel
                     throw ex;
                 }
 
-
-                NavigateToNowPlayingPage(finalUri);
+                if (navigate)
+                    NavigateToNowPlayingPage(finalUri);
 
                 try
                 {
