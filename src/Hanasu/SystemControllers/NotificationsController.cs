@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
 
 namespace Hanasu.SystemControllers
 {
     public static class NotificationsController
     {
+        static NotificationsController()
+        {
+            toaster = ToastNotificationManager.CreateToastNotifier();
+            tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
+        }
+        private static ToastNotifier toaster = null;
+        private static TileUpdater tileUpdater = null;
         public static void SendToast(string txt, string imgurl = "")
         {
-            var toaster = ToastNotificationManager.CreateToastNotifier();
-
             if (toaster.Setting != NotificationSetting.Enabled) return;
 
             // It is possible to start from an existing template and modify what is needed.
@@ -48,6 +54,35 @@ namespace Hanasu.SystemControllers
             // Create a ToastNotification from our XML, and send it to the Toast Notification Manager
             var toast = new ToastNotification(toastXml);
             toaster.Show(toast);
+        }
+
+        public static void SendTileUpdate(string text, string imgurl = "")
+        {
+            XmlDocument tileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideImageAndText01);
+
+            XmlNodeList tileTextAttributes = tileXml.GetElementsByTagName("text");
+            tileTextAttributes[0].InnerText = text;
+
+            XmlNodeList tileImageAttributes = tileXml.GetElementsByTagName("image");
+            ((XmlElement)tileImageAttributes[0]).SetAttribute("src", imgurl);
+            ((XmlElement)tileImageAttributes[0]).SetAttribute("alt", "red graphic");
+
+            XmlDocument squareTileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileSquareText04);
+            XmlNodeList squareTileTextAttributes = squareTileXml.GetElementsByTagName("text");
+            squareTileTextAttributes[0].AppendChild(squareTileXml.CreateTextNode(text));
+            IXmlNode node = tileXml.ImportNode(squareTileXml.GetElementsByTagName("binding").Item(0), true);
+            tileXml.GetElementsByTagName("visual").Item(0).AppendChild(node);
+
+            TileNotification tileNotification = new TileNotification(tileXml);
+
+            tileNotification.ExpirationTime = DateTimeOffset.UtcNow.AddSeconds(10);
+
+            tileUpdater.Update(tileNotification);
+        }
+
+        public static void ClearTile()
+        {
+            tileUpdater.Clear();
         }
     }
 }

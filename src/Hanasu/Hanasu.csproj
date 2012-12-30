@@ -117,6 +117,7 @@
     <Compile Include="Model\Station.cs" />
     <Compile Include="Services\MessageBoxService.cs" />
     <Compile Include="SystemControllers\NetworkCostController.cs" />
+    <Compile Include="SystemControllers\NotificationsController.cs" />
     <Compile Include="SystemControllers\PlayToController.cs" />
     <Compile Include="Tools\HtmlTextUtility.cs" />
     <Compile Include="Tools\Preprocessing\BasePreprocessor.cs" />
