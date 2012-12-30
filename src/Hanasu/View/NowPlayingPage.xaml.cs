@@ -42,6 +42,7 @@ namespace Hanasu
                     backButton.Style = App.Current.Resources["BackButtonStyle"] as Style;
                     NowPlayingGrid.Width = 500;
                     PageScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    NowPlayingHeader.Margin = new Thickness(50, 0, 0, 0);
                     break;
 
                 case "Snapped":

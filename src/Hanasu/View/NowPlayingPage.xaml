@@ -55,7 +55,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader" Margin="20 0 0 0"/>
+                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader" Margin="50 0 0 0" x:Name="NowPlayingHeader"/>
 
                         <Grid Grid.Row="1">
                             <StackPanel>
