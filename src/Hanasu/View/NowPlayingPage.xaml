@@ -17,8 +17,8 @@
     <local:LayoutAwarePage.TopAppBar>
         <AppBar>
             <StackPanel Orientation="Horizontal">
-                <Button Content="Home" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="HomeAppBarButton" Click="HomeAppBarButton_Click_1"/>
-                <Button Content="Now Playing" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="NowPlayingAppBarButton" IsEnabled="False"/>
+                <Button Content="Home" i18n:CrystalLocalizedValueHelper.LocalizationKey="HomeHeader" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="HomeAppBarButton" Click="HomeAppBarButton_Click_1"/>
+                <Button Content="Now Playing" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="NowPlayingAppBarButton" IsEnabled="False"/>
             </StackPanel>
         </AppBar>
     </local:LayoutAwarePage.TopAppBar>
@@ -55,7 +55,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Now Playing" Margin="20 0 0 0"/>
+                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader" Margin="20 0 0 0"/>
 
                         <Grid Grid.Row="1">
                             <StackPanel>
@@ -70,7 +70,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" Text="Song History" Margin="20 0 0 0"/>
+                        <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="SongHistoryHeader" Margin="20 0 0 0"/>
 
                         <Grid Grid.Row="1" Margin="20 10 0 0" Width="Auto">
                             <GridView ItemsSource="{Binding SongHistory}" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="Auto">

@@ -219,8 +219,8 @@
     <local:LayoutAwarePage.TopAppBar>
         <AppBar>
             <StackPanel Orientation="Horizontal">
-                <Button Content="Home" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="HomeAppBarButton" IsEnabled="False"/>
-                <Button Content="Now Playing" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="NowPlayingAppBarButton" Click="NowPlayingAppBarButton_Click_1"/>
+                <Button Content="Home" i18n:CrystalLocalizedValueHelper.LocalizationKey="HomeHeader" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="HomeAppBarButton" IsEnabled="False"/>
+                <Button Content="Now Playing" i18n:CrystalLocalizedValueHelper.LocalizationKey="NowPlayingHeader" Style="{StaticResource AppBarLinkButtonStyle}" x:Name="NowPlayingAppBarButton" Click="NowPlayingAppBarButton_Click_1"/>
             </StackPanel>
         </AppBar>
     </local:LayoutAwarePage.TopAppBar>
