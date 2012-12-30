@@ -386,7 +386,7 @@ namespace Hanasu.ViewModel
             }
             catch (Exception ex)
             {
-                if (mediaElement.CurrentState == MediaElementState.Playing) return; //Ignorable error. Probably nothing.
+                if (mediaElement.CurrentState == MediaElementState.Playing || mediaElement.CurrentState == MediaElementState.Opening) return; //Ignorable error. Probably nothing.
 
                 Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
                     .ShowMessage(
