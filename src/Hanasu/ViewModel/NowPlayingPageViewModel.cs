@@ -18,7 +18,23 @@ namespace Hanasu.ViewModel
     {
         public NowPlayingPageViewModel()
         {
+            App.Current.Suspending += Current_Suspending;
+            App.Current.Resuming += Current_Resuming;
             SongHistory = new ObservableCollection<ShoutcastSongHistoryItem>();
+        }
+
+        void Current_Resuming(object sender, object e)
+        {
+            if (dt_wasrunning)
+                dt.Start();
+        }
+
+        void Current_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
+        {
+            dt_wasrunning = dt.IsEnabled;
+
+            if (dt_wasrunning)
+                dt.Stop();
         }
         public override void OnNavigatedFrom()
         {
@@ -30,7 +46,11 @@ namespace Hanasu.ViewModel
             catch (Exception)
             {
             }
+
+            App.Current.Suspending -= Current_Suspending;
+            App.Current.Resuming -= Current_Resuming;
         }
+        bool dt_wasrunning = false;
         DispatcherTimer dt = new DispatcherTimer();
         public override async void OnNavigatedTo(dynamic argument = null)
         {
