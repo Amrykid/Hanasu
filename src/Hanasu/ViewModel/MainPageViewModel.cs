@@ -87,17 +87,30 @@ namespace Hanasu.ViewModel
 
         void MediaControl_StopPressed(object sender, object e)
         {
+            // hardware/keyboard stop key
 
+            Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low,
+                () =>
+                {
+                    try
+                    {
+                        if (mediaElement.CurrentState != MediaElementState.Stopped)
+                            mediaElement.Stop();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                });
         }
 
         void MediaControl_PlayPressed(object sender, object e)
         {
-
+            // hardware/keyboard play key
         }
 
         void MediaControl_PausePressed(object sender, object e)
         {
-
+            // hardware/keyboard pause key
         }
 
         void MediaControl_ChannelUpPressed(object sender, object e)
