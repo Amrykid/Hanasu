@@ -38,11 +38,15 @@ namespace Hanasu
                 case "FullScreenPortrait":
                     pageTitle.Style = App.Current.Resources["PageHeaderTextStyle"] as Style;
                     backButton.Style = App.Current.Resources["BackButtonStyle"] as Style;
+                    itemGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    itemListView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                     break;
 
                 case "Snapped":
                     pageTitle.Style = App.Current.Resources["SnappedPageHeaderTextStyle"] as Style;
                     backButton.Style = App.Current.Resources["SnappedBackButtonStyle"] as Style;
+                    itemGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    itemListView.Visibility = Windows.UI.Xaml.Visibility.Visible;
                     break;
             }
         }
