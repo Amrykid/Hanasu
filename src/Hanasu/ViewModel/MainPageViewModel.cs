@@ -38,7 +38,8 @@ namespace Hanasu.ViewModel
                         }
                 });
 
-            PauseCommand = CommandManager.CreateCommandFromBinding((x => this.IsPlaying), (s, e) => IsPlaying, (o) =>
+            PauseCommand = CommandManager.CreateCommandFromBinding((x => this.IsPlaying), (s, e) => 
+                IsPlaying, (o) =>
                 {
                     if (mediaElement != null)
                         if (mediaElement.CurrentState != MediaElementState.Paused)
@@ -431,7 +432,13 @@ namespace Hanasu.ViewModel
                 try
                 {
                     if (!PlayToController.IsConnectedViaPlayTo)
-                        await mediaElement.PlayAsync(System.Threading.CancellationToken.None);
+                    {
+                        var playTask = mediaElement.PlayAsync(System.Threading.CancellationToken.None);
+                        IsPlaying = true;
+                        await playTask;
+                    }
+                    else
+                        IsPlaying = true;
                 }
                 catch (Exception ex)
                 {
@@ -445,6 +452,8 @@ namespace Hanasu.ViewModel
             catch (Exception ex)
             {
                 if (mediaElement.CurrentState == MediaElementState.Playing || mediaElement.CurrentState == MediaElementState.Opening) return; //Ignorable error. Probably nothing.
+
+                IsPlaying = false;
 
                 Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
                     .ShowMessage(
