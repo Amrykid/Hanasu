@@ -29,6 +29,9 @@ namespace Hanasu.SystemControllers
                 //not connected to internet
 
                 IsConnectedToInternet = false;
+
+                if (InternetConnectionChanged != null)
+                    InternetConnectionChanged();
             }
             else
             {
@@ -39,6 +42,8 @@ namespace Hanasu.SystemControllers
                 else
                     IsConnectedToInternet = false;
 
+                if (InternetConnectionChanged != null)
+                    InternetConnectionChanged();
 
 
                 //Detect behaviors
@@ -81,6 +86,9 @@ namespace Hanasu.SystemControllers
 
         public delegate void ApproachingDataLimitHandler();
         public static event ApproachingDataLimitHandler ApproachingDataLimitEvent;
+
+        public delegate void InternetConnectionChangedHandler();
+        public static event InternetConnectionChangedHandler InternetConnectionChanged;
 
         public static bool ApproachingDataLimit { get; private set; }
         public static bool IsConnectedToNetwork { get; private set; }

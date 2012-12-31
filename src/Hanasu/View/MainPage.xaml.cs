@@ -39,9 +39,22 @@ namespace Hanasu
 
             this.Loaded += MainPage_Loaded;
 
+            NetworkCostController.InternetConnectionChanged += NetworkCostController_InternetConnectionChanged;
+
             SetViewModel();
 
             //Task.Run(() => Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessUntilQuit));
+        }
+
+        async void NetworkCostController_InternetConnectionChanged()
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                {
+                    if (NetworkCostController.IsConnectedToInternet)
+                        WaitInternetGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    else
+                        WaitInternetGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                });
         }
 
         private void SetViewModel()
@@ -73,6 +86,8 @@ namespace Hanasu
                         }
                 }
             }
+
+            NetworkCostController_InternetConnectionChanged();
 
             GrabMediaElement();
 

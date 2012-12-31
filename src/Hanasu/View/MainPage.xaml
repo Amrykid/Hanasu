@@ -69,6 +69,13 @@
         <Grid Grid.Row="1">
             <!--<MediaElement x:Name="globalMediaElement" Visibility="Collapsed" AudioCategory="BackgroundCapableMedia" AudioDeviceType="Multimedia" AutoPlay="False"/>-->
 
+            <Grid x:Name="WaitInternetGrid" Visibility="Collapsed">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ProgressRing Foreground="#FFFFD200" Height="100" Width="100" IsActive="True"></ProgressRing>
+                    <TextBlock i18n:CrystalLocalizedValueHelper.LocalizationKey="WaitForInternetStatusMsg" FontSize="22"/>
+                </StackPanel>
+            </Grid>
+            
             <!-- Horizontal scrolling grid used in most view states -->
             <GridView
             x:Name="itemGridView"

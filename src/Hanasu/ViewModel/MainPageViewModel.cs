@@ -38,7 +38,7 @@ namespace Hanasu.ViewModel
                         }
                 });
 
-            PauseCommand = CommandManager.CreateCommandFromBinding((x => this.IsPlaying), (s, e) => 
+            PauseCommand = CommandManager.CreateCommandFromBinding((x => this.IsPlaying), (s, e) =>
                 IsPlaying, (o) =>
                 {
                     if (mediaElement != null)
@@ -66,6 +66,8 @@ namespace Hanasu.ViewModel
                 mediaElement.MediaOpened -= mediaElement_MediaOpened;
                 mediaElement.MediaEnded -= mediaElement_MediaEnded;
             }
+
+            //NetworkCostController.InternetConnectionChanged -= NetworkCostController_InternetConnectionChanged;
         }
 
         #region Registering these events are required for playing media in the background AND in order to play from a mediaelement that is set to BackgroundCompatibleMedia.
@@ -280,32 +282,35 @@ namespace Hanasu.ViewModel
 
         private async void LoadStationsFromAppGlobal()
         {
-            AvailableStations = new ObservableCollection<StationGroup>();
-
-            var stations = ((App)App.Current).AvailableStations;
-
-            if (stations == null)
+            if (NetworkCostController.IsConnectedToInternet)
             {
-                await ((App)App.Current).LoadStations();
-                stations = ((App)App.Current).AvailableStations;
+                AvailableStations = new ObservableCollection<StationGroup>();
+
+                var stations = ((App)App.Current).AvailableStations;
+
+                if (stations == null)
+                {
+                    await ((App)App.Current).LoadStations();
+                    stations = ((App)App.Current).AvailableStations;
+                }
+
+                var formats = stations.Select(x => x.UnlocalizedFormat).Distinct();
+
+                foreach (var format in formats)
+                {
+                    var sGroup = new StationGroup();
+                    sGroup.Name = LocalizationManager.GetLocalizedValue("Group" + format);
+                    sGroup.UnlocalizedName = format;
+                    sGroup.Items = new ObservableCollection<Station>();
+
+                    foreach (var i in stations.Where(x => x.UnlocalizedFormat == format).Take(2))
+                        sGroup.Items.Add(i);
+
+                    AvailableStations.Add(sGroup);
+                }
+
+                RaisePropertyChanged(x => this.AvailableStations);
             }
-
-            var formats = stations.Select(x => x.UnlocalizedFormat).Distinct();
-
-            foreach (var format in formats)
-            {
-                var sGroup = new StationGroup();
-                sGroup.Name = LocalizationManager.GetLocalizedValue("Group" + format);
-                sGroup.UnlocalizedName = format;
-                sGroup.Items = new ObservableCollection<Station>();
-
-                foreach (var i in stations.Where(x => x.UnlocalizedFormat == format).Take(2))
-                    sGroup.Items.Add(i);
-
-                AvailableStations.Add(sGroup);
-            }
-
-            RaisePropertyChanged(x => this.AvailableStations);
         }
 
         public ObservableCollection<StationGroup> AvailableStations
@@ -545,6 +550,9 @@ namespace Hanasu.ViewModel
 
         public override void OnNavigatedTo(dynamic argument = null)
         {
+
+            NetworkCostController.InternetConnectionChanged += NetworkCostController_InternetConnectionChanged;
+
             //grab any arguments pass to the mainpage when it was navigated to.
 
             if (argument == null) return;
@@ -561,6 +569,32 @@ namespace Hanasu.ViewModel
 
                         break;
                     }
+            }
+        }
+
+        async void NetworkCostController_InternetConnectionChanged()
+        {
+            if (NetworkCostController.IsConnectedToInternet)
+            {
+                if (AvailableStations == null || AvailableStations.Count == 0)
+                {
+                    if (((App)App.Current).AvailableStations == null || ((App)App.Current).AvailableStations.Count == 0)
+                        await ((App)App.Current).LoadStations();
+
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+                        {
+                            LoadStationsFromAppGlobal();
+                        });
+
+                }
+            }
+            else
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+                {
+                    AvailableStations.Clear();
+                    RaisePropertyChanged(x => this.AvailableStations);
+                });
             }
         }
     }
