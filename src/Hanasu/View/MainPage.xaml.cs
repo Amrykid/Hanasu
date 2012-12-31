@@ -269,6 +269,8 @@ namespace Hanasu
         private SearchPane searchPane = null;
         private void pageRoot_KeyDown_1(object sender, Windows.UI.Core‌.KeyEventArgs e)
         {
+            if (!NetworkCostController.IsConnectedToInternet) return;
+
             //This function sends the enter chars to the search page for processing.
 
             int keyCode = (int)e.VirtualKey;
