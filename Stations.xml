@@ -288,14 +288,15 @@
   </Station>
   <Station>
     <Name>J-Jams Radio</Name>
-    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=195951]]></DataSource>
-    <Homepage>http://j-jams.co.cc/</Homepage>
+    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=64356]]></DataSource>
+    <Homepage>http://jjamsradio.weebly.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
     <ExplicitExtension>.pls</ExplicitExtension>
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <ServerType>Shoutcast</ServerType>
   </Station>
   <Station>
     <Name>O-Line Radio</Name>
