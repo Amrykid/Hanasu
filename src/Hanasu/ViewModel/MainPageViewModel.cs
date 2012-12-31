@@ -406,6 +406,8 @@ namespace Hanasu.ViewModel
                     {
                         //timeout. inform the user and back out.
 
+                        IsPlaying = false;
+
                         Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
                             .ShowMessage(
                                  LocalizationManager.GetLocalizedValue("StreamingErrorHeader"),
