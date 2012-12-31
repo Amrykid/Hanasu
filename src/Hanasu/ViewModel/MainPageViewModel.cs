@@ -358,7 +358,8 @@ namespace Hanasu.ViewModel
 
             StorageFile albumFile = await GetStationAlbumFromCache(); //Grab the current station's logo from the cache.
 
-            MediaControl.AlbumArt = new Uri("ms-appdata:///local/" + albumFile.DisplayName); //Set the logo in the media control.
+            if (albumFile != null)
+                MediaControl.AlbumArt = new Uri("ms-appdata:///local/Hanasu/" + albumFile.DisplayName); //Set the logo in the media control.
             MediaControl.ArtistName = CurrentStation.Title; //set the station's name
             MediaControl.IsPlaying = true;
 
@@ -393,7 +394,29 @@ namespace Hanasu.ViewModel
 
                 try
                 {
-                    await mediaElement.OpenAsync(finalUri, System.Threading.CancellationToken.None);
+                    System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
+
+                    var openTask = mediaElement.OpenAsync(finalUri, cts.Token);
+                    var timeoutTask = Task.Delay(7000); //Wait for a connection for 7 seconds.
+
+                    var successful = await Task.WhenAny(openTask, timeoutTask);
+
+                    if (successful == timeoutTask)
+                    {
+                        //timeout. inform the user and back out.
+
+                        Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>()
+                            .ShowMessage(
+                                 LocalizationManager.GetLocalizedValue("StreamingErrorHeader"),
+                                 LocalizationManager.GetLocalizedValue("StreamingConnectionTimeoutMsg"));
+
+                        cts.Cancel();
+                        cts.Dispose();
+
+                        ResetStationInfo();
+
+                        return;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -431,10 +454,17 @@ namespace Hanasu.ViewModel
 
         }
 
+        private void ResetStationInfo()
+        {
+            CurrentStation = null;
+            CurrentStationSongData = null;
+            CurrentStationStreamedUri = null;
+        }
+
         private void NavigateToNowPlayingPage(Uri finalUri)
         {
             //if its made it this far, try navigating to the "now playing page".
-            NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, string>("station", CurrentStationName), new KeyValuePair<string, string>("directurl", finalUri.ToString()));
+            NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, string>("station", CurrentStationName), new KeyValuePair<string, string>("directurl", finalUri != null ? finalUri.ToString() : ""));
         }
         public void NavigateToNowPlayingPage()
         {

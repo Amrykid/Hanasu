@@ -108,6 +108,7 @@ namespace Hanasu.Core.Preprocessor.Preprocessors.PLS
                     break;
                 }
             }
+            if (string.IsNullOrWhiteSpace(newurl)) throw new Exception("Unable to get a url from the playlist.");
 
             return new Uri(newurl);
         }
