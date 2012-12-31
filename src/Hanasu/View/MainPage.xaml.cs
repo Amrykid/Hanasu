@@ -13,6 +13,7 @@ using Windows.ApplicationModel.Search;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -303,6 +304,48 @@ namespace Hanasu
         private void NowPlayingAppBarButton_Click_1(object sender, RoutedEventArgs e)
         {
             ((MainPageViewModel)this.DataContext).NavigateToNowPlayingPage();
+        }
+
+        private async void ItemView_ItemRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            var pos = e.GetPosition(this);
+
+            var elements = VisualTreeHelper.FindElementsInHostCoordinates(pos, ((UIElement)sender));
+
+            FrameworkElement selectedElement = null;
+            Station selectedStation = null;
+
+            //I could refactor this
+            if (sender is GridView)
+            {
+                selectedElement = (FrameworkElement)elements.FirstOrDefault(x => x.GetType() == typeof(GridViewItem));
+            }
+            else if (sender is ListView)
+            {
+                selectedElement = (FrameworkElement)elements.FirstOrDefault(x => x.GetType() == typeof(ListViewItem));
+            }
+
+            if (selectedElement != null)
+            {
+                e.Handled = true;
+
+                selectedStation = (Station)selectedElement.DataContext;
+
+                PopupMenu menu = new PopupMenu();
+                menu.Commands.Add(new UICommand(LocalizationManager.GetLocalizedValue("GotoHomepageMenu"), (command) =>
+                {
+                    Windows.System.Launcher.LaunchUriAsync(selectedStation.HomepageUrl);
+                }));
+
+                this.BottomAppBar.IsSticky = true;
+                this.TopAppBar.IsSticky = true;
+
+                var chosenCommand = await menu.ShowForSelectionAsync(new Rect(pos, selectedElement.RenderSize));
+
+                this.BottomAppBar.IsSticky = false;
+                this.TopAppBar.IsSticky = false;
+
+            }
         }
 
         //void searchPane_ResultSuggestionChosen(SearchPane sender, SearchPaneResultSuggestionChosenEventArgs args)

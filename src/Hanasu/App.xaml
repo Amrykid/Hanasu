@@ -41,7 +41,7 @@
             <Style x:Key="HanasuLayoutRootStyle" TargetType="Grid" BasedOn="{StaticResource LayoutRootStyle}">
                 <Setter Property="Background">
                     <Setter.Value>
-                        <ImageBrush ImageSource="/Assets/hanasu_winrt_bg.png" Stretch="Fill"/>
+                        <ImageBrush ImageSource="ms-appx:/Assets/hanasu_winrt_bg.png" Stretch="Fill"/>
                     </Setter.Value>
                 </Setter>
             </Style>

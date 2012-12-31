@@ -10,7 +10,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" x:Name="pageRoot" Background="Red">
 
-
     <Page.Resources>
 
         <!--
@@ -40,7 +39,7 @@
 
 
         <!-- Back button and page title -->
-        <Grid Grid.Row="0" Background="Transparent">
+        <Grid Grid.Row="0" Background="Transparent" x:Name="HeaderGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -75,7 +74,7 @@
                     <TextBlock i18n:CrystalLocalizedValueHelper.LocalizationKey="WaitForInternetStatusMsg" FontSize="22"/>
                 </StackPanel>
             </Grid>
-            
+
             <!-- Horizontal scrolling grid used in most view states -->
             <GridView
             x:Name="itemGridView"
@@ -87,6 +86,7 @@
             ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
             ItemTemplate="{StaticResource Standard250x250ItemTemplate}"
             SelectionMode="None"
+            RightTapped="ItemView_ItemRightTapped"
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
             ItemClick="ItemView_ItemClick">
@@ -95,7 +95,7 @@
                         <VirtualizingStackPanel Orientation="Horizontal">
                             <VirtualizingStackPanel.ChildrenTransitions>
                                 <TransitionCollection>
-                                    <EntranceThemeTransition/>
+                                    <AddDeleteThemeTransition />
                                 </TransitionCollection>
                             </VirtualizingStackPanel.ChildrenTransitions>
                         </VirtualizingStackPanel>
@@ -139,6 +139,7 @@
             ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
             ItemTemplate="{StaticResource Standard80ItemTemplate}"
             SelectionMode="None"
+            RightTapped="ItemView_ItemRightTapped" 
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
             ItemClick="ItemView_ItemClick">

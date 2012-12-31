@@ -161,7 +161,8 @@ namespace Hanasu
                                    UnlocalizedFormat = x.Element("Format").Value,
                                    Format = LocalizationManager.GetLocalizedValue("Group" + x.Element("Format").Value),
                                    Subtitle = LocalizationManager.GetLocalizedValue("StationSubtitle"),
-                                   ServerType = x.ContainsElement("ServerType") ? x.Element("ServerType").Value : "Raw"
+                                   ServerType = x.ContainsElement("ServerType") ? x.Element("ServerType").Value : "Raw",
+                                   HomepageUrl = x.ContainsElement("Homepage") ? new Uri(x.Element("Homepage").Value) : null
                                };
 
                 foreach (var x in stations)

@@ -90,6 +90,8 @@ namespace Hanasu.Model
         public string UnlocalizedFormat { get; set; }
 
         public string ServerType { get; set; }
+
+        public Uri HomepageUrl { get; set; }
     }
 
     public class StationGroup : Crystal.Dynamic.AutoIPNotifyingBaseModel //, ISupportIncrementalLoading
