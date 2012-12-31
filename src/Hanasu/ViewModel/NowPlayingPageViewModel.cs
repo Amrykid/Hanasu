@@ -73,7 +73,18 @@ namespace Hanasu.ViewModel
 
             if (CurrentStation.ServerType.ToLower() == "shoutcast")
                 if (!string.IsNullOrWhiteSpace(directUrl.Value))
-                    await RefreshCurrentSongAndHistory(direct);
+                    try
+                    {
+                        await RefreshCurrentSongAndHistory(direct);
+                    }
+                    catch (Exception)
+                    {
+                        if (dt.IsEnabled)
+                        {
+                            dt.Stop();
+                            dt.Tick -= dt_Tick;
+                        }
+                    }
         }
 
         private KeyValuePair<string, string> directUrl;
