@@ -87,17 +87,12 @@
             ItemTemplate="{StaticResource Standard250x250ItemTemplate}"
             SelectionMode="None"
             RightTapped="ItemView_ItemRightTapped"
-            IsSwipeEnabled="false"
+            IsSwipeEnabled="true"
             IsItemClickEnabled="True"
             ItemClick="ItemView_ItemClick">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel Orientation="Horizontal">
-                            <VirtualizingStackPanel.ChildrenTransitions>
-                                <TransitionCollection>
-                                    <AddDeleteThemeTransition />
-                                </TransitionCollection>
-                            </VirtualizingStackPanel.ChildrenTransitions>
                         </VirtualizingStackPanel>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
@@ -140,7 +135,7 @@
             ItemTemplate="{StaticResource Standard80ItemTemplate}"
             SelectionMode="None"
             RightTapped="ItemView_ItemRightTapped" 
-            IsSwipeEnabled="false"
+            IsSwipeEnabled="True"
             IsItemClickEnabled="True"
             ItemClick="ItemView_ItemClick">
                 <!--Grid.Row="1"-->

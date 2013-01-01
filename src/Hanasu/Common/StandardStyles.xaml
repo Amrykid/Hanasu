@@ -30,7 +30,7 @@
 
     <!-- RichTextBlock styles -->
 
-    <Style x:Key="BasicRichTextStyle" TargetType="RichTextBlock">
+    <!--<Style x:Key="BasicRichTextStyle" TargetType="RichTextBlock">
         <Setter Property="Foreground" Value="{StaticResource ApplicationForegroundThemeBrush}"/>
         <Setter Property="FontSize" Value="{StaticResource ControlContentThemeFontSize}"/>
         <Setter Property="FontFamily" Value="{StaticResource ContentControlThemeFontFamily}"/>
@@ -43,9 +43,9 @@
 
     <Style x:Key="BaselineRichTextStyle" TargetType="RichTextBlock" BasedOn="{StaticResource BasicRichTextStyle}">
         <Setter Property="LineHeight" Value="20"/>
-        <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+        <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>-->
         <!-- Properly align text along its baseline -->
-        <Setter Property="RenderTransform">
+        <!--<Setter Property="RenderTransform">
             <Setter.Value>
                 <TranslateTransform X="-1" Y="4"/>
             </Setter.Value>
@@ -56,7 +56,7 @@
 
     <Style x:Key="BodyRichTextStyle" TargetType="RichTextBlock" BasedOn="{StaticResource BaselineRichTextStyle}">
         <Setter Property="FontWeight" Value="SemiLight"/>
-    </Style>
+    </Style>-->
 
     <!-- TextBlock styles -->
 
@@ -1676,7 +1676,7 @@
     </DataTemplate>
 
     <!-- Grid-appropriate 500 by 130 pixel item template as seen in the GroupDetailPage -->
-    <DataTemplate x:Key="Standard500x130ItemTemplate">
+    <!--<DataTemplate x:Key="Standard500x130ItemTemplate">
         <Grid Height="110" Width="480" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -1691,7 +1691,7 @@
                 <TextBlock Text="{Binding Description}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
             </StackPanel>
         </Grid>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <!-- List-appropriate 130 pixel high item template as seen in the SplitPage -->
     <DataTemplate x:Key="Standard130ItemTemplate">
@@ -1732,7 +1732,7 @@
     </DataTemplate>
 
     <!-- Grid-appropriate 300 by 70 pixel item template as seen in the SearchResultsPage -->
-    <DataTemplate x:Key="StandardSmallIcon300x70ItemTemplate">
+    <!--<DataTemplate x:Key="StandardSmallIcon300x70ItemTemplate">
         <Grid Width="294" Margin="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -1747,10 +1747,10 @@
                 <TextBlock Text="{Binding Description}" Style="{StaticResource BodyTextStyle}" Foreground="{StaticResource ApplicationSecondaryForegroundThemeBrush}" TextWrapping="NoWrap"/>
             </StackPanel>
         </Grid>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <!-- List-appropriate 70 pixel high item template as seen in the SearchResultsPage when Snapped -->
-    <DataTemplate x:Key="StandardSmallIcon70ItemTemplate">
+    <!--<DataTemplate x:Key="StandardSmallIcon70ItemTemplate">
         <Grid Margin="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -1765,13 +1765,13 @@
                 <TextBlock Text="{Binding Description}" Style="{StaticResource BodyTextStyle}" Foreground="{StaticResource ApplicationSecondaryForegroundThemeBrush}" TextWrapping="NoWrap"/>
             </StackPanel>
         </Grid>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <!--
       190x130 pixel item template for displaying file previews as seen in the FileOpenPickerPage
       Includes an elaborate tooltip to display title and description text
   -->
-    <DataTemplate x:Key="StandardFileWithTooltip190x130ItemTemplate">
+    <!--<DataTemplate x:Key="StandardFileWithTooltip190x130ItemTemplate">
         <Grid>
             <Grid Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
                 <Image
@@ -1815,7 +1815,7 @@
                 </ToolTip>
             </ToolTipService.ToolTip>
         </Grid>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <!-- ScrollViewer styles -->
 

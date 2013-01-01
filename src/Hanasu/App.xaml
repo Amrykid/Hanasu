@@ -38,13 +38,13 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="HanasuLayoutRootStyle" TargetType="Grid" BasedOn="{StaticResource LayoutRootStyle}">
+            <!--<Style x:Key="HanasuLayoutRootStyle" TargetType="Grid" BasedOn="{StaticResource LayoutRootStyle}">
                 <Setter Property="Background">
                     <Setter.Value>
                         <ImageBrush ImageSource="ms-appx:/Assets/hanasu_winrt_bg.png" Stretch="Fill"/>
                     </Setter.Value>
                 </Setter>
-            </Style>
+            </Style>-->
 
             <Style TargetType="Button" x:Key="AppBarLinkButtonStyle" BasedOn="{StaticResource TextButtonStyle}">
                 <Setter Property="Margin" Value="10 0 10 0"/>
