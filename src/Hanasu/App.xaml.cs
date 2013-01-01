@@ -37,6 +37,7 @@ namespace Hanasu
     /// </summary>
     sealed partial class App : BaseCrystalApplication
     {
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -65,11 +66,11 @@ namespace Hanasu
         }
 
         public static Windows.Storage.StorageFolder AppFolder = null;
+        public static AppSettings HanasuAppSettings = null;
 
         protected override async void PreStartup()
         {
             //set some Crystal initialization values.
-            //note, this runs even if the app was suspended previousily.
 
             EnableSelfAssemblyResolution = true;
             EnableCrystalLocalization = true;
@@ -86,7 +87,41 @@ namespace Hanasu
 
             await GetAppFolder();
 
+            //try and load settings
+            LoadSettings();
+
             base.PreStartup();
+        }
+
+        private static void LoadSettings()
+        {
+            //try and load settings
+            HanasuAppSettings = new AppSettings();
+
+            if (ApplicationData.Current.LocalSettings.Values.Count == 0)
+            {
+                //set default settings
+                HanasuAppSettings.PreferedApplicationTheme = Enum.GetName(typeof(ApplicationTheme), ApplicationTheme.Dark);
+                HanasuAppSettings.PreferedChromeBackgroundColor = Windows.UI.Color.FromArgb(255, 0, 20, 78).ToString();
+
+                SaveSettings();
+            }
+            else
+            {
+                foreach (var setting in ApplicationData.Current.LocalSettings.Values)
+                {
+                    HanasuAppSettings.SetProperty(setting.Key, setting.Value);
+                }
+            }
+        }
+
+        private static void SaveSettings()
+        {
+            HanasuAppSettings.IteratePropertiesAndValues((property, value) =>
+            {
+                ApplicationData.Current.LocalSettings.Values[property] = value;
+            });
+            ApplicationData.Current.SignalDataChanged();
         }
 
         private static async System.Threading.Tasks.Task GetAppFolder()
@@ -278,8 +313,8 @@ namespace Hanasu
             var about = new SettingsCommand("about", "About", (handler) =>
             {
                 var settings = new Flyout(Flyout.ShowSettingsCharmBackButtonAction);
-                settings.Header = "About";
-                settings.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 20, 78));
+                settings.Header = handler.Label;
+                settings.Background = new SolidColorBrush(Hanasu.Tools.ColorHelper.GetColorFromHexString(HanasuAppSettings.PreferedChromeBackgroundColor));
                 settings.FlyoutContent = new Hanasu.View.Flyouts.AboutFlyoutControl();
                 //settings.Content = new About();
                 //settings.HeaderBrush = new SolidColorBrush(_background);
@@ -289,6 +324,19 @@ namespace Hanasu
                 settings.Show();
             });
             args.Request.ApplicationCommands.Add(about);
+
+
+            var preferences = new SettingsCommand("settings", "Preferences", (handler) =>
+                {
+                    var settings = new Flyout(Flyout.ShowSettingsCharmBackButtonAction);
+                    settings.Header = handler.Label;
+                    settings.Background = new SolidColorBrush(Hanasu.Tools.ColorHelper.GetColorFromHexString(HanasuAppSettings.PreferedChromeBackgroundColor));
+                    settings.FlyoutContent = new Hanasu.View.Flyouts.AboutFlyoutControl();
+                    settings.Show();
+                });
+            args.Request.ApplicationCommands.Add(preferences);
+
+
             // Adding a Privacy Policy
             var privacy = new SettingsCommand("privacypolicy", "Privacy Policy", OpenPrivacyPolicy);
             args.Request.ApplicationCommands.Add(privacy);
@@ -314,6 +362,9 @@ namespace Hanasu
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+
+            SaveSettings();
+
             deferral.Complete();
         }
 

@@ -111,6 +111,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AppSettings.cs" />
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Controls\Flyouts\Flyout.xaml.cs">
@@ -124,6 +125,7 @@
     <Compile Include="SystemControllers\NetworkCostController.cs" />
     <Compile Include="SystemControllers\NotificationsController.cs" />
     <Compile Include="SystemControllers\PlayToController.cs" />
+    <Compile Include="Tools\ColorHelper.cs" />
     <Compile Include="Tools\HtmlTextUtility.cs" />
     <Compile Include="Tools\Preprocessing\BasePreprocessor.cs" />
     <Compile Include="Tools\Preprocessing\IPreprocessor.cs" />
