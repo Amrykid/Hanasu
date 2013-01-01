@@ -44,8 +44,8 @@
     <Style x:Key="BaselineRichTextStyle" TargetType="RichTextBlock" BasedOn="{StaticResource BasicRichTextStyle}">
         <Setter Property="LineHeight" Value="20"/>
         <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>-->
-        <!-- Properly align text along its baseline -->
-        <!--<Setter Property="RenderTransform">
+    <!-- Properly align text along its baseline -->
+    <!--<Setter Property="RenderTransform">
             <Setter.Value>
                 <TranslateTransform X="-1" Y="4"/>
             </Setter.Value>
@@ -142,7 +142,7 @@
     </Style>
 
     <!-- Button styles -->
-    
+
     <!--
         TextButtonStyle is used to style a Button using subheader-styled text with no other adornment.  There
         are two styles that are based on TextButtonStyle (TextPrimaryButtonStyle and TextSecondaryButtonStyle)
@@ -229,17 +229,17 @@
         <Setter Property="Foreground" Value="{StaticResource ApplicationHeaderForegroundThemeBrush}"/>
     </Style>
 
-    <Style x:Key="TextSecondaryButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource TextButtonStyle}">
+    <!--<Style x:Key="TextSecondaryButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource TextButtonStyle}">
         <Setter Property="Foreground" Value="{StaticResource ApplicationSecondaryForegroundThemeBrush}"/>
-    </Style>
+    </Style>-->
 
     <!--
         TextRadioButtonStyle is used to style a RadioButton using subheader-styled text with no other adornment.
         This style is used in the SearchResultsPage to allow selection among filters.
     -->
-    <Style x:Key="TextRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource TextButtonStyle}">
+    <!--<Style x:Key="TextRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource TextButtonStyle}">
         <Setter Property="Margin" Value="0,0,30,0"/>
-    </Style>
+    </Style>-->
 
     <!--
         AppBarButtonStyle is used to style a Button (or ToggleButton) for use in an App Bar.  Content will be centered 
@@ -1663,12 +1663,27 @@
     <!-- Item templates -->
 
     <!-- Grid-appropriate 250 pixel square item template as seen in the GroupedItemsPage and ItemsPage -->
-    <DataTemplate x:Key="Standard250x250ItemTemplate">
+    <!--<DataTemplate x:Key="Standard250x250ItemTemplate">
         <Grid HorizontalAlignment="Left" Width="250" Height="250">
             <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
                 <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
             </Border>
             <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+                <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" Height="60" Margin="15,0,15,0"/>
+                <TextBlock Text="{Binding Subtitle}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap" Margin="15,0,15,10"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>-->
+    <!-- Optimized template to minimize overdraw as much as possible. See //build/ video: http://channel9.msdn.com/Events/Build/2012/4-103 -->
+    <DataTemplate x:Key="Standard250x250ItemTemplate">
+        <Grid HorizontalAlignment="Left" Width="250" Height="250">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="155"/>
+                <RowDefinition Height="95"/>
+            </Grid.RowDefinitions>
+            <Image Source="{Binding Image}" Stretch="UniformToFill" Height="155" AutomationProperties.Name="{Binding Title}" Grid.Row="0"/>
+            <Rectangle Height="155" Grid.Row="0" Stroke="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}"/>
+            <StackPanel Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}" Grid.Row="1">
                 <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" Height="60" Margin="15,0,15,0"/>
                 <TextBlock Text="{Binding Subtitle}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap" Margin="15,0,15,10"/>
             </StackPanel>
@@ -1694,7 +1709,7 @@
     </DataTemplate>-->
 
     <!-- List-appropriate 130 pixel high item template as seen in the SplitPage -->
-    <DataTemplate x:Key="Standard130ItemTemplate">
+    <!--<DataTemplate x:Key="Standard130ItemTemplate">
         <Grid Height="110" Margin="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -1709,7 +1724,7 @@
                 <TextBlock Text="{Binding Description}" Style="{StaticResource BodyTextStyle}" MaxHeight="60"/>
             </StackPanel>
         </Grid>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <!--
         List-appropriate 80 pixel high item template as seen in the SplitPage when Filled, and

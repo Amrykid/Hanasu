@@ -41,6 +41,10 @@ namespace Hanasu
             this.InitializeComponent();
             this.Suspending += OnSuspending;
             this.UnhandledException += App_UnhandledException;
+
+            DebugSettings.EnableFrameRateCounter = true;
+            DebugSettings.IsOverdrawHeatMapEnabled = true;
+            DebugSettings.IsBindingTracingEnabled = true;
         }
 
         void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
