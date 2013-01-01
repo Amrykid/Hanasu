@@ -406,7 +406,7 @@ namespace Hanasu.ViewModel
                     System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
 
                     var openTask = mediaElement.OpenAsync(finalUri, cts.Token);
-                    var timeoutTask = Task.Delay(7000); //Wait for a connection for 7 seconds.
+                    var timeoutTask = Task.Delay(10000); //Wait for a connection for 10 seconds.
 
                     var successful = await Task.WhenAny(openTask, timeoutTask);
 

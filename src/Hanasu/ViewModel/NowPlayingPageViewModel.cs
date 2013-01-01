@@ -126,6 +126,7 @@ namespace Hanasu.ViewModel
                     try
                     {
                         SongHistoryOperationStatus = SongHistoryOperationStatusType.Running;
+                        await Task.Delay(10000); // wait 10 seconds before fetching.
                         await RefreshCurrentSongAndHistory(direct);
                         if (SongHistory != null && SongHistory.Count > 0)
                             SongHistoryOperationStatus = SongHistoryOperationStatusType.DataReturned;
