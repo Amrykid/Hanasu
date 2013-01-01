@@ -140,6 +140,12 @@
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="ViewModel\NowPlayingPageViewModel.cs" />
     <Compile Include="ViewModel\SearchPageViewModel.cs" />
+    <Compile Include="View\Flyouts\AboutFlyoutControl.xaml.cs">
+      <DependentUpon>AboutFlyoutControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Flyouts\SettingsFlyoutControl.xaml.cs">
+      <DependentUpon>SettingsFlyoutControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\NowPlayingPage.xaml.cs">
       <DependentUpon>NowPlayingPage.xaml</DependentUpon>
     </Compile>
@@ -190,6 +196,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Flyouts\Flyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Flyouts\AboutFlyoutControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Flyouts\SettingsFlyoutControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

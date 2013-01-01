@@ -284,6 +284,7 @@ namespace Hanasu
                 var settings = new Flyout(Flyout.ShowSettingsCharmBackButtonAction);
                 settings.Header = "About";
                 settings.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 20, 78));
+                settings.FlyoutContent = new Hanasu.View.Flyouts.AboutFlyoutControl();
                 //settings.Content = new About();
                 //settings.HeaderBrush = new SolidColorBrush(_background);
                 //settings.Background = new SolidColorBrush(_background);

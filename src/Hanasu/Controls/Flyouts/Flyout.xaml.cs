@@ -37,12 +37,12 @@ namespace Hanasu.Controls.Flyouts
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register("Header", typeof(string), typeof(Flyout), new PropertyMetadata(""));
 
 
-        public new object Content
+        public new object FlyoutContent
         {
-            get { return GetValue(ContentProperty); }
-            set { SetValue(ContentProperty, value); }
+            get { return GetValue(FlyoutContentProperty); }
+            set { SetValue(FlyoutContentProperty, value); }
         }
-        public new static readonly DependencyProperty ContentProperty = DependencyProperty.Register("Content", typeof(object), typeof(Flyout), new PropertyMetadata(null));
+        public static readonly DependencyProperty FlyoutContentProperty = DependencyProperty.Register("FlyoutContent", typeof(object), typeof(Flyout), new PropertyMetadata(null));
 
         #region Unmodified/original code from the sample
         // FlyoutState - is open or closed

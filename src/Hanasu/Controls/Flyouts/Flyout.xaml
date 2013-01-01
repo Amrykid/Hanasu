@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400" IsHitTestVisible="True">
 
     <Popup x:Name="flyoutPopup" Closed="OnPopupClosed" IsLightDismissEnabled="True" >
         <Border x:Name="mainBorder" BorderThickness="1,0,0,0" Background="{Binding Background, ElementName=userControl}">
@@ -19,11 +19,11 @@
 
             <Canvas x:Name="contentPanel" Margin="0,0,0,0" VerticalAlignment="Top" Background="Transparent">
                 <StackPanel Canvas.Top="30" Canvas.Left="20" Canvas.ZIndex="5" Orientation="Horizontal">
-                    <Button  BorderBrush="Transparent" Click="BackButton_Click" HorizontalAlignment="Left" Style="{StaticResource SnappedBackButtonStyle}" >
+                    <Button  BorderBrush="Transparent" Click="BackButton_Click" HorizontalAlignment="Left" Style="{StaticResource SnappedBackButtonStyle}">
                     </Button>
-                    <TextBlock Style="{StaticResource PageSubheaderTextStyle}" Text="{Binding Header, ElementName=userControl}"/>
+                    <TextBlock Style="{StaticResource PageSubheaderTextStyle}" Text="{Binding Header, ElementName=userControl}" FontWeight="SemiBold"/>
                 </StackPanel>
-                <ContentPresenter />
+                <ContentPresenter Canvas.Top="82" Content="{Binding FlyoutContent, ElementName=userControl}" Width="400"/>
             </Canvas>
 
         </Border>
