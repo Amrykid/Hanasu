@@ -36,13 +36,16 @@ namespace Hanasu
                     StationImage.Margin = new Thickness(-100, 20, 0, 0);
                     StationImage.Width = 300;
                     StationImage.Height = 300;
-                    CurrentSongTextBlock.Margin = new Thickness(50, 15, 0, 0);
+                    CurrentSongTextBlock.Margin = new Thickness(40, 5, 0, 0);
+                    CurrentSongTextBlock.TextAlignment = TextAlignment.Left;
                     CurrentSongTextBlock.Width = double.NaN;
                     pageTitle.Style = App.Current.Resources["PageHeaderTextStyle"] as Style;
                     backButton.Style = App.Current.Resources["BackButtonStyle"] as Style;
                     NowPlayingGrid.Width = 500;
                     PageScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
                     NowPlayingHeader.Margin = new Thickness(50, 0, 0, 0);
+                    MediaControlPanel.HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Left;
+                    MediaControlPanel.Margin = new Thickness(40, 0, 0, 0);
                     break;
 
                 case "Snapped":
@@ -53,10 +56,13 @@ namespace Hanasu
                     CurrentSongTextBlock.Margin = new Thickness(5, 15, 0, 0);
                     CurrentSongTextBlock.Width = 200;
                     CurrentSongTextBlock.TextWrapping = TextWrapping.Wrap;
+                    CurrentSongTextBlock.TextAlignment = TextAlignment.Center;
                     pageTitle.Style = App.Current.Resources["SnappedPageHeaderTextStyle"] as Style;
                     backButton.Style = App.Current.Resources["SnappedBackButtonStyle"] as Style;
                     NowPlayingGrid.Width = 300;
                     PageScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                    MediaControlPanel.HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Center;
+                    MediaControlPanel.Margin = new Thickness(0, 0, 0, 0);
                     break;
             }
         }

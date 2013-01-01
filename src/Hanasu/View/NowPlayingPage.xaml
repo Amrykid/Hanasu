@@ -66,7 +66,12 @@
                         <Grid Grid.Row="1">
                             <StackPanel>
                                 <Image Height="300" Width="300" Margin="-100 20 0 0" Source="{Binding Image}" x:Name="StationImage"/>
-                                <TextBlock FontSize="17" Text="{Binding CurrentSong}" x:Name="CurrentSongTextBlock" Margin="50 15 0 0"/>
+                                <TextBlock FontSize="17" Text="{Binding CurrentSong}" x:Name="CurrentSongTextBlock" TextAlignment="Left"/>
+                                
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="MediaControlPanel">
+                                    <Button Style="{StaticResource PlayAppBarButtonStyle}" x:Name="PlayButton" Command="{Binding PlayCommand}" Margin="-10 0 -10 0"/>
+                                    <Button Style="{StaticResource PauseAppBarButtonStyle}" x:Name="PauseButton" Command="{Binding PauseCommand}" Margin="-10 0 -10 0"/>
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
                     </Grid>

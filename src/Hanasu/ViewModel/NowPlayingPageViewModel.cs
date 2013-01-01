@@ -1,4 +1,5 @@
-﻿using Crystal.Core;
+﻿using Crystal.Command;
+using Crystal.Core;
 using Crystal.Localization;
 using Hanasu.Model;
 using Hanasu.SystemControllers;
@@ -9,19 +10,63 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.Media;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace Hanasu.ViewModel
 {
-    public class NowPlayingPageViewModel : Crystal.Dynamic.AutoIPNotifyingBaseViewModel
+    public class NowPlayingPageViewModel : BaseViewModel
     {
+        public CrystalCommand PlayCommand { get; set; }
+        public CrystalCommand PauseCommand { get; set; }
+
+        private MediaElement mediaElement = null;
+
         public NowPlayingPageViewModel()
         {
             App.Current.Suspending += Current_Suspending;
             App.Current.Resuming += Current_Resuming;
             SongHistory = new ObservableCollection<ShoutcastSongHistoryItem>();
+
+            mediaElement = ((App)App.Current).MediaElement;
+
+            PlayCommand = CommandManager.CreateCommand(() =>
+            {
+                if (mediaElement != null)
+                    if (mediaElement.CurrentState != MediaElementState.Playing)
+                    {
+                        mediaElement.Play();
+                        MediaControl.IsPlaying = true;
+                    }
+            });
+
+            PauseCommand = CommandManager.CreateCommand(() =>
+                {
+                    if (mediaElement != null)
+                        if (mediaElement.CurrentState != MediaElementState.Paused)
+                        {
+                            mediaElement.Pause();
+                            MediaControl.IsPlaying = false;
+                        }
+                });
+        }
+
+        void mediaElement_CurrentStateChanged(object sender, RoutedEventArgs e)
+        {
+            switch (mediaElement.CurrentState)
+            {
+                case MediaElementState.Playing:
+                    PlayCommand.SetCanExecute(false);
+                    PauseCommand.SetCanExecute(true);
+                    break;
+                default:
+                    PlayCommand.SetCanExecute(true);
+                    PauseCommand.SetCanExecute(false);
+                    break;
+            }
         }
 
         void Current_Resuming(object sender, object e)
@@ -47,6 +92,7 @@ namespace Hanasu.ViewModel
             catch (Exception)
             {
             }
+            mediaElement.CurrentStateChanged -= mediaElement_CurrentStateChanged;
 
             App.Current.Suspending -= Current_Suspending;
             App.Current.Resuming -= Current_Resuming;
@@ -58,6 +104,8 @@ namespace Hanasu.ViewModel
             //grab any arguments pass to the page when it was navigated to.
 
             if (argument == null) return;
+
+            mediaElement.CurrentStateChanged += mediaElement_CurrentStateChanged;
 
             var args = (KeyValuePair<string, string>)argument[0];
             var direct = (KeyValuePair<string, string>)argument[1];
