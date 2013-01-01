@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Converters\NowPlayingPageShoutcastOperationVisibilityConverter.cs" />
     <Compile Include="Extensions\MediaElementExtensions.cs" />
     <Compile Include="Extensions\XElementExtensions.cs" />
     <Compile Include="Model\Station.cs" />

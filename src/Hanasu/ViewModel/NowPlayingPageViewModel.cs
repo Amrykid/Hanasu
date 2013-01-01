@@ -73,10 +73,16 @@ namespace Hanasu.ViewModel
             directUrl = direct;
 
             if (CurrentStation.ServerType.ToLower() == "shoutcast")
+            {
                 if (!string.IsNullOrWhiteSpace(directUrl.Value))
                     try
                     {
+                        SongHistoryOperationStatus = SongHistoryOperationStatusType.Running;
                         await RefreshCurrentSongAndHistory(direct);
+                        if (SongHistory != null && SongHistory.Count > 0)
+                            SongHistoryOperationStatus = SongHistoryOperationStatusType.DataReturned;
+                        else
+                            SongHistoryOperationStatus = SongHistoryOperationStatusType.Ready;
                     }
                     catch (Exception)
                     {
@@ -86,6 +92,11 @@ namespace Hanasu.ViewModel
                             dt.Tick -= dt_Tick;
                         }
                     }
+            }
+            else
+            {
+                SongHistoryOperationStatus = SongHistoryOperationStatusType.UnsupportedServer;
+            }
         }
 
         private KeyValuePair<string, string> directUrl;
@@ -94,7 +105,15 @@ namespace Hanasu.ViewModel
         {
             if (Windows.UI.Xaml.Window.Current.Visible) //only fetch new info if the window is visible.. or else, its a waste of power.
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
-                    await RefreshCurrentSongAndHistory(directUrl));
+                {
+                    SongHistoryOperationStatus = SongHistoryOperationStatusType.Running;
+                    await RefreshCurrentSongAndHistory(directUrl);
+
+                    if (SongHistory != null && SongHistory.Count > 0)
+                        SongHistoryOperationStatus = SongHistoryOperationStatusType.DataReturned;
+                    else
+                        SongHistoryOperationStatus = SongHistoryOperationStatusType.Ready;
+                });
         }
 
         private async Task RefreshCurrentSongAndHistory(KeyValuePair<string, string> direct)
@@ -130,6 +149,10 @@ namespace Hanasu.ViewModel
                     dt.Start();
                 }
             }
+            else
+            {
+                SongHistoryOperationStatus = SongHistoryOperationStatusType.NetworkStatusProhibits;
+            }
         }
 
         public Station CurrentStation { get; set; }
@@ -139,7 +162,50 @@ namespace Hanasu.ViewModel
         public ImageSource Image { get; set; }
 
         public ObservableCollection<ShoutcastSongHistoryItem> SongHistory { get; set; }
+        public SongHistoryOperationStatusType SongHistoryOperationStatus
+        {
+            get { return (SongHistoryOperationStatusType)GetProperty("SongHistoryOperationStatus"); }
+            set
+            {
+                SetProperty("SongHistoryOperationStatus", value);
+
+                switch (value)
+                {
+                    case SongHistoryOperationStatusType.DataReturned:
+                        SongHistoryOperationStatusMessage = "";
+                        break;
+                    case SongHistoryOperationStatusType.Running:
+                        SongHistoryOperationStatusMessage = LocalizationManager.GetLocalizedValue("SongHistoryFetchingStatusMsg");
+                        break;
+                    case SongHistoryOperationStatusType.NetworkStatusProhibits:
+                        SongHistoryOperationStatusMessage = LocalizationManager.GetLocalizedValue("SongHistoryNetworkConstraintsErrorMsg");
+                        break;
+                    case SongHistoryOperationStatusType.UnsupportedServer:
+                        SongHistoryOperationStatusMessage = LocalizationManager.GetLocalizedValue("SongHistoryServerNotSupportedErrorMsg");
+                        break;
+                    case SongHistoryOperationStatusType.Ready:
+                        SongHistoryOperationStatusMessage = LocalizationManager.GetLocalizedValue("SongHistoryReadyStatusMsg");
+                        break;
+                }
+            }
+        }
+        public string SongHistoryOperationStatusMessage
+        {
+            get { return (string)GetProperty("SongHistoryOperationStatusMessage"); }
+            set { SetProperty("SongHistoryOperationStatusMessage", value); }
+        }
+
+        public enum SongHistoryOperationStatusType
+        {
+            Ready = 0,
+            Running = 1,
+            DataReturned = 2,
+            NetworkStatusProhibits = 3,
+            UnsupportedServer = 4
+        }
 
         public string CurrentSong { get; set; }
     }
+
+
 }

@@ -8,8 +8,14 @@
     xmlns:cbind="using:Crystal.Binding"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:conv="using:Hanasu.Converters"
     mc:Ignorable="d" x:Name="pageRoot">
 
+    <local:LayoutAwarePage.Resources>
+        <conv:NowPlayingPageShoutcastOperationVisibilityConverter x:Key="NPSOVC1"/>
+        <conv:NowPlayingPageShoutcastOperationVisibilityReverseConverter x:Key="NPSOVC2"/>
+    </local:LayoutAwarePage.Resources>
+    
     <local:LayoutAwarePage.DataContext>
         <vm:NowPlayingPageViewModel />
     </local:LayoutAwarePage.DataContext>
@@ -73,7 +79,8 @@
                         <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="SongHistoryHeader" Margin="20 0 0 0"/>
 
                         <Grid Grid.Row="1" Margin="20 10 0 0" Width="Auto">
-                            <GridView ItemsSource="{Binding SongHistory}" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="Auto">
+                            <TextBlock x:Name="SongHistoryMsgBlock" FontSize="18" TextAlignment="Center" TextWrapping="Wrap" Text="{Binding SongHistoryOperationStatusMessage}" Visibility="{Binding Path=SongHistoryOperationStatus,Converter={StaticResource NPSOVC1}}"/>
+                            <GridView ItemsSource="{Binding SongHistory}" Visibility="{Binding Path=SongHistoryOperationStatus,Converter={StaticResource NPSOVC2}}" x:Name="SongHistoryGridView" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="Auto">
                                 <GridView.ItemContainerTransitions>
                                     <TransitionCollection>
                                         <AddDeleteThemeTransition/>
