@@ -207,10 +207,8 @@ namespace Hanasu
         public ObservableCollection<Station> AvailableStations { get; set; }
 
 
-        protected override async void OnSearchActivated(SearchActivatedEventArgs args)
+        protected override async void PostStartupSearchActivated(SearchActivatedEventArgs args)
         {
-            base.OnSearchActivated(args); //required
-
             SetupSettingsCharm();
 
             RootFrame.Style = Resources["RootFrameStyle"] as Style; // Fixes background audio issue across pages 
@@ -237,10 +235,8 @@ namespace Hanasu
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
         //protected override void OnLaunched(LaunchActivatedEventArgs args)
-        protected override void PostStartup(LaunchActivatedEventArgs args)
+        protected override void PostStartupNormalLaunch(LaunchActivatedEventArgs args)
         {
-            base.PostStartup(args);
-
             SetupSettingsCharm();
 
             RootFrame.Style = Resources["RootFrameStyle"] as Style; // Fixes background audio issue across pages http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/
