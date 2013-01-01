@@ -133,8 +133,29 @@ namespace Hanasu.ViewModel
                     try
                     {
                         SongHistoryOperationStatus = SongHistoryOperationStatusType.Running;
-                        await Task.Delay(10000); // wait 10 seconds before fetching.
-                        await RefreshCurrentSongAndHistory(direct);
+                        if (CurrentStationCache == null || CurrentStationCache.Item1 != CurrentStation)
+                        {
+                            await Task.Delay(10000); // wait 10 seconds before fetching to allow the app to catch up.
+                            await RefreshCurrentSongAndHistory(directUrl);
+                        }
+                        else
+                        {
+                            if (CurrentStationCache != null && CurrentStationCache.Item1 == CurrentStation)
+                            {
+                                if (CurrentStationCache.Item2 != null)
+                                {
+                                    SongHistory = CurrentStationCache.Item2;
+
+                                    CurrentSong = SongHistory[0].Song;
+
+                                    RaisePropertyChanged(x => this.CurrentSong);
+
+                                    RaisePropertyChanged(x => this.SongHistory);
+
+                                    MediaControl.TrackName = CurrentSong;
+                                }
+                            }
+                        }
                         if (SongHistory != null && SongHistory.Count > 0)
                             SongHistoryOperationStatus = SongHistoryOperationStatusType.DataReturned;
                         else
@@ -163,7 +184,29 @@ namespace Hanasu.ViewModel
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
                 {
                     SongHistoryOperationStatus = SongHistoryOperationStatusType.Running;
-                    await RefreshCurrentSongAndHistory(directUrl);
+
+                    if (CurrentStationCache == null || CurrentStationCache.Item1 != CurrentStation)
+                    {
+                        await RefreshCurrentSongAndHistory(directUrl);
+                    }
+                    else
+                    {
+                        if (CurrentStationCache != null && CurrentStationCache.Item1 == CurrentStation)
+                        {
+                            if (CurrentStationCache.Item2 != null)
+                            {
+                                SongHistory = CurrentStationCache.Item2;
+
+                                CurrentSong = SongHistory[0].Song;
+
+                                RaisePropertyChanged(x => this.CurrentSong);
+
+                                RaisePropertyChanged(x => this.SongHistory);
+
+                                MediaControl.TrackName = CurrentSong;
+                            }
+                        }
+                    }
 
                     if (SongHistory != null && SongHistory.Count > 0)
                         SongHistoryOperationStatus = SongHistoryOperationStatusType.DataReturned;
@@ -196,6 +239,8 @@ namespace Hanasu.ViewModel
                 MediaControl.TrackName = CurrentSong;
 
 
+                CurrentStationCache = new Tuple<Station, ObservableCollection<ShoutcastSongHistoryItem>>(CurrentStation, SongHistory);
+
                 if (!dt.IsEnabled)
                 {
                     dt.Interval = new TimeSpan(0, 2, 0);
@@ -217,6 +262,7 @@ namespace Hanasu.ViewModel
 
         public ImageSource Image { get; set; }
 
+        private static Tuple<Station, ObservableCollection<ShoutcastSongHistoryItem>> CurrentStationCache = null;
         public ObservableCollection<ShoutcastSongHistoryItem> SongHistory { get; set; }
         public SongHistoryOperationStatusType SongHistoryOperationStatus
         {
