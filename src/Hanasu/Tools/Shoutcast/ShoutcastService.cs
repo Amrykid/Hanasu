@@ -118,5 +118,7 @@ namespace Hanasu.Tools.Shoutcast
     {
         public DateTime Time { get; set; }
         public string Song { get; set; }
+
+        public string LocalizedTime { get; set; }
     }
 }

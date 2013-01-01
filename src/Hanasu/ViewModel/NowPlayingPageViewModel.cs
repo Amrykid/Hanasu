@@ -1,4 +1,5 @@
 ﻿using Crystal.Core;
+using Crystal.Localization;
 using Hanasu.Model;
 using Hanasu.SystemControllers;
 using Hanasu.Tools.Shoutcast;
@@ -101,6 +102,15 @@ namespace Hanasu.ViewModel
             if (NetworkCostController.CurrentNetworkingBehavior == NetworkingBehavior.Normal)
             {
                 SongHistory = await ShoutcastService.GetShoutcastStationSongHistory(CurrentStation, direct.Value);
+
+                for (int i = 0; i < SongHistory.Count; i++)
+                {
+                    var x = SongHistory[i];
+
+                    x.LocalizedTime = LocalizationManager.FormatDateTime(x.Time);
+
+                    SongHistory[i] = x;
+                }
 
                 CurrentSong = SongHistory[0].Song;
 
