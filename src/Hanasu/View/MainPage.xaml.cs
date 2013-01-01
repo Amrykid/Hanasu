@@ -209,6 +209,10 @@ namespace Hanasu
                     pageTitle.Style = App.Current.Resources["PageHeaderTextStyle"] as Style;
                     backButton.Style = App.Current.Resources["BackButtonStyle"] as Style;
 
+                    WaitInternetTextBlock.FontSize = 22;
+                    WaitInternetTextBlock.Width = double.NaN; //Auto?
+                    WaitInternetTextBlock.TextAlignment = TextAlignment.Left; //Default?
+
                     foreach (Button ui in MediaControlPanel.Children)
                         ui.Margin = new Thickness(0, 0, 0, 0);
                     break;
@@ -227,6 +231,10 @@ namespace Hanasu
 
                     pageTitle.Style = App.Current.Resources["SnappedPageHeaderTextStyle"] as Style;
                     backButton.Style = App.Current.Resources["SnappedBackButtonStyle"] as Style;
+
+                    WaitInternetTextBlock.FontSize = 19;
+                    WaitInternetTextBlock.Width = 200;
+                    WaitInternetTextBlock.TextAlignment = TextAlignment.Center;
 
                     foreach (Button ui in MediaControlPanel.Children)
                         ui.Margin = new Thickness(-15, 0, -15, 0);

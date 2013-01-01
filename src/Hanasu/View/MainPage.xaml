@@ -71,7 +71,7 @@
             <Grid x:Name="WaitInternetGrid" Visibility="Collapsed">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ProgressRing Foreground="#FFFFD200" Height="100" Width="100" IsActive="True"></ProgressRing>
-                    <TextBlock i18n:CrystalLocalizedValueHelper.LocalizationKey="WaitForInternetStatusMsg" FontSize="22"/>
+                    <TextBlock i18n:CrystalLocalizedValueHelper.LocalizationKey="WaitForInternetStatusMsg" FontSize="22" x:Name="WaitInternetTextBlock" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
 
