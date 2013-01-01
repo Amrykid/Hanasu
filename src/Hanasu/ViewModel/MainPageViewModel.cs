@@ -511,6 +511,8 @@ namespace Hanasu.ViewModel
         private void NavigateToNowPlayingPage(Uri finalUri)
         {
             //if its made it this far, try navigating to the "now playing page".
+            if (NavigationService.IsNavigatedTo<NowPlayingPageViewModel>()) return;
+
             NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, string>("station", CurrentStationName), new KeyValuePair<string, string>("directurl", finalUri != null ? finalUri.ToString() : ""));
         }
         public void NavigateToNowPlayingPage()
