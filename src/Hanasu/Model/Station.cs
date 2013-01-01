@@ -81,7 +81,11 @@ namespace Hanasu.Model
 
                 http.Dispose();
             }
-            _image = new BitmapImage(new Uri("ms-appdata:///local/Hanasu/" + file.DisplayName, UriKind.RelativeOrAbsolute));
+            //_image = new BitmapImage(new Uri("ms-appdata:///local/Hanasu/" + file.DisplayName, UriKind.RelativeOrAbsolute));
+
+            var thumb = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.PicturesView);
+            _image = new BitmapImage();
+            await ((BitmapImage)_image).SetSourceAsync(thumb);
 
             RaisePropertyChanged(z => this.Image);
         }
