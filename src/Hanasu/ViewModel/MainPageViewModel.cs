@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Collections.Generic;
 using Crystal.Navigation;
+using Crystal.Command;
 
 namespace Hanasu.ViewModel
 {
@@ -28,24 +29,25 @@ namespace Hanasu.ViewModel
 
             RegisterWithMediaTransportControls();
 
-            PlayCommand = CommandManager.CreateCommandFromBinding((x => this.IsPlaying), (s, e) => !IsPlaying && CurrentStation != null, (o) =>
+            PlayCommand = CommandManager.CreateCommand(() =>
                 {
                     if (mediaElement != null)
                         if (mediaElement.CurrentState != MediaElementState.Playing)
                         {
                             PlayStation(CurrentStation, mediaElement, false);
                             IsPlaying = true;
+                            SetMediaButtons();
                         }
                 });
 
-            PauseCommand = CommandManager.CreateCommandFromBinding((x => this.IsPlaying), (s, e) =>
-                IsPlaying, (o) =>
+            PauseCommand = CommandManager.CreateCommand(() =>
                 {
                     if (mediaElement != null)
                         if (mediaElement.CurrentState != MediaElementState.Paused)
                         {
                             mediaElement.Pause();
                             IsPlaying = false;
+                            SetMediaButtons();
                         }
                 });
 
@@ -66,6 +68,8 @@ namespace Hanasu.ViewModel
                 mediaElement.MediaOpened -= mediaElement_MediaOpened;
                 mediaElement.MediaEnded -= mediaElement_MediaEnded;
             }
+
+            ((App)App.Current).MediaElement.CurrentStateChanged -= mediaElement_CurrentStateChanged;
 
             //NetworkCostController.InternetConnectionChanged -= NetworkCostController_InternetConnectionChanged;
         }
@@ -170,6 +174,30 @@ namespace Hanasu.ViewModel
             NetworkCostController.ApproachingDataLimitEvent += NetworkCostController_ApproachingDataLimitEvent;
         }
 
+        void mediaElement_CurrentStateChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            SetMediaButtons();
+        }
+
+        private void SetMediaButtons()
+        {
+            if (mediaElement == null) return;
+
+            IsPlaying = mediaElement.CurrentState == MediaElementState.Playing || mediaElement.CurrentState == MediaElementState.Buffering || mediaElement.CurrentState == MediaElementState.Opening; //Detect status
+
+            switch (IsPlaying) //MediaElement.CurrentState
+            {
+                case true:
+                    PlayCommand.SetCanExecute(false);
+                    PauseCommand.SetCanExecute(true);
+                    break;
+                case false:
+                    PlayCommand.SetCanExecute(true);
+                    PauseCommand.SetCanExecute(false);
+                    break;
+            }
+        }
+
         void mediaElement_MediaEnded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             ResetMediaControlInfo();
@@ -226,10 +254,10 @@ namespace Hanasu.ViewModel
             set { SetProperty<bool>(x => this.IsPlaying, value); }
         }
 
-        public ICommand PlayCommand { get; set; }
-        public ICommand PauseCommand { get; set; }
-        public ICommand PreviousStationCommand { get; set; }
-        public ICommand NextStationCommand { get; set; }
+        public CrystalCommand PlayCommand { get; set; }
+        public CrystalCommand PauseCommand { get; set; }
+        public CrystalCommand PreviousStationCommand { get; set; }
+        public CrystalCommand NextStationCommand { get; set; }
 
 
         async void MediaControl_SoundLevelChanged(object sender, object e)
@@ -553,6 +581,9 @@ namespace Hanasu.ViewModel
 
         public override void OnNavigatedTo(dynamic argument = null)
         {
+            ((App)App.Current).MediaElement.CurrentStateChanged += mediaElement_CurrentStateChanged;
+
+            SetMediaButtons();
 
             NetworkCostController.InternetConnectionChanged += NetworkCostController_InternetConnectionChanged;
 

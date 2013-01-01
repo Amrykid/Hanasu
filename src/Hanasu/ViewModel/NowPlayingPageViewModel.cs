@@ -56,6 +56,11 @@ namespace Hanasu.ViewModel
 
         void mediaElement_CurrentStateChanged(object sender, RoutedEventArgs e)
         {
+            SetMediaButtons();
+        }
+
+        private void SetMediaButtons()
+        {
             switch (mediaElement.CurrentState)
             {
                 case MediaElementState.Playing:
@@ -104,6 +109,8 @@ namespace Hanasu.ViewModel
             //grab any arguments pass to the page when it was navigated to.
 
             if (argument == null) return;
+
+            SetMediaButtons();
 
             mediaElement.CurrentStateChanged += mediaElement_CurrentStateChanged;
 

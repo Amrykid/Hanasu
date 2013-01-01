@@ -168,22 +168,25 @@ namespace Hanasu
 
         private void DetectMediaElementState()
         {
-            if (globalMediaElement.CurrentState == MediaElementState.Playing)
-            {
-                //nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                NowPlayingAppBarButton.IsEnabled = true;
-            }
-            else if (globalMediaElement.CurrentState == MediaElementState.Opening || globalMediaElement.CurrentState == MediaElementState.Buffering)
-            {
-                ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            }
-            else //if (globalMediaElement.CurrentState == MediaElementState.Closed || globalMediaElement.CurrentState == MediaElementState.Stopped)
-            {
-                //nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                NowPlayingAppBarButton.IsEnabled = false;
-                ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            }
+            Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                {
+                    if (globalMediaElement.CurrentState == MediaElementState.Playing)
+                    {
+                        //nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                        ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                        NowPlayingAppBarButton.IsEnabled = true;
+                    }
+                    else if (globalMediaElement.CurrentState == MediaElementState.Opening || globalMediaElement.CurrentState == MediaElementState.Buffering)
+                    {
+                        ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    }
+                    else //if (globalMediaElement.CurrentState == MediaElementState.Closed || globalMediaElement.CurrentState == MediaElementState.Stopped)
+                    {
+                        //nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                        NowPlayingAppBarButton.IsEnabled = false;
+                        ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    }
+                });
         }
 
         public override void OnVisualStateChange(string newVisualState)
