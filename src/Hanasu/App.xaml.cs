@@ -22,6 +22,11 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.UI.ApplicationSettings;
+using Windows.UI.Popups;
+using Windows.System;
+using Hanasu.Controls;
+using Hanasu.Controls.Flyouts;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -206,6 +211,8 @@ namespace Hanasu
         {
             base.OnSearchActivated(args); //required
 
+            SetupSettingsCharm();
+
             RootFrame.Style = Resources["RootFrameStyle"] as Style; // Fixes background audio issue across pages 
             // http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/
 
@@ -234,6 +241,8 @@ namespace Hanasu
         {
             base.PostStartup(args);
 
+            SetupSettingsCharm();
+
             RootFrame.Style = Resources["RootFrameStyle"] as Style; // Fixes background audio issue across pages http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/241ba3b4-3e2a-4f9b-a704-87c7b1be7988/
 
             Frame rootFrame = RootFrame;
@@ -258,6 +267,43 @@ namespace Hanasu
 
             // Ensure the current window is active
             Window.Current.Activate();
+        }
+
+        private void SetupSettingsCharm()
+        {
+            SettingsPane.GetForCurrentView().CommandsRequested += App_CommandsRequested;
+        }
+
+        void App_CommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            //http://rohitshaw.com/2012/11/06/adding-a-settings-panel-in-charms-in-windows-8-app-about-and-privacy-policy/
+
+            // Add an About command
+            var about = new SettingsCommand("about", "About", (handler) =>
+            {
+                var settings = new Flyout(Flyout.ShowSettingsCharmBackButtonAction);
+                settings.Header = "About";
+                settings.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 20, 78));
+                //settings.Content = new About();
+                //settings.HeaderBrush = new SolidColorBrush(_background);
+                //settings.Background = new SolidColorBrush(_background);
+                //settings.HeaderText = "About";
+                //settings.IsOpen = true;
+                settings.Show();
+            });
+            args.Request.ApplicationCommands.Add(about);
+            // Adding a Privacy Policy
+            var privacy = new SettingsCommand("privacypolicy", "Privacy Policy", OpenPrivacyPolicy);
+            args.Request.ApplicationCommands.Add(privacy);
+
+        }
+
+        private async void OpenPrivacyPolicy(IUICommand command)
+        {
+            return;
+
+            Uri uri = new Uri("http://Add A Link for your Privacy policy");
+            await Launcher.LaunchUriAsync(uri);
         }
 
         /// <summary>

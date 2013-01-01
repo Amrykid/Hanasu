@@ -113,6 +113,9 @@
     </Compile>
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Controls\Flyouts\Flyout.xaml.cs">
+      <DependentUpon>Flyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\NowPlayingPageShoutcastOperationVisibilityConverter.cs" />
     <Compile Include="Extensions\MediaElementExtensions.cs" />
     <Compile Include="Extensions\XElementExtensions.cs" />
@@ -185,6 +188,10 @@
     <Page Include="Common\StandardStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Flyouts\Flyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\NowPlayingPage.xaml">
       <Generator>MSBuild:Compile</Generator>
