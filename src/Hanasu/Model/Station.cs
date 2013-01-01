@@ -87,6 +87,14 @@ namespace Hanasu.Model
             _image = new BitmapImage();
             await ((BitmapImage)_image).SetSourceAsync(thumb);
 
+            if (StationDisplay == StationDisplayType.Main)
+                ((BitmapImage)_image).DecodePixelHeight = 155;
+            else if (StationDisplay == StationDisplayType.Small)
+            {
+                ((BitmapImage)_image).DecodePixelHeight = 60;
+                ((BitmapImage)_image).DecodePixelWidth = 60;
+            }
+
             RaisePropertyChanged(z => this.Image);
         }
         public string Subtitle { get; set; }
@@ -96,6 +104,31 @@ namespace Hanasu.Model
         public string ServerType { get; set; }
 
         public Uri HomepageUrl { get; set; }
+
+        private StationDisplayType _stationDisplay = StationDisplayType.Main;
+        public StationDisplayType StationDisplay
+        {
+            get { return _stationDisplay; }
+            set
+            {
+                _stationDisplay = value;
+
+                if (_image != null)
+                    GetCachedImage(); //Updates the image with a re-decoded image.
+            }
+        }
+    }
+
+    public enum StationDisplayType
+    {
+        /// <summary>
+        /// DecodeHeight = 155 according to StandardStyles.xaml's optimized Standard250x250ItemTemplate template
+        /// </summary>
+        Main = 0,
+        /// <summary>
+        /// DecodeHeight/Width = 60 according to StandardStyles.xaml's Standard80ItemTemplate template
+        /// </summary>
+        Small,
     }
 
     public class StationGroup : Crystal.Dynamic.AutoIPNotifyingBaseModel //, ISupportIncrementalLoading

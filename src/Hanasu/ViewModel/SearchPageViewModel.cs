@@ -124,7 +124,10 @@ namespace Hanasu.ViewModel
                 Stations.Clear();
 
             foreach (var stat in names)
+            {
+                stat.StationDisplay = StationDisplayType.Small;
                 Stations.Add(stat);
+            }
 
             RaisePropertyChanged(x => this.Stations);
         }

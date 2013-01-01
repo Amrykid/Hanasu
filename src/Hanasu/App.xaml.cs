@@ -42,9 +42,11 @@ namespace Hanasu
             this.Suspending += OnSuspending;
             this.UnhandledException += App_UnhandledException;
 
+#if DEBUG
             DebugSettings.EnableFrameRateCounter = true;
-            DebugSettings.IsOverdrawHeatMapEnabled = true;
+            //DebugSettings.IsOverdrawHeatMapEnabled = true;
             DebugSettings.IsBindingTracingEnabled = true;
+#endif
         }
 
         void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)

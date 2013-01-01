@@ -304,7 +304,10 @@ namespace Hanasu.ViewModel
                     sGroup.Items = new ObservableCollection<Station>();
 
                     foreach (var i in stations.Where(x => x.UnlocalizedFormat == format).Take(2))
+                    {
+                        i.StationDisplay = StationDisplayType.Main;
                         sGroup.Items.Add(i);
+                    }
 
                     AvailableStations.Add(sGroup);
                 }
