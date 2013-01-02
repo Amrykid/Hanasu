@@ -95,6 +95,8 @@ namespace Hanasu.Model
                 ((BitmapImage)_image).DecodePixelWidth = 60;
             }
 
+            await Task.Yield();
+
             RaisePropertyChanged(z => this.Image);
         }
         public string Subtitle { get; set; }
