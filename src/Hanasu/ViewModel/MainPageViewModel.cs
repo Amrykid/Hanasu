@@ -58,6 +58,8 @@ namespace Hanasu.ViewModel
             PreviousStationCommand = CommandManager.CreateCommand(() =>
                 {
                 });
+
+            SetMediaButtons();
         }
         public override void OnNavigatedFrom()
         {
@@ -181,20 +183,26 @@ namespace Hanasu.ViewModel
 
         private void SetMediaButtons()
         {
-            if (mediaElement == null) return;
-
-            IsPlaying = mediaElement.CurrentState == MediaElementState.Playing || mediaElement.CurrentState == MediaElementState.Buffering || mediaElement.CurrentState == MediaElementState.Opening; //Detect status
-
-            switch (IsPlaying) //MediaElement.CurrentState
+            if (mediaElement == null)
             {
-                case true:
-                    PlayCommand.SetCanExecute(false);
-                    PauseCommand.SetCanExecute(true);
-                    break;
-                case false:
-                    PlayCommand.SetCanExecute(true);
-                    PauseCommand.SetCanExecute(false);
-                    break;
+                PlayCommand.SetCanExecute(false);
+                PauseCommand.SetCanExecute(false);
+            }
+            else
+            {
+                IsPlaying = mediaElement.CurrentState == MediaElementState.Playing || mediaElement.CurrentState == MediaElementState.Buffering || mediaElement.CurrentState == MediaElementState.Opening; //Detect status
+
+                switch (IsPlaying) //MediaElement.CurrentState
+                {
+                    case true:
+                        PlayCommand.SetCanExecute(false);
+                        PauseCommand.SetCanExecute(true);
+                        break;
+                    case false:
+                        PlayCommand.SetCanExecute(true);
+                        PauseCommand.SetCanExecute(false);
+                        break;
+                }
             }
         }
 
