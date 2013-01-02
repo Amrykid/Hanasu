@@ -15,7 +15,7 @@
         <conv:NowPlayingPageShoutcastOperationVisibilityConverter x:Key="NPSOVC1"/>
         <conv:NowPlayingPageShoutcastOperationVisibilityReverseConverter x:Key="NPSOVC2"/>
     </local:LayoutAwarePage.Resources>
-    
+
     <local:LayoutAwarePage.DataContext>
         <vm:NowPlayingPageViewModel />
     </local:LayoutAwarePage.DataContext>
@@ -67,7 +67,7 @@
                             <StackPanel>
                                 <Image Height="300" Width="300" Margin="-100 20 0 0" Source="{Binding Image}" x:Name="StationImage"/>
                                 <TextBlock FontSize="17" Text="{Binding CurrentSong}" x:Name="CurrentSongTextBlock" TextAlignment="Left"/>
-                                
+
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="MediaControlPanel">
                                     <Button Style="{StaticResource PlayAppBarButtonStyle}" x:Name="PlayButton" Command="{Binding PlayCommand}" Margin="-10 0 -10 0"/>
                                     <Button Style="{StaticResource PauseAppBarButtonStyle}" x:Name="PauseButton" Command="{Binding PauseCommand}" Margin="-10 0 -10 0"/>
@@ -76,7 +76,7 @@
                         </Grid>
                     </Grid>
 
-                    <Grid VerticalAlignment="Top" Height="600" Width="500" x:Name="SongHistoryGrid">
+                    <Grid VerticalAlignment="Top" Height="600" MinWidth="500" Width="Auto" x:Name="SongHistoryGrid">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20*"/>
@@ -84,17 +84,20 @@
                         <TextBlock Grid.Row="0" Style="{StaticResource PageSubheaderTextStyle}" i18n:CrystalLocalizedValueHelper.LocalizationKey="SongHistoryHeader" Margin="20 0 0 0"/>
 
                         <Grid Grid.Row="1" Margin="20 10 0 0" Width="Auto">
-                            <TextBlock x:Name="SongHistoryMsgBlock" FontSize="18" TextAlignment="Center" TextWrapping="Wrap" Text="{Binding SongHistoryOperationStatusMessage}" Visibility="{Binding Path=SongHistoryOperationStatus,Converter={StaticResource NPSOVC1}}"/>
-                            <GridView ItemsSource="{Binding SongHistory}" Visibility="{Binding Path=SongHistoryOperationStatus,Converter={StaticResource NPSOVC2}}" x:Name="SongHistoryGridView" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="Auto">
+                            <TextBlock x:Name="SongHistoryMsgBlock" FontSize="18" TextAlignment="Center" TextWrapping="Wrap" 
+                                       Text="{Binding SongHistoryOperationStatusMessage}" Visibility="{Binding Path=SongHistoryOperationStatus,Converter={StaticResource NPSOVC1}}"/>
+                            <GridView ItemsSource="{Binding SongHistory}" Visibility="{Binding Path=SongHistoryOperationStatus,Converter={StaticResource NPSOVC2}}" x:Name="SongHistoryGridView" 
+                                      ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="Auto" SelectionMode="None">
                                 <GridView.ItemContainerTransitions>
                                     <TransitionCollection>
                                         <AddDeleteThemeTransition/>
                                     </TransitionCollection>
                                 </GridView.ItemContainerTransitions>
-                                
+
                                 <GridView.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Width="500">
+                                        <Grid MinWidth="500" Width="Auto">
+                                            <!--<Rectangle Stroke="{StaticResource ApplicationForegroundThemeBrush}" Width="{Binding ElementName=SongHistoryGrid,Path=ActualWidth}"/>-->
                                             <StackPanel>
                                                 <TextBlock FontSize="17" Text="{Binding Song}" TextTrimming="WordEllipsis" TextAlignment="Center" Width="Auto"/>
                                                 <TextBlock FontSize="14" Margin="0 3 0 0" Text="{Binding LocalizedTime}" HorizontalAlignment="Center"/>
