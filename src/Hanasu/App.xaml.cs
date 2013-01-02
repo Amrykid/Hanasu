@@ -185,6 +185,15 @@ namespace Hanasu
                     localRepo = null;
                 }
 
+                try
+                {
+                    localRepo = await App.AppFolder.GetFileAsync("Stations.xml");
+                }
+                catch (Exception)
+                {
+                    localRepo = null;
+                }
+
 
                 XDocument doc = null;
 
