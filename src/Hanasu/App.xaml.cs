@@ -341,8 +341,8 @@ namespace Hanasu
 
 
             // Adding a Privacy Policy
-            var privacy = new SettingsCommand("privacypolicy", LocalizationManager.GetLocalizedValue("PrivacyPolicyItem"), OpenPrivacyPolicy);
-            args.Request.ApplicationCommands.Add(privacy);
+            //var privacy = new SettingsCommand("privacypolicy", LocalizationManager.GetLocalizedValue("PrivacyPolicyItem"), OpenPrivacyPolicy);
+            //args.Request.ApplicationCommands.Add(privacy);
 
         }
 
