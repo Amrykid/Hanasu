@@ -48,6 +48,10 @@ namespace Hanasu
             this.Suspending += OnSuspending;
             this.UnhandledException += App_UnhandledException;
 
+
+            //try and load settings
+            LoadSettings();
+
 #if DEBUG
             DebugSettings.EnableFrameRateCounter = true;
             //DebugSettings.IsOverdrawHeatMapEnabled = true;
@@ -87,9 +91,6 @@ namespace Hanasu
 
             await GetAppFolder();
 
-            //try and load settings
-            LoadSettings();
-
             base.PreStartup();
         }
 
@@ -101,8 +102,8 @@ namespace Hanasu
             if (ApplicationData.Current.LocalSettings.Values.Count == 0)
             {
                 //set default settings
-                HanasuAppSettings.PreferedApplicationTheme = Enum.GetName(typeof(ApplicationTheme), ApplicationTheme.Dark);
-                HanasuAppSettings.PreferedChromeBackgroundColor = Windows.UI.Color.FromArgb(255, 0, 20, 78).ToString();
+                HanasuAppSettings.PreferredApplicationTheme = Enum.GetName(typeof(ApplicationTheme), ApplicationTheme.Dark);
+                HanasuAppSettings.PreferredChromeBackgroundColor = Windows.UI.Color.FromArgb(255, 0, 20, 78).ToString();
 
                 SaveSettings();
             }
@@ -113,9 +114,11 @@ namespace Hanasu
                     HanasuAppSettings.SetProperty(setting.Key, setting.Value);
                 }
             }
+
+            Application.Current.RequestedTheme = (ApplicationTheme)Enum.Parse(typeof(ApplicationTheme), HanasuAppSettings.PreferredApplicationTheme);
         }
 
-        private static void SaveSettings()
+        internal static void SaveSettings()
         {
             HanasuAppSettings.IteratePropertiesAndValues((property, value) =>
             {
@@ -310,11 +313,11 @@ namespace Hanasu
             //http://rohitshaw.com/2012/11/06/adding-a-settings-panel-in-charms-in-windows-8-app-about-and-privacy-policy/
 
             // Add an About command
-            var about = new SettingsCommand("about", "About", (handler) =>
+            var about = new SettingsCommand("about", LocalizationManager.GetLocalizedValue("AboutItem"), (handler) =>
             {
                 var settings = new Flyout(Flyout.ShowSettingsCharmBackButtonAction);
                 settings.Header = handler.Label;
-                settings.Background = new SolidColorBrush(Hanasu.Tools.ColorHelper.GetColorFromHexString(HanasuAppSettings.PreferedChromeBackgroundColor));
+                settings.Background = new SolidColorBrush(Hanasu.Tools.ColorHelper.GetColorFromHexString(HanasuAppSettings.PreferredChromeBackgroundColor));
                 settings.FlyoutContent = new Hanasu.View.Flyouts.AboutFlyoutControl();
                 //settings.Content = new About();
                 //settings.HeaderBrush = new SolidColorBrush(_background);
@@ -326,19 +329,19 @@ namespace Hanasu
             args.Request.ApplicationCommands.Add(about);
 
 
-            var preferences = new SettingsCommand("settings", "Preferences", (handler) =>
+            var preferences = new SettingsCommand("settings", LocalizationManager.GetLocalizedValue("PreferencesItem"), (handler) =>
                 {
                     var settings = new Flyout(Flyout.ShowSettingsCharmBackButtonAction);
                     settings.Header = handler.Label;
-                    settings.Background = new SolidColorBrush(Hanasu.Tools.ColorHelper.GetColorFromHexString(HanasuAppSettings.PreferedChromeBackgroundColor));
-                    settings.FlyoutContent = new Hanasu.View.Flyouts.AboutFlyoutControl();
+                    settings.Background = new SolidColorBrush(Hanasu.Tools.ColorHelper.GetColorFromHexString(HanasuAppSettings.PreferredChromeBackgroundColor));
+                    settings.FlyoutContent = new Hanasu.View.Flyouts.SettingsFlyoutControl();
                     settings.Show();
                 });
             args.Request.ApplicationCommands.Add(preferences);
 
 
             // Adding a Privacy Policy
-            var privacy = new SettingsCommand("privacypolicy", "Privacy Policy", OpenPrivacyPolicy);
+            var privacy = new SettingsCommand("privacypolicy", LocalizationManager.GetLocalizedValue("PrivacyPolicyItem"), OpenPrivacyPolicy);
             args.Request.ApplicationCommands.Add(privacy);
 
         }

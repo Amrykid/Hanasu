@@ -15,11 +15,11 @@ namespace Hanasu
         /// <summary>
         /// Windows.UI.Color
         /// </summary>
-        public string PreferedChromeBackgroundColor { get; set; }
+        public string PreferredChromeBackgroundColor { get; set; }
         /// <summary>
         /// Windows.UI.Xaml.ApplicationTheme
         /// </summary>
-        public string PreferedApplicationTheme { get; set; }
+        public string PreferredApplicationTheme { get; set; }
 
         public void IteratePropertiesAndValues(Action<string, object> act)
         {

@@ -5,11 +5,39 @@
     xmlns:local="using:Hanasu.View.Flyouts"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i18n="using:Crystal.Localization"
     mc:Ignorable="d"
+    Height="Auto"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    
-    <Grid>
+
+    <Grid d:Background="{StaticResource ApplicationPageBackgroundThemeBrush}" Background="Transparent">
+        <StackPanel>
+            <StackPanel Orientation="Vertical" Margin="20">
+                <TextBlock Text="PreferredApplicationTheme" i18n:CrystalLocalizedValueHelper.LocalizationKey="PreferredApplicationThemeHeader" FontSize="17" FontWeight="Bold"/>
+                <StackPanel Margin="15 20 15 20">
+                    <TextBlock Text="Sets the background color and the foreground color with one setting." i18n:CrystalLocalizedValueHelper.LocalizationKey="PreferredApplicationThemeMsg" FontSize="16" TextWrapping="Wrap"/>
+                    <ToggleSwitch Header="Use Light Theme?" i18n:CrystalLocalizedValueHelper.LocalizationKey="UseLightThemeToggleHeader" x:Name="UseLightThemeToggle" Margin="5 10 0 0" Toggled="UseLightThemeToggle_Toggled"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="20">
+                <TextBlock Text="PreferredChromeBackgroundColor" i18n:CrystalLocalizedValueHelper.LocalizationKey="PreferredChromeBackgroundColorHeader" FontSize="17" FontWeight="Bold"/>
+                <StackPanel Margin="15 20 15 20">
+                    <TextBlock Text="Set the background color of any flyout windows that Hanasu creates." i18n:CrystalLocalizedValueHelper.LocalizationKey="PreferredChromeBackgroundColorMsg" FontSize="16" TextWrapping="Wrap"/>
+                    <Grid x:Name="ColorPicker" Background="#3f000000">
+                        <!-- http://social.msdn.microsoft.com/Forums/en-US/winappswithcsharp/thread/1cb9c5b9-3ef6-4c88-b747-ae222c38c922/ -->
+                        <StackPanel>
+                            <Slider x:Name="RSlider" LargeChange="5" Maximum="255" ValueChanged="Slider_ValueChanged"  >
+                            </Slider>
+                            <Slider x:Name="GSlider" LargeChange="5" Maximum="255" ValueChanged="Slider_ValueChanged" ></Slider>
+                            <Slider x:Name="BSlider" LargeChange="5" Maximum="255" ValueChanged="Slider_ValueChanged" ></Slider>
+                            <Slider x:Name="ASlider" LargeChange="5" Maximum="255" ValueChanged="Slider_ValueChanged" ></Slider>
+                            <Rectangle x:Name="showColor" Height="84" Margin="0,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
 
     </Grid>
 </UserControl>
