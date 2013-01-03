@@ -197,7 +197,7 @@ namespace Hanasu
 
                 XDocument doc = null;
 
-                if (localRepo == null)
+                if (localRepo == null || (await localRepo.GetBasicPropertiesAsync()).Size == 0)
                     using (var http = new HttpClient())
                     {
                         //making things asynchronous
