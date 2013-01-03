@@ -348,6 +348,17 @@ namespace Hanasu
                 });
             args.Request.ApplicationCommands.Add(preferences);
 
+            var datacache = new SettingsCommand("datacache", LocalizationManager.GetLocalizedValue("CachedDataItem"), (handler) =>
+                {
+                    var settings = new Flyout(Flyout.ShowSettingsCharmBackButtonAction);
+                    settings.Header = handler.Label;
+                    settings.Background = new SolidColorBrush(Hanasu.Tools.ColorHelper.GetColorFromHexString(HanasuAppSettings.PreferredChromeBackgroundColor));
+                    settings.FlyoutContent = new Hanasu.View.Flyouts.DataFlyoutControl();
+                    settings.Show();
+                });
+            args.Request.ApplicationCommands.Add(datacache);
+            
+
 
             // Adding a Privacy Policy
             //var privacy = new SettingsCommand("privacypolicy", LocalizationManager.GetLocalizedValue("PrivacyPolicyItem"), OpenPrivacyPolicy);
