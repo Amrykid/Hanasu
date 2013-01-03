@@ -46,58 +46,64 @@ namespace Hanasu.Model
 
         private async Task GetCachedImage()
         {
-            var idealName = Title + ImageUrl.Substring(ImageUrl.LastIndexOf("."));
-
-            StorageFile file = null;
             try
             {
-                file = await App.AppFolder.GetFileAsync(idealName);
+                var idealName = Title + ImageUrl.Substring(ImageUrl.LastIndexOf("."));
 
-                var prop = await file.GetBasicPropertiesAsync();
-                if (prop.Size == 0)
+                StorageFile file = null;
+                try
                 {
-                    await file.DeleteAsync();
-                    file = null; //Size = 0, so its not completed.
+                    file = await App.AppFolder.GetFileAsync(idealName);
+
+                    var prop = await file.GetBasicPropertiesAsync();
+                    if (prop.Size == 0)
+                    {
+                        await file.DeleteAsync();
+                        file = null; //Size = 0, so its not completed.
+                    }
                 }
+                catch (Exception)
+                {
+
+                }
+
+                if (file == null)
+                {
+                    file = await App.AppFolder.CreateFileAsync(idealName);
+
+                    var str = await file.OpenAsync(FileAccessMode.ReadWrite);
+
+                    var http = new HttpClient();
+                    var data = await http.GetByteArrayAsync(ImageUrl);
+
+                    await str.WriteAsync(data.AsBuffer());
+                    await str.FlushAsync();
+
+                    str.Dispose();
+
+                    http.Dispose();
+                }
+                //_image = new BitmapImage(new Uri("ms-appdata:///local/Hanasu/" + file.DisplayName, UriKind.RelativeOrAbsolute));
+
+                var thumb = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.PicturesView);
+                _image = new BitmapImage();
+                await ((BitmapImage)_image).SetSourceAsync(thumb);
+
+                if (StationDisplay == StationDisplayType.Main)
+                    ((BitmapImage)_image).DecodePixelHeight = 155;
+                else if (StationDisplay == StationDisplayType.Small)
+                {
+                    ((BitmapImage)_image).DecodePixelHeight = 60;
+                    ((BitmapImage)_image).DecodePixelWidth = 60;
+                }
+
+                await Task.Yield();
+
+                RaisePropertyChanged(z => this.Image);
             }
             catch (Exception)
             {
-
             }
-
-            if (file == null)
-            {
-                file = await App.AppFolder.CreateFileAsync(idealName);
-
-                var str = await file.OpenAsync(FileAccessMode.ReadWrite);
-
-                var http = new HttpClient();
-                var data = await http.GetByteArrayAsync(ImageUrl);
-
-                await str.WriteAsync(data.AsBuffer());
-                await str.FlushAsync();
-
-                str.Dispose();
-
-                http.Dispose();
-            }
-            //_image = new BitmapImage(new Uri("ms-appdata:///local/Hanasu/" + file.DisplayName, UriKind.RelativeOrAbsolute));
-
-            var thumb = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.PicturesView);
-            _image = new BitmapImage();
-            await ((BitmapImage)_image).SetSourceAsync(thumb);
-
-            if (StationDisplay == StationDisplayType.Main)
-                ((BitmapImage)_image).DecodePixelHeight = 155;
-            else if (StationDisplay == StationDisplayType.Small)
-            {
-                ((BitmapImage)_image).DecodePixelHeight = 60;
-                ((BitmapImage)_image).DecodePixelWidth = 60;
-            }
-
-            await Task.Yield();
-
-            RaisePropertyChanged(z => this.Image);
         }
         public string Subtitle { get; set; }
 
