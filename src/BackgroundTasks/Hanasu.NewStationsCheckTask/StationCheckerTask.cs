@@ -29,7 +29,7 @@ namespace Hanasu.NewStationsCheckTask
 
             taskInstance.Canceled += new BackgroundTaskCanceledEventHandler(OnCanceled);
 
-            updater.Clear();
+            updater.EnableNotificationQueue(true);
 
 
             //try and get the app folder
@@ -53,7 +53,7 @@ namespace Hanasu.NewStationsCheckTask
                     var html = await http.GetStringAsync("https://github.com/Amrykid/Hanasu/blob/master/Stations.xml");
 
                     //exact the time from the page
-                    var timeMatches = Regex.Matches(html, "<time.+?</time>");
+                    var timeMatches = Regex.Matches(html, "<time.+?</time>", RegexOptions.Singleline);
 
                     //grab the GMT time from the match
                     var dateTime = timeMatches[0].Value;
@@ -90,14 +90,27 @@ namespace Hanasu.NewStationsCheckTask
                                 {
                                     var probableLatest = docRemote.Element("Stations").Elements().Last();
 
-                                    var tile = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideImageAndText02);
-                                    var tilexml = tile.GetXml();
-                                    tile.GetElementsByTagName("text")[0].InnerText = probableLatest.Element("Name").Value;
-                                    tile.GetElementsByTagName("text")[1].InnerText = remoteModDate.ToLocalTime().ToString();
-                                    tile.GetElementsByTagName("image")[0].Attributes.First(x =>
-                                        x.NodeName == "src").InnerText = probableLatest.Element("Logo").Value;
+                                    Windows.Data.Xml.Dom.XmlDocument tile = null;
 
-                                    updater.Update(new TileNotification(tile));
+                                    if (probableLatest.Elements("Logo").Count() > 1)
+                                    {
+                                        tile = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideImageAndText02);
+                                        var tilexml = tile.GetXml();
+                                        tile.GetElementsByTagName("text")[0].InnerText = probableLatest.Element("Name").Value;
+                                        tile.GetElementsByTagName("text")[1].InnerText = remoteModDate.ToLocalTime().ToString();
+                                        tile.GetElementsByTagName("image")[0].Attributes.First(x =>
+                                            x.NodeName == "src").InnerText = probableLatest.Element("Logo").Value;
+                                    }
+                                    else
+                                    {
+                                        tile = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideBlockAndText02);
+                                        var tilexml = tile.GetXml();
+                                        tile.GetElementsByTagName("text")[1].InnerText = probableLatest.Element("Name").Value;
+                                        tile.GetElementsByTagName("text")[2].InnerText = remoteModDate.ToLocalTime().ToString();
+                                    }
+
+                                    //updater.Update(new TileNotification(tile));
+                                    updater.AddToSchedule(new ScheduledTileNotification(tile, new DateTimeOffset(DateTime.Now.AddSeconds(5))) { ExpirationTime = new DateTimeOffset(DateTime.Now.AddDays(7)) });
                                 }
                             }
                         }
