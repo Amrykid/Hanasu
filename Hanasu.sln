@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crystal.W8Metro", "..\Crystal\src\Crystal.W8Metro\Crystal.W8Metro.csproj", "{4D1B194D-28DB-4A93-93A1-83EF90302F6B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Background Tasks", "Background Tasks", "{4D5DFD16-7EC8-483C-9F91-86E1167AC3CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanasu.NewStationsCheckTask", "src\BackgroundTasks\Hanasu.NewStationsCheckTask\Hanasu.NewStationsCheckTask.csproj", "{CEAD1353-80CD-4CF8-8A71-3347265574A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,11 +63,28 @@ Global
 		{4D1B194D-28DB-4A93-93A1-83EF90302F6B}.Release|x64.Build.0 = Release|x64
 		{4D1B194D-28DB-4A93-93A1-83EF90302F6B}.Release|x86.ActiveCfg = Release|x86
 		{4D1B194D-28DB-4A93-93A1-83EF90302F6B}.Release|x86.Build.0 = Release|x86
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Debug|ARM.ActiveCfg = Debug|ARM
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Debug|ARM.Build.0 = Debug|ARM
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Debug|x64.ActiveCfg = Debug|x64
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Debug|x64.Build.0 = Debug|x64
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Debug|x86.ActiveCfg = Debug|x86
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Debug|x86.Build.0 = Debug|x86
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|ARM.ActiveCfg = Release|ARM
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|ARM.Build.0 = Release|ARM
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|x64.ActiveCfg = Release|x64
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|x64.Build.0 = Release|x64
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|x86.ActiveCfg = Release|x86
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4D1B194D-28DB-4A93-93A1-83EF90302F6B} = {200088CB-9153-47A0-A77F-F44990139533}
+		{CEAD1353-80CD-4CF8-8A71-3347265574A8} = {4D5DFD16-7EC8-483C-9F91-86E1167AC3CC}
 	EndGlobalSection
 EndGlobal

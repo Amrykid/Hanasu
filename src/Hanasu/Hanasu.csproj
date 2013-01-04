@@ -106,12 +106,17 @@
       <Project>{4d1b194d-28db-4a93-93a1-83ef90302f6b}</Project>
       <Name>Crystal.W8Metro</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BackgroundTasks\Hanasu.NewStationsCheckTask\Hanasu.NewStationsCheckTask.csproj">
+      <Project>{cead1353-80cd-4cf8-8a71-3347265574a8}</Project>
+      <Name>Hanasu.NewStationsCheckTask</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="Background Tasks\BGTaskManager.cs" />
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Controls\Flyouts\Flyout.xaml.cs">
@@ -188,6 +193,7 @@
     <Content Include="Assets\vector_icon_150_150.png" />
     <Content Include="Assets\vector_icon_270_270.png" />
     <Content Include="Assets\vector_icon_30_30.scale-180.png" />
+    <Content Include="Assets\vector_icon_badge.png" />
     <Content Include="Assets\vector_icon_splash.png" />
     <Content Include="Assets\WideLogo.scale-100.png" />
   </ItemGroup>

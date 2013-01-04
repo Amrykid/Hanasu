@@ -27,6 +27,8 @@ using Windows.UI.Popups;
 using Windows.System;
 using Hanasu.Controls;
 using Hanasu.Controls.Flyouts;
+using Hanasu.Background_Tasks;
+using Windows.ApplicationModel.Background;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -91,7 +93,16 @@ namespace Hanasu
 
             await GetAppFolder();
 
+            RegisterBackgroundTask();
+
             base.PreStartup();
+        }
+
+        private static void RegisterBackgroundTask()
+        {
+            string[] newStationCheckerTask = { "Hanasu Station Checker Task", "Hanasu.NewStationsCheckTask.StationCheckerTask" };
+            if (!BGTaskManager.BackgroundTaskIsRegistered(newStationCheckerTask[0]))
+                BGTaskManager.RegisterBackgroundTask(newStationCheckerTask[1], newStationCheckerTask[0], new TimeTrigger(60 * 24, false), new SystemCondition(SystemConditionType.InternetAvailable));
         }
 
         private static void LoadSettings()
@@ -357,7 +368,7 @@ namespace Hanasu
                     settings.Show();
                 });
             args.Request.ApplicationCommands.Add(datacache);
-            
+
 
 
             // Adding a Privacy Policy
