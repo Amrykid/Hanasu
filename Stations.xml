@@ -504,4 +504,16 @@
     <Cacheable>True</Cacheable>
     <Logo>http://d1i6vahw24eb07.cloudfront.net/s105944q.png</Logo>
   </Station>
+  <Station>
+    <Name>91.8 The Fan</Name>
+    <DataSource><![CDATA[http://66.180.202.151:80/;stream.mp3]]></DataSource>
+    <Homepage>http://918thefan.com/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension></ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>English</Language>
+    <Cacheable>True</Cacheable>
+    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-ash3/25455_399559839920_6476546_n.jpg</Logo>
+  </Station>
 </Stations>
