@@ -44,62 +44,68 @@ namespace Hanasu.NewStationsCheckTask
                 AppFolder = await Windows.Storage.ApplicationData.Current.LocalFolder.CreateFolderAsync("Hanasu");
             //
 
-            //start fetching the html for screen scraping
-            using (HttpClient http = new HttpClient())
+            try
             {
-                //grab the html
-                var html = await http.GetStringAsync("https://github.com/Amrykid/Hanasu/blob/master/Stations.xml");
-
-                //exact the time from the page
-                var timeMatches = Regex.Matches(html, "<time.+?</time>");
-
-                //grab the GMT time from the match
-                var dateTime = timeMatches[0].Value;
-                dateTime = dateTime.Substring(dateTime.IndexOf("datetime=") + "datetime=".Length + 1);
-                dateTime = dateTime.Substring(0, dateTime.IndexOf("\""));
-
-                //parse the time from the string
-                var remoteModDate = DateTime.Parse(dateTime, null, System.Globalization.DateTimeStyles.AdjustToUniversal); //parse the last modified day of the repo
-
-                //grab the last modified time for the local version
-                var stationsFile = await AppFolder.GetFileAsync("Stations.xml");
-                var info = await stationsFile.GetBasicPropertiesAsync();
-                var localModDateNow = info.DateModified.ToUniversalTime();
-                //
-
-                //bool beforeOrequalToLocalFileModDate = (utcNow.Year > dateTimeObj.Year) || (utcNow.Year == dateTimeObj.Year && utcNow.DayOfYear >= dateTimeObj.DayOfYear);
-                //bool beforeLocalFileModDate = 
-                //    (localModDateNow.Year > remoteModDate.Year) //if the file was modified before today
-                //    || (localModDateNow.Year == remoteModDate.Year && localModDateNow.DayOfYear > remoteModDate.DayOfYear); 
-                bool remoteWasModifiedToday = localModDateNow.Year == remoteModDate.Year && localModDateNow.DayOfYear == remoteModDate.DayOfYear;
-
-                if (remoteWasModifiedToday)
+                //start fetching the html for screen scraping
+                using (HttpClient http = new HttpClient())
                 {
-                    //Hasn't update. Show an old update... or not.
+                    //grab the html
+                    var html = await http.GetStringAsync("https://github.com/Amrykid/Hanasu/blob/master/Stations.xml");
 
-                    using (var localStream = await stationsFile.OpenReadAsync())
+                    //exact the time from the page
+                    var timeMatches = Regex.Matches(html, "<time.+?</time>");
+
+                    //grab the GMT time from the match
+                    var dateTime = timeMatches[0].Value;
+                    dateTime = dateTime.Substring(dateTime.IndexOf("datetime=") + "datetime=".Length + 1);
+                    dateTime = dateTime.Substring(0, dateTime.IndexOf("\""));
+
+                    //parse the time from the string
+                    var remoteModDate = DateTime.Parse(dateTime, null, System.Globalization.DateTimeStyles.AdjustToUniversal); //parse the last modified day of the repo
+
+                    //grab the last modified time for the local version
+                    var stationsFile = await AppFolder.GetFileAsync("Stations.xml");
+                    var info = await stationsFile.GetBasicPropertiesAsync();
+                    var localModDateNow = info.DateModified.ToUniversalTime();
+                    //
+
+                    //bool beforeOrequalToLocalFileModDate = (utcNow.Year > dateTimeObj.Year) || (utcNow.Year == dateTimeObj.Year && utcNow.DayOfYear >= dateTimeObj.DayOfYear);
+                    //bool beforeLocalFileModDate = 
+                    //    (localModDateNow.Year > remoteModDate.Year) //if the file was modified before today
+                    //    || (localModDateNow.Year == remoteModDate.Year && localModDateNow.DayOfYear > remoteModDate.DayOfYear); 
+                    bool remoteWasModifiedToday = remoteModDate.Year == DateTime.UtcNow.Year && remoteModDate.DayOfYear == DateTime.UtcNow.DayOfYear; //localModDateNow.Year == remoteModDate.Year && localModDateNow.DayOfYear == remoteModDate.DayOfYear;
+
+                    if (remoteWasModifiedToday)
                     {
-                        using (var localNormalStream = localStream.AsStream())
+                        //Hasn't update. Show an old update... or not.
+
+                        using (var localStream = await stationsFile.OpenReadAsync())
                         {
-                            XDocument docLocal = XDocument.Load(localNormalStream);
-                            XDocument docRemote = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml");
-
-                            if (docRemote.Element("Stations").Elements().Count() >= docLocal.Element("Stations").Elements().Count())
+                            using (var localNormalStream = localStream.AsStream())
                             {
-                                var probableLatest = docRemote.Element("Stations").Elements().Last();
+                                XDocument docLocal = XDocument.Load(localNormalStream);
+                                XDocument docRemote = XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml");
 
-                                var tile = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideImageAndText02);
-                                var tilexml = tile.GetXml();
-                                tile.GetElementsByTagName("text")[0].InnerText = probableLatest.Element("Name").Value;
-                                tile.GetElementsByTagName("text")[1].InnerText = remoteModDate.ToLocalTime().ToString();
-                                tile.GetElementsByTagName("image")[0].Attributes.First(x =>
-                                    x.NodeName == "src").InnerText = probableLatest.Element("Logo").Value;
+                                if (docRemote.Element("Stations").Elements().Count() >= docLocal.Element("Stations").Elements().Count())
+                                {
+                                    var probableLatest = docRemote.Element("Stations").Elements().Last();
 
-                                updater.Update(new TileNotification(tile));
+                                    var tile = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideImageAndText02);
+                                    var tilexml = tile.GetXml();
+                                    tile.GetElementsByTagName("text")[0].InnerText = probableLatest.Element("Name").Value;
+                                    tile.GetElementsByTagName("text")[1].InnerText = remoteModDate.ToLocalTime().ToString();
+                                    tile.GetElementsByTagName("image")[0].Attributes.First(x =>
+                                        x.NodeName == "src").InnerText = probableLatest.Element("Logo").Value;
+
+                                    updater.Update(new TileNotification(tile));
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (Exception)
+            {
             }
 
             deferral.Complete();
