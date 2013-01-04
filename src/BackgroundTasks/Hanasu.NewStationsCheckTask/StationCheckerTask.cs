@@ -15,17 +15,24 @@ using Windows.UI.Notifications;
 
 namespace Hanasu.NewStationsCheckTask
 {
-    public sealed class StationCheckerTask: IBackgroundTask
+    public sealed class StationCheckerTask : IBackgroundTask
     {
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
             if (_CancelRequested)
                 return;
 
+            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+            if (updater.Setting != NotificationSetting.Enabled) return;
+
             var deferral = taskInstance.GetDeferral();
 
             taskInstance.Canceled += new BackgroundTaskCanceledEventHandler(OnCanceled);
 
+            updater.Clear();
+
+
+            //try and get the app folder
             StorageFolder AppFolder = null;
             try
             {
@@ -35,21 +42,30 @@ namespace Hanasu.NewStationsCheckTask
 
             if (AppFolder == null)
                 AppFolder = await Windows.Storage.ApplicationData.Current.LocalFolder.CreateFolderAsync("Hanasu");
+            //
 
+            //start fetching the html for screen scraping
             using (HttpClient http = new HttpClient())
             {
+                //grab the html
                 var html = await http.GetStringAsync("https://github.com/Amrykid/Hanasu/blob/master/Stations.xml");
+
+                //exact the time from the page
                 var timeMatches = Regex.Matches(html, "<time.+?</time>");
 
+                //grab the GMT time from the match
                 var dateTime = timeMatches[0].Value;
                 dateTime = dateTime.Substring(dateTime.IndexOf("datetime=") + "datetime=".Length + 1);
                 dateTime = dateTime.Substring(0, dateTime.IndexOf("\""));
 
+                //parse the time from the string
                 var remoteModDate = DateTime.Parse(dateTime, null, System.Globalization.DateTimeStyles.AdjustToUniversal); //parse the last modified day of the repo
 
+                //grab the last modified time for the local version
                 var stationsFile = await AppFolder.GetFileAsync("Stations.xml");
                 var info = await stationsFile.GetBasicPropertiesAsync();
                 var localModDateNow = info.DateModified.ToUniversalTime();
+                //
 
                 //bool beforeOrequalToLocalFileModDate = (utcNow.Year > dateTimeObj.Year) || (utcNow.Year == dateTimeObj.Year && utcNow.DayOfYear >= dateTimeObj.DayOfYear);
                 //bool beforeLocalFileModDate = 
@@ -72,9 +88,6 @@ namespace Hanasu.NewStationsCheckTask
                             {
                                 var probableLatest = docRemote.Element("Stations").Elements().Last();
 
-                                var updater = TileUpdateManager.CreateTileUpdaterForApplication();
-                                updater.Clear();
-
                                 var tile = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideImageAndText02);
                                 var tilexml = tile.GetXml();
                                 tile.GetElementsByTagName("text")[0].InnerText = probableLatest.Element("Name").Value;
@@ -86,9 +99,6 @@ namespace Hanasu.NewStationsCheckTask
                             }
                         }
                     }
-                }
-                else
-                {
                 }
             }
 
