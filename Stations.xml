@@ -516,4 +516,16 @@
     <Cacheable>True</Cacheable>
     <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-ash3/25455_399559839920_6476546_n.jpg</Logo>
   </Station>
+  <Station>
+    <Name>Radio Otaku Xtreme</Name>
+    <DataSource><![CDATA[http://radiootakuxtreme.no-ip.info:8396/listen.pls]]></DataSource>
+    <Homepage>http://www.radiootakuxtreme.com/</Homepage>
+    <Format>Mix</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.pls</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>Portuguese</Language>
+    <Cacheable>True</Cacheable>
+    <ServerType>Shoutcast</ServerType>
+  </Station>
 </Stations>
