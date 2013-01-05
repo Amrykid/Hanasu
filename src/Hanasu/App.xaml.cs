@@ -226,7 +226,7 @@ namespace Hanasu
                                    Title = x.Element("Name").Value,
                                    StreamUrl = x.Element("DataSource").Value,
                                    PreprocessorFormat = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : string.Empty,
-                                   ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : null,
+                                   ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : "http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/200px-No_image_available.svg.png",
                                    UnlocalizedFormat = x.Element("Format").Value,
                                    Format = LocalizationManager.GetLocalizedValue("Group" + x.Element("Format").Value),
                                    Subtitle = LocalizationManager.GetLocalizedValue("StationSubtitle"),

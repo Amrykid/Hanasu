@@ -103,6 +103,7 @@ namespace Hanasu.Model
             }
             catch (Exception)
             {
+                ImageUrl = "http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/200px-No_image_available.svg.png";
             }
         }
         public string Subtitle { get; set; }
