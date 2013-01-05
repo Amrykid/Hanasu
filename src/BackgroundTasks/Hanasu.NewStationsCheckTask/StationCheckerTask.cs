@@ -50,7 +50,7 @@ namespace Hanasu.NewStationsCheckTask
                 using (HttpClient http = new HttpClient())
                 {
                     //grab the html
-                    var html = await http.GetStringAsync("https://github.com/Amrykid/Hanasu/blob/master/Stations.xml");
+                    var html = await http.GetStringAsync("https://github.com/Amrykid/Hanasu/commits/master/Stations.xml"); //"https://github.com/Amrykid/Hanasu/blob/master/Stations.xml"
 
                     //exact the time from the page
                     var timeMatches = Regex.Matches(html, "<time.+?</time>", RegexOptions.Singleline);
@@ -92,7 +92,7 @@ namespace Hanasu.NewStationsCheckTask
 
                                     Windows.Data.Xml.Dom.XmlDocument tile = null;
 
-                                    if (probableLatest.Elements("Logo").Count() > 1)
+                                    if (probableLatest.Elements("Logo").Count() > 0)
                                     {
                                         tile = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideImageAndText02);
                                         var tilexml = tile.GetXml();
