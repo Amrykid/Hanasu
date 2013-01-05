@@ -528,4 +528,17 @@
     <Cacheable>True</Cacheable>
     <ServerType>Shoutcast</ServerType>
   </Station>
+  <Station>
+    <Name>AnimeSeed</Name>
+    <DataSource><![CDATA[http://radio.animeseed.com/listen.m3u]]></DataSource>
+    <Homepage>http://radio.animeseed.com/</Homepage>
+    <Format>Anime</Format>
+    <City>N/A</City>
+    <ExplicitExtension>.m3u</ExplicitExtension>
+    <StationType>Radio</StationType>
+    <Language>English</Language>
+    <Cacheable>True</Cacheable>
+    <ServerType>Shoutcast</ServerType>
+    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-prn1/60413_153021924732818_5289442_n.jpg</Logo>
+  </Station>
 </Stations>
