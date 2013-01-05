@@ -70,6 +70,8 @@ namespace Hanasu
             var vm = ((GroupPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;
 
+            ((App)App.Current).PlayClickSong();
+
             NavigationService.GoBack();
 
             Messenger.PushMessage(vm, "PlayStation", stat);

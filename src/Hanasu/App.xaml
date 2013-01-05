@@ -31,6 +31,7 @@
                         <ControlTemplate TargetType="Frame">
                             <Grid>
                                 <MediaElement x:Name="MediaPlayer" AudioCategory="BackgroundCapableMedia"  AudioDeviceType="Multimedia" AutoPlay="False" />
+                                <MediaElement x:Name="SoundPlayer" AudioCategory="GameEffects" AudioDeviceType="Console" AutoPlay="False"/>
                                 <ContentPresenter />
                             </Grid>
                         </ControlTemplate>

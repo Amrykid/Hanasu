@@ -410,8 +410,50 @@ namespace Hanasu
             {
                 DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
 
-                return (MediaElement)VisualTreeHelper.GetChild(rootGrid, 0);
+                var me = (MediaElement)VisualTreeHelper.GetChild(rootGrid, 0);
+                if (me.Name == "MediaPlayer")
+                    return me;
+                else
+                    return null;
             }
+        }
+
+        public async Task PlaySound(Uri name)
+        {
+            DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
+
+            var me = (MediaElement)VisualTreeHelper.GetChild(rootGrid, 1);
+            me.MediaFailed += me_MediaFailed;
+            me.MediaEnded += me_MediaEnded;
+
+            //if (me.Source == name)
+            //{
+            //    //me.Stop(); 
+            //    //me.Position = new TimeSpan(0, 0, 0);
+            //}
+            //else
+                await me.OpenAsync(name, System.Threading.CancellationToken.None);
+            await me.PlayAsync(System.Threading.CancellationToken.None);
+        }
+
+        void me_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            ((MediaElement)sender).MediaFailed -= me_MediaFailed;
+            ((MediaElement)sender).MediaEnded -= me_MediaEnded;
+
+            //((MediaElement)sender).Stop();
+        }
+
+        void me_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            ((MediaElement)sender).MediaFailed -= me_MediaFailed;
+            ((MediaElement)sender).MediaEnded -= me_MediaEnded;
+        }
+        public async Task PlayClickSong()
+        {
+            var path = Package.Current.InstalledLocation.Path;
+
+            await PlaySound(new Uri(path + "/Assets/110429__soundbyter-com__www-soundbyter-com-selectsound.wav", UriKind.RelativeOrAbsolute));
         }
 
         public MainPageViewModel MainPageViewModel { get; set; }

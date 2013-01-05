@@ -179,6 +179,7 @@
     <EmbeddedResource Include="I18N\ja-JP.ini" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\110429__soundbyter-com__www-soundbyter-com-selectsound.wav" />
     <Content Include="Assets\hanasu_winrt_bg.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SplashScreen.png" />

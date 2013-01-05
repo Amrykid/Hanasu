@@ -73,6 +73,8 @@ namespace Hanasu
             var vm = ((SearchPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem; //grab the clicked station
 
+            ((App)App.Current).PlayClickSong();
+
             Messenger.PushMessage(vm, "PlayStation", stat); //sends a message to the main view model to play the station
 
             //await Task.Run(() => Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => vm.PlayStation(stat, globalMediaElement)));

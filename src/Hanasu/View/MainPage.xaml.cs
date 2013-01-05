@@ -275,6 +275,7 @@ namespace Hanasu
             var vm = ((MainPageViewModel)this.DataContext);
             var stat = (Station)e.ClickedItem;
 
+            ((App)App.Current).PlayClickSong();
             await Task.Run(() => Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => vm.PlayStation(stat, globalMediaElement)));
         }
 
