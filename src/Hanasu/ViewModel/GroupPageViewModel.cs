@@ -31,7 +31,10 @@ namespace Hanasu.ViewModel
 
             GroupName = LocalizationManager.GetLocalizedValue("Group" + name);
 
-            foreach (var stat in ((App)BaseCrystalApplication.Current).AvailableStations.Where(x => x.UnlocalizedFormat == name))
+            foreach (var stat in ((App)BaseCrystalApplication.Current)
+                .AvailableStations
+                .Where(x => x.UnlocalizedFormat == name)
+                .OrderBy(x => x.Title))
                 Stations.Add(stat);
 
             RaisePropertyChanged(x => this.Stations);
