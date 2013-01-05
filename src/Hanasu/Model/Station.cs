@@ -48,7 +48,7 @@ namespace Hanasu.Model
         {
             try
             {
-                var idealName = Title + ImageUrl.Substring(ImageUrl.LastIndexOf("."));
+                var idealName = (Title + ImageUrl.Substring(ImageUrl.LastIndexOf("."))).Replace("/", "_");
 
                 StorageFile file = null;
                 try
