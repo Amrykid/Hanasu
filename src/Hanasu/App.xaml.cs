@@ -451,9 +451,9 @@ namespace Hanasu
         }
         public async Task PlayClickSong()
         {
-            var path = Package.Current.InstalledLocation.Path;
+            //var path = Package.Current.InstalledLocation.Path;
 
-            await PlaySound(new Uri(path + "/Assets/110429__soundbyter-com__www-soundbyter-com-selectsound.wav", UriKind.RelativeOrAbsolute));
+            //await PlaySound(new Uri(path + "/Assets/110429__soundbyter-com__www-soundbyter-com-selectsound.wav", UriKind.RelativeOrAbsolute));
         }
 
         public MainPageViewModel MainPageViewModel { get; set; }

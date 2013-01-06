@@ -472,7 +472,7 @@ namespace Hanasu.ViewModel
                     throw ex;
                 }
 
-                if (navigate)
+                if (navigate && IsPlaying)
                     NavigateToNowPlayingPage(finalUri);
 
                 try
