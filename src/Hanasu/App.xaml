@@ -29,9 +29,11 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Frame">
-                            <Grid>
-                                <MediaElement x:Name="MediaPlayer" AudioCategory="BackgroundCapableMedia"  AudioDeviceType="Multimedia" AutoPlay="False" />
-                                <MediaElement x:Name="SoundPlayer" AudioCategory="GameEffects" AudioDeviceType="Console" AutoPlay="False"/>
+                            <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+                                <MediaElement x:Name="MediaPlayer" AudioCategory="BackgroundCapableMedia"  AudioDeviceType="Multimedia" AutoPlay="False" Visibility="Collapsed"/>
+                                <MediaElement x:Name="SoundPlayer" AudioCategory="GameEffects" AudioDeviceType="Console" AutoPlay="False" Visibility="Collapsed"/>
+                                
+                                <ProgressBar IsIndeterminate="True" HorizontalAlignment="Stretch" Margin="0 0 0 0" x:Name="ProgressIndicator" Visibility="Collapsed" VerticalAlignment="Top" Canvas.ZIndex="100"/>
                                 <ContentPresenter />
                             </Grid>
                         </ControlTemplate>

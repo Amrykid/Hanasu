@@ -280,9 +280,49 @@ namespace Hanasu
             else
                 NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", args.QueryText));
 
+            HookOnMediaElement();
+
             // Ensure the current window is active
             Window.Current.Activate();
 
+        }
+
+        private async void HookOnMediaElement()
+        {
+            await Task.Delay(2000);
+            MediaElement.CurrentStateChanged += MediaElement_CurrentStateChanged;
+        }
+
+        void MediaElement_CurrentStateChanged(object sender, RoutedEventArgs e)
+        {
+            if (MediaElement.CurrentState == MediaElementState.Playing)
+            {
+                //nowPlayingPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+            else if (MediaElement.CurrentState == MediaElementState.Opening || MediaElement.CurrentState == MediaElementState.Buffering)
+            {
+                //resets the indicator animation
+                ProgressIndicator.IsIndeterminate = false;
+                ProgressIndicator.IsIndeterminate = true;
+
+                //makes it visible
+                ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+            else
+            {
+                ProgressIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+        }
+
+        private ProgressBar ProgressIndicator
+        {
+            get
+            {
+                DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
+
+                return (ProgressBar)VisualTreeHelper.GetChild(rootGrid, 2);
+            }
         }
 
 
@@ -318,6 +358,8 @@ namespace Hanasu
             }
 
             NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("args", args.Arguments));
+
+            HookOnMediaElement();
 
             // Ensure the current window is active
             Window.Current.Activate();
@@ -457,6 +499,8 @@ namespace Hanasu
         }
 
         public MainPageViewModel MainPageViewModel { get; set; }
+
+
 
     }
 }

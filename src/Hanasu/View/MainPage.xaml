@@ -47,7 +47,6 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
             <Grid Grid.Column="1">
-                <ProgressBar IsIndeterminate="True" HorizontalAlignment="Stretch" Margin="0 0 0 0" x:Name="ProgressIndicator" Visibility="Collapsed" VerticalAlignment="Top"/>
                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"/>
             </Grid>
 

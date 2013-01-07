@@ -18,6 +18,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Collections.Generic;
 using Crystal.Navigation;
 using Crystal.Command;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml;
 
 namespace Hanasu.ViewModel
 {

@@ -91,6 +91,7 @@ namespace Hanasu
             NetworkCostController_InternetConnectionChanged();
 
             GrabMediaElement();
+            GrabProgressBar();
 
             thisCoreWindow = CoreWindow.GetForCurrentThread();
             thisCoreWindow.KeyDown += pageRoot_KeyDown_1; //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
@@ -115,7 +116,16 @@ namespace Hanasu
 
             globalMediaElement.CurrentStateChanged += globalMediaElement_CurrentStateChanged;
         }
+        private void GrabProgressBar()
+        {
 
+            DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
+
+            ProgressIndicator = (ProgressBar)VisualTreeHelper.GetChild(rootGrid, 2);
+        }
+
+
+        private ProgressBar ProgressIndicator = null;
 
         void PlayToController_PlayToConnectionStateChanged()
         {
