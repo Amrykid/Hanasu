@@ -591,8 +591,10 @@ namespace Hanasu.ViewModel
             set { SetProperty(x => this.CurrentStationSongData, value); }
         }
 
-        public override void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
+        public override async void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
         {
+            await Task.Delay(1000);
+
             ((App)App.Current).MediaElement.CurrentStateChanged += mediaElement_CurrentStateChanged;
 
             SetMediaButtons();

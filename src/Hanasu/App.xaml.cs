@@ -450,6 +450,8 @@ namespace Hanasu
         {
             get
             {
+                if (Window.Current.Content == null) return null;
+
                 DependencyObject rootGrid = VisualTreeHelper.GetChild(Window.Current.Content, 0);
 
                 var me = (MediaElement)VisualTreeHelper.GetChild(rootGrid, 0);
