@@ -17,19 +17,19 @@ namespace Hanasu.ViewModel
     /// </summary>
     public class SearchPageViewModel : Crystal.Dynamic.AutoIPNotifyingBaseViewModel
     {
-        public override void OnNavigatedTo(dynamic argument = null)
+        public override void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
         {
             //http://stackoverflow.com/questions/11812059/windows-8-metro-focus-on-grid
             coreWindow = CoreWindow.GetForCurrentThread();
             coreWindow.KeyDown += SearchPageViewModel_KeyDown; //handle global down
 
-            var args = (KeyValuePair<string, string>)argument[0];
+            var args = (KeyValuePair<string, object>)argument[0];
 
             Stations = new ObservableCollection<Station>();
 
-            SetupSearch(args.Value);
+            SetupSearch(args.Value.ToString());
 
-            UpdateSearchQuery(args.Value);
+            UpdateSearchQuery(args.Value.ToString());
         }
 
         CoreWindow coreWindow = null;

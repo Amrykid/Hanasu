@@ -276,9 +276,9 @@ namespace Hanasu
 
             if (RootFrame.CurrentSourcePageType == null)
                 //App was just activated via search but it wasn't already running. We go to the main page first to have it as the home window.
-                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("search", args.QueryText));
+                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, object>("search", args.QueryText));
             else
-                NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", args.QueryText));
+                NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, object>("query", args.QueryText));
 
             HookOnMediaElement();
 
@@ -357,7 +357,7 @@ namespace Hanasu
                 Window.Current.Content = rootFrame;
             }
 
-            NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("args", args.Arguments));
+            NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, object>("args", args.Arguments));
 
             HookOnMediaElement();
 

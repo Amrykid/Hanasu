@@ -21,13 +21,13 @@ namespace Hanasu.ViewModel
         {
         }
 
-        public override void OnNavigatedTo(dynamic argument = null)
+        public override void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
         {
-            var args = (KeyValuePair<string, string>)argument[0];
+            var args = (KeyValuePair<string, object>)argument[0];
 
             Stations = new ObservableCollection<Station>();
 
-            var name = args.Value;
+            var name = args.Value.ToString();
 
             GroupName = LocalizationManager.GetLocalizedValue("Group" + name);
 

@@ -84,7 +84,7 @@ namespace Hanasu
             if (NavigationService.CanGoBack)
                 NavigationService.GoBack(); //goes back to the main page.
             else
-                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, string>("StationToPlay", stat.Title)); //in rare cases, go straight to the main page, passying the station to play, with it.
+                NavigationService.NavigateTo<MainPageViewModel>(new KeyValuePair<string, object>("StationToPlay", stat.Title)); //in rare cases, go straight to the main page, passying the station to play, with it.
         }
     }
 }

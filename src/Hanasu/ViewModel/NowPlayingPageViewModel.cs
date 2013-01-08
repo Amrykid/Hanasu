@@ -104,7 +104,9 @@ namespace Hanasu.ViewModel
         }
         bool dt_wasrunning = false;
         DispatcherTimer dt = new DispatcherTimer();
-        public override async void OnNavigatedTo(dynamic argument = null)
+
+
+        public override async void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
         {
             //grab any arguments pass to the page when it was navigated to.
 
@@ -114,8 +116,8 @@ namespace Hanasu.ViewModel
 
             mediaElement.CurrentStateChanged += mediaElement_CurrentStateChanged;
 
-            var args = (KeyValuePair<string, string>)argument[0];
-            var direct = (KeyValuePair<string, string>)argument[1];
+            var args = (KeyValuePair<string, object>)argument[0];
+            var direct = (KeyValuePair<string, object>)argument[1];
 
             CurrentStation = ((App)App.Current).AvailableStations.First(x => x.Title == args.Value);
 
@@ -129,7 +131,7 @@ namespace Hanasu.ViewModel
 
             if (CurrentStation.ServerType.ToLower() == "shoutcast")
             {
-                if (!string.IsNullOrWhiteSpace(directUrl.Value))
+                if (!string.IsNullOrWhiteSpace(directUrl.Value.ToString()))
                     try
                     {
                         SongHistoryOperationStatus = SongHistoryOperationStatusType.Running;
@@ -176,7 +178,7 @@ namespace Hanasu.ViewModel
             }
         }
 
-        private KeyValuePair<string, string> directUrl;
+        private KeyValuePair<string, object> directUrl;
 
         async void dt_Tick(object sender, object e)
         {
@@ -215,11 +217,11 @@ namespace Hanasu.ViewModel
                 });
         }
 
-        private async Task RefreshCurrentSongAndHistory(KeyValuePair<string, string> direct)
+        private async Task RefreshCurrentSongAndHistory(KeyValuePair<string, object> direct)
         {
             if (NetworkCostController.CurrentNetworkingBehavior == NetworkingBehavior.Normal)
             {
-                SongHistory = await ShoutcastService.GetShoutcastStationSongHistory(CurrentStation, direct.Value);
+                SongHistory = await ShoutcastService.GetShoutcastStationSongHistory(CurrentStation, direct.Value.ToString());
 
                 for (int i = 0; i < SongHistory.Count; i++)
                 {
@@ -266,7 +268,7 @@ namespace Hanasu.ViewModel
         public ObservableCollection<ShoutcastSongHistoryItem> SongHistory { get; set; }
         public SongHistoryOperationStatusType SongHistoryOperationStatus
         {
-            get { return (SongHistoryOperationStatusType)GetProperty("SongHistoryOperationStatus"); }
+            get { return (SongHistoryOperationStatusType)GetPropertyOrDefaultType<SongHistoryOperationStatusType>("SongHistoryOperationStatus"); }
             set
             {
                 SetProperty("SongHistoryOperationStatus", value);

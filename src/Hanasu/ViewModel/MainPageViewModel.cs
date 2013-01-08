@@ -523,7 +523,7 @@ namespace Hanasu.ViewModel
             //if its made it this far, try navigating to the "now playing page".
             if (NavigationService.IsNavigatedTo<NowPlayingPageViewModel>()) return;
 
-            NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, string>("station", CurrentStationName), new KeyValuePair<string, string>("directurl", finalUri != null ? finalUri.ToString() : ""));
+            NavigationService.NavigateTo<NowPlayingPageViewModel>(new KeyValuePair<string, object>("station", CurrentStationName), new KeyValuePair<string, object>("directurl", finalUri != null ? finalUri.ToString() : ""));
         }
         public void NavigateToNowPlayingPage()
         {
@@ -591,7 +591,7 @@ namespace Hanasu.ViewModel
             set { SetProperty(x => this.CurrentStationSongData, value); }
         }
 
-        public override void OnNavigatedTo(dynamic argument = null)
+        public override void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
         {
             ((App)App.Current).MediaElement.CurrentStateChanged += mediaElement_CurrentStateChanged;
 
@@ -603,7 +603,7 @@ namespace Hanasu.ViewModel
 
             if (argument == null) return;
 
-            var args = (KeyValuePair<string, string>)argument[0];
+            var args = (KeyValuePair<string, object>)argument[0];
 
             switch (args.Key.ToLower())
             {

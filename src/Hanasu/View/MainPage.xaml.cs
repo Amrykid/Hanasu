@@ -78,11 +78,11 @@ namespace Hanasu
 
                             var query = onLoadedCommand.Value;
 
-                            onLoadedCommand = new KeyValuePair<string, string>();
+                            onLoadedCommand = new KeyValuePair<string, object>();
 
                             this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
 
-                            NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", query));
+                            NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, object>("query", query));
                             break;
                         }
                 }
@@ -264,20 +264,20 @@ namespace Hanasu
         {
             if (e.NavigationMode == NavigationMode.Back) return;
 
-            if (((object[])e.Parameter)[0] is KeyValuePair<string, string>)
+            if (((object[])e.Parameter)[0] is KeyValuePair<string, object>)
             {
-                onLoadedCommand = (KeyValuePair<string, string>)((object[])e.Parameter)[0];
+                onLoadedCommand = (KeyValuePair<string, object>)((object[])e.Parameter)[0];
 
             }
         }
 
-        KeyValuePair<string, string> onLoadedCommand;
+        KeyValuePair<string, object> onLoadedCommand;
 
         private void Header_Click(object sender, RoutedEventArgs e)
         {
             var name = ((StationGroup)((Button)e.OriginalSource).DataContext).UnlocalizedName;
 
-            NavigationService.NavigateTo<GroupPageViewModel>(new KeyValuePair<string, string>("groupName", name));
+            NavigationService.NavigateTo<GroupPageViewModel>(new KeyValuePair<string, object>("groupName", name));
         }
 
         private async void ItemView_ItemClick(object sender, ItemClickEventArgs e)
@@ -320,7 +320,7 @@ namespace Hanasu
             //}
 
 
-            NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, string>("query", initialchar));
+            NavigationService.NavigateTo<SearchPageViewModel>(new KeyValuePair<string, object>("query", initialchar));
         }
 
         private void NowPlayingAppBarButton_Click_1(object sender, RoutedEventArgs e)
