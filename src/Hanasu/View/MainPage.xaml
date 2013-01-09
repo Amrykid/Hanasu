@@ -91,8 +91,8 @@
             ItemClick="ItemView_ItemClick">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Horizontal">
-                        </VirtualizingStackPanel>
+                        <StackPanel Orientation="Horizontal">
+                        </StackPanel>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
                 <GridView.GroupStyle>
