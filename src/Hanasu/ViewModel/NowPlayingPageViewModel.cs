@@ -129,6 +129,8 @@ namespace Hanasu.ViewModel
 
             directUrl = direct;
 
+            MediaControl.TrackName = "";
+
             if (CurrentStation.ServerType.ToLower() == "shoutcast")
             {
                 if (!string.IsNullOrWhiteSpace(directUrl.Value.ToString()))

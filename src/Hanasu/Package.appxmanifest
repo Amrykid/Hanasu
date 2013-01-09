@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="ca819f0c-53af-4c06-8bd3-72872e0e24dd" Publisher="CN=Amrykid" Version="0.1.0.4" />
+  <Identity Name="ca819f0c-53af-4c06-8bd3-72872e0e24dd" Publisher="CN=Amrykid" Version="0.1.0.5" />
   <Properties>
     <DisplayName>Hanasu</DisplayName>
     <PublisherDisplayName>Amrykid</PublisherDisplayName>
