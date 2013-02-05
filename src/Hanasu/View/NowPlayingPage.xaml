@@ -88,11 +88,11 @@
                                        Text="{Binding SongHistoryOperationStatusMessage}" Visibility="{Binding Path=SongHistoryOperationStatus,Converter={StaticResource NPSOVC1}}"/>
                             <GridView ItemsSource="{Binding SongHistory}" Visibility="{Binding Path=SongHistoryOperationStatus,Converter={StaticResource NPSOVC2}}" x:Name="SongHistoryGridView" 
                                       ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="Auto" SelectionMode="None">
-                                <GridView.ItemContainerTransitions>
+                                <GridView.Transitions>
                                     <TransitionCollection>
                                         <AddDeleteThemeTransition/>
                                     </TransitionCollection>
-                                </GridView.ItemContainerTransitions>
+                                </GridView.Transitions>
 
                                 <GridView.ItemTemplate>
                                     <DataTemplate>
@@ -102,6 +102,12 @@
                                                 <TextBlock FontSize="17" Text="{Binding Song}" TextTrimming="WordEllipsis" TextAlignment="Center" Width="Auto"/>
                                                 <TextBlock FontSize="14" Margin="0 3 0 0" Text="{Binding LocalizedTime}" HorizontalAlignment="Center"/>
                                             </StackPanel>
+                                            
+                                            <Grid.Transitions>
+                                                <TransitionCollection>
+                                                    <AddDeleteThemeTransition/>
+                                                </TransitionCollection>
+                                            </Grid.Transitions>
                                         </Grid>
                                     </DataTemplate>
                                 </GridView.ItemTemplate>

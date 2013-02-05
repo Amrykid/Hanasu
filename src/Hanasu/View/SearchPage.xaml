@@ -54,9 +54,20 @@
             ItemClick="ItemView_ItemClick">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapGrid Orientation="Horizontal" MaximumRowsOrColumns="2"/>
+                        <WrapGrid Orientation="Horizontal" MaximumRowsOrColumns="2">
+                            <WrapGrid.ChildrenTransitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition />
+                                </TransitionCollection>
+                            </WrapGrid.ChildrenTransitions>
+                        </WrapGrid>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
+                <ListView.Transitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition />
+                    </TransitionCollection>
+                </ListView.Transitions>
                 <ListView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
