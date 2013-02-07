@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Background Tasks", "Backgro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanasu.NewStationsCheckTask", "src\W8\BackgroundTasks\Hanasu.NewStationsCheckTask\Hanasu.NewStationsCheckTask.csproj", "{CEAD1353-80CD-4CF8-8A71-3347265574A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanasu", "src\WPF\Hanasu\Hanasu.csproj", "{1D24A694-EC96-4171-9C24-328A91A88C48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,16 @@ Global
 		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|x64.Build.0 = Release|x64
 		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|x86.ActiveCfg = Release|x86
 		{CEAD1353-80CD-4CF8-8A71-3347265574A8}.Release|x86.Build.0 = Release|x86
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Release|ARM.ActiveCfg = Release|Any CPU
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Release|x64.ActiveCfg = Release|Any CPU
+		{1D24A694-EC96-4171-9C24-328A91A88C48}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
