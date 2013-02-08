@@ -1,8 +1,8 @@
-﻿<Application x:Class="Hanasu.App"
+﻿<crystal:BaseCrystalApplication x:Class="Hanasu.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow.xaml">
+             xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal">
     <Application.Resources>
          
     </Application.Resources>
-</Application>
+</crystal:BaseCrystalApplication>
