@@ -427,17 +427,17 @@ namespace Hanasu.ViewModel
 
                 CurrentStationStreamedUri = finalUri;
 
-                //if (CurrentStation.ServerType.ToLower() == "shoutcast")
-                //{
-                //    var str = await ShoutcastService.GetShoutcastStream(finalUri);
-                //    mediaElement.SetSource(str, str.Content_Type);
+                if (CurrentStation.ServerType.ToLower() == "shoutcast")
+                {
+                    var str = await ShoutcastService.GetShoutcastStream(finalUri);
+                    mediaElement.SetSource(str, str.Content_Type);
 
-                //    mediaElement.Play();
-                //}
-                //else
-                //{
+                    mediaElement.Play();
+                }
+                else
+                {
 
-                //finalUri = new Uri(finalUri.ToString() + ";stream.nsv", UriKind.Absolute);
+                finalUri = new Uri(finalUri.ToString() + ";stream.nsv", UriKind.Absolute);
 
                 try
                 {
@@ -495,7 +495,7 @@ namespace Hanasu.ViewModel
                     throw ex;
                 }
 
-                //}
+                }
             }
             catch (Exception ex)
             {

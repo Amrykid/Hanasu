@@ -42,7 +42,7 @@ namespace Hanasu.Tools.Shoutcast
             sb.AppendLine("GET / HTTP/1.1");
             sb.AppendLine("Connection: keep-alive");
             sb.AppendLine("Host: " + url.Host);
-            sb.AppendLine("icy-metadata: 0");
+            sb.AppendLine("icy-metadata: 1");
             sb.AppendLine();
 
             outStream = underlayingSocket.OutputStream.AsStreamForWrite();
@@ -168,21 +168,19 @@ namespace Hanasu.Tools.Shoutcast
         private ulong _pos = 0;
         public ulong Position
         {
-            get { return _pos; }
+            get { throw new NotImplementedException(); }
         }
 
         public void Seek(ulong position)
         {
-            bytesToSkip = (int)position;
-
-            return;
+            throw new NotImplementedException();
         }
 
         public ulong Size
         {
             get
             {
-                return  _pos == 0 ? 100000 : _pos * 4;
+                return 0;
             }
             set
             {
