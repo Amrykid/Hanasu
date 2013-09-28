@@ -1,0 +1,3 @@
+[submodule "lib/Crystal"]
+	path = lib/Crystal
+	url = ../Crystal.git
