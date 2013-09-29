@@ -6,11 +6,11 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Hanasu")]
+[assembly: AssemblyTitle("HanasuWP8.AudioPlaybackAgent")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HanasuWP8")]
+[assembly: AssemblyProduct("HanasuWP8.AudioPlaybackAgent")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +21,7 @@ using System.Resources;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("17cedd77-112a-4bde-ad78-848ab148f2b4")]
+[assembly: Guid("7a7bada8-87a9-49e2-b939-5234276ff37c")]
 
 // Version information for an assembly consists of the following four values:
 //

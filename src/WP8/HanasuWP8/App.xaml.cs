@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using HanasuWP8.Resources;
+using Microsoft.Phone.BackgroundAudio;
 
 namespace HanasuWP8
 {
@@ -38,6 +39,10 @@ namespace HanasuWP8
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)
             {
+                // Close the background audio player in case it 
+                // was running from a previous debugging session.
+                BackgroundAudioPlayer.Instance.Close();
+
                 // Display the current frame rate counters.
                 Application.Current.Host.Settings.EnableFrameRateCounter = true;
 
@@ -218,6 +223,11 @@ namespace HanasuWP8
 
                 throw;
             }
+        }
+
+        private void PhoneApplicationService_RunningInBackground(object sender, RunningInBackgroundEventArgs e)
+        {
+
         }
     }
 }

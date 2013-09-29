@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{3babc988-5fde-4fff-af37-e9b62bc6e7f0}" Title="Hanasu" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="HanasuWP8 author" Description="An Internet Radio streaming application for Asian music lovers." Publisher="HanasuWP8" PublisherID="{4b545b6d-e732-4f91-bea1-500ed2734b62}">
+  <App xmlns="" ProductID="{3babc988-5fde-4fff-af37-e9b62bc6e7f0}" Title="Hanasu" RuntimeType="Silverlight" Version="0.0.0.1" Genre="apps.normal" Author="Amrykid" Description="An Internet Radio streaming application for Asian music lovers." Publisher="Amrykid" PublisherID="{4b545b6d-e732-4f91-bea1-500ed2734b62}">
     <IconPath IsRelative="true" IsResource="false">vector_icon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
@@ -11,15 +11,26 @@
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
     </Capabilities>
     <Tasks>
-      <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
+      <DefaultTask Name="_default"
+                   NavigationPage="MainPage.xaml" />
+      <ExtendedTask Name="BackgroundTask">
+        <BackgroundServiceAgent Specifier="AudioPlayerAgent"
+                                Name="HanasuWP8.AudioPlaybackAgent"
+                                Source="HanasuWP8.AudioPlaybackAgent"
+                                Type="HanasuWP8.AudioPlaybackAgent.AudioPlayer" />
+        <BackgroundServiceAgent Specifier="AudioStreamingAgent"
+                                Name="HanasuWP8.AudioStreamAgent"
+                                Source="HanasuWP8.AudioStreamAgent"
+                                Type="HanasuWP8.AudioStreamAgent.AudioTrackStreamer" />
+      </ExtendedTask>
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="HanasuWP8Token" TaskName="_default">
         <TemplateFlip>
-          <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
+          <SmallImageURI IsRelative="true" IsResource="false">vector_icon_150_150.png</SmallImageURI>
           <Count>0</Count>
-          <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
-          <Title>HanasuWP8</Title>
+          <BackgroundImageURI IsRelative="true" IsResource="false">vector_icon_270_270.png</BackgroundImageURI>
+          <Title>Hanasu</Title>
           <BackContent>
           </BackContent>
           <BackBackgroundImageURI>
