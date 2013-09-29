@@ -1,0 +1,99 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="HanasuWP8.View.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:vm="clr-namespace:HanasuWP8.ViewModel"
+    xmlns:conv="clr-namespace:HanasuWP8.Converters"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.BackgroundColor="Red" Loaded="PhoneApplicationPage_Loaded_1">
+
+    <phone:PhoneApplicationPage.DataContext>
+        <vm:MainPageViewModel />
+    </phone:PhoneApplicationPage.DataContext>
+    <phone:PhoneApplicationPage.Resources>
+        <conv:BoolToVisibilityConverter x:Key="b2v"/>
+        <conv:InverseBoolToVisibilityConverter x:Key="ib2v"/>
+    </phone:PhoneApplicationPage.Resources>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <!--Pivot Control-->
+        <phone:Pivot Title="HANASU">
+            <!--Pivot item one-->
+            <phone:PivotItem Header="playing">
+                <phone:PivotItem.DataContext>
+                    <vm:MainPageNowPlayingViewModel/>
+                </phone:PivotItem.DataContext>
+                <Grid>
+                    <Grid Visibility="{Binding IsPlaying, Converter={StaticResource ib2v}}">
+                        <TextBlock TextAlignment="Center" Text="Nothing is playing."/>
+                    </Grid>
+                    <Grid Visibility="{Binding IsPlaying, Converter={StaticResource b2v}}">
+                        <StackPanel>
+                            <Image Source="{Binding CurrentCover}" Height="200" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding CurrentTrack}" FontSize="33"/>
+                            <TextBlock Text="{Binding CurrentArtist}" FontSize="27"/>
+                            <TextBlock Text="{Binding CurrentStation.Title}" FontSize="25"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </phone:PivotItem>
+
+            <!--Pivot item two-->
+            <phone:PivotItem Header="stations" x:Name="stationsPivot">
+                <phone:PivotItem.DataContext>
+                    <vm:MainPageStationsViewModel/>
+                </phone:PivotItem.DataContext>
+                <Grid>
+                    <ListBox ItemsSource="{Binding Stations}" x:Name="stationsListBox" DoubleTap="stationsListBox_DoubleTap_1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Image Height="70" Grid.Column="0" Source="{Binding ImageUrl}"/>
+                                    
+                                    <Grid Grid.Column="1" Margin="5 0 0 0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="40"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <TextBlock Text="{Binding Title}" Grid.Row="0"/>
+                                        <TextBlock Text="{Binding Genre}" Grid.Row="1"/>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
+
+
+
+        <!--Uncomment to see an alignment grid to help ensure your controls are
+            aligned on common boundaries.  The image has a top margin of -32px to
+            account for the System Tray. Set this to 0 (or remove the margin altogether)
+            if the System Tray is hidden.
+
+            Before shipping remove this XAML and the image itself.-->
+        <!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0,-32,0,0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />-->
+    </Grid>
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Mode="Default" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton Text="Play" IconUri="Images/transport.play.png" Click="ApplicationBarIconButton_Click_1"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+</phone:PhoneApplicationPage>

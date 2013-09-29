@@ -11,17 +11,10 @@
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
     </Capabilities>
     <Tasks>
-      <DefaultTask Name="_default"
-                   NavigationPage="MainPage.xaml" />
+      <DefaultTask Name="_default" NavigationPage="View/MainPage.xaml" />
       <ExtendedTask Name="BackgroundTask">
-        <BackgroundServiceAgent Specifier="AudioPlayerAgent"
-                                Name="HanasuWP8.AudioPlaybackAgent"
-                                Source="HanasuWP8.AudioPlaybackAgent"
-                                Type="HanasuWP8.AudioPlaybackAgent.AudioPlayer" />
-        <BackgroundServiceAgent Specifier="AudioStreamingAgent"
-                                Name="HanasuWP8.AudioStreamAgent"
-                                Source="HanasuWP8.AudioStreamAgent"
-                                Type="HanasuWP8.AudioStreamAgent.AudioTrackStreamer" />
+        <BackgroundServiceAgent Specifier="AudioPlayerAgent" Name="HanasuWP8.AudioPlaybackAgent" Source="HanasuWP8.AudioPlaybackAgent" Type="HanasuWP8.AudioPlaybackAgent.AudioPlayer" />
+        <BackgroundServiceAgent Specifier="AudioStreamingAgent" Name="HanasuWP8.AudioStreamAgent" Source="HanasuWP8.AudioStreamAgent" Type="HanasuWP8.AudioStreamAgent.AudioTrackStreamer" />
       </ExtendedTask>
     </Tasks>
     <Tokens>

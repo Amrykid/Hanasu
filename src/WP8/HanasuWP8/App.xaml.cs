@@ -1,17 +1,26 @@
-﻿using System;
+﻿using Crystal.Core;
+using Crystal.Localization;
+using Hanasu.Extensions;
+using Hanasu.Model;
+using HanasuWP8.Resources;
+using Microsoft.Phone.BackgroundAudio;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Net.Http;
 using System.Resources;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using HanasuWP8.Resources;
-using Microsoft.Phone.BackgroundAudio;
+using System.Xml.Linq;
 
 namespace HanasuWP8
 {
-    public partial class App : Application
+    public partial class App : BaseCrystalApplication
     {
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
@@ -60,6 +69,10 @@ namespace HanasuWP8
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
+            EnableSelfAssemblyResolution = true;
+            EnableCrystalLocalization = true;
+
+            LoadStationsTask = LoadStations();
         }
 
         // Code to execute when the application is launching (eg, from Start)
@@ -227,6 +240,66 @@ namespace HanasuWP8
 
         private void PhoneApplicationService_RunningInBackground(object sender, RunningInBackgroundEventArgs e)
         {
+
+        }
+
+        public Task LoadStationsTask = null;
+        public ObservableCollection<Station> AvailableStations { get; set; }
+
+        internal async Task LoadStations()
+        {
+            if (AvailableStations == null)
+                AvailableStations = new ObservableCollection<Station>();
+            else
+                if (AvailableStations.Count > 0)
+                    AvailableStations.Clear();
+
+
+
+
+            XDocument doc = null;
+            using (var http = new HttpClient())
+            {
+                //making things asynchronous
+                doc = XDocument.Parse(await http.GetStringAsync("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml")); //XDocument.Load("https://raw.github.com/Amrykid/Hanasu/master/Stations.xml");
+            }
+
+
+            var stationsElement = doc.Element("Stations");
+
+            var stations = from x in stationsElement.Elements("Station")
+                           where x.ContainsElement("StationType") ? x.Element("StationType").Value != "TV" : true
+                           select new Station()
+                           {
+                               Title = x.Element("Name").Value,
+                               StreamUrl = x.Element("DataSource").Value,
+                               PreprocessorFormat = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : string.Empty,
+                               ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : "http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/200px-No_image_available.svg.png",
+                               UnlocalizedFormat = x.Element("Format").Value,
+                               Format = LocalizationManager.GetLocalizedValue("Group" + x.Element("Format").Value),
+                               Subtitle = LocalizationManager.GetLocalizedValue("StationSubtitle"),
+                               ServerType = x.ContainsElement("ServerType") ? x.Element("ServerType").Value : "Raw",
+                               HomepageUrl = x.ContainsElement("Homepage") ? new Uri(x.Element("Homepage").Value) : null
+                           };
+
+            foreach (var x in stations)
+                AvailableStations.Add(x);
+
+
+            //  <Stations>
+            //<Station>
+            //  <Name>AnimeNfo</Name>
+            //  <DataSource>http://www.animenfo.com/radio/listen.m3u</DataSource>
+            //  <Homepage>http://www.animenfo.com/</Homepage>
+            //  <Format>Anime</Format>
+            //  <City>Tokyo, Japan</City>
+            //  <Language>English</Language>
+            //  <Cacheable>True</Cacheable>
+            //  <ExplicitExtension>.m3u</ExplicitExtension>
+            //  <Schedule type="page">http://www.animenfo.com/radio/schedule.php</Schedule>
+            //  <Logo>http://d1i6vahw24eb07.cloudfront.net/s54119q.png</Logo>
+            //  <ServerType>Shoutcast</ServerType>
+            //</Station>
 
         }
     }

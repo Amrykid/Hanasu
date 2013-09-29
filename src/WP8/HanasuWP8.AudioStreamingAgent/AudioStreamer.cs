@@ -33,7 +33,12 @@ namespace HanasuWP8.AudioStreamAgent
         {
             //TODO: Set the SetSource property of streamer to a MSS source
 
-            mms = new Silverlight.Media.ShoutcastMediaStreamSource(new Uri(track.Tag.ToString()), true);
+            var data = track.Tag.ToString().Split('$');
+            var url = data[data.Length - 1];
+
+
+
+            mms = new Silverlight.Media.ShoutcastMediaStreamSource(new Uri(url), true);
             //track.Title = "Moo";
             streamer.SetSource(mms);
             mms.MetadataChanged += mms_MetadataChanged;

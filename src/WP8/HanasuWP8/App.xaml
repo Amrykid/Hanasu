@@ -1,9 +1,10 @@
-﻿<Application
+﻿<crystal:BaseCrystalApplication
     x:Class="HanasuWP8.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone">
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal.WP8">
 
     <!--Application Resources-->
     <Application.Resources>
@@ -18,4 +19,4 @@
             RunningInBackground="PhoneApplicationService_RunningInBackground"/>
     </Application.ApplicationLifetimeObjects>
 
-</Application>
+</crystal:BaseCrystalApplication>

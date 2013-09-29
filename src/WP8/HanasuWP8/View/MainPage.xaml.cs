@@ -10,8 +10,9 @@ using Microsoft.Phone.Shell;
 using HanasuWP8.Resources;
 using Microsoft.Phone.BackgroundAudio;
 using System.Threading.Tasks;
+using Hanasu.Model;
 
-namespace HanasuWP8
+namespace HanasuWP8.View
 {
     public partial class MainPage : PhoneApplicationPage
     {
@@ -26,23 +27,51 @@ namespace HanasuWP8
 
         private void PhoneApplicationPage_Loaded_1(object sender, RoutedEventArgs e)
         {
+            SystemTray.ProgressIndicator = new ProgressIndicator();
+            SystemTray.ProgressIndicator.IsIndeterminate = true;
+
             BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
         }
 
         void Instance_PlayStateChanged(object sender, EventArgs e)
         {
-
+            switch (BackgroundAudioPlayer.Instance.PlayerState)
+            {
+                case PlayState.BufferingStarted:
+                    {
+                        SystemTray.ProgressIndicator.IsIndeterminate = true;
+                        SystemTray.ProgressIndicator.IsVisible = true;
+                        SystemTray.ProgressIndicator.Text = "Buffering...";
+                        break;
+                    }
+                default:
+                    {
+                        SystemTray.ProgressIndicator.IsIndeterminate = true;
+                        SystemTray.ProgressIndicator.IsVisible = false;
+                        break;
+                    }
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Microsoft.Phone.BackgroundAudio.BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, "Moo", "", "", null, "http://173.192.205.178:80", EnabledPlayerControls.Pause);
+            //Microsoft.Phone.BackgroundAudio.BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, "Moo", "", "", null, "http://173.192.205.178:80", EnabledPlayerControls.Pause);
 
             //HanasuWP8.AudioPlaybackAgent.AudioPlayer.CurrentStream = "http://173.244.196.108:80/;stream.mp3";
 
             //Microsoft.Phone.BackgroundAudio.BackgroundAudioPlayer.Instance.Play();
             //HanasuWP8.AudioStreamAgent.AudioTrackStreamer asa = new HanasuWP8.AudioStreamAgent.AudioTrackStreamer();
             //HanasuWP8.AudioPlaybackAgent.AudioPlayer ap = new AudioPlaybackAgent.AudioPlayer();
+        }
+
+        private void stationsListBox_DoubleTap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            ((HanasuWP8.ViewModel.MainPageStationsViewModel)stationsListBox.DataContext).PlayStationCommand.Execute((Station)stationsListBox.SelectedItem);
+        }
+
+        private void ApplicationBarIconButton_Click_1(object sender, EventArgs e)
+        {
+
         }
 
         // Sample code for building a localized ApplicationBar
