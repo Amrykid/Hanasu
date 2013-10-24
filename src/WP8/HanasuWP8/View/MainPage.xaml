@@ -34,7 +34,7 @@
                 </phone:PivotItem.DataContext>
                 <Grid>
                     <Grid Visibility="{Binding IsPlaying, Converter={StaticResource ib2v}}">
-                        <TextBlock TextAlignment="Center" Text="Nothing is playing."/>
+                        <TextBlock TextAlignment="Center" Text="Nothing is playing or the current media is not managed by Hanasu."/>
                     </Grid>
                     <Grid Visibility="{Binding IsPlaying, Converter={StaticResource b2v}}">
                         <StackPanel>
@@ -93,7 +93,9 @@
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Mode="Default" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton Text="Play" IconUri="Images/transport.play.png" Click="ApplicationBarIconButton_Click_1"/>
+            <shell:ApplicationBarIconButton x:Name="playBtn" Text="Play" IconUri="Images/transport.play.png" Click="ApplicationBarIconButton_Click_1">
+        
+            </shell:ApplicationBarIconButton>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

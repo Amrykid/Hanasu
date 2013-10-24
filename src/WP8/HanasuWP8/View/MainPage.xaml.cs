@@ -48,6 +48,14 @@ namespace HanasuWP8.View
                     {
                         SystemTray.ProgressIndicator.IsIndeterminate = true;
                         SystemTray.ProgressIndicator.IsVisible = false;
+                        playBtn.IconUri = new Uri("Images/transport.play.png");
+                        playBtn.Text = "Play";
+                        break;
+                    }
+                case PlayState.Playing:
+                    {
+                        playBtn.IconUri = new Uri("Images/transport.pause.png");
+                        playBtn.Text = "Pause";
                         break;
                     }
             }
@@ -66,7 +74,11 @@ namespace HanasuWP8.View
 
         private void stationsListBox_DoubleTap_1(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            ((HanasuWP8.ViewModel.MainPageStationsViewModel)stationsListBox.DataContext).PlayStationCommand.Execute((Station)stationsListBox.SelectedItem);
+            if (BackgroundAudioPlayer.Instance.PlayerState != PlayState.Playing)
+                ((HanasuWP8.ViewModel.MainPageStationsViewModel)stationsListBox.DataContext).PlayStationCommand.Execute((Station)stationsListBox.SelectedItem);
+            else
+                if (BackgroundAudioPlayer.Instance.CanPause)
+                    BackgroundAudioPlayer.Instance.Pause(); //Breaks MVVM. Will fix later.
         }
 
         private void ApplicationBarIconButton_Click_1(object sender, EventArgs e)
