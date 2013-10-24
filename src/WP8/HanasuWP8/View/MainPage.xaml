@@ -34,7 +34,8 @@
                 </phone:PivotItem.DataContext>
                 <Grid>
                     <Grid Visibility="{Binding IsPlaying, Converter={StaticResource ib2v}}">
-                        <TextBlock TextAlignment="Center" Text="Nothing is playing or the current media is not managed by Hanasu."/>
+                        <TextBlock TextAlignment="Center" TextWrapping="Wrap"
+                                   Text="Nothing is playing or the current media is not managed by Hanasu."/>
                     </Grid>
                     <Grid Visibility="{Binding IsPlaying, Converter={StaticResource b2v}}">
                         <StackPanel>
