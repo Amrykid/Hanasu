@@ -50,14 +50,26 @@ namespace HanasuWP8.AudioStreamAgent
             var data = track.Tag.ToString().Split('$');
             var url = data[data.Length - 1];
 
+            var type = data[2];
 
-
-            mms = new Silverlight.Media.ShoutcastMediaStreamSource(new Uri(url), true);
-            //track.Title = "Moo";
-            streamer.SetSource(mms);
-            mms.MetadataChanged += mms_MetadataChanged;
-            mms.Connected += mms_Connected;
-            mms.Closed += mms_Closed;
+            switch (type.ToLower())
+            {
+                case "shoutcast":
+                    {
+                        mms = new Silverlight.Media.ShoutcastMediaStreamSource(new Uri(url), true);
+                        //track.Title = "Moo";
+                        mms.MetadataChanged += mms_MetadataChanged;
+                        mms.Connected += mms_Connected;
+                        mms.Closed += mms_Closed;
+                        streamer.SetSource(mms);
+                    }
+                    break;
+                default:
+                    track.BeginEdit();
+                    track.Source = new Uri(url);
+                    track.EndEdit();
+                    break;
+            }
         }
 
         void mms_Closed(object sender, EventArgs e)
