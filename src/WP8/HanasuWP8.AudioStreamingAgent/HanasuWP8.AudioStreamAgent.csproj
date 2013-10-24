@@ -92,6 +92,10 @@
       <Project>{05CC4102-451C-4EB5-8FEA-614F5B49AB2D}</Project>
       <Name>Silverlight.Media.Shoutcast.Phone</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\lib\IpcWrapper\IpcWrapper.vcxproj">
+      <Project>{0B31880A-1980-42C9-8261-B4DC43F8E577}</Project>
+      <Name>IpcWrapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

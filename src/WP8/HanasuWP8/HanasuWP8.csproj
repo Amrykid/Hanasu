@@ -102,6 +102,7 @@
     <Compile Include="Converters\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Model\Station.cs" />
+    <Compile Include="Services\MessageBoxService.cs" />
     <Compile Include="Tools\BasePreprocessor.cs" />
     <Compile Include="Tools\IPreprocessor.cs" />
     <Compile Include="Tools\MultiStreamPreprocessor.cs" />
@@ -176,6 +177,10 @@
     <ProjectReference Include="..\..\..\lib\Crystal\src\Crystal.WP8\Crystal.WP8.csproj">
       <Project>{9BDB1749-97EF-43BD-9E0C-E5DCD552D6FC}</Project>
       <Name>Crystal.WP8</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\lib\IpcWrapper\IpcWrapper.vcxproj">
+      <Project>{0B31880A-1980-42C9-8261-B4DC43F8E577}</Project>
+      <Name>IpcWrapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\HanasuWP8.AudioPlaybackAgent\HanasuWP8.AudioPlaybackAgent.csproj">
       <Project>{7A7BADA8-87A9-49E2-B939-5234276FF37C}</Project>

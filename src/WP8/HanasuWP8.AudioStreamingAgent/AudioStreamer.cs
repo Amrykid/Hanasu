@@ -1,4 +1,5 @@
-﻿using Microsoft.Phone.BackgroundAudio;
+﻿using IpcWrapper;
+using Microsoft.Phone.BackgroundAudio;
 using System;
 
 namespace HanasuWP8.AudioStreamAgent
@@ -9,7 +10,20 @@ namespace HanasuWP8.AudioStreamAgent
     public class AudioTrackStreamer : AudioStreamingAgent
     {
         private Silverlight.Media.ShoutcastMediaStreamSource mms = null;
+        const string CONNECTED_EVENT_NAME = "HANASU_STREAM_CONNECTED";
+        private NamedEvent connectedEvent = null;
 
+        public AudioTrackStreamer()
+            : base()
+        {
+            connectedEvent = new NamedEvent(CONNECTED_EVENT_NAME, true);
+
+        }
+
+        ~AudioTrackStreamer()
+        {
+            connectedEvent.Dispose();
+        }
 
         /// <summary>
         /// Called when a new track requires audio decoding
@@ -53,7 +67,7 @@ namespace HanasuWP8.AudioStreamAgent
 
         void mms_Connected(object sender, EventArgs e)
         {
-
+            connectedEvent.Set();
         }
 
         void mms_MetadataChanged(object sender, System.Windows.RoutedEventArgs e)
@@ -85,8 +99,8 @@ namespace HanasuWP8.AudioStreamAgent
                 {
                     mms.Connected -= mms_Connected;
                     mms.MetadataChanged -= mms_MetadataChanged;
-                    mms.Dispose();
                     mms.Closed -= mms_Closed;
+                    mms.Dispose();
                 }
                 catch (Exception) { }
             }

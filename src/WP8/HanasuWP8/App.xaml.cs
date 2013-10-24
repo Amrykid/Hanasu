@@ -1,5 +1,6 @@
 ﻿using Crystal.Core;
 using Crystal.Localization;
+using Crystal.Services;
 using Hanasu.Extensions;
 using Hanasu.Model;
 using HanasuWP8.Resources;
@@ -72,6 +73,8 @@ namespace HanasuWP8
 
             EnableSelfAssemblyResolution = true;
             EnableCrystalLocalization = true;
+
+            ServiceManager.RegisterService<Services.MessageBoxService>();
 
             LoadStationsTask = LoadStations();
         }

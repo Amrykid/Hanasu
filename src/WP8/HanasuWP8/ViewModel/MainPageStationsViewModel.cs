@@ -1,8 +1,10 @@
 ﻿using Crystal.Command;
 using Crystal.Core;
 using Crystal.Messaging;
+using Crystal.Services;
 using Hanasu.Core.Preprocessor;
 using Hanasu.Model;
+using IpcWrapper;
 using Microsoft.Phone.BackgroundAudio;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,9 @@ namespace HanasuWP8.ViewModel
 {
     public class MainPageStationsViewModel : BaseViewModel
     {
+        const string CONNECTED_EVENT_NAME = "HANASU_STREAM_CONNECTED";
+        private NamedEvent connectedEvent = null;
+
         public MainPageStationsViewModel()
         {
             if (!IsDesignMode)
@@ -41,11 +46,40 @@ namespace HanasuWP8.ViewModel
 
                         var url = x.StreamUrl.Trim();
 
+
                         if (await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
                             url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/","");
 
                         BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, x.Title, null, null, new Uri(x.ImageUrl),
                             "Hanasu$" + string.Join("$", x.Title, x.ServerType, url), EnabledPlayerControls.Pause);
+
+                        while (true)
+                        {
+                            //loop until we get the event.
+                            if (NamedEvent.TryOpen(CONNECTED_EVENT_NAME, out connectedEvent))
+                            {
+                                break;
+                            }
+
+                            await Task.Delay(200);
+                        }
+
+                        var playTask = connectedEvent.WaitAsync().AsTask();
+
+                        var timeoutTask = Task.Delay(5000);
+
+                        var what = await Task.WhenAny(playTask, timeoutTask);
+
+                        if (what == timeoutTask)
+                        {
+                            ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
+                                "Unable to connect in a timely fashion!");
+                            BackgroundAudioPlayer.Instance.Track = null;
+                        }
+
+                        Status = null;
+
+                        IsBusy = false;
                     });
             }
         }
@@ -69,12 +103,6 @@ namespace HanasuWP8.ViewModel
 
         void Instance_PlayStateChanged(object sender, EventArgs e)
         {
-            if (BackgroundAudioPlayer.Instance.PlayerState == PlayState.Playing)
-            {
-                Status = null;
-
-                IsBusy = false;
-            }
         }
 
         public ObservableCollection<Station> Stations

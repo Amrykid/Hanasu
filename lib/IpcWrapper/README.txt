@@ -1,0 +1,2 @@
+From: http://code.msdn.microsoft.com/wpapps/Using-named-events-for-IPC-133e5bf9
+http://blogs.windows.com/windows_phone/b/wpdev/archive/2013/03/27/using-named-events-to-coordinate-foreground-apps-and-background-agents.aspx
