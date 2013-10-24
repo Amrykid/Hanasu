@@ -26,7 +26,7 @@
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <!--Pivot Control-->
-        <phone:Pivot Title="HANASU">
+        <phone:Pivot Title="HANASU" SelectedIndex="{Binding SelectedTab, Mode=TwoWay}">
             <!--Pivot item one-->
             <phone:PivotItem Header="playing">
                 <phone:PivotItem.DataContext>
@@ -38,10 +38,10 @@
                     </Grid>
                     <Grid Visibility="{Binding IsPlaying, Converter={StaticResource b2v}}">
                         <StackPanel>
-                            <Image Source="{Binding CurrentCover}" Height="200" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding CurrentTrack}" FontSize="33"/>
-                            <TextBlock Text="{Binding CurrentArtist}" FontSize="27"/>
-                            <TextBlock Text="{Binding CurrentStation.Title}" FontSize="25"/>
+                            <Image Source="{Binding CurrentCover}" Height="250" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding CurrentTrack}" FontSize="38" TextAlignment="Center" Foreground="{StaticResource PhoneAccentBrush}"/>
+                            <TextBlock Text="{Binding CurrentArtist}" FontSize="30" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding CurrentStation.Title}" FontSize="25" TextAlignment="Center"/>
                         </StackPanel>
                     </Grid>
                 </Grid>

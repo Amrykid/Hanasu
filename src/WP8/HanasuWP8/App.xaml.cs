@@ -50,7 +50,8 @@ namespace HanasuWP8
             {
                 // Close the background audio player in case it 
                 // was running from a previous debugging session.
-                BackgroundAudioPlayer.Instance.Close();
+                //BackgroundAudioPlayer.Instance.Close();
+
 
                 // Display the current frame rate counters.
                 Application.Current.Host.Settings.EnableFrameRateCounter = true;
@@ -97,7 +98,11 @@ namespace HanasuWP8
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+            if (Exit2 != null)
+                Exit2(sender, e);
         }
+
+        internal event EventHandler<ClosingEventArgs> Exit2;
 
         // Code to execute if a navigation fails
         private void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)

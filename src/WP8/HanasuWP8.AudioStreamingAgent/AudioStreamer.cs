@@ -62,9 +62,13 @@ namespace HanasuWP8.AudioStreamAgent
 
             var track = BackgroundAudioPlayer.Instance.Track;
             track.BeginEdit();
-            var data = mms.CurrentMetadata.Title.Split(new string[] { " - " }, StringSplitOptions.None);
-            track.Artist = data[0];
-            track.Title = data[1];
+            try
+            {
+                var data = mms.CurrentMetadata.Title.Split(new string[] { " - " }, StringSplitOptions.None);
+                track.Artist = data[0];
+                track.Title = data[1];
+            }
+            catch (Exception) { }
             track.EndEdit();
             //NotifyComplete();
         }
@@ -77,10 +81,14 @@ namespace HanasuWP8.AudioStreamAgent
         {
             if (mms != null)
             {
-                mms.Closed -= mms_Closed;
-                mms.Connected -= mms_Connected;
-                mms.MetadataChanged -= mms_MetadataChanged;
-                mms.Dispose();
+                try
+                {
+                    mms.Connected -= mms_Connected;
+                    mms.MetadataChanged -= mms_MetadataChanged;
+                    mms.Dispose();
+                    mms.Closed -= mms_Closed;
+                }
+                catch (Exception) { }
             }
 
             base.OnCancel();

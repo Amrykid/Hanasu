@@ -17,11 +17,48 @@ namespace HanasuWP8.ViewModel
         private DispatcherTimer timer = new DispatcherTimer();
         public MainPageNowPlayingViewModel()
         {
-            BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
-            timer.Tick += timer_Tick;
-            timer.Interval = new TimeSpan(0, 0, 3);
+            try
+            {
+                if (!IsDesignMode)
+                {
+                    if (!System.Diagnostics.Debugger.IsAttached)
+                        System.Diagnostics.Debugger.Launch();
 
-            SynchronizeBAPStatus();
+                    BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
+                    ((HanasuWP8.App)App.Current).Exit2 += MainPageNowPlayingViewModel_Exit2;
+
+                    timer.Tick += timer_Tick;
+                    timer.Interval = new TimeSpan(0, 0, 3);
+
+                    SynchronizeBAPStatus();
+                }
+                else
+                {
+                    //Fale data for the design view.
+                    IsPlaying = true;
+                    CurrentCover = "https://si0.twimg.com/profile_images/1104224483/logo_transbkgr.png";
+                    CurrentTrack = "Super-moo!";
+                    CurrentArtist = "Amrykid";
+                    CurrentStation = new Station() { Title = "AmryFM" };
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Crystal.Services.ServiceManager.Resolve<Crystal.Services.IMessageBoxService>().ShowMessage("Exception", ex.ToString());
+#endif
+            }
+        }
+
+        void MainPageNowPlayingViewModel_Exit2(object sender, Microsoft.Phone.Shell.ClosingEventArgs e)
+        {
+            ((HanasuWP8.App)App.Current).Exit2 -= MainPageNowPlayingViewModel_Exit2;
+            BackgroundAudioPlayer.Instance.PlayStateChanged -= Instance_PlayStateChanged;
+        }
+
+        public override void OnNavigatedFrom()
+        {
+
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -34,7 +71,7 @@ namespace HanasuWP8.ViewModel
             SynchronizeBAPStatus();
         }
 
-        private void SynchronizeBAPStatus()
+        private async void SynchronizeBAPStatus()
         {
             IsPlaying = BackgroundAudioPlayer.Instance.PlayerState == PlayState.Playing;
 
@@ -44,6 +81,8 @@ namespace HanasuWP8.ViewModel
                 {
                     var data = BackgroundAudioPlayer.Instance.Track.Tag.ToString().Split('$');
                     var url = data[data.Length - 1];
+
+                    await ((HanasuWP8.App)App.Current).LoadStationsTask;
 
                     Station currentStation = ((App)App.Current).AvailableStations.First(x => x.Title == data[1]) as Station;
 
@@ -66,8 +105,12 @@ namespace HanasuWP8.ViewModel
         {
             CurrentCover = CurrentStation.ImageUrl;
 
-            CurrentTrack = BackgroundAudioPlayer.Instance.Track.Title;
-            CurrentArtist = BackgroundAudioPlayer.Instance.Track.Artist;
+            if (BackgroundAudioPlayer.Instance.Track != null)
+            {
+                CurrentTrack = BackgroundAudioPlayer.Instance.Track.Title;
+                CurrentArtist = BackgroundAudioPlayer.Instance.Track.Artist;
+            }
+
         }
 
         public bool IsPlaying
