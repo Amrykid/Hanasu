@@ -108,7 +108,12 @@ namespace HanasuWP8.AudioPlaybackAgent
                     }
                     break;
                 case UserAction.Stop:
-                    player.Stop();
+                    try
+                    {
+                        player.Stop();
+                    }
+
+                    catch (Exception) { }
                     break;
                 case UserAction.Pause:
                     player.Pause();

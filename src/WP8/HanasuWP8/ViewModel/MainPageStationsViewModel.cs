@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HanasuWP8.ViewModel
@@ -29,11 +30,23 @@ namespace HanasuWP8.ViewModel
                 PlayStationCommand = CommandManager.CreateCommand(async (y) =>
                     {
                         //if (IsBusy) return;
+
+                        if (!playCommandLock.WaitOne(5000)) return;
+
                         try
                         {
-                            BackgroundAudioPlayer.Instance.Stop();
-                            BackgroundAudioPlayer.Instance.Track = null;
-                            //BackgroundAudioPlayer.Instance.Close();
+                            if (BackgroundAudioPlayer.Instance.PlayerState != PlayState.Stopped)
+                            {
+                                BackgroundAudioPlayer.Instance.Stop();
+                                //BackgroundAudioPlayer.Instance.Track = null;
+                                //BackgroundAudioPlayer.Instance.Close();
+
+                                IsBusy = true;
+
+                                Status = "Stopping...";
+
+                                await Task.Delay(5000);
+                            }
                         }
                         catch (Exception) { }
 
@@ -65,25 +78,33 @@ namespace HanasuWP8.ViewModel
 
                         var playTask = connectedEvent.WaitAsync().AsTask();
 
-                        var timeoutTask = Task.Delay(5000);
+                        var timeoutTask = Task.Delay(System.Diagnostics.Debugger.IsAttached ? 12000 : 7000);
 
                         var what = await Task.WhenAny(playTask, timeoutTask);
 
-                        if (what == timeoutTask)
+                        if (what == timeoutTask && (BackgroundAudioPlayer.Instance.PlayerState != PlayState.BufferingStarted || BackgroundAudioPlayer.Instance.PlayerState != PlayState.Playing))
                         {
                             ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
                                 "Unable to connect in a timely fashion!");
-                            BackgroundAudioPlayer.Instance.Track = null;
+                            BackgroundAudioPlayer.Instance.Stop();
+                            //BackgroundAudioPlayer.Instance.Track = null;
                         }
                         else
+                        {
                             Messenger.PushMessage(this, "SwitchTab", 0);
+                            //.Instance.Play();
+                        }
 
                         Status = null;
 
                         IsBusy = false;
+
+                        playCommandLock.Set();
                     });
             }
         }
+
+        private AutoResetEvent playCommandLock = new AutoResetEvent(true); //true means a station can be played.
 
         private async void Initialize()
         {
