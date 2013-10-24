@@ -68,12 +68,16 @@ namespace HanasuWP8.ViewModel
 
         void Instance_PlayStateChanged(object sender, EventArgs e)
         {
-            SynchronizeBAPStatus();
+            Microsoft.Phone.BackgroundAudio.PlayStateChangedEventArgs e2 = (Microsoft.Phone.BackgroundAudio.PlayStateChangedEventArgs)e;
+            SynchronizeBAPStatus(e2);
         }
 
-        private async void SynchronizeBAPStatus()
+        private async void SynchronizeBAPStatus(Microsoft.Phone.BackgroundAudio.PlayStateChangedEventArgs e = null)
         {
-            IsPlaying = BackgroundAudioPlayer.Instance.PlayerState == PlayState.Playing;
+            if (e == null)
+                IsPlaying = BackgroundAudioPlayer.Instance.PlayerState == PlayState.Playing; //try and guess
+            else
+                IsPlaying = e.CurrentPlayState == PlayState.Playing; //&& e.IntermediatePlayState == PlayState.BufferingStopped;
 
             if (BackgroundAudioPlayer.Instance.Track != null)
             {
@@ -98,6 +102,7 @@ namespace HanasuWP8.ViewModel
                     timer.Start();
             }
             else
+                
                 timer.Stop();
         }
 

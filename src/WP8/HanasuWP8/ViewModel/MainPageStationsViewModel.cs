@@ -37,13 +37,13 @@ namespace HanasuWP8.ViewModel
                         {
                             if (BackgroundAudioPlayer.Instance.PlayerState != PlayState.Stopped)
                             {
-                                BackgroundAudioPlayer.Instance.Stop();
-                                //BackgroundAudioPlayer.Instance.Track = null;
-                                //BackgroundAudioPlayer.Instance.Close();
-
                                 IsBusy = true;
 
                                 Status = "Stopping...";
+
+                                BackgroundAudioPlayer.Instance.Stop();
+                                BackgroundAudioPlayer.Instance.Track = null;
+                               // BackgroundAudioPlayer.Instance.Close();
 
                                 await Task.Delay(5000);
                             }
@@ -60,10 +60,15 @@ namespace HanasuWP8.ViewModel
 
 
                         if (await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
-                            url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/","");
+                            url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/", "");
+
+                        bool shouldCallPlay = BackgroundAudioPlayer.Instance.Track == null;
 
                         BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, x.Title, null, null, new Uri(x.ImageUrl),
                             "Hanasu$" + string.Join("$", x.Title, x.ServerType, url), EnabledPlayerControls.Pause);
+
+                        if (shouldCallPlay)
+                            BackgroundAudioPlayer.Instance.Play();
 
                         while (true)
                         {
@@ -73,7 +78,7 @@ namespace HanasuWP8.ViewModel
                                 break;
                             }
 
-                            await Task.Delay(200);
+                            await Task.Delay(100);
                         }
 
                         var playTask = connectedEvent.WaitAsync().AsTask();
@@ -82,7 +87,7 @@ namespace HanasuWP8.ViewModel
 
                         var what = await Task.WhenAny(playTask, timeoutTask);
 
-                        if (what == timeoutTask && (BackgroundAudioPlayer.Instance.PlayerState != PlayState.BufferingStarted || BackgroundAudioPlayer.Instance.PlayerState != PlayState.Playing))
+                        if (what == timeoutTask && BackgroundAudioPlayer.Instance.PlayerState != PlayState.BufferingStarted)
                         {
                             ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
                                 "Unable to connect in a timely fashion!");
