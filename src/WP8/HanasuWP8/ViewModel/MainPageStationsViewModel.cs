@@ -32,11 +32,10 @@ namespace HanasuWP8.ViewModel
                         try
                         {
                             BackgroundAudioPlayer.Instance.Stop();
-                            BackgroundAudioPlayer.Instance.Close();
+                            BackgroundAudioPlayer.Instance.Track = null;
+                            //BackgroundAudioPlayer.Instance.Close();
                         }
                         catch (Exception) { }
-
-                        Messenger.PushMessage(this, "SwitchTab", 0);
 
                         Status = "Connecting...";
 
@@ -76,6 +75,8 @@ namespace HanasuWP8.ViewModel
                                 "Unable to connect in a timely fashion!");
                             BackgroundAudioPlayer.Instance.Track = null;
                         }
+                        else
+                            Messenger.PushMessage(this, "SwitchTab", 0);
 
                         Status = null;
 
