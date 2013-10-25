@@ -35,34 +35,34 @@ namespace HanasuWP8.View
 
         void Instance_PlayStateChanged(object sender, EventArgs e)
         {
+            if (playBtn == null)
+                playBtn = ApplicationBar.Buttons.OfType<ApplicationBarIconButton>().First(x => x.Text == "Play" || x.Text == "Pause");
+
             switch (BackgroundAudioPlayer.Instance.PlayerState)
             {
                 case PlayState.BufferingStarted:
                     {
-                        SystemTray.ProgressIndicator.IsIndeterminate = true;
-                        SystemTray.ProgressIndicator.IsVisible = true;
-                        SystemTray.ProgressIndicator.Text = "Buffering...";
+                        //SystemTray.ProgressIndicator.IsIndeterminate = true;
+                        //SystemTray.ProgressIndicator.IsVisible = true;
+                        //SystemTray.ProgressIndicator.Text = "Buffering...";
                         break;
                     }
                 default:
                     {
-                        SystemTray.ProgressIndicator.IsIndeterminate = true;
-                        SystemTray.ProgressIndicator.IsVisible = false;
+                        //SystemTray.ProgressIndicator.IsIndeterminate = true;
+                        //SystemTray.ProgressIndicator.IsVisible = false;
 
-                        if (playBtn != null)
-                        {
-                            playBtn.IconUri = new Uri("Images/transport.play.png");
-                            playBtn.Text = "Play";
-                        }
+
+                        playBtn.IconUri = new Uri("Images/transport.play.png", UriKind.Relative);
+                        playBtn.Text = "Play";
+
                         break;
                     }
                 case PlayState.Playing:
                     {
-                        if (playBtn != null)
-                        {
-                            playBtn.IconUri = new Uri("Images/transport.pause.png");
-                            playBtn.Text = "Pause";
-                        }
+                        playBtn.IconUri = new Uri("Images/transport.pause.png", UriKind.Relative);
+                        playBtn.Text = "Pause";
+
                         break;
                     }
             }
@@ -88,9 +88,29 @@ namespace HanasuWP8.View
 
         private void ApplicationBarIconButton_Click_1(object sender, EventArgs e)
         {
-            //        else
-            //if (BackgroundAudioPlayer.Instance.CanPause)
-            //    BackgroundAudioPlayer.Instance.Pause(); //Breaks MVVM. Will fix later.
+            //not MVVM-ish. will fix later.
+
+            playBtn = sender as ApplicationBarIconButton;
+
+            if (BackgroundAudioPlayer.Instance.PlayerState == PlayState.Playing)
+            {
+                if (BackgroundAudioPlayer.Instance.CanPause)
+                {
+                    playBtn.IconUri = new Uri("Images/transport.play.png", UriKind.Relative);
+                    playBtn.Text = "Play";
+
+                    BackgroundAudioPlayer.Instance.Pause();
+                }
+            }
+            else
+            {
+                if (BackgroundAudioPlayer.Instance.Track == null) return;
+
+                playBtn.IconUri = new Uri("Images/transport.pause.png", UriKind.Relative);
+                playBtn.Text = "Pause";
+
+                BackgroundAudioPlayer.Instance.Play();
+            }
         }
 
         // Sample code for building a localized ApplicationBar
