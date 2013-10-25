@@ -71,6 +71,8 @@ namespace HanasuWP8
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
+            BackgroundAudioPlayer.Instance.Volume = 0.5;
+
             EnableSelfAssemblyResolution = true;
             EnableCrystalLocalization = true;
 
