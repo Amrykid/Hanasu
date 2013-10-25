@@ -34,7 +34,7 @@ namespace HanasuWP8.ViewModel
                 }
                 else
                 {
-                    //Fale data for the design view.
+                    //False data for the design view.
                     IsPlaying = true;
                     CurrentCover = "https://si0.twimg.com/profile_images/1104224483/logo_transbkgr.png";
                     CurrentTrack = "Super-moo!";

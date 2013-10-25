@@ -39,11 +39,11 @@ namespace HanasuWP8.ViewModel
                             {
                                 IsBusy = true;
 
-                                Status = "Stopping...";
+                                Status = "Working...";
 
                                 BackgroundAudioPlayer.Instance.Stop();
                                 BackgroundAudioPlayer.Instance.Track = null;
-                               // BackgroundAudioPlayer.Instance.Close();
+                                // BackgroundAudioPlayer.Instance.Close();
 
                                 await Task.Delay(5000);
                             }
@@ -144,7 +144,15 @@ namespace HanasuWP8.ViewModel
         }
 
 
-        public string Status { get; set; }
+        public string Status
+        {
+            get { return GetPropertyOrDefaultType<string>(x => this.Status); }
+            set
+            {
+                SetProperty(x => this.Status, value);
+                Messenger.PushMessage(this, "UpdateIndeterminateStatus", new Tuple<bool, string>(IsBusy, value));
+            }
+        }
         public bool IsBusy
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
