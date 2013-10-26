@@ -63,6 +63,7 @@ namespace HanasuWP8.ViewModel
 
                         var url = x.StreamUrl.Trim();
 
+                        BackgroundAudioPlayer.Instance.Volume = 0.5;
 
                         if (await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
                             url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/", "");
