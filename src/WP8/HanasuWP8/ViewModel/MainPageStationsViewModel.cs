@@ -41,11 +41,16 @@ namespace HanasuWP8.ViewModel
 
                                 Status = "Working...";
 
-                                BackgroundAudioPlayer.Instance.Stop();
-                                BackgroundAudioPlayer.Instance.Track = null;
-                                // BackgroundAudioPlayer.Instance.Close();
+                                try
+                                {
+                                    BackgroundAudioPlayer.Instance.Stop();
+                                    //BackgroundAudioPlayer.Instance.Track = null;
+                                    BackgroundAudioPlayer.Instance.Close();
+                                    BAPClosed = true;
+                                }
+                                catch (Exception) { }
 
-                                await Task.Delay(5000);
+                                await Task.Delay(2000);
                             }
                         }
                         catch (Exception) { }
@@ -62,13 +67,14 @@ namespace HanasuWP8.ViewModel
                         if (await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
                             url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/", "");
 
-                        bool shouldCallPlay = BackgroundAudioPlayer.Instance.Track == null;
-
                         BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, x.Title, null, null, new Uri(x.ImageUrl),
                             "Hanasu$" + string.Join("$", x.Title, x.ServerType, url), EnabledPlayerControls.Pause);
 
-                        if (shouldCallPlay)
+                        if (BAPClosed)
+                        {
                             BackgroundAudioPlayer.Instance.Play();
+                            BAPClosed = false;
+                        }
 
                         while (true)
                         {
@@ -87,11 +93,14 @@ namespace HanasuWP8.ViewModel
 
                         var what = await Task.WhenAny(playTask, timeoutTask);
 
-                        if (what == timeoutTask && BackgroundAudioPlayer.Instance.PlayerState != PlayState.BufferingStarted)
+                        if (what == timeoutTask && (BackgroundAudioPlayer.Instance.PlayerState != PlayState.BufferingStarted || BackgroundAudioPlayer.Instance.PlayerState != PlayState.Playing))
                         {
                             ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
                                 "Unable to connect in a timely fashion!");
                             BackgroundAudioPlayer.Instance.Stop();
+                            BackgroundAudioPlayer.Instance.Close();
+
+                            BAPClosed = true;
                             //BackgroundAudioPlayer.Instance.Track = null;
                         }
                         else
@@ -109,6 +118,7 @@ namespace HanasuWP8.ViewModel
             }
         }
 
+        private bool BAPClosed = false;
         private AutoResetEvent playCommandLock = new AutoResetEvent(true); //true means a station can be played.
 
         private async void Initialize()

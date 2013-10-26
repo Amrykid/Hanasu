@@ -53,6 +53,7 @@ namespace HanasuWP8.AudioPlaybackAgent
             {
                 case PlayState.TrackEnded:
                     //player.Track = GetPreviousTrack();
+                    player.Track = null;
                     break;
                 case PlayState.TrackReady:
                     player.Play();
@@ -101,6 +102,17 @@ namespace HanasuWP8.AudioPlaybackAgent
             switch (action)
             {
                 case UserAction.Play:
+                    if (track != null && track.Tag != null)
+                    {
+                        var data = track.Tag.ToString().Split('$');
+                        var url = data[data.Length - 1];
+
+                        var type = data[2];
+
+                        if (type.ToLower() != "shoutcast")
+                            track.Source = new Uri(url);
+                    }
+
                     //player.Track = new AudioTrack(null, "", "", "", null, track.Tag, EnabledPlayerControls.Pause);
                     if (player.PlayerState != PlayState.Playing)
                     {
@@ -108,34 +120,31 @@ namespace HanasuWP8.AudioPlaybackAgent
                     }
                     break;
                 case UserAction.Stop:
-                    try
-                    {
+                    if (player.PlayerState == PlayState.Playing)
                         player.Stop();
-                    }
-
-                    catch (Exception) { }
                     break;
                 case UserAction.Pause:
-                    player.Pause();
+                    if (player.PlayerState == PlayState.Playing)
+                        player.Pause();
                     break;
                 case UserAction.FastForward:
-                    player.FastForward();
+                    //player.FastForward();
                     break;
                 case UserAction.Rewind:
-                    player.Rewind();
+                    //player.Rewind();
                     break;
                 case UserAction.Seek:
-                    player.Position = (TimeSpan)param;
+                    //player.Position = (TimeSpan)param;
                     break;
                 case UserAction.SkipNext:
                     player.Track = GetNextTrack();
                     break;
                 case UserAction.SkipPrevious:
-                    AudioTrack previousTrack = GetPreviousTrack();
-                    if (previousTrack != null)
-                    {
-                        player.Track = previousTrack;
-                    }
+                    //AudioTrack previousTrack = GetPreviousTrack();
+                    //if (previousTrack != null)
+                    //{
+                    //    player.Track = previousTrack;
+                    //}
                     break;
             }
 

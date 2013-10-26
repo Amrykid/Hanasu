@@ -65,15 +65,21 @@ namespace HanasuWP8.AudioStreamAgent
                     }
                     break;
                 default:
-                    track.BeginEdit();
-                    track.Source = new Uri(url);
-                    track.EndEdit();
+                    try
+                    {
+                        track.BeginEdit();
+                        track.Source = new Uri(url);
+                        track.EndEdit();
+                    }
+                    catch (Exception) { }
                     break;
             }
         }
 
         void mms_Closed(object sender, EventArgs e)
         {
+            mms.Closed -= mms_Closed;
+            base.OnCancel();
             NotifyComplete();
         }
 
@@ -93,6 +99,8 @@ namespace HanasuWP8.AudioStreamAgent
                 var data = mms.CurrentMetadata.Title.Split(new string[] { " - " }, StringSplitOptions.None);
                 track.Artist = data[0];
                 track.Title = data[1];
+                track.Album = null;
+                track.AlbumArt = null;
             }
             catch (Exception) { }
             track.EndEdit();
@@ -111,13 +119,12 @@ namespace HanasuWP8.AudioStreamAgent
                 {
                     mms.Connected -= mms_Connected;
                     mms.MetadataChanged -= mms_MetadataChanged;
-                    mms.Closed -= mms_Closed;
                     mms.Dispose();
                 }
                 catch (Exception) { }
             }
-
-            base.OnCancel();
+            else
+                base.OnCancel();
         }
     }
 }

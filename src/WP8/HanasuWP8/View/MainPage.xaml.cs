@@ -96,8 +96,8 @@ namespace HanasuWP8.View
             {
                 if (BackgroundAudioPlayer.Instance.CanPause)
                 {
-                    playBtn.IconUri = new Uri("Images/transport.play.png", UriKind.Relative);
-                    playBtn.Text = "Play";
+                    //playBtn.IconUri = new Uri("Images/transport.play.png", UriKind.Relative);
+                    //playBtn.Text = "Play";
 
                     BackgroundAudioPlayer.Instance.Pause();
                 }
@@ -106,8 +106,8 @@ namespace HanasuWP8.View
             {
                 if (BackgroundAudioPlayer.Instance.Track == null) return;
 
-                playBtn.IconUri = new Uri("Images/transport.pause.png", UriKind.Relative);
-                playBtn.Text = "Pause";
+                //playBtn.IconUri = new Uri("Images/transport.pause.png", UriKind.Relative);
+                //playBtn.Text = "Pause";
 
                 BackgroundAudioPlayer.Instance.Play();
             }
