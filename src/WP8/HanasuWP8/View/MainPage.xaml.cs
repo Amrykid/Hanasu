@@ -31,6 +31,12 @@ namespace HanasuWP8.View
             SystemTray.ProgressIndicator.IsIndeterminate = true;
 
             BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
+
+            try
+            {
+                Instance_PlayStateChanged(null, null); //force refresh of appbar button
+            }
+            catch (Exception) { }
         }
 
         void Instance_PlayStateChanged(object sender, EventArgs e)
