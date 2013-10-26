@@ -13,3 +13,4 @@ obj/
 *.docstates.*
 # Misc Ignores
 Thumbs.db
+/ARM/

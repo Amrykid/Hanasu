@@ -27,19 +27,6 @@
     <ServerType>Shoutcast</ServerType>
   </Station>
   <Station>
-    <Name>XAMFM2</Name>
-    <DataSource>http://www.xamfm.com/siteplayer/xamfm2.pls</DataSource>
-    <Homepage>http://www.xamfm.com/index.php/xamfm</Homepage>
-    <Format>JRock</Format>
-    <City>N/A</City>
-    <Language>English</Language>
-    <Cacheable>True</Cacheable>
-    <Schedule type="image">http://www.xamfm.com/images/stories/schedules/schedule_xamfm2_02-05-2011.png</Schedule>
-    <Logo>https://si0.twimg.com/profile_images/1104224483/logo_transbkgr.png</Logo>
-    <Timezone>Eastern Standard Time</Timezone>
-    <ServerType>Shoutcast</ServerType>
-  </Station>
-  <Station>
     <Name>AnimeAMAZE</Name>
     <DataSource>http://apple.neostreams.info/auto/tunein.php/mcarrass/playlist.asx</DataSource>
     <Homepage>http://www.animeamaze.net/</Homepage>
