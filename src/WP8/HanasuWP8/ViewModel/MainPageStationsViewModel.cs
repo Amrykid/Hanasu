@@ -123,12 +123,12 @@ namespace HanasuWP8.ViewModel
 #endif
 
                                 BackgroundAudioPlayer.Instance.Stop();
-                                BackgroundAudioPlayer.Instance.Close();
+                                //BackgroundAudioPlayer.Instance.Close();
 
-                                Status = "Rewinding state...";
-                                await Task.Delay(5000);
+                                //Status = "Rewinding state...";
+                                //await Task.Delay(5000);
 
-                                BAPClosed = true;
+                                //BAPClosed = true;
                             }
                             else
                             {
