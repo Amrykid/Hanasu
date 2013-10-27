@@ -24,6 +24,9 @@ namespace HanasuWP8.ViewModel
                     BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
                     ((HanasuWP8.App)App.Current).Exit2 += MainPageNowPlayingViewModel_Exit2;
 
+                    if (timer == null)
+                        timer = new DispatcherTimer();
+
                     timer.Tick += timer_Tick;
                     timer.Interval = new TimeSpan(0, 0, 3);
 
@@ -76,21 +79,27 @@ namespace HanasuWP8.ViewModel
         {
             DetectPlayState(e);
 
-            if (BackgroundAudioPlayer.Instance.Track != null)
+            try
             {
-                if (BackgroundAudioPlayer.Instance.Track.Tag.StartsWith("Hanasu$"))
+                if (BackgroundAudioPlayer.Instance.Track != null)
                 {
-                    var data = BackgroundAudioPlayer.Instance.Track.Tag.ToString().Split('$');
-                    var url = data[data.Length - 1];
+                    if (BackgroundAudioPlayer.Instance.Track.Tag.StartsWith("Hanasu$"))
+                    {
+                        var data = BackgroundAudioPlayer.Instance.Track.Tag.ToString().Split('$');
+                        var url = data[data.Length - 1];
 
-                    await ((HanasuWP8.App)App.Current).LoadStationsTask;
+                        await ((HanasuWP8.App)App.Current).LoadStationsTask;
 
-                    Station currentStation = App.AvailableStations.First(x => x.Title == data[1]) as Station;
+                        Station currentStation = App.AvailableStations.First(x => x.Title == data[1]) as Station;
 
-                    CurrentStation = currentStation;
+                        CurrentStation = currentStation;
 
-                    UpdateNowPlaying();
+                        UpdateNowPlaying();
+                    }
                 }
+            }
+            catch (Exception)
+            {
             }
 
             if (IsPlaying)
@@ -125,6 +134,21 @@ namespace HanasuWP8.ViewModel
                 catch (Exception) { }
             }
 
+        }
+
+        public override void OnSuspending(IDictionary<string, object> state, bool isRunningInBackground)
+        {
+            if (timer != null)
+                timer.Stop();
+
+            base.OnSuspending(state, isRunningInBackground);
+        }
+        public override void OnResuming(IDictionary<string, object> state)
+        {
+            if (timer != null)
+                timer.Start();
+
+            base.OnResuming(state);
         }
 
         public bool IsPlaying
