@@ -84,6 +84,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\HanasuWP8\IPCConsts.cs">
+      <Link>IPCConsts.cs</Link>
+    </Compile>
     <Compile Include="AudioStreamer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

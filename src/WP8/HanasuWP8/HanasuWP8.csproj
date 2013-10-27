@@ -101,6 +101,7 @@
     <Compile Include="BackgroundAudioPlayerExtensions.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBoolToVisibilityConverter.cs" />
+    <Compile Include="IPCConsts.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Model\Station.cs" />
     <Compile Include="Services\MessageBoxService.cs" />

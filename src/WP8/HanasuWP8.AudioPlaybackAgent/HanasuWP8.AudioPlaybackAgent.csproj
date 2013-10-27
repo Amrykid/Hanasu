@@ -87,6 +87,9 @@
     <Compile Include="..\HanasuWP8\BackgroundAudioPlayerExtensions.cs">
       <Link>BackgroundAudioPlayerExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\HanasuWP8\IPCConsts.cs">
+      <Link>IPCConsts.cs</Link>
+    </Compile>
     <Compile Include="AudioPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

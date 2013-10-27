@@ -10,13 +10,12 @@ namespace HanasuWP8.AudioStreamAgent
     public class AudioTrackStreamer : AudioStreamingAgent
     {
         private Silverlight.Media.ShoutcastMediaStreamSource mms = null;
-        const string CONNECTED_EVENT_NAME = "HANASU_STREAM_CONNECTED";
         private NamedEvent connectedEvent = null;
 
         public AudioTrackStreamer()
             : base()
         {
-            connectedEvent = new NamedEvent(CONNECTED_EVENT_NAME, true);
+            connectedEvent = new NamedEvent(IPCConsts.CONNECTED_EVENT_NAME, true);
 
         }
 

@@ -3,20 +3,19 @@ using System.Diagnostics;
 using System.Windows;
 using Microsoft.Phone.BackgroundAudio;
 using IpcWrapper;
+using Microsoft.Devices;
 
 namespace HanasuWP8.AudioPlaybackAgent
 {
     public class AudioPlayer : AudioPlayerAgent
     {
-        const string CONNECTED_EVENT_NAME = "HANASU_STREAM_CONNECTED";
-        const string ERROR_EVENT_NAME = "HANASU_STREAM_ERROR";
         private NamedEvent connectedEvent = null;
         private NamedEvent errorEvent = null;
 
         public AudioPlayer()
         {
-            connectedEvent = new NamedEvent(CONNECTED_EVENT_NAME, true);
-            errorEvent = new NamedEvent(ERROR_EVENT_NAME, true);
+            connectedEvent = new NamedEvent(IPCConsts.CONNECTED_EVENT_NAME, true);
+            errorEvent = new NamedEvent(IPCConsts.ERROR_EVENT_NAME, true);
         }
 
         /// <remarks>
@@ -72,6 +71,21 @@ namespace HanasuWP8.AudioPlaybackAgent
                 case PlayState.TrackReady:
                     player.Play();
                     connectedEvent.Set();
+
+                    if (track != null && track.Tag != null)
+                    {
+                        var data = track.Tag.ToString().Split('$');
+                        var url = data[data.Length - 1];
+                        var title = data[1];
+                        var type = data[2];
+
+                        #region from http://stackoverflow.com/questions/7159900/detect-application-launch-from-universal-volume-control
+                        MediaHistoryItem nowPlaying = new MediaHistoryItem();
+                        nowPlaying.Title = title;
+                        nowPlaying.PlayerContext.Add("station", title);
+                        MediaHistory.Instance.NowPlaying = nowPlaying;
+                        #endregion
+                    }
                     break;
                 case PlayState.Shutdown:
                     // TODO: Handle the shutdown state here (e.g. save state)

@@ -5,11 +5,13 @@ using Crystal.Services;
 using Hanasu.Core.Preprocessor;
 using Hanasu.Model;
 using IpcWrapper;
+using Microsoft.Devices;
 using Microsoft.Phone.BackgroundAudio;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,8 +20,6 @@ namespace HanasuWP8.ViewModel
 {
     public class MainPageStationsViewModel : BaseViewModel
     {
-        const string CONNECTED_EVENT_NAME = "HANASU_STREAM_CONNECTED";
-        const string ERROR_EVENT_NAME = "HANASU_STREAM_ERROR";
         private NamedEvent connectedEvent = null;
         private NamedEvent errorEvent = null;
 
@@ -31,123 +31,141 @@ namespace HanasuWP8.ViewModel
 
                 PlayStationCommand = CommandManager.CreateCommand(async (y) =>
                     {
-                        //if (IsBusy) return;
-
-                        if (!playCommandLock.WaitOne(5000)) return;
-
-                        //try
-                        //{
-                        //    if (App.IsPlaying)
-                        //    {
-                        //        IsBusy = true;
-
-                        //        Status = "Working...";
-
-                        //        try
-                        //        {
-                        //            //BackgroundAudioPlayer.Instance.Stop();
-                        //            //BackgroundAudioPlayer.Instance.Track = null;
-                        //            BackgroundAudioPlayer.Instance.Close();
-                        //            //BAPClosed = true;
-                        //        }
-                        //        catch (Exception) { }
-
-                        //        //await Task.Delay(2000);
-                        //    }
-                        //}
-                        //catch (Exception) { }
-
-                        Status = "Connecting...";
-
-                        IsBusy = true;
-
-                        Station x = (Station)y;
-
-                        var url = x.StreamUrl.Trim();
-
-                        if (BackgroundAudioPlayer.Instance.Volume != 0.5)
-                            BackgroundAudioPlayer.Instance.Volume = 0.5;
-
-                        bool preprocessingNeeded = false;
-                        try
-                        {
-                            if (preprocessingNeeded = await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
-                                url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/", "");
-                        }
-                        catch (Exception)
-                        {
-                            url = null;
-
-                            ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
-                                    "Unable to retrieve this station's streaming url.");
-                        }
-
-                        if (url != null)
-                        {
-                            BackgroundAudioPlayer.Instance.Track = new AudioTrack(x.ServerType.ToLower() == "raw" ? new Uri(url) : null, x.Title, null, null, new Uri(x.ImageUrl),
-                                "Hanasu$" + string.Join("$", x.Title, x.ServerType, url), EnabledPlayerControls.Pause);
-
-                            if (BAPClosed)
-                            {
-                                BackgroundAudioPlayer.Instance.Play();
-                                BAPClosed = false;
-                            }
-
-                            while (true)
-                            {
-                                //loop until we get the event.
-                                if (NamedEvent.TryOpen(CONNECTED_EVENT_NAME, out connectedEvent))
-                                {
-                                    NamedEvent.TryOpen(ERROR_EVENT_NAME, out errorEvent);
-                                    break;
-                                }
-
-                                await Task.Delay(100);
-                            }
-
-                            var playTask = connectedEvent.WaitAsync().AsTask();
-                            var errorTask = errorEvent.WaitAsync().AsTask();
-
-                            var timeoutTask = Task.Delay(System.Diagnostics.Debugger.IsAttached ? 12000 : 7000);
-
-                            var what = await Task.WhenAny(playTask, timeoutTask, errorTask);
-
-                            if ((what == timeoutTask  || what == errorTask) && !App.IsPlaying)
-                            {
-                                ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
-                                    what == timeoutTask ? "Unable to connect in a timely fashion!" : what == errorTask ? "An error occurred while connecting." : "Something bad happened!");
-
-#if DEBUG
-                                var error = BackgroundAudioPlayer.Instance.Error;
-                                if (System.Diagnostics.Debugger.IsAttached && error != null)
-                                {
-                                    System.Diagnostics.Debugger.Log(4, "Exception", error.ToString());
-                                    System.Diagnostics.Debugger.Break();
-                                }
-#endif
-
-                                BackgroundAudioPlayer.Instance.Stop();
-                                //BackgroundAudioPlayer.Instance.Close();
-
-                                //Status = "Rewinding state...";
-                                //await Task.Delay(5000);
-
-                                //BAPClosed = true;
-                            }
-                            else
-                            {
-                                Messenger.PushMessage(this, "SwitchTab", 0);
-                                //.Instance.Play();
-                            }
-                        }
-
-                        Status = null;
-
-                        IsBusy = false;
-
-                        playCommandLock.Set();
+                        await PlayStation((Station)y);
+                        return;
                     });
             }
+        }
+
+        private async Task PlayStation(Station y)
+        {
+            //if (IsBusy) return;
+
+            if (!playCommandLock.WaitOne(5000)) return;
+
+            //try
+            //{
+            //    if (App.IsPlaying)
+            //    {
+            //        IsBusy = true;
+
+            //        Status = "Working...";
+
+            //        try
+            //        {
+            //            //BackgroundAudioPlayer.Instance.Stop();
+            //            //BackgroundAudioPlayer.Instance.Track = null;
+            //            BackgroundAudioPlayer.Instance.Close();
+            //            //BAPClosed = true;
+            //        }
+            //        catch (Exception) { }
+
+            //        //await Task.Delay(2000);
+            //    }
+            //}
+            //catch (Exception) { }
+
+            Status = "Connecting...";
+
+            IsBusy = true;
+
+            Station station = (Station)y;
+
+            var url = station.StreamUrl.Trim();
+
+            if (BackgroundAudioPlayer.Instance.Volume != 0.5)
+                BackgroundAudioPlayer.Instance.Volume = 0.5;
+
+            bool preprocessingNeeded = false;
+            try
+            {
+                if (preprocessingNeeded = await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
+                    url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/", "");
+            }
+            catch (Exception)
+            {
+                url = null;
+
+                ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
+                        "Unable to retrieve this station's streaming url.");
+            }
+
+            if (url != null)
+            {
+                try
+                {
+                    BackgroundAudioPlayer.Instance.Track = new AudioTrack(station.ServerType.ToLower() == "raw" ? new Uri(url) : null, station.Title, null, null, new Uri(station.ImageUrl),
+                        "Hanasu$" + string.Join("$", station.Title, station.ServerType, url), EnabledPlayerControls.Pause);
+
+                    if (BAPClosed)
+                    {
+                        BackgroundAudioPlayer.Instance.Play();
+                        BAPClosed = false;
+                    }
+
+                    while (true)
+                    {
+                        //loop until we get the event.
+                        if (NamedEvent.TryOpen(IPCConsts.CONNECTED_EVENT_NAME, out connectedEvent))
+                        {
+                            while (true)
+                            {
+                                if (NamedEvent.TryOpen(IPCConsts.ERROR_EVENT_NAME, out errorEvent))
+                                {
+                                    break;
+                                }
+                                await Task.Delay(100);
+                            }
+                            break;
+                        }
+
+                        await Task.Delay(100);
+                    }
+
+                    var playTask = connectedEvent.WaitAsync().AsTask();
+                    var errorTask = errorEvent.WaitAsync().AsTask();
+
+                    var timeoutTask = Task.Delay(System.Diagnostics.Debugger.IsAttached ? 12000 : 7000);
+
+                    var what = await Task.WhenAny(playTask, timeoutTask, errorTask);
+
+                    if ((what == timeoutTask || what == errorTask) && !App.IsPlaying)
+                    {
+                        ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
+                            what == timeoutTask ? "Unable to connect in a timely fashion!" : what == errorTask ? "An error occurred while connecting." : "Something bad happened!");
+
+#if DEBUG
+                        var error = BackgroundAudioPlayer.Instance.Error;
+                        if (System.Diagnostics.Debugger.IsAttached && error != null)
+                        {
+                            System.Diagnostics.Debugger.Log(4, "Exception", error.ToString());
+                            System.Diagnostics.Debugger.Break();
+                        }
+#endif
+
+                        BackgroundAudioPlayer.Instance.Stop();
+                        //BackgroundAudioPlayer.Instance.Close();
+
+                        //Status = "Rewinding state...";
+                        //await Task.Delay(5000);
+
+                        //BAPClosed = true;
+                    }
+                    else
+                    {
+                        //Station is playing... or it should be.
+
+                        Messenger.PushMessage(this, "SwitchTab", 0);
+                    }
+                }
+                catch (Exception) { }
+            }
+
+            Status = null;
+
+            IsBusy = false;
+
+            playCommandLock.Set();
         }
 
         private bool BAPClosed = false;

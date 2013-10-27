@@ -15,6 +15,11 @@ namespace HanasuWP8.ViewModel
             RegisterForMessages("SwitchTab");
         }
 
+        public override void OnNavigatedTo(KeyValuePair<string, string>[] argument = null)
+        {
+            base.OnNavigatedTo(argument);
+        }
+
         public override bool ReceiveMessage(object source, Crystal.Messaging.Message message)
         {
             switch (message.MessageString)
