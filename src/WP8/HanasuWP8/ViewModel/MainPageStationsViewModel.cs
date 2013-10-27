@@ -19,7 +19,9 @@ namespace HanasuWP8.ViewModel
     public class MainPageStationsViewModel : BaseViewModel
     {
         const string CONNECTED_EVENT_NAME = "HANASU_STREAM_CONNECTED";
+        const string ERROR_EVENT_NAME = "HANASU_STREAM_ERROR";
         private NamedEvent connectedEvent = null;
+        private NamedEvent errorEvent = null;
 
         public MainPageStationsViewModel()
         {
@@ -96,6 +98,7 @@ namespace HanasuWP8.ViewModel
                                 //loop until we get the event.
                                 if (NamedEvent.TryOpen(CONNECTED_EVENT_NAME, out connectedEvent))
                                 {
+                                    NamedEvent.TryOpen(ERROR_EVENT_NAME, out errorEvent);
                                     break;
                                 }
 
@@ -103,15 +106,16 @@ namespace HanasuWP8.ViewModel
                             }
 
                             var playTask = connectedEvent.WaitAsync().AsTask();
+                            var errorTask = errorEvent.WaitAsync().AsTask();
 
                             var timeoutTask = Task.Delay(System.Diagnostics.Debugger.IsAttached ? 12000 : 7000);
 
-                            var what = await Task.WhenAny(playTask, timeoutTask);
+                            var what = await Task.WhenAny(playTask, timeoutTask, errorTask);
 
-                            if (what == timeoutTask && !App.IsPlaying)
+                            if ((what == timeoutTask  || what == errorTask) && !App.IsPlaying)
                             {
                                 ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
-                                    "Unable to connect in a timely fashion!");
+                                    what == timeoutTask ? "Unable to connect in a timely fashion!" : what == errorTask ? "An error occurred while connecting." : "Something bad happened!");
 
 #if DEBUG
                                 var error = BackgroundAudioPlayer.Instance.Error;

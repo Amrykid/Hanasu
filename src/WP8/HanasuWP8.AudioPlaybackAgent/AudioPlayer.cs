@@ -9,11 +9,14 @@ namespace HanasuWP8.AudioPlaybackAgent
     public class AudioPlayer : AudioPlayerAgent
     {
         const string CONNECTED_EVENT_NAME = "HANASU_STREAM_CONNECTED";
+        const string ERROR_EVENT_NAME = "HANASU_STREAM_ERROR";
         private NamedEvent connectedEvent = null;
+        private NamedEvent errorEvent = null;
 
         public AudioPlayer()
         {
             connectedEvent = new NamedEvent(CONNECTED_EVENT_NAME, true);
+            errorEvent = new NamedEvent(ERROR_EVENT_NAME, true);
         }
 
         /// <remarks>
@@ -221,6 +224,8 @@ namespace HanasuWP8.AudioPlaybackAgent
         /// </remarks>
         protected override void OnError(BackgroundAudioPlayer player, AudioTrack track, Exception error, bool isFatal)
         {
+            errorEvent.Set();
+
             if (isFatal)
             {
                 Abort();
@@ -243,6 +248,8 @@ namespace HanasuWP8.AudioPlaybackAgent
         {
             connectedEvent.Set();
             connectedEvent.Dispose();
+            errorEvent.Dispose();
+
             NotifyComplete();
         }
     }
