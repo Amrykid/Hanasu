@@ -40,7 +40,8 @@
                     <Grid Visibility="{Binding IsPlaying, Converter={StaticResource b2v}}">
                         <StackPanel>
                             <Image Source="{Binding CurrentCover}" Height="250" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding CurrentTrack}" FontSize="38" TextAlignment="Center" Foreground="{StaticResource PhoneAccentBrush}"/>
+                            <TextBlock Text="{Binding CurrentTrack}" FontSize="38" TextAlignment="Center" 
+                                       Foreground="{StaticResource PhoneAccentBrush}" TextWrapping="Wrap"/>
                             <TextBlock Text="{Binding CurrentArtist}" FontSize="30" TextAlignment="Center"/>
                             <TextBlock Text="{Binding CurrentStation.Title}" FontSize="25" TextAlignment="Center"/>
                         </StackPanel>
