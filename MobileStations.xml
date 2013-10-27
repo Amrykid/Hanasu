@@ -202,7 +202,7 @@
     <Logo>http://netdna.seoul.fm/wp-content/uploads/2012/07/logo11.png</Logo>
   </Station>
   <Station>
-    <Name>SoulNB</Name>
+    <Name><![CDATA[Soul&B]]></Name>
     <DataSource><![CDATA[http://www.soulnb.com/soulnb.pls]]></DataSource>
     <Homepage>http://www.soulnb.com/</Homepage>
     <Format>Mix</Format>
