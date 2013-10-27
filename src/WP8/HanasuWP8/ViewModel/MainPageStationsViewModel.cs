@@ -65,49 +65,62 @@ namespace HanasuWP8.ViewModel
 
                         BackgroundAudioPlayer.Instance.Volume = 0.5;
 
-                        if (await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
-                            url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/", "");
-
-                        BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, x.Title, null, null, new Uri(x.ImageUrl),
-                            "Hanasu$" + string.Join("$", x.Title, x.ServerType, url), EnabledPlayerControls.Pause);
-
-                        if (BAPClosed)
+                        try
                         {
-                            BackgroundAudioPlayer.Instance.Play();
-                            BAPClosed = false;
+                            if (await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
+                                url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/", "");
+                        }
+                        catch (Exception)
+                        {
+                            url = null;
+
+                            ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
+                                    "Unable to retrieve this station's streaming url.");
                         }
 
-                        while (true)
+                        if (url != null)
                         {
-                            //loop until we get the event.
-                            if (NamedEvent.TryOpen(CONNECTED_EVENT_NAME, out connectedEvent))
+                            BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, x.Title, null, null, new Uri(x.ImageUrl),
+                                "Hanasu$" + string.Join("$", x.Title, x.ServerType, url), EnabledPlayerControls.Pause);
+
+                            if (BAPClosed)
                             {
-                                break;
+                                BackgroundAudioPlayer.Instance.Play();
+                                BAPClosed = false;
                             }
 
-                            await Task.Delay(100);
-                        }
+                            while (true)
+                            {
+                                //loop until we get the event.
+                                if (NamedEvent.TryOpen(CONNECTED_EVENT_NAME, out connectedEvent))
+                                {
+                                    break;
+                                }
 
-                        var playTask = connectedEvent.WaitAsync().AsTask();
+                                await Task.Delay(100);
+                            }
 
-                        var timeoutTask = Task.Delay(System.Diagnostics.Debugger.IsAttached ? 12000 : 7000);
+                            var playTask = connectedEvent.WaitAsync().AsTask();
 
-                        var what = await Task.WhenAny(playTask, timeoutTask);
+                            var timeoutTask = Task.Delay(System.Diagnostics.Debugger.IsAttached ? 12000 : 7000);
 
-                        if (what == timeoutTask && (BackgroundAudioPlayer.Instance.PlayerState != PlayState.BufferingStarted || BackgroundAudioPlayer.Instance.PlayerState != PlayState.Playing))
-                        {
-                            ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
-                                "Unable to connect in a timely fashion!");
-                            BackgroundAudioPlayer.Instance.Stop();
-                            BackgroundAudioPlayer.Instance.Close();
+                            var what = await Task.WhenAny(playTask, timeoutTask);
 
-                            BAPClosed = true;
-                            //BackgroundAudioPlayer.Instance.Track = null;
-                        }
-                        else
-                        {
-                            Messenger.PushMessage(this, "SwitchTab", 0);
-                            //.Instance.Play();
+                            if (what == timeoutTask && (BackgroundAudioPlayer.Instance.PlayerState != PlayState.BufferingStarted || BackgroundAudioPlayer.Instance.PlayerState != PlayState.Playing))
+                            {
+                                ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
+                                    "Unable to connect in a timely fashion!");
+                                BackgroundAudioPlayer.Instance.Stop();
+                                BackgroundAudioPlayer.Instance.Close();
+
+                                BAPClosed = true;
+                                //BackgroundAudioPlayer.Instance.Track = null;
+                            }
+                            else
+                            {
+                                Messenger.PushMessage(this, "SwitchTab", 0);
+                                //.Instance.Play();
+                            }
                         }
 
                         Status = null;

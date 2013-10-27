@@ -22,6 +22,7 @@ namespace HanasuWP8.AudioStreamAgent
 
         ~AudioTrackStreamer()
         {
+            connectedEvent.Set();
             connectedEvent.Dispose();
         }
 
@@ -63,15 +64,6 @@ namespace HanasuWP8.AudioStreamAgent
                         mms.Closed += mms_Closed;
                         streamer.SetSource(mms);
                     }
-                    break;
-                default:
-                    try
-                    {
-                        track.BeginEdit();
-                        track.Source = new Uri(url);
-                        track.EndEdit();
-                    }
-                    catch (Exception) { }
                     break;
             }
         }

@@ -2,11 +2,20 @@
 using System.Diagnostics;
 using System.Windows;
 using Microsoft.Phone.BackgroundAudio;
+using IpcWrapper;
 
 namespace HanasuWP8.AudioPlaybackAgent
 {
     public class AudioPlayer : AudioPlayerAgent
     {
+        const string CONNECTED_EVENT_NAME = "HANASU_STREAM_CONNECTED";
+        private NamedEvent connectedEvent = null;
+
+        public AudioPlayer()
+        {
+            connectedEvent = new NamedEvent(CONNECTED_EVENT_NAME, true);
+        }
+
         /// <remarks>
         /// AudioPlayer instances can share the same process.
         /// Static fields can be used to share state between AudioPlayer instances
@@ -57,6 +66,7 @@ namespace HanasuWP8.AudioPlaybackAgent
                     break;
                 case PlayState.TrackReady:
                     player.Play();
+                    connectedEvent.Set();
                     break;
                 case PlayState.Shutdown:
                     // TODO: Handle the shutdown state here (e.g. save state)
@@ -110,7 +120,9 @@ namespace HanasuWP8.AudioPlaybackAgent
                         var type = data[2];
 
                         if (type.ToLower() != "shoutcast")
+                        {
                             track.Source = new Uri(url);
+                        }
                     }
 
                     //player.Track = new AudioTrack(null, "", "", "", null, track.Tag, EnabledPlayerControls.Pause);
@@ -227,6 +239,8 @@ namespace HanasuWP8.AudioPlaybackAgent
         /// </remarks>
         protected override void OnCancel()
         {
+            connectedEvent.Set();
+            connectedEvent.Dispose();
             NotifyComplete();
         }
     }
