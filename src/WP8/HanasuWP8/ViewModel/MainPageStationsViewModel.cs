@@ -35,7 +35,7 @@ namespace HanasuWP8.ViewModel
 
                         try
                         {
-                            if (BackgroundAudioPlayer.Instance.PlayerState != PlayState.Stopped)
+                            if (App.IsPlaying)
                             {
                                 IsBusy = true;
 
@@ -106,10 +106,20 @@ namespace HanasuWP8.ViewModel
 
                             var what = await Task.WhenAny(playTask, timeoutTask);
 
-                            if (what == timeoutTask && (BackgroundAudioPlayer.Instance.PlayerState != PlayState.BufferingStarted || BackgroundAudioPlayer.Instance.PlayerState != PlayState.Playing))
+                            if (what == timeoutTask && !App.IsPlaying)
                             {
                                 ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
                                     "Unable to connect in a timely fashion!");
+
+#if DEBUG
+                                var error = BackgroundAudioPlayer.Instance.Error;
+                                if (System.Diagnostics.Debugger.IsAttached && error != null)
+                                {
+                                    System.Diagnostics.Debugger.Log(4, "Exception", error.ToString());
+                                    System.Diagnostics.Debugger.Break();
+                                }
+#endif
+
                                 BackgroundAudioPlayer.Instance.Stop();
                                 BackgroundAudioPlayer.Instance.Close();
 
@@ -158,7 +168,7 @@ namespace HanasuWP8.ViewModel
 
         public ObservableCollection<Station> Stations
         {
-            get { return ((App)App.Current).AvailableStations; }
+            get { return App.AvailableStations; }
         }
 
         public CrystalCommand PlayStationCommand

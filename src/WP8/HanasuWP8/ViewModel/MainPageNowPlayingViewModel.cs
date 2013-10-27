@@ -74,10 +74,7 @@ namespace HanasuWP8.ViewModel
 
         private async void SynchronizeBAPStatus(Microsoft.Phone.BackgroundAudio.PlayStateChangedEventArgs e = null)
         {
-            if (e == null)
-                IsPlaying = BackgroundAudioPlayer.Instance.PlayerState == PlayState.Playing; //try and guess
-            else
-                IsPlaying = e.CurrentPlayState == PlayState.Playing; //&& e.IntermediatePlayState == PlayState.BufferingStopped;
+            DetectPlayState(e);
 
             if (BackgroundAudioPlayer.Instance.Track != null)
             {
@@ -88,7 +85,7 @@ namespace HanasuWP8.ViewModel
 
                     await ((HanasuWP8.App)App.Current).LoadStationsTask;
 
-                    Station currentStation = ((App)App.Current).AvailableStations.First(x => x.Title == data[1]) as Station;
+                    Station currentStation = App.AvailableStations.First(x => x.Title == data[1]) as Station;
 
                     CurrentStation = currentStation;
 
@@ -104,6 +101,14 @@ namespace HanasuWP8.ViewModel
             else
                 
                 timer.Stop();
+        }
+
+        private void DetectPlayState(Microsoft.Phone.BackgroundAudio.PlayStateChangedEventArgs e = null)
+        {
+            if (e == null)
+                IsPlaying = BackgroundAudioPlayerExtensions.SafeGetPlayerState(BackgroundAudioPlayer.Instance) == PlayState.Playing; //try and guess
+            else
+                IsPlaying = e.CurrentPlayState == PlayState.Playing; //&& e.IntermediatePlayState == PlayState.BufferingStopped;
         }
 
         private void UpdateNowPlaying()
@@ -125,7 +130,7 @@ namespace HanasuWP8.ViewModel
         public bool IsPlaying
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.IsPlaying); }
-            set { SetProperty(x => this.IsPlaying, value); }
+            set { SetProperty(x => this.IsPlaying, value); App.IsPlaying = value; }
         }
         public object CurrentCover
         {

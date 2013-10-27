@@ -252,7 +252,9 @@ namespace HanasuWP8
         }
 
         public Task LoadStationsTask = null;
-        public ObservableCollection<Station> AvailableStations { get; set; }
+        public static ObservableCollection<Station> AvailableStations { get; set; }
+
+        public static bool IsPlaying { get; internal set; }
 
         internal async Task LoadStations()
         {

@@ -126,17 +126,17 @@ namespace HanasuWP8.AudioPlaybackAgent
                     }
 
                     //player.Track = new AudioTrack(null, "", "", "", null, track.Tag, EnabledPlayerControls.Pause);
-                    if (player.PlayerState != PlayState.Playing)
+                    if (player.SafeGetPlayerState() != PlayState.Playing)
                     {
                         player.Play();
                     }
                     break;
                 case UserAction.Stop:
-                    if (player.PlayerState == PlayState.Playing)
+                    if (player.SafeGetPlayerState() == PlayState.Playing)
                         player.Stop();
                     break;
                 case UserAction.Pause:
-                    if (player.PlayerState == PlayState.Playing)
+                    if (player.SafeGetPlayerState() == PlayState.Playing)
                         player.Pause();
                     break;
                 case UserAction.FastForward:
