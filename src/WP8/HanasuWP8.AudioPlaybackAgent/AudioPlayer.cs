@@ -79,12 +79,12 @@ namespace HanasuWP8.AudioPlaybackAgent
                         var title = data[1];
                         var type = data[2];
 
-                        #region from http://stackoverflow.com/questions/7159900/detect-application-launch-from-universal-volume-control
-                        MediaHistoryItem nowPlaying = new MediaHistoryItem();
-                        nowPlaying.Title = title;
-                        nowPlaying.PlayerContext.Add("station", title);
-                        MediaHistory.Instance.NowPlaying = nowPlaying;
-                        #endregion
+                        //#region from http://stackoverflow.com/questions/7159900/detect-application-launch-from-universal-volume-control
+                        //MediaHistoryItem nowPlaying = new MediaHistoryItem();
+                        //nowPlaying.Title = title;
+                        //nowPlaying.PlayerContext.Add("station", title);
+                        //MediaHistory.Instance.NowPlaying = nowPlaying;
+                        //#endregion
                     }
                     break;
                 case PlayState.Shutdown:
