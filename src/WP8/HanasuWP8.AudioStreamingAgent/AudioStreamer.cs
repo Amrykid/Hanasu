@@ -53,6 +53,10 @@ namespace HanasuWP8.AudioStreamAgent
 
             var type = data[2];
 
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("AudioStreamer:OnBeginStreaming - Type: " + type);
+#endif
+
             switch (type.ToLower())
             {
                 case "shoutcast":

@@ -33,27 +33,27 @@ namespace HanasuWP8.ViewModel
 
                         if (!playCommandLock.WaitOne(5000)) return;
 
-                        try
-                        {
-                            if (App.IsPlaying)
-                            {
-                                IsBusy = true;
+                        //try
+                        //{
+                        //    if (App.IsPlaying)
+                        //    {
+                        //        IsBusy = true;
 
-                                Status = "Working...";
+                        //        Status = "Working...";
 
-                                try
-                                {
-                                    BackgroundAudioPlayer.Instance.Stop();
-                                    //BackgroundAudioPlayer.Instance.Track = null;
-                                    BackgroundAudioPlayer.Instance.Close();
-                                    BAPClosed = true;
-                                }
-                                catch (Exception) { }
+                        //        try
+                        //        {
+                        //            //BackgroundAudioPlayer.Instance.Stop();
+                        //            //BackgroundAudioPlayer.Instance.Track = null;
+                        //            BackgroundAudioPlayer.Instance.Close();
+                        //            //BAPClosed = true;
+                        //        }
+                        //        catch (Exception) { }
 
-                                await Task.Delay(2000);
-                            }
-                        }
-                        catch (Exception) { }
+                        //        //await Task.Delay(2000);
+                        //    }
+                        //}
+                        //catch (Exception) { }
 
                         Status = "Connecting...";
 
@@ -63,11 +63,13 @@ namespace HanasuWP8.ViewModel
 
                         var url = x.StreamUrl.Trim();
 
-                        BackgroundAudioPlayer.Instance.Volume = 0.5;
+                        if (BackgroundAudioPlayer.Instance.Volume != 0.5)
+                            BackgroundAudioPlayer.Instance.Volume = 0.5;
 
+                        bool preprocessingNeeded = false;
                         try
                         {
-                            if (await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
+                            if (preprocessingNeeded = await PreprocessorService.CheckIfPreprocessingIsNeeded(url))
                                 url = (await PreprocessorService.GetProcessor(new Uri(url)).Process(new Uri(url))).ToString().Replace("\r/", "");
                         }
                         catch (Exception)
@@ -80,7 +82,7 @@ namespace HanasuWP8.ViewModel
 
                         if (url != null)
                         {
-                            BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, x.Title, null, null, new Uri(x.ImageUrl),
+                            BackgroundAudioPlayer.Instance.Track = new AudioTrack(x.ServerType.ToLower() == "raw" ? new Uri(url) : null, x.Title, null, null, new Uri(x.ImageUrl),
                                 "Hanasu$" + string.Join("$", x.Title, x.ServerType, url), EnabledPlayerControls.Pause);
 
                             if (BAPClosed)
@@ -123,8 +125,10 @@ namespace HanasuWP8.ViewModel
                                 BackgroundAudioPlayer.Instance.Stop();
                                 BackgroundAudioPlayer.Instance.Close();
 
+                                Status = "Rewinding state...";
+                                await Task.Delay(5000);
+
                                 BAPClosed = true;
-                                //BackgroundAudioPlayer.Instance.Track = null;
                             }
                             else
                             {

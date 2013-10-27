@@ -38,6 +38,8 @@ namespace HanasuWP8.AudioPlaybackAgent
                 // An unhandled exception has occurred; break into the debugger
                 Debugger.Break();
             }
+            else
+                e.Handled = true;
         }
 
         /// <summary>
@@ -149,7 +151,7 @@ namespace HanasuWP8.AudioPlaybackAgent
                     //player.Position = (TimeSpan)param;
                     break;
                 case UserAction.SkipNext:
-                    player.Track = GetNextTrack();
+                    //player.Track = GetNextTrack();
                     break;
                 case UserAction.SkipPrevious:
                     //AudioTrack previousTrack = GetPreviousTrack();
