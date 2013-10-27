@@ -51,7 +51,7 @@
     <Schedule type="ics">https://www.google.com/calendar/ical/jphip.net_h2ddkfp90b6e6bct9usubrvev8%40group.calendar.google.com/public/basic.ics</Schedule>
     <ServerType>Shoutcast</ServerType>
   </Station>
-  <Station>
+  <!--<Station>
     <Name>JPopsuki</Name>
     <DataSource>http://play.internet-radio-guide.net/asx.php?id=220233</DataSource>
     <Homepage>http://jpopsuki.eu/</Homepage>
@@ -62,9 +62,9 @@
     <ExplicitExtension>.asx</ExplicitExtension>
     <Logo>https://si0.twimg.com/profile_images/1036480076/default.png</Logo>
     <Schedule type="ics">https://www.google.com/calendar/ical/mellowb%40jpopsuki.eu/public/basic.ics</Schedule>
-    <!--Backup Schedule page: https://www.google.com/calendar/embed?mode=WEEK&height=600&wkst=2&bgcolor=%23ccccff&src=mellowb@jpopsuki.eu&color=%238C500B&ctz=Europe/London&gsessionid=Dg8xWG-57duersDk-8r4_w-->
+    --><!--Backup Schedule page: https://www.google.com/calendar/embed?mode=WEEK&height=600&wkst=2&bgcolor=%23ccccff&src=mellowb@jpopsuki.eu&color=%238C500B&ctz=Europe/London&gsessionid=Dg8xWG-57duersDk-8r4_w--><!--
     <ServerType>Icecast</ServerType>
-  </Station>
+  </Station>-->
   <Station>
     <Name>Big B Radio</Name>
     <DataSource>http://www.fileden.com/files/2008/4/27/1886400/Big.B.Radio-All.Channels.PL.pls</DataSource> <!--http://178.33.227.116:8104-->
@@ -134,39 +134,6 @@
     <Language>Japanese</Language>
   </Station>-->
   <Station>
-    <Name>Seebit TV</Name>
-    <DataSource><![CDATA[mms://see.broadcast-neo.tv/neo_s]]></DataSource>
-    <Homepage>http://www.seebit.tv/</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <ExplicitExtension></ExplicitExtension>
-    <StationType>TV</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>False</Cacheable>
-  </Station>
-  <Station>
-    <Name>JPopsuki TV</Name>
-    <DataSource><![CDATA[http://91.121.117.196:8800]]></DataSource>
-    <Homepage>http://jpopsuki.eu/</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <ExplicitExtension></ExplicitExtension>
-    <StationType>TV</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>False</Cacheable>
-  </Station>
-  <Station>
-    <Name>Fuji News Network</Name>
-    <DataSource><![CDATA[http://www.fnn-news.com/news/playlist/video/wmv/news_300.asx]]></DataSource>
-    <Homepage>http://www.fnn-news.com/</Homepage>
-    <Format>Info</Format>
-    <City>N/A</City>
-    <ExplicitExtension>.asx</ExplicitExtension>
-    <StationType>TV</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>False</Cacheable>
-  </Station>
-  <Station>
     <Name>Touhou Radio</Name>
     <DataSource><![CDATA[http://miku.fm/mikufm.m3u]]></DataSource><!--http://miku.fm/mikufm.m3u-->
     <Homepage>http://www.touhouradio.com/</Homepage>
@@ -201,7 +168,7 @@
     <Cacheable>True</Cacheable>
     <Logo>http://netdna.seoul.fm/wp-content/uploads/2012/07/logo11.png</Logo>
   </Station>
-  <Station>
+  <!--<Station>
     <Name><![CDATA[Soul&B]]></Name>
     <DataSource><![CDATA[http://www.soulnb.com/soulnb.pls]]></DataSource>
     <Homepage>http://www.soulnb.com/</Homepage>
@@ -213,7 +180,7 @@
     <Cacheable>True</Cacheable>
     <Schedule type="page">http://www.soulnb.com/timetable</Schedule>
     <Logo>http://www.soulnb.com/skin_board/m_minory1/img/main_bar_logo.gif</Logo>
-  </Station>
+  </Station>-->
   <Station>
     <Name>J-Jams Radio</Name>
     <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=64356]]></DataSource>
