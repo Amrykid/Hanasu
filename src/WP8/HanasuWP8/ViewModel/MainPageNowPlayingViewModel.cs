@@ -22,7 +22,9 @@ namespace HanasuWP8.ViewModel
                 if (!IsDesignMode)
                 {
                     BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
-                    ((HanasuWP8.App)App.Current).Exit2 += MainPageNowPlayingViewModel_Exit2;
+
+                    if (App.Current != null)
+                        ((HanasuWP8.App)App.Current).Exit2 += MainPageNowPlayingViewModel_Exit2;
 
                     if (timer == null)
                         timer = new DispatcherTimer();
@@ -108,7 +110,7 @@ namespace HanasuWP8.ViewModel
                     timer.Start();
             }
             else
-                
+
                 timer.Stop();
         }
 
