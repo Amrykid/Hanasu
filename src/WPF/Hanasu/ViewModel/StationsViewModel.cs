@@ -13,7 +13,7 @@ using Crystal.Localization;
 
 namespace Hanasu.ViewModel
 {
-    public class StationsViewModel: BaseViewModel
+    public class StationsViewModel : BaseViewModel
     {
         public StationsViewModel()
         {
@@ -22,6 +22,8 @@ namespace Hanasu.ViewModel
 
         private async System.Threading.Tasks.Task Initialize()
         {
+            await Task.Delay(2000); //Wait a bit before loading.
+
             await DoWork(LoadStations());
         }
 
@@ -67,7 +69,7 @@ namespace Hanasu.ViewModel
             XDocument doc = null;
             using (var http = new HttpClient())
             {
-                doc = XDocument.Parse(await http.GetStringAsync("https://raw.github.com/Amrykid/Hanasu/master/MobileStations.xml"));
+                doc = XDocument.Parse(await http.GetStringAsync("https://raw.github.com/Amrykid/Hanasu/master/MobileStations.xml").ConfigureAwait(false));
             }
 
 
@@ -88,8 +90,11 @@ namespace Hanasu.ViewModel
                                HomepageUrl = x.ContainsElement("Homepage") ? new Uri(x.Element("Homepage").Value) : null
                            };
 
-            foreach (var x in stations)
-                AvailableStations.Add(x);
+            await UIDispatcher.BeginInvoke(new Action(() =>
+            {
+                foreach (var x in stations)
+                    AvailableStations.Add(x);
+            }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
     }
 }
