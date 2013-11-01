@@ -10,11 +10,13 @@ using Crystal.Core;
 using Hanasu.Model;
 using Hanasu.Extensions;
 using Crystal.Localization;
+using Crystal.Messaging;
 
 namespace Hanasu.ViewModel
 {
     public class StationsViewModel : BaseViewModel
     {
+        Crystal.Messaging.MessageRelayedProperty<bool> IsBusyProperty = null;
         public StationsViewModel()
         {
             Initialize();
@@ -22,7 +24,9 @@ namespace Hanasu.ViewModel
 
         private async System.Threading.Tasks.Task Initialize()
         {
-            await Task.Delay(2000); //Wait a bit before loading.
+            IsBusyProperty = CreateRelayProperty<bool>("IsBusy", null);
+
+            await Task.Delay(3000); //Wait a bit before loading.
 
             await DoWork(LoadStations());
         }
@@ -43,7 +47,7 @@ namespace Hanasu.ViewModel
         public bool IsBusy
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
-            set { SetProperty(x => this.IsBusy, value); }
+            set { SetProperty(x => this.IsBusy, value); Messenger.PushMessage(this, "UpdateIsBusy", value); } //IsBusyProperty.Value = value; }
         }
 
         public Station SelectedStation
@@ -69,9 +73,9 @@ namespace Hanasu.ViewModel
             XDocument doc = null;
             using (var http = new HttpClient())
             {
-                doc = XDocument.Parse(await http.GetStringAsync("https://raw.github.com/Amrykid/Hanasu/master/MobileStations.xml").ConfigureAwait(false));
+                string data = await http.GetStringAsync("https://raw.github.com/Amrykid/Hanasu/master/MobileStations.xml").ConfigureAwait(false);
+                doc = await Task.Run(() => XDocument.Parse(data)).ConfigureAwait(false);
             }
-
 
             var stationsElement = doc.Element("Stations");
 

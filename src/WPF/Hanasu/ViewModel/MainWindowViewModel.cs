@@ -20,7 +20,24 @@ namespace Hanasu.ViewModel
             NowPlayingPaneViewModel = new NowPlayingViewModel();
             StationsPaneViewModel = new StationsViewModel();
 
+            RegisterForMessages("UpdateIsBusy");
+
             base.OnNavigatedTo(argument);
+        }
+
+        public override bool ReceiveMessage(object source, Crystal.Messaging.Message message)
+        {
+            switch (message.MessageString.ToLower())
+            {
+                case "updateisbusy":
+                    UIDispatcher.BeginInvoke(new Action(() =>
+                        {
+                            IsBusy = (bool)message.Data;
+                        }));
+                    return true;
+            }
+
+            return base.ReceiveMessage(source, message);
         }
 
         public NowPlayingViewModel NowPlayingPaneViewModel
@@ -33,6 +50,13 @@ namespace Hanasu.ViewModel
         {
             get { return GetPropertyOrDefaultType<StationsViewModel>(x => this.StationsPaneViewModel); }
             set { SetProperty(x => this.StationsPaneViewModel, value); }
+        }
+
+        [Crystal.Messaging.PropertyMessage("IsBusy")]
+        public bool IsBusy
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
+            set { SetProperty(x => this.IsBusy, value); }
         }
     }
 }
