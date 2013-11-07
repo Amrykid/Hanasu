@@ -7,8 +7,18 @@ using Hanasu.Model;
 
 namespace Hanasu.ViewModel
 {
-    public class NowPlayingViewModel: BaseViewModel
+    public class NowPlayingViewModel : BaseViewModel
     {
+        public NowPlayingViewModel()
+        {
+
+            IsPlaying = true;
+            CurrentStation = new Station() { Title = "XAMFM", ImageUrl = "https://si0.twimg.com/profile_images/1104224483/logo_transbkgr.png" };
+            CurrentTrack = "Uprising";
+            CurrentArtist = "Pieman";
+
+        }
+
         public bool IsPlaying
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.IsPlaying); }

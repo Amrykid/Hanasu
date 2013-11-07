@@ -11,6 +11,7 @@ using Hanasu.Model;
 using Hanasu.Extensions;
 using Crystal.Localization;
 using Crystal.Messaging;
+using Crystal.Services;
 
 namespace Hanasu.ViewModel
 {
@@ -19,7 +20,13 @@ namespace Hanasu.ViewModel
         Crystal.Messaging.MessageRelayedProperty<bool> IsBusyProperty = null;
         public StationsViewModel()
         {
-            Initialize();
+            if (!IsDesignMode)
+                Initialize();
+            else
+            {
+                AvailableStations = new ObservableCollection<Station>();
+                AvailableStations.Add(new Station() { Title = "AmryFM" });
+            }
         }
 
         private async System.Threading.Tasks.Task Initialize()
@@ -70,35 +77,42 @@ namespace Hanasu.ViewModel
                 if (AvailableStations.Count > 0)
                     AvailableStations.Clear();
 
-            XDocument doc = null;
-            using (var http = new HttpClient())
+            try
             {
-                string data = await http.GetStringAsync("https://raw.github.com/Amrykid/Hanasu/master/MobileStations.xml").ConfigureAwait(false);
-                doc = await Task.Run(() => XDocument.Parse(data)).ConfigureAwait(false);
+                XDocument doc = null;
+                using (var http = new HttpClient())
+                {
+                    string data = await http.GetStringAsync("https://raw.github.com/Amrykid/Hanasu/master/MobileStations.xml").ConfigureAwait(false);
+                    doc = await Task.Run(() => XDocument.Parse(data)).ConfigureAwait(false);
+                }
+
+                var stationsElement = doc.Element("Stations");
+
+                var stations = from x in stationsElement.Elements("Station")
+                               where x.ContainsElement("StationType") ? x.Element("StationType").Value != "TV" : true
+                               select new Station()
+                               {
+                                   Title = x.Element("Name").Value,
+                                   StreamUrl = x.Element("DataSource").Value,
+                                   PreprocessorFormat = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : string.Empty,
+                                   ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : "http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/200px-No_image_available.svg.png",
+                                   UnlocalizedFormat = x.Element("Format").Value,
+                                   Format = x.Element("Format").Value,
+                                   Subtitle = LocalizationManager.GetLocalizedValue("StationSubtitle"),
+                                   ServerType = x.ContainsElement("ServerType") ? x.Element("ServerType").Value : "Raw",
+                                   HomepageUrl = x.ContainsElement("Homepage") ? new Uri(x.Element("Homepage").Value) : null
+                               };
+
+                await UIDispatcher.BeginInvoke(new Action(() =>
+                {
+                    foreach (var x in stations)
+                        AvailableStations.Add(x);
+                }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
             }
-
-            var stationsElement = doc.Element("Stations");
-
-            var stations = from x in stationsElement.Elements("Station")
-                           where x.ContainsElement("StationType") ? x.Element("StationType").Value != "TV" : true
-                           select new Station()
-                           {
-                               Title = x.Element("Name").Value,
-                               StreamUrl = x.Element("DataSource").Value,
-                               PreprocessorFormat = x.ContainsElement("ExplicitExtension") ? x.Element("ExplicitExtension").Value : string.Empty,
-                               ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : "http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/200px-No_image_available.svg.png",
-                               UnlocalizedFormat = x.Element("Format").Value,
-                               Format = x.Element("Format").Value,
-                               Subtitle = LocalizationManager.GetLocalizedValue("StationSubtitle"),
-                               ServerType = x.ContainsElement("ServerType") ? x.Element("ServerType").Value : "Raw",
-                               HomepageUrl = x.ContainsElement("Homepage") ? new Uri(x.Element("Homepage").Value) : null
-                           };
-
-            await UIDispatcher.BeginInvoke(new Action(() =>
+            catch (HttpRequestException)
             {
-                foreach (var x in stations)
-                    AvailableStations.Add(x);
-            }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Un-oh!", "Unable to retrieve available stations from the repository!");
+            }
         }
     }
 }

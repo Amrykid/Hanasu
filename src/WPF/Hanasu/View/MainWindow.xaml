@@ -5,6 +5,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         xmlns:vm="clr-namespace:Hanasu.ViewModel"
+        xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Amrykid.Crystal"
         Title="Hanasu" Height="434" Width="944" ShowTitleBar="False" Style="{DynamicResource CleanWindowStyleKey}"
         GlowBrush="{DynamicResource AccentColorBrush}">
     <Window.Resources>
@@ -22,6 +23,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
@@ -35,29 +37,11 @@
 
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" x:Name="NowPlayingPane" DataContext="{Binding NowPlayingPaneViewModel}" Width="300"
-              Visibility="{Binding IsPlaying, Converter={StaticResource btv}}">
-                    <StackPanel VerticalAlignment="Top" Margin="0 50 0 0">
-                        <Label Content="now playing" FontSize="23"/>
-                        <Image Width="200" Height="200">
-                            <Image.Source>
-                                <PriorityBinding>
-                                    <Binding Source="CurrentAlbumCover"/>
-                                    <Binding Source="CurrentStation.Cover"/>
-                                </PriorityBinding>
-                            </Image.Source>
-                        </Image>
-                        <Label Content="{Binding CurrentTrack}" FontSize="20" Foreground="{DynamicResource AccentColorBrush}"/>
-                        <Label Content="{Binding CurrentArtist}"/>
-                        <Label Content="{Binding CurrentStation.Name}"/>
-                    </StackPanel>
-                </Grid>
-                <Grid Grid.Column="1" x:Name="StationsPane" DataContext="{Binding StationsPaneViewModel}">
+                <Grid Grid.Column="0" x:Name="StationsPane" DataContext="{Binding StationsPaneViewModel}">
                     <ListBox ItemsSource="{Binding AvailableStations, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"
                      SelectedItem="{Binding SelectedStation, Mode=TwoWay}" VirtualizingPanel.IsVirtualizing="True" 
                      VirtualizingPanel.VirtualizationMode="Recycling">
@@ -75,10 +59,11 @@
                                     <TextBlock Grid.Column="1" Text="{Binding Title, Mode=OneTime}" 
                                        VerticalAlignment="Center" FontSize="17" Margin="5 0 0 0" />
 
-                                    <Button Grid.Column="2" Style="{DynamicResource MetroCircleButtonStyle}" 
-                                    x:Name="playBtn"
-                                    Height="35" Width="35" VerticalAlignment="Center">
-                                        <Rectangle Width="12" Height="12" Margin="3 0 0 0">
+                                    <Button Grid.Column="2" 
+                                            Style="{DynamicResource MetroCircleButtonStyle}" 
+                                            x:Name="playBtn"
+                                            Height="25" Width="25" VerticalAlignment="Center">
+                                        <Rectangle Width="7" Height="7" Margin="3 0 0 0">
                                             <Rectangle.Fill>
                                                 <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_play}" />
                                             </Rectangle.Fill>
@@ -89,8 +74,110 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
-                <Grid Grid.Column="2" x:Name="InfoPane" Width="300"/>
+                <Grid Grid.Column="1" x:Name="InfoPane" Width="300"/>
             </Grid>
+
+            <Border Grid.Row="2"
+                    BorderBrush="{DynamicResource AccentColorBrush}"
+                    BorderThickness=".8">
+                <Grid x:Name="NowPlayingPane" DataContext="{Binding NowPlayingPaneViewModel}" Height="125">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="2.6*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid VerticalAlignment="Top" 
+                            Margin="0 0 0 0" 
+                            Grid.Column="1"
+                            Visibility="{Binding IsPlaying, Converter={StaticResource btv}, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="now playing" 
+                           FontSize="20" 
+                           Grid.Row="0" 
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2" />
+
+                        <Image Width="70" 
+                               Height="70"
+                               Grid.Row="1"
+                               Grid.Column="0">
+                            <Image.Source>
+                                <PriorityBinding>
+                                    <Binding Path="CurrentAlbumCover" />
+                                    <Binding Path="CurrentStation.ImageUrl" />
+                                </PriorityBinding>
+                            </Image.Source>
+                        </Image>
+                        <StackPanel Grid.Row="1"
+                                Grid.Column="1">
+                            <Label Content="{Binding CurrentTrack}" FontSize="20" Foreground="{DynamicResource AccentColorBrush}" Margin="0 0 0 -5" />
+                            <Label Content="{Binding CurrentArtist}" FontSize="18" Margin="0 -5 0 0" />
+                            <Label Content="{Binding CurrentStation.Title}" Margin="1 -5 0 0" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Column="2"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="35" Height="35" Command="{Binding MediaRewindCommand}">
+                                <Rectangle Margin="0 0 0 0" Height="15" Width="15">
+                                    <Rectangle.Fill>
+                                        <VisualBrush Stretch="Uniform"
+                                                                    Visual="{StaticResource appbar_rewind}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Button.ToolTip>
+                                    <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonRewindTooltip'}"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Height="60" Command="{Binding MediaPlayCommand}">
+                                <Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                    <Rectangle.Fill>
+                                        <VisualBrush Stretch="Uniform"
+                                                                    Visual="{StaticResource appbar_play}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Button.ToolTip>
+                                    <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonPlayTooltip'}"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Command="{Binding MediaStopCommand}">
+                                <Rectangle Margin="0 1 0 0" Height="30" Width="30">
+                                    <Rectangle.Fill>
+                                        <VisualBrush Stretch="Uniform"
+                                                                    Visual="{StaticResource appbar_stop}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Button.ToolTip>
+                                    <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonStopTooltip'}"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="35" Height="35" Command="{Binding MediaFastForwardCommand}">
+                                <Rectangle Margin="0 0 0 0" Height="15" Width="15">
+                                    <Rectangle.Fill>
+                                        <VisualBrush Stretch="Uniform"
+                                                                    Visual="{StaticResource appbar_fastforward}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Button.ToolTip>
+                                    <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonFastForwardTooltip'}"/>
+                                </Button.ToolTip>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 </metro:MetroWindow>
