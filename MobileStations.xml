@@ -2,6 +2,7 @@
 <Stations>
   <Station>
     <Name>AnimeNfo</Name>
+    <Subtitle>Serving you the best Anime and Doujin music!</Subtitle>
     <DataSource>http://www.animenfo.com/radio/listen.m3u</DataSource>
     <Homepage>http://www.animenfo.com/</Homepage>
     <Format>Anime</Format>
@@ -15,6 +16,7 @@
   </Station>
   <Station>
     <Name>XAMFM</Name>
+    <Subtitle>Europe's #1 Asian Hit Music Station.</Subtitle>
     <DataSource>http://www.xamfm.com/siteplayer/xamfm.pls</DataSource>
     <Homepage>http://www.xamfm.com/index.php/xamfm</Homepage>
     <Format>JPop</Format>
@@ -28,6 +30,7 @@
   </Station>
   <Station>
     <Name>AnimeAMAZE</Name>
+    <Subtitle>The best Anime radio station on the Internet! Non-stop, commercial free, what more could you ask for?</Subtitle>
     <DataSource>http://apple.neostreams.info/auto/tunein.php/mcarrass/playlist.asx</DataSource>
     <Homepage>http://www.animeamaze.net/</Homepage>
     <Format>Mix</Format>
@@ -41,6 +44,7 @@
   </Station>
   <Station>
     <Name>JPHiP</Name>
+    <Subtitle>HiP Radio is Radio FOR The People BY The People.</Subtitle>
     <DataSource>http://radio.jphip.com:8800/</DataSource>
     <Homepage>http://jphip.com/radio.html</Homepage>
     <Format>Mix</Format>
