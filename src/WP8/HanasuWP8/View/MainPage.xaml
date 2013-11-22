@@ -13,7 +13,9 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    shell:SystemTray.IsVisible="True" shell:SystemTray.BackgroundColor="Red" Loaded="PhoneApplicationPage_Loaded_1">
+    shell:SystemTray.IsVisible="True" shell:SystemTray.BackgroundColor="Red" 
+    Loaded="PhoneApplicationPage_Loaded_1"
+    x:Name="thisPage">
 
     <phone:PhoneApplicationPage.DataContext>
         <vm:MainPageViewModel />
@@ -55,7 +57,7 @@
                     <vm:MainPageStationsViewModel/>
                 </phone:PivotItem.DataContext>
                 <Grid>
-                    <ListBox ItemsSource="{Binding Stations}" x:Name="stationsListBox" DoubleTap="stationsListBox_DoubleTap_1">
+                    <ListBox ItemsSource="{Binding Stations}" IsEnabled="{Binding AreStationsChoosable}" x:Name="stationsListBox" DoubleTap="stationsListBox_DoubleTap_1">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0 5 0 5">
@@ -97,6 +99,9 @@
         <shell:ApplicationBar Mode="Default" IsMenuEnabled="True">
             <shell:ApplicationBarIconButton x:Name="playBtn" Text="Play" IconUri="Images/transport.play.png" Click="ApplicationBarIconButton_Click_1">
         
+            </shell:ApplicationBarIconButton>
+            <shell:ApplicationBarIconButton x:Name="songHistoryBtn" Text="History" IconUri="Images/transport.play.png">
+                
             </shell:ApplicationBarIconButton>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

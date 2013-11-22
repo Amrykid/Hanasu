@@ -35,6 +35,8 @@ namespace HanasuWP8.ViewModel
                         return;
                     });
             }
+
+            AreStationsChoosable = true;
         }
 
         private async Task PlayStation(Station y)
@@ -68,6 +70,7 @@ namespace HanasuWP8.ViewModel
             Status = "Connecting...";
 
             IsBusy = true;
+            AreStationsChoosable = false;
 
             Station station = (Station)y;
 
@@ -147,6 +150,8 @@ namespace HanasuWP8.ViewModel
 
             IsBusy = false;
 
+            AreStationsChoosable = true;
+
             playCommandLock.Set();
         }
 
@@ -224,6 +229,15 @@ namespace HanasuWP8.ViewModel
             {
                 SetProperty(x => this.IsBusy, value);
                 Messenger.PushMessage(this, "UpdateIndeterminateStatus", new Tuple<bool, string>(value, Status));
+            }
+        }
+
+        public bool AreStationsChoosable
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.AreStationsChoosable); }
+            set
+            {
+                SetProperty(x => this.AreStationsChoosable, value);
             }
         }
     }
