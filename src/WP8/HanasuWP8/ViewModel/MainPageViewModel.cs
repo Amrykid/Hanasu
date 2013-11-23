@@ -1,4 +1,5 @@
 ﻿using Crystal.Core;
+using Microsoft.Phone.BackgroundAudio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,8 @@ namespace HanasuWP8.ViewModel
             RegisterForMessages("UpdateIndeterminateStatus");
             RegisterForMessages("SwitchTab");
 
-            SelectedTab = 1; //stations
+            if (BackgroundAudioPlayerExtensions.SafeGetPlayerState(BackgroundAudioPlayer.Instance) == PlayState.Shutdown || BackgroundAudioPlayer.Instance.Track == null)
+                    SelectedTab = 1; //stations
         }
 
         public override void OnNavigatedTo(KeyValuePair<string, string>[] argument = null)
@@ -30,7 +32,7 @@ namespace HanasuWP8.ViewModel
                     {
                         try
                         {
-                            Tuple<bool,string> tup = (Tuple<bool,string>)message.Data;
+                            Tuple<bool, string> tup = (Tuple<bool, string>)message.Data;
 
                             Microsoft.Phone.Shell.SystemTray.ProgressIndicator.Text = tup.Item2;
                             Microsoft.Phone.Shell.SystemTray.ProgressIndicator.IsIndeterminate = true;
