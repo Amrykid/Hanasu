@@ -13,6 +13,8 @@ namespace HanasuWP8.ViewModel
         {
             RegisterForMessages("UpdateIndeterminateStatus");
             RegisterForMessages("SwitchTab");
+
+            SelectedTab = 1; //stations
         }
 
         public override void OnNavigatedTo(KeyValuePair<string, string>[] argument = null)
