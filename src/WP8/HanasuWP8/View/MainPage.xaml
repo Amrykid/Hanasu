@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:c4f="clr-namespace:Coding4Fun.Toolkit.Controls;assembly=Coding4Fun.Toolkit.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -20,10 +21,6 @@
     <phone:PhoneApplicationPage.DataContext>
         <vm:MainPageViewModel />
     </phone:PhoneApplicationPage.DataContext>
-    <phone:PhoneApplicationPage.Resources>
-        <conv:BoolToVisibilityConverter x:Key="b2v"/>
-        <conv:InverseBoolToVisibilityConverter x:Key="ib2v"/>
-    </phone:PhoneApplicationPage.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -43,9 +40,17 @@
                         <StackPanel>
                             <Image Source="{Binding CurrentCover}" Height="250" HorizontalAlignment="Center"/>
                             <TextBlock Text="{Binding CurrentTrack}" FontSize="38" TextAlignment="Center" 
-                                       Foreground="{StaticResource PhoneAccentBrush}" TextWrapping="Wrap"/>
+                                       Foreground="{StaticResource PhoneAccentBrush}" TextWrapping="Wrap"
+                                       MaxHeight="130"/>
                             <TextBlock Text="{Binding CurrentArtist}" FontSize="30" TextAlignment="Center"/>
                             <TextBlock Text="{Binding CurrentStation.Title}" FontSize="25" TextAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="100 0 100 0">
+                                <c4f:RoundButton VerticalAlignment="Center" x:Name="songHistoryBtn" 
+                                                 Label="History" ImageSource="/Images/time.png"
+                                                 Command="{Binding SongHistoryCommand}">
+
+                                </c4f:RoundButton>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -67,14 +72,14 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Image Height="70" Grid.Column="0" Source="{Binding ImageUrl}"/>
-                                    
+
                                     <Grid Grid.Column="1" Margin="12 0 0 0">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="37"/>
                                             <RowDefinition Height="24"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        
+
                                         <TextBlock Text="{Binding Title}" VerticalAlignment="Top" FontSize="33" Margin="0 0 0 0" Grid.Row="0"/>
                                         <TextBlock Text="{Binding Subtitle}" VerticalAlignment="Top" FontSize="22" Margin="0 0 0 0" Grid.Row="1"/>
                                         <TextBlock Text="{Binding Format}" VerticalAlignment="Bottom" FontSize="18" Grid.Row="2"/>
@@ -100,10 +105,7 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Mode="Default" IsMenuEnabled="True">
             <shell:ApplicationBarIconButton x:Name="playBtn" Text="Play" IconUri="Images/transport.play.png" Click="ApplicationBarIconButton_Click_1">
-        
-            </shell:ApplicationBarIconButton>
-            <shell:ApplicationBarIconButton x:Name="songHistoryBtn" Text="History" IconUri="Images/transport.play.png">
-                
+
             </shell:ApplicationBarIconButton>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

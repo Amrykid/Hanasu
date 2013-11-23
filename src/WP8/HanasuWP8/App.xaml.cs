@@ -288,7 +288,7 @@ namespace HanasuWP8
                                ImageUrl = x.ContainsElement("Logo") ? x.Element("Logo").Value : "http://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/200px-No_image_available.svg.png",
                                UnlocalizedFormat = x.Element("Format").Value,
                                Format = x.Element("Format").Value,
-                               Subtitle = LocalizationManager.GetLocalizedValue("StationSubtitle"),
+                               Subtitle = x.ContainsElement("Subtitle") ? x.Element("Subtitle").Value : "N/A",
                                ServerType = x.ContainsElement("ServerType") ? x.Element("ServerType").Value : "Raw",
                                HomepageUrl = x.ContainsElement("Homepage") ? new Uri(x.Element("Homepage").Value) : null
                            };

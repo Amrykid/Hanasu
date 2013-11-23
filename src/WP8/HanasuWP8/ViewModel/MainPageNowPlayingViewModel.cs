@@ -1,4 +1,6 @@
-﻿using Crystal.Core;
+﻿using Crystal.Command;
+using Crystal.Core;
+using Crystal.Navigation;
 using Hanasu.Model;
 using Microsoft.Phone.BackgroundAudio;
 using System;
@@ -7,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace HanasuWP8.ViewModel
@@ -31,6 +34,11 @@ namespace HanasuWP8.ViewModel
 
                     timer.Tick += timer_Tick;
                     timer.Interval = new TimeSpan(0, 0, 3);
+
+                    SongHistoryCommand = CommandManager.CreateCommand(x =>
+                        {
+                            NavigationService.NavigateTo<SongHistoryViewModel>(new KeyValuePair<string, string>("Station", CurrentStation.Title));
+                        }, y => CurrentStation != null && CurrentStation.ServerType.ToLower() == "shoutcast");
 
                     SynchronizeBAPStatus();
                 }
@@ -176,8 +184,13 @@ namespace HanasuWP8.ViewModel
         public Station CurrentStation
         {
             get { return GetPropertyOrDefaultType<Station>(x => this.CurrentStation); }
-            set { SetProperty(x => this.CurrentStation, value); }
+            set { SetProperty(x => this.CurrentStation, value); SongHistoryCommand.RaiseCanExecuteChanged(); }
         }
 
+        public CrystalCommand SongHistoryCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalCommand>(x => SongHistoryCommand); }
+            set { SetProperty(x => SongHistoryCommand, value); }
+        }
     }
 }

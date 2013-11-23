@@ -1,6 +1,8 @@
 ﻿using Hanasu.Core.Utilities;
 using Hanasu.Model;
+#if !WINDOWS_PHONE
 using Hanasu.Tools.Song;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -82,6 +84,7 @@ namespace Hanasu.Tools.Shoutcast
 
             return his;
         }
+#if !WINDOWS_PHONE
         public static async Task<SongData> GetShoutcastStationCurrentSong(Station station, string url)
         {
 
@@ -112,6 +115,7 @@ namespace Hanasu.Tools.Shoutcast
 
             return s;
         }
+#endif
     }
 
     public struct ShoutcastSongHistoryItem
