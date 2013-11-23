@@ -46,7 +46,7 @@ namespace HanasuWP8.ViewModel
             if (!playCommandLock.WaitOne(5000)) return;
 
             Microsoft.Xna.Framework.FrameworkDispatcher.Update();
-            if (!Microsoft.Xna.Framework.Media.MediaPlayer.GameHasControl)
+            if (!Microsoft.Xna.Framework.Media.MediaPlayer.GameHasControl && BackgroundAudioPlayer.Instance.Track == null)
                 if (ServiceManager.Resolve<IMessageBoxService>()
                         .ShowOkayCancelMessage("Playing Media", "By proceeding, your current media will stop and the selected station will be played instead.") == false)
                 {
@@ -114,10 +114,17 @@ namespace HanasuWP8.ViewModel
                     BAPClosed = false;
                 }
 
+                bool openedEvents = false;
                 if (connectedEvent == null)
                 {
                     await OpenEvents();
+
+                    if (connectedEvent == null || errorEvent == null)
+                        openedEvents = false;
+                    else
+                        openedEvents = true;
                 }
+
 
                 var playTask = connectedEvent.WaitAsync().AsTask();
                 var errorTask = errorEvent.WaitAsync().AsTask();
@@ -126,7 +133,7 @@ namespace HanasuWP8.ViewModel
 
                 var what = await Task.WhenAny(playTask, timeoutTask, errorTask);
 
-                if ((what == timeoutTask || what == errorTask) && !App.IsPlaying)
+                if ((what == timeoutTask || what == errorTask || !openedEvents) && !App.IsPlaying)
                 {
                     ServiceManager.Resolve<IMessageBoxService>().ShowMessage("Uh-oh!",
                         what == timeoutTask ? "Unable to connect in a timely fashion!" : what == errorTask ? "An error occurred while connecting." : "Something bad happened!");
@@ -167,11 +174,13 @@ namespace HanasuWP8.ViewModel
 
         private async Task OpenEvents()
         {
+            int wait = 0;
             while (true)
             {
                 //loop until we get the event.
                 if (NamedEvent.TryOpen(IPCConsts.CONNECTED_EVENT_NAME, out connectedEvent))
                 {
+                    wait = 0;
                     while (true)
                     {
                         if (NamedEvent.TryOpen(IPCConsts.ERROR_EVENT_NAME, out errorEvent))
@@ -179,11 +188,18 @@ namespace HanasuWP8.ViewModel
                             break;
                         }
                         await Task.Delay(100);
+
+                        if (wait >= 5000)
+                            return;
                     }
                     break;
                 }
 
                 await Task.Delay(100);
+                wait += 100;
+
+                if (wait >= 5000)
+                    return;
             }
         }
 
