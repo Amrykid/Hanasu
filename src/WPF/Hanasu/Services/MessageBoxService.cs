@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Crystal.Services;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace Hanasu.Services
 {

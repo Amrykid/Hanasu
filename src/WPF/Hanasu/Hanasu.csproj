@@ -54,6 +54,24 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -104,7 +122,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\Station.cs" />
+    <Compile Include="PlaybackEngine.cs" />
     <Compile Include="Services\MessageBoxService.cs" />
+    <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\NowPlayingViewModel.cs" />
     <Compile Include="ViewModel\StationsViewModel.cs" />
@@ -150,6 +170,14 @@
     <ProjectReference Include="..\..\..\lib\Crystal\src\Crystal\Crystal.csproj">
       <Project>{8c5a2d35-824e-4f52-9b18-b1aa19c42bda}</Project>
       <Name>Crystal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hanasu.Extensibility\Hanasu.Extensibility.csproj">
+      <Project>{e3db1768-0d5d-49ba-a78b-737f8a2439a7}</Project>
+      <Name>Hanasu.Extensibility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hanasu.Playback.FMOD\Hanasu.Playback.FMOD.csproj">
+      <Project>{518c89a0-7120-4c54-b1d1-d7c9a1d481a4}</Project>
+      <Name>Hanasu.Playback.FMOD</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

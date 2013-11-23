@@ -41,40 +41,87 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" x:Name="StationsPane" DataContext="{Binding StationsPaneViewModel}">
-                    <ListBox ItemsSource="{Binding AvailableStations, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"
+                <metro:MetroAnimatedSingleRowTabControl TabStripPlacement="Left">
+                    <TabControl.Resources>
+                        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
+                            <Setter Property="HeaderTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <ContentPresenter Content="{TemplateBinding Content}" TextBlock.FontSize="25">
+                                            <ContentPresenter.LayoutTransform>
+                                                <RotateTransform Angle="270" />
+                                            </ContentPresenter.LayoutTransform>
+                                        </ContentPresenter>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TabControl.Resources>
+                    <TabItem Header="home">
+                        <Grid DataContext="{Binding HomeTabViewModel}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="5*"/>
+                            </Grid.RowDefinitions>
+                            <metro:FlipView Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" BannerText="Something">
+                                <Image Source="http://i146.photobucket.com/albums/r277/Robo-Demon/NarutoShippuden.jpg"/>
+                            </metro:FlipView>
+                            
+                            <GroupBox Grid.Row="1" Grid.Column="0" Header="new">
+                                
+                            </GroupBox>
+                            <GroupBox Grid.Row="1" Grid.Column="1" Header="popular">
+                                
+                            </GroupBox>
+                            
+                            <GroupBox Grid.Row="1" Grid.Column="2" Header="recent">
+                                
+                            </GroupBox>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="stations">
+                        <Grid DataContext="{Binding StationsPaneViewModel}">
+                            <ListBox ItemsSource="{Binding AvailableStations, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"
                      SelectedItem="{Binding SelectedStation, Mode=TwoWay}" VirtualizingPanel.IsVirtualizing="True" 
                      VirtualizingPanel.VirtualizationMode="Recycling">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Height="50">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="30" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="50" />
-                                    </Grid.ColumnDefinitions>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Height="50">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="50" />
+                                            </Grid.ColumnDefinitions>
 
-                                    <!--<Image Grid.Column="0" Source="{Binding ImageUrl, IsAsync=True, Delay=3000}" />-->
+                                            <!--<Image Grid.Column="0" Source="{Binding ImageUrl, IsAsync=True, Delay=3000}" />-->
 
-                                    <TextBlock Grid.Column="1" Text="{Binding Title, Mode=OneTime}" 
+                                            <TextBlock Grid.Column="1" Text="{Binding Title, Mode=OneTime}" 
                                        VerticalAlignment="Center" FontSize="17" Margin="5 0 0 0" />
 
-                                    <Button Grid.Column="2" 
+                                            <Button Grid.Column="2" 
                                             Style="{DynamicResource MetroCircleButtonStyle}" 
                                             x:Name="playBtn"
                                             Height="25" Width="25" VerticalAlignment="Center">
-                                        <Rectangle Width="7" Height="7" Margin="3 0 0 0">
-                                            <Rectangle.Fill>
-                                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_play}" />
-                                            </Rectangle.Fill>
-                                        </Rectangle>
-                                    </Button>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-                <Grid Grid.Column="1" x:Name="InfoPane" Width="300"/>
+                                                <Rectangle Width="7" Height="7" Margin="3 0 0 0">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_play}" />
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                            </Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </TabItem>
+                </metro:MetroAnimatedSingleRowTabControl>
+                
+                <Grid Grid.Column="2" x:Name="InfoPane" Width="300"/>
             </Grid>
 
             <Border Grid.Row="2"
