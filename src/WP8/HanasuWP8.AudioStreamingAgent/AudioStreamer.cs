@@ -118,8 +118,8 @@ namespace HanasuWP8.AudioStreamAgent
                 }
                 catch (Exception) { }
             }
-            else
-                base.OnCancel();
+
+            base.OnCancel();
         }
     }
 }
