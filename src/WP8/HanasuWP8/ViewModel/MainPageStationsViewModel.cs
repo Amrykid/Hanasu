@@ -45,6 +45,16 @@ namespace HanasuWP8.ViewModel
 
             if (!playCommandLock.WaitOne(5000)) return;
 
+            Microsoft.Xna.Framework.FrameworkDispatcher.Update();
+            if (!Microsoft.Xna.Framework.Media.MediaPlayer.GameHasControl)
+                if (ServiceManager.Resolve<IMessageBoxService>()
+                        .ShowOkayCancelMessage("Playing Media", "By proceeding, your current media will stop and the selected station will be played instead.") == false)
+                {
+                    playCommandLock.Set();
+                    return;
+                }
+
+
             //try
             //{
             //    if (App.IsPlaying)

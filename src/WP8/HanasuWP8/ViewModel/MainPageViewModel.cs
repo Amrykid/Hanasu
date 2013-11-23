@@ -16,7 +16,7 @@ namespace HanasuWP8.ViewModel
             RegisterForMessages("SwitchTab");
 
             if (BackgroundAudioPlayerExtensions.SafeGetPlayerState(BackgroundAudioPlayer.Instance) == PlayState.Shutdown || BackgroundAudioPlayer.Instance.Track == null)
-                    SelectedTab = 1; //stations
+                SelectedTab = 1; //stations
         }
 
         public override void OnNavigatedTo(KeyValuePair<string, string>[] argument = null)
