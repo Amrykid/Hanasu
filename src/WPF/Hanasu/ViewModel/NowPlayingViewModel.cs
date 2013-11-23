@@ -19,14 +19,13 @@ namespace Hanasu.ViewModel
                 CurrentArtist = "Pieman";
             }
 
-            IsPlaying = true;
             PlaybackEngine.Engine.MetadataChanged += Engine_MetadataChanged;
             PlaybackEngine.Engine.PlaybackStatusChanged += Engine_PlaybackStatusChanged;
         }
 
         void Engine_PlaybackStatusChanged(object sender, EventArgs e)
         {
-            
+            IsPlaying = PlaybackEngine.Engine.IsPlaying;
         }
 
         void Engine_MetadataChanged(object sender, Extensibility.PlaybackMetaDataChangedEventArgs e)

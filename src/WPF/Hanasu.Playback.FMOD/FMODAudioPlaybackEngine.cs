@@ -18,6 +18,7 @@ namespace Hanasu.Playback.FMODPlayback
 
         private System.Timers.Timer timer = null;
         private string _title, _artist = null;
+        private bool _playing = false;
 
         public FMODAudioPlaybackEngine()
         {
@@ -120,6 +121,14 @@ namespace Hanasu.Playback.FMODPlayback
                 result = channel.getPosition(ref ms, FMOD.TIMEUNIT.MS);
                 ERRCHECK(result);
 
+                if (playing != _playing)
+                {
+                    _playing = playing;
+
+                    if (PlaybackStatusChanged != null)
+                        PlaybackStatusChanged(this, EventArgs.Empty);
+                }
+
                 //statusBar.Text = "Time " + (ms / 1000 / 60) + ":" + (ms / 1000 % 60) + ":" + (ms / 10 % 100) + (openstate == FMOD.OPENSTATE.BUFFERING ? " Buffering..." : (openstate == FMOD.OPENSTATE.CONNECTING ? " Connecting..." : (paused ? " Paused       " : (playing ? " Playing      " : " Stopped      ")))) + "(" + percentbuffered + "%)" + (starving ? " STARVING" : "        ");
             }
 
@@ -160,7 +169,7 @@ namespace Hanasu.Playback.FMODPlayback
         public void Pause()
         {
             FMOD.RESULT result;
-            bool        paused = false;
+            bool paused = false;
 
             if (channel != null)
             {
@@ -173,12 +182,20 @@ namespace Hanasu.Playback.FMODPlayback
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            FMOD.RESULT result;
+
+            if (channel != null)
+            {
+                result = channel.stop();
+                ERRCHECK(result);
+
+                timer.Stop();
+            }
         }
 
         public bool IsPlaying
         {
-            get { throw new NotImplementedException(); }
+            get { return _playing; }
         }
 
         public event EventHandler<PlaybackMetaDataChangedEventArgs> MetadataChanged;
