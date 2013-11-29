@@ -11,12 +11,27 @@ namespace Hanasu.ViewModel
     {
         public NowPlayingViewModel()
         {
+            if (!IsDesignMode)
+            {
+                IsPlaying = true;
+                CurrentStation = new Station() { Title = "XAMFM", ImageUrl = "https://si0.twimg.com/profile_images/1104224483/logo_transbkgr.png" };
+                CurrentTrack = "Uprising";
+                CurrentArtist = "Pieman";
+            }
 
-            IsPlaying = true;
-            CurrentStation = new Station() { Title = "XAMFM", ImageUrl = "https://si0.twimg.com/profile_images/1104224483/logo_transbkgr.png" };
-            CurrentTrack = "Uprising";
-            CurrentArtist = "Pieman";
+            PlaybackEngine.Engine.MetadataChanged += Engine_MetadataChanged;
+            PlaybackEngine.Engine.PlaybackStatusChanged += Engine_PlaybackStatusChanged;
+        }
 
+        void Engine_PlaybackStatusChanged(object sender, EventArgs e)
+        {
+            IsPlaying = PlaybackEngine.Engine.IsPlaying;
+        }
+
+        void Engine_MetadataChanged(object sender, Extensibility.PlaybackMetaDataChangedEventArgs e)
+        {
+            CurrentTrack = e.Track;
+            CurrentArtist = e.Artist;
         }
 
         public bool IsPlaying

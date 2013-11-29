@@ -17,10 +17,11 @@ namespace Hanasu.ViewModel
     {
         public override async void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
         {
+            RegisterForMessages("UpdateIsBusy");
+
             NowPlayingPaneViewModel = new NowPlayingViewModel();
             StationsPaneViewModel = new StationsViewModel();
-
-            RegisterForMessages("UpdateIsBusy");
+            HomeTabViewModel = new HomeViewModel();
 
             base.OnNavigatedTo(argument);
         }
@@ -50,6 +51,11 @@ namespace Hanasu.ViewModel
         {
             get { return GetPropertyOrDefaultType<StationsViewModel>(x => this.StationsPaneViewModel); }
             set { SetProperty(x => this.StationsPaneViewModel, value); }
+        }
+        public HomeViewModel HomeTabViewModel
+        {
+            get { return GetPropertyOrDefaultType<HomeViewModel>(x => this.HomeTabViewModel); }
+            set { SetProperty(x => this.HomeTabViewModel, value); }
         }
 
         [Crystal.Messaging.PropertyMessage("IsBusy")]
