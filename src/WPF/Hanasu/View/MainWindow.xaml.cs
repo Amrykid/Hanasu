@@ -31,5 +31,11 @@ namespace Hanasu
         {
 
         }
+
+        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            InfoPane.Visibility = tabControl.SelectedIndex == 0 ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+            NowPlayingPane.Visibility = tabControl.SelectedIndex == 0 ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+        }
     }
 }

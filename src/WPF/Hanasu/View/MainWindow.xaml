@@ -6,7 +6,7 @@
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         xmlns:vm="clr-namespace:Hanasu.ViewModel"
         xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Amrykid.Crystal"
-        Title="Hanasu" Height="434" Width="944" ShowTitleBar="False" Style="{DynamicResource CleanWindowStyleKey}"
+        Title="Hanasu" Height="633.101" Width="984.458" ShowTitleBar="False" Style="{DynamicResource CleanWindowStyleKey}"
         GlowBrush="{DynamicResource AccentColorBrush}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="btv" />
@@ -26,6 +26,8 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+
+
             <Grid Grid.Row="0">
                 <!--<metro:ProgressIndicator Height="10" ProgressColor="{DynamicResource AccentColorBrush}"
                                  Visibility="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource btv}}" 
@@ -41,7 +43,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <metro:MetroAnimatedSingleRowTabControl TabStripPlacement="Left">
+                <metro:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" x:Name="tabControl" SelectionChanged="tabControl_SelectionChanged">
                     <TabControl.Resources>
                         <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
                             <Setter Property="HeaderTemplate">
@@ -57,31 +59,92 @@
                             </Setter>
                         </Style>
                     </TabControl.Resources>
-                    <TabItem Header="home">
-                        <Grid DataContext="{Binding HomeTabViewModel}">
+                    <TabItem Header="playing" DataContext="{Binding NowPlayingPaneViewModel}">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*"/>
-                                <ColumnDefinition Width="3*"/>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="1.5*" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="1.5*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="5*"/>
-                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height=".5*" />
+                                <RowDefinition Height="3*" />
+                                <RowDefinition Height="70" />
                             </Grid.RowDefinitions>
-                            <metro:FlipView Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" BannerText="Something">
-                                <Image Source="http://i146.photobucket.com/albums/r277/Robo-Demon/NarutoShippuden.jpg"/>
-                            </metro:FlipView>
                             
-                            <GroupBox Grid.Row="1" Grid.Column="0" Header="new">
-                                
-                            </GroupBox>
-                            <GroupBox Grid.Row="1" Grid.Column="1" Header="popular">
-                                
-                            </GroupBox>
-                            
-                            <GroupBox Grid.Row="1" Grid.Column="2" Header="recent">
-                                
-                            </GroupBox>
+                            <StackPanel VerticalAlignment="Stretch" 
+                                        HorizontalAlignment="Stretch"
+                                        Grid.Column="1"
+                                        Grid.Row="1"
+                                        Grid.RowSpan="1">
+                                <Image HorizontalAlignment="Center" 
+                                       VerticalAlignment="Top"
+                                       Margin="25">
+                                    <Image.Source>
+                                        <PriorityBinding>
+                                            <Binding Path="CurrentAlbumCover" />
+                                            <Binding Path="CurrentStation.ImageUrl" />
+                                        </PriorityBinding>
+                                    </Image.Source>
+                                </Image>
+                                <StackPanel Height="80">
+                                    <Label Content="{Binding CurrentTrack}" FontSize="27" Foreground="{DynamicResource AccentColorBrush}" Margin="0 0 0 -5" HorizontalAlignment="Center" />
+                                    <Label Content="{Binding CurrentArtist}" FontSize="24" Margin="0 -5 0 0" HorizontalAlignment="Center" />
+                                    <Label Content="{Binding CurrentStation.Title}" FontSize="19" Margin="1 -5 0 0" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        Height="70">
+                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="35" Height="35" Command="{Binding MediaRewindCommand}">
+                                    <Rectangle Margin="0 0 0 0" Height="15" Width="15">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Uniform"
+                                                                    Visual="{StaticResource appbar_rewind}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonRewindTooltip'}"/>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Height="60" Command="{Binding MediaPlayCommand}">
+                                    <Rectangle Margin="5 1 0 0" Height="30" Width="30">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Uniform"
+                                                                    Visual="{StaticResource appbar_play}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonPlayTooltip'}"/>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="60" Height="60" Command="{Binding MediaStopCommand}">
+                                    <Rectangle Margin="0 1 0 0" Height="30" Width="30">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Uniform"
+                                                                    Visual="{StaticResource appbar_stop}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonStopTooltip'}"/>
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="35" Height="35" Command="{Binding MediaFastForwardCommand}">
+                                    <Rectangle Margin="0 0 0 0" Height="15" Width="15">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Uniform"
+                                                                    Visual="{StaticResource appbar_fastforward}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="{i18n:CrystalLocalizedValueMarkup Key='ButtonFastForwardTooltip'}"/>
+                                    </Button.ToolTip>
+                                </Button>
+                            </StackPanel>
                         </Grid>
                     </TabItem>
                     <TabItem Header="stations">
@@ -98,7 +161,7 @@
                                                 <ColumnDefinition Width="50" />
                                             </Grid.ColumnDefinitions>
 
-                                            <!--<Image Grid.Column="0" Source="{Binding ImageUrl, IsAsync=True, Delay=3000}" />-->
+                                            <Image Grid.Column="0" Source="{Binding ImageUrl, IsAsync=True, Delay=3000}" />
 
                                             <TextBlock Grid.Column="1" Text="{Binding Title, Mode=OneTime}" 
                                        VerticalAlignment="Center" FontSize="17" Margin="5 0 0 0" />
@@ -120,8 +183,11 @@
                         </Grid>
                     </TabItem>
                 </metro:MetroAnimatedSingleRowTabControl>
-                
-                <Grid Grid.Column="2" x:Name="InfoPane" Width="300"/>
+
+                <Grid Grid.Column="2" x:Name="InfoPane" Width="300">
+                    <Grid.Triggers>
+                    </Grid.Triggers>
+                </Grid>
             </Grid>
 
             <Border Grid.Row="2"

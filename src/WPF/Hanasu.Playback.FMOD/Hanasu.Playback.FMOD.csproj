@@ -94,7 +94,6 @@
     </None>
     <None Include="..\..\..\lib\FMOD\fmodex64.dll">
       <Link>fmodex64.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

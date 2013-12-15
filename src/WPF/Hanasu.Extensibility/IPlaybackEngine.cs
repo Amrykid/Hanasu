@@ -11,6 +11,9 @@ namespace Hanasu.Extensibility
         void Resume();
         void Pause();
         void Stop();
+        void Shutdown();
+
+        float Volume { get; set; }
 
         bool IsPlaying { get; }
 

@@ -28,10 +28,16 @@ namespace Hanasu
         protected override void PostStartup()
         {
             PlaybackEngine.Initialize();
-
             NavigationService.ShowWindow<MainWindowViewModel>();
 
             base.PostStartup();
+        }
+
+        protected override void PreShutdown()
+        {
+            PlaybackEngine.Shutdown();
+
+            base.PreShutdown();
         }
     }
 }

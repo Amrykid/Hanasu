@@ -121,6 +121,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\NewsItem.cs" />
     <Compile Include="Model\Station.cs" />
     <Compile Include="PlaybackEngine.cs" />
     <Compile Include="Services\MessageBoxService.cs" />

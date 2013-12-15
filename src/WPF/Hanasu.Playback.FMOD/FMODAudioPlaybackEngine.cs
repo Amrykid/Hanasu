@@ -201,5 +201,46 @@ namespace Hanasu.Playback.FMODPlayback
         public event EventHandler<PlaybackMetaDataChangedEventArgs> MetadataChanged;
 
         public event EventHandler PlaybackStatusChanged;
+
+
+        public void Shutdown()
+        {
+            try
+            {
+                Stop();
+            }
+            catch (Exception) { }
+
+            system.close();
+        }
+
+
+        public float Volume
+        {
+            get
+            {
+                if (IsPlaying && channel != null)
+                {
+                    float value = 0;
+
+                    FMOD.RESULT result;
+                    result = channel.getVolume(ref value);
+                    ERRCHECK(result);
+
+                    return value;
+                }
+
+                return default(float);
+            }
+            set
+            {
+                if (channel != null)
+                {
+                    FMOD.RESULT result;
+                    result = channel.setVolume(value);
+                    ERRCHECK(result);
+                }
+            }
+        }
     }
 }
