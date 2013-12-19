@@ -75,22 +75,12 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <Schedule type="page">http://www.japanaradio.com/node/22</Schedule>
-    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash3/31849_441941228312_5299978_n.jpg</Logo>
+    <Logo>https://scontent-b.xx.fbcdn.net/hphotos-prn1/60725_10151304016713313_298529145_n.png</Logo>
     <ServerType>Shoutcast</ServerType>
   </Station>
   <Station>
-    <Name>LeekRadio</Name>
-    <DataSource>http://miku.someone5544.net/leekradio/listen.pls</DataSource>
-    <Homepage>http://miku.someone5544.net/leekradio/</Homepage>
-    <Format>Vocaloid</Format>
-    <City>N/A</City>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-snc6/177619_412524978814166_1899587737_o.jpg</Logo>
-  </Station>
-  <Station>
     <Name>Touhou Radio</Name>
-    <DataSource><![CDATA[http://miku.fm/mikufm.m3u]]></DataSource><!--http://miku.fm/mikufm.m3u-->
+    <DataSource><![CDATA[http://www.touhouradio.com/touhouradio.m3u]]></DataSource><!--http://miku.fm/mikufm.m3u-->
     <Homepage>http://www.touhouradio.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
@@ -98,11 +88,12 @@
     <StationType>Radio</StationType>
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
+    <Logo>http://www.touhouradio.com/banner.png</Logo>
   </Station>
   <Station>
     <Name>Bakagami Radio</Name>
-    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=70191]]></DataSource>
-    <Homepage>http://www.bakaradio.com/</Homepage>
+    <DataSource>http://206.190.136.212:3825/listen.pls</DataSource>
+    <Homepage>http://www.bakadio.com/</Homepage>
     <Format>Mix</Format>
     <City>N/A</City>
     <ExplicitExtension>.pls</ExplicitExtension>
@@ -110,18 +101,6 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash4/427012_450429691646534_332109301_n.jpg</Logo>
-  </Station>
-  <Station>
-    <Name>SEOULFM!</Name>
-    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=11632]]></DataSource>
-    <Homepage>http://seoul.fm/</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Korean</Language>
-    <Cacheable>True</Cacheable>
-    <Logo>http://netdna.seoul.fm/wp-content/uploads/2012/07/logo11.png</Logo>
   </Station>
   <Station>
     <Name>J-Jams Radio</Name>
