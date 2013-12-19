@@ -55,20 +55,6 @@
     <Schedule type="ics">https://www.google.com/calendar/ical/jphip.net_h2ddkfp90b6e6bct9usubrvev8%40group.calendar.google.com/public/basic.ics</Schedule>
     <ServerType>Shoutcast</ServerType>
   </Station>
-  <!--<Station>
-    <Name>JPopsuki</Name>
-    <DataSource>http://play.internet-radio-guide.net/asx.php?id=220233</DataSource>
-    <Homepage>http://jpopsuki.eu/</Homepage>
-    <Format>JPop</Format>
-    <City>N/A</City>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-    <ExplicitExtension>.asx</ExplicitExtension>
-    <Logo>https://si0.twimg.com/profile_images/1036480076/default.png</Logo>
-    <Schedule type="ics">https://www.google.com/calendar/ical/mellowb%40jpopsuki.eu/public/basic.ics</Schedule>
-    --><!--Backup Schedule page: https://www.google.com/calendar/embed?mode=WEEK&height=600&wkst=2&bgcolor=%23ccccff&src=mellowb@jpopsuki.eu&color=%238C500B&ctz=Europe/London&gsessionid=Dg8xWG-57duersDk-8r4_w--><!--
-    <ServerType>Icecast</ServerType>
-  </Station>-->
   <Station>
     <Name>Big B Radio</Name>
     <DataSource>http://www.fileden.com/files/2008/4/27/1886400/Big.B.Radio-All.Channels.PL.pls</DataSource> <!--http://178.33.227.116:8104-->
@@ -102,41 +88,6 @@
     <Cacheable>True</Cacheable>
     <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-snc6/177619_412524978814166_1899587737_o.jpg</Logo>
   </Station>
-  <Station>
-    <Name>NHK World Radio Japan</Name>
-    <DataSource>http://www.nhk.or.jp/rj/asx/en/english.asx</DataSource>
-    <Homepage>http://www3.nhk.or.jp/nhkworld/english/radio/program/index.html</Homepage>
-    <Format>Info</Format>
-    <City>N/A</City>
-    <StationType>Radio</StationType>
-    <Language>English</Language>
-    <Cacheable>False</Cacheable>
-    <Logo>http://www3.nhk.or.jp/nhkworld/english/common/images/header_logo.gif</Logo>
-  </Station>
-  <Station>
-    <Name>Keiichi.net EX2</Name>
-    <DataSource><![CDATA[http://149.255.33.69:8038]]></DataSource>
-    <!--http://www.loudcity.com/launch?file=pls&id=3168&playid=6253201205031331323168 Loudcity makes it /really/ hard to hotlink.-->
-    <Homepage>http://radio.keiichi.net/</Homepage>
-    <Format>Mix</Format>
-    <City>Denton, TX, United States</City>
-    <ExplicitExtension></ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>False</Cacheable>
-    <Schedule type="page">http://radio.keiichi.net/index2.php?target=php/programs.php</Schedule>
-    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-ash3/559134_10150751081471061_1464021196_n.jpg</Logo>
-  </Station>
-  <!--<Station>
-    <Name>Odoroku TV</Name>
-    <DataSource><![CDATA[http://www.odoroku.tv/cgi-bin/mov/live.cgi?no=1&bps=512]]></DataSource>
-    <Homepage>http://www.odoroku.tv/index.html</Homepage>
-    <Format>Mix</Format>
-    <City>Odoroku</City>
-    <ExplicitExtension>.asx</ExplicitExtension>
-    <StationType>TV</StationType>
-    <Language>Japanese</Language>
-  </Station>-->
   <Station>
     <Name>Touhou Radio</Name>
     <DataSource><![CDATA[http://miku.fm/mikufm.m3u]]></DataSource><!--http://miku.fm/mikufm.m3u-->
@@ -172,19 +123,6 @@
     <Cacheable>True</Cacheable>
     <Logo>http://netdna.seoul.fm/wp-content/uploads/2012/07/logo11.png</Logo>
   </Station>
-  <!--<Station>
-    <Name><![CDATA[Soul&B]]></Name>
-    <DataSource><![CDATA[http://www.soulnb.com/soulnb.pls]]></DataSource>
-    <Homepage>http://www.soulnb.com/</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Korean</Language>
-    <Cacheable>True</Cacheable>
-    <Schedule type="page">http://www.soulnb.com/timetable</Schedule>
-    <Logo>http://www.soulnb.com/skin_board/m_minory1/img/main_bar_logo.gif</Logo>
-  </Station>-->
   <Station>
     <Name>J-Jams Radio</Name>
     <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=64356]]></DataSource>
@@ -196,154 +134,5 @@
     <Language>Japanese</Language>
     <Cacheable>True</Cacheable>
     <ServerType>Shoutcast</ServerType>
-  </Station>
-  <Station>
-    <Name>O-Line Radio</Name>
-    <DataSource><![CDATA[http://orangeline.org:8000/listen.pls]]></DataSource>
-    <Homepage>http://orangeline.org/~o-line/i-mode/radio.htm</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-    <Logo>http://orangeline.org/~o-line/i-mode/radio1.jpg</Logo>
-  </Station>
-  <Station>
-    <Name>Radio FanSite</Name>
-    <DataSource><![CDATA[http://radio.denialstream.com/tunein.php/fansite/playlist.pls]]></DataSource>
-    <Homepage>http://www.fansite.cl/sitio/</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-snc7/428406_10150930179819526_1604418491_n.jpg</Logo>
-  </Station>
-  <Station>
-    <Name>In-Nae Radio</Name>
-    <DataSource><![CDATA[http://sc1.usa.myhostingservices.com.au/tunein.php/karreyes/playlist.pls]]></DataSource>
-    <Homepage>http://www.innae-radio.com/18.php</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-  </Station>
-  <Station>
-    <Name>AmanteAnime Radio</Name>
-    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=231757]]></DataSource>
-    <Homepage>http://amanteanime.net/</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-    <Logo>http://js3.amanteanime.net/wp-content/themes/Amanteanime/images/logo6.jpg</Logo>
-  </Station>
-  <Station>
-    <Name>BABEL ROCK RADIO</Name>
-    <DataSource><![CDATA[http://yp.shoutcast.com/sbin/tunein-station.pls?id=44725]]></DataSource>
-    <Homepage>http://www.babelentertainment.com/</Homepage>
-    <Format>JRock</Format>
-    <City>N/A</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-    <Schedule type="page">http://www.babelentertainment.com/babelradio.html</Schedule>
-    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash3/575750_492449784104899_86670572_n.jpg</Logo>
-  </Station>
-  <Station>
-    <Name>Radio MIHAMA</Name>
-    <DataSource><![CDATA[http://live.radiomihama.com:7707/listen.pls?sid=1]]></DataSource>
-    <Homepage>http://www.radiomihama.com/Site/HOME.html</Homepage>
-    <Format>Mix</Format>
-    <City>N/A</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-  </Station>
-  <!--<Station>
-    <Name>Otaku no Radio</Name>
-    <DataSource><![CDATA[http://radio.otakunopodcast.com:8000/otakunoradio.m3u]]></DataSource>
-    <Homepage>http://radio.otakunopodcast.com/cgi-bin/icecast/playing.cgi</Homepage>
-    <Format>Mix</Format>
-    <City>Santa Maria, CA, United States</City>
-    <ExplicitExtension>.m3u</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>English</Language>
-    <Cacheable>True</Cacheable>
-  </Station>-->
-  <Station>
-    <Name>Final Fantasy Radio</Name>
-    <DataSource><![CDATA[http://finalfantasyradio.net/radio/playlist.pls]]></DataSource>
-    <Homepage>http://www.finalfantasyradio.net/</Homepage>
-    <Format>JPop</Format>
-    <City>United States</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-ash3/165674_488036442125_798865_n.jpg</Logo>
-  </Station>
-  <Station>
-    <Name>Radio Anime Obsesión</Name>
-    <DataSource><![CDATA[http://www.anime-obsesion.net/playlist.pls]]></DataSource>
-    <Homepage>http://www.anime-obsesion.net/</Homepage>
-    <Format>Anime</Format>
-    <City>United States</City>
-    <ExplicitExtension>.pls</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Japanese</Language>
-    <Cacheable>True</Cacheable>
-    <Schedule type="page">http://www.anime-obsesion.net/horarios/</Schedule>
-    <Logo>https://sphotos-b.xx.fbcdn.net/hphotos-ash4/424999_390319047690170_1804814540_n.jpg</Logo>
-  </Station>
-  <Station>
-    <Name>Anime Layer Radio</Name>
-    <DataSource><![CDATA[http://animelayer.ru:5190/play.m3u]]></DataSource>
-    <Homepage>http://www.animelayer.ru/</Homepage>
-    <Format>Anime</Format>
-    <City>Moscow, Russia</City>
-    <ExplicitExtension>.m3u</ExplicitExtension>
-    <StationType>Radio</StationType>
-    <Language>Russian</Language>
-    <Cacheable>True</Cacheable>
-    <Logo>http://d1i6vahw24eb07.cloudfront.net/s105498q.png</Logo>
-  </Station>
-  <Station>
-    <Name>Cyber ​​Anime Radio 24/7</Name>
-    <DataSource><![CDATA[http://stream.acrobs.net:8000/acrobs.mp3.m3u]]></DataSource>
-    <Homepage>http://acrobs.net/</Homepage>
-    <Format>Anime</Format>
-    <City>Moscow, Russia</City>
-    <Language>Russian</Language>
-    <Cacheable>False</Cacheable>
-    <Logo>http://d1i6vahw24eb07.cloudfront.net/s140355q.png</Logo>
-  </Station>
-  <Station>
-    <Name>KAWAii Radio</Name>
-    <DataSource><![CDATA[http://listen.radionomy.com/kawaiiradio.m3u]]></DataSource>
-    <Homepage>http://www.kawaiiradio.org/</Homepage>
-    <Format>Anime</Format>
-    <City>Paris, France</City>
-    <Language>French</Language>
-    <Cacheable>False</Cacheable>
-    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-snc7/395427_322537651126659_1798406612_n.jpg</Logo>
-  </Station>
-  <Station>
-    <Name>Anime Academy Radio</Name>
-    <DataSource><![CDATA[http://coolface.info:8888/mpd.mp3]]></DataSource>
-    <Homepage>https://www.facebook.com/pages/Anime-Academy-Radio/173616517763</Homepage>
-    <Format>Anime</Format>
-    <City>Seattle, WA</City>
-    <Language>English</Language>
-    <Cacheable>False</Cacheable>
-    <Logo>https://sphotos-a.xx.fbcdn.net/hphotos-snc7/339272_10150455203387764_1409766837_o.jpg</Logo>
   </Station>
 </Stations>
