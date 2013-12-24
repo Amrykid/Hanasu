@@ -17,6 +17,7 @@ namespace Hanasu
             /// would use MEF but...
             /// 
             Engine = new Hanasu.Playback.FMODPlayback.FMODAudioPlaybackEngine();
+            Engine.MetadataChanged += Engine_MetadataChanged;
 
             Task.Delay(1000)
                 .ContinueWith(x =>
@@ -26,6 +27,15 @@ namespace Hanasu
             StartPlaying("http://173.192.205.178:80");
             //StartPlaying("http://itori.animenfo.com:443/;");
         }
+
+        static void Engine_MetadataChanged(object sender, PlaybackMetaDataChangedEventArgs e)
+        {
+            CurrentArtist = e.Artist;
+            CurrentTrack = e.Track;
+        }
+
+        public static string CurrentTrack { get; private set; }
+        public static string CurrentArtist { get; private set; }
 
         public static void StartPlaying(Station station)
         {
@@ -41,6 +51,8 @@ namespace Hanasu
         {
             if (Engine != null)
             {
+                Engine.MetadataChanged -= Engine_MetadataChanged;
+
                 Engine.Stop();
 
                 Engine.Shutdown();

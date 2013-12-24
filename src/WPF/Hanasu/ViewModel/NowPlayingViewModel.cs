@@ -21,6 +21,9 @@ namespace Hanasu.ViewModel
 
             PlaybackEngine.Engine.MetadataChanged += Engine_MetadataChanged;
             PlaybackEngine.Engine.PlaybackStatusChanged += Engine_PlaybackStatusChanged;
+
+            CurrentArtist = PlaybackEngine.CurrentArtist;
+            CurrentTrack = PlaybackEngine.CurrentTrack;
         }
 
         void Engine_PlaybackStatusChanged(object sender, EventArgs e)
