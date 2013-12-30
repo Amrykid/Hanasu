@@ -126,6 +126,12 @@ namespace HanasuWP8
                 // An unhandled exception has occurred; break into the debugger
                 Debugger.Break();
             }
+            else
+            {
+                e.Handled = true;
+
+                MessageBox.Show(e.ExceptionObject.ToString(), "Uh-oh!", MessageBoxButton.OK);
+            }
         }
 
         #region Phone application initialization
