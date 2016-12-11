@@ -1,6 +1,9 @@
 Hanasu
 ======
 
+This repo  is for an extremely old versionof the app, please visit my [Neptunium](https://github.com/Amrykid/Neptunium) repo. Its essentially a reboot of this app in its entirety. 
+
+
 Hanasu for W8/WinRT and for WP8
 -------------------------------
 The Windows 8/WinRT/Metro version is finished (as of almost a year ago). The Windows Phone 8 version is a rather new development.
